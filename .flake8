@@ -1,0 +1,5 @@
+[flake8]
+max-line-length = 100
+per-file-ignores =
+    hot_osm/settings/*:F403 F401
+    home/models.py:F401

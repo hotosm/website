@@ -2,6 +2,7 @@
 
 build-dev:
 	@docker-compose -f docker-compose.dev.yml build
+	@docker-compose -f docker-compose.dev.yml up -d
 
 build-prod:
 	@docker-compose -f docker-compose.prod.yml build
@@ -10,7 +11,7 @@ test:
 	@pytest
 
 up-dev:
-	@docker-compose -f docker-compose.dev.yml up
+	@docker-compose -f docker-compose.dev.yml up -d
 
 up-prod:
 	@docker-compose -f docker-compose.prod.yml up
@@ -20,3 +21,6 @@ down-dev:
 
 down-prod:
 	@docker-compose -f docker-compose.prod.yml down
+
+refresh-db:
+	@docker volume rm $(docker volume ls -q)

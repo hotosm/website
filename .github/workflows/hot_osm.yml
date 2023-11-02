@@ -1,9 +1,0 @@
-name: hot_osm
-
-on:
-  push:
-  pull_request:
-
-jobs:
-  call-workflow:
-    uses: hotosm/gh-workflows/.github/workflows/workflow-file-name.yml@main

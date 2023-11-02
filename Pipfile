@@ -8,7 +8,6 @@ wagtail = "==5.2"
 pre-commit = "*"
 psycopg2 = "*"
 python-dotenv = "*"
-pytest = "*"
 
 [dev-packages]
 pytest = "*"

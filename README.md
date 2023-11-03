@@ -8,6 +8,14 @@ The codebase is structured as a standard Django project with a `settings` direct
 
 The project uses Docker for development and production environments, with separate Docker Compose files for each. The `Dockerfile.dev` file is used for the development environment, and the `Dockerfile.prod` file is used for the production environment.
 
+## Setting Up Environment Variables
+
+To set up environment variables for your local development environment, you'll need to create a `.env.dev` file in the root directory of the project. This file will store your environment variables.
+
+You can refer to the `.env.dev.example` file in the root directory of the project as an example of what your `.env.dev` file should look like. Simply copy the contents of `.env.dev.example` into your `.env.dev` file and replace the placeholder values with your actual values.
+
+Remember to keep your `.env.dev` file secure and do not commit it to your version control system. It's already included in the `.gitignore` file to prevent accidental commits.
+
 ## Dependency Management
 
 This project uses Pipenv for dependency management. Pipenv is a Python tool that combines the best features of pip (Python's package installer), Pipfile (a manifest file format for Python package requirements), and virtualenv (a tool for creating isolated Python environments).
@@ -16,9 +24,10 @@ Dependencies are specified in the `Pipfile`, and the exact versions of the depen
 
 ## Using the Makefile
 
+Ensure you have the superuser credentials you want in your .env.dev file prior to running `make build-dev`.
 The Makefile provides several commands for building and running the project:
 
-- `make build-dev`: Builds the Docker images for the development environment.
+- `make build-dev`: Builds and starts the Docker images for the development environment.
 - `make up-dev`: Starts the Docker containers for the development environment.
 - `make down-dev`: Stops the Docker containers for the development environment.
 - `make build-prod`: Builds the Docker images for the production environment.
@@ -26,15 +35,3 @@ The Makefile provides several commands for building and running the project:
 - `make down-prod`: Stops the Docker containers for the production environment.
 - `make test`: Runs the tests.
 - `make refresh-db`: Deletes all Docker volumes (use with caution).
-
-## Creating a Superuser
-
-To access the Wagtail admin interface at http://localhost:8000/admin/login/, you need to create a superuser. You can do this with the Django `createsuperuser` command.
-
-First, find the ID of the Docker container running the Django application with `docker ps`. Then, run the following command, replacing `container_id` with the actual container ID:
-
-```bash
-docker exec -it container_id python manage.py createsuperuser
-```
-
-Follow the prompts to create the superuser.

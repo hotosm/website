@@ -23,4 +23,4 @@ down-prod:
 	@docker-compose -f docker-compose.prod.yml down
 
 refresh-db:
-	@docker volume rm $(docker volume ls -q)
+	@if [ -n "$(shell docker volume ls -q)" ]; then docker volume rm $(shell docker volume ls -q); fi

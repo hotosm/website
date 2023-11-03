@@ -8,6 +8,7 @@ wagtail = "==5.2"
 pre-commit = "*"
 psycopg2 = "*"
 python-dotenv = "*"
+docker = "*"
 
 [dev-packages]
 pytest-django = "*"

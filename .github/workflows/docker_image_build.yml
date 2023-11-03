@@ -13,36 +13,16 @@ on:
 jobs:
   build:
     uses: hotosm/gh-workflows/.github/workflows/image_build.yml@main
-    if: github.event_name != 'pull_request'  # Ensures this job runs for push events
     with:
       context: .
-      dockerfile: './Dockerfile.prod'
-      image_name: ghcr.io/${{ github.repository }}/backend:${{ github.sha }}
+      dockerfile: ${{ github.event_name == 'pull_request' && './Dockerfile.dev' || './Dockerfile.prod' }}
+      image_name: ghcr.io/${{ github.repository }}/backend
       extra_build_args: |
         APP_VERSION=${{ github.ref_name }}
         COMMIT_REF=${{ github.sha }}
   pytest:
     uses: hotosm/gh-workflows/.github/workflows/test_pytest.yml@main
-    if: github.event_name != 'pull_request'  # Ensures this job runs for push events
     with:
-      image_name: ghcr.io/${{ github.repository }}/backend:${{ github.sha }}
-      extra_build_args: |
-        COMMIT_REF=${{ github.sha }}
-
-  build_pr:
-    uses: hotosm/gh-workflows/.github/workflows/image_build.yml@main
-    if: github.event_name == 'pull_request'  # Runs this job only for pull requests
-    with:
-      context: .
-      dockerfile: './Dockerfile.dev'
-      image_name: ghcr.io/${{ github.repository }}/backend:pr-${{ github.event.pull_request.number }}
-      extra_build_args: |
-        APP_VERSION=${{ github.ref_name }}
-        COMMIT_REF=${{ github.sha }}
-  pytest_pr:
-    uses: hotosm/gh-workflows/.github/workflows/test_pytest.yml@main
-    if: github.event_name == 'pull_request'  # Runs this job only for pull requests
-    with:
-      image_name: ghcr.io/${{ github.repository }}/backend:pr-${{ github.event.pull_request.number }}
+      image_name: ghcr.io/${{ github.repository }}/backend
       extra_build_args: |
         COMMIT_REF=${{ github.sha }}

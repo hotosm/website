@@ -23,6 +23,8 @@ jobs:
   pytest:
     uses: hotosm/gh-workflows/.github/workflows/test_pytest.yml@main
     with:
+      build_context: .
+      build_dockerfile: ${{ github.event_name == 'pull_request' && './Dockerfile.dev' || './Dockerfile.prod' }}
       image_name: ghcr.io/${{ github.repository }}/backend
       extra_build_args: |
         COMMIT_REF=${{ github.sha }}

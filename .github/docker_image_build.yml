@@ -1,0 +1,30 @@
+name: Use hotosm Docker Image Build workflow
+
+on:
+  push:
+    branches:
+      - 'main'
+      - 'release/*'
+  pull_request:
+    branches:
+      - 'main'
+      - 'release/*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Use hotosm Docker Image Build workflow
+      uses: hotosm/gh-workflows/.github/workflows/image_build.yml@main
+      with:
+        context: .
+        dockerfile: ${{ github.event_name == 'pull_request' && './Dockerfile.dev' || './Dockerfile.prod' }}
+        push: true
+        tags: user/app:${{ github.event_name == 'pull_request' && 'dev' || 'prod' }}
+        build-args: |
+          APP_VERSION=${{ github.ref_name }}
+          COMMIT_REF=${{ github.sha }}

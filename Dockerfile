@@ -1,7 +1,7 @@
 # This is a coppy of Dockerfile.dev for GH action debugging purposes
 
 # Use an official Python runtime based on Debian 10 "buster" as a parent image.
-FROM python:3.11
+FROM python:3.11 as ci
 
 # Add user that will be used in the container.
 RUN useradd wagtail

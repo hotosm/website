@@ -1,7 +1,7 @@
-name: Use hotosm workflow immage build fors pushes to main or release branches
+name: Hotosm workflow for running pytest on pull requests to main or release branches
 
 on:
-  push:
+  pull_request:
     branches:
       - 'main'
       - 'release/*'

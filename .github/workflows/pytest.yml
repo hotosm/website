@@ -6,11 +6,6 @@ on:
       - 'main'
       - 'release/*'
       - 'dev'
-    paths:
-      - ./
-  # Allow manual trigger (workflow_dispatch)
-  workflow_dispatch:
-
 jobs:
   pytest:
     uses: hotosm/gh-workflows/.github/workflows/test_compose.yml@main

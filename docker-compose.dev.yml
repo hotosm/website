@@ -1,6 +1,7 @@
 version: "3.9"
 services:
   web:
+    image: "ghcr.io/hotosm/website/backend:${TAG_OVERRIDE:-debug}"
     build:
       context: .
       dockerfile: Dockerfile.dev

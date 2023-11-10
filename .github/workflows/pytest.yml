@@ -3,10 +3,9 @@ name: Use hotosm workflow test_compose for pull requests to main or release bran
 on:
   pull_request:
     branches:
-      - main
-      - staging
-      - development
-    # Workflow is triggered only if src/backend changes
+      - 'main'
+      - 'release/*'
+      - 'dev'
     paths:
       - ./
   # Allow manual trigger (workflow_dispatch)

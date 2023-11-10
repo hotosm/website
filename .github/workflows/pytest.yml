@@ -1,18 +1,27 @@
-name: Hotosm workflow for running pytest on pull requests to main or release branches
+name: Use hotosm workflow test_compose for pull requests to main or release branches
 
 on:
   pull_request:
     branches:
-      - 'main'
-      - 'release/*'
+      - main
+      - staging
+      - development
+    # Workflow is triggered only if src/backend changes
+    paths:
+      - ./
+  # Allow manual trigger (workflow_dispatch)
+  workflow_dispatch:
 
 jobs:
   pytest:
-    uses: hotosm/gh-workflows/.github/workflows/test_pytest.yml@main
+    uses: hotosm/gh-workflows/.github/workflows/test_compose.yml@main
     with:
-      build_context: .
-      build_dockerfile: ${{ github.event_name == 'pull_request' && './Dockerfile.dev' || './Dockerfile.prod' }}
-      image_name: ghcr.io/${{ github.repository }}
+      image_name: ghcr.io/${{ github.repository }}/backend
+      build_context: ./
+      build_dockerfile: Dockerfile.dev
       extra_build_args: |
+        APP_VERSION=${{ github.ref_name }}
         COMMIT_REF=${{ github.sha }}
-      environment: dev
+      compose_service: api
+      compose_command: pytest
+      compose_file: "docker-compose.dev.yml"

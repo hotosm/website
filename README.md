@@ -10,11 +10,11 @@ The project uses Docker for development and production environments, with separa
 
 ## Setting Up Environment Variables
 
-To set up environment variables for your local development environment, you'll need to create a `.env.dev` file in the root directory of the project. This file will store your environment variables.
+To set up environment variables for your local development environment, you'll need to create a `.env' file in the root directory of the project. This file will store your environment variables.
 
-You can refer to the `.env.dev.example` file in the root directory of the project as an example of what your `.env.dev` file should look like. Simply copy the contents of `.env.dev.example` into your `.env.dev` file and replace the placeholder values with your actual values.
+You can refer to the `.env.example` file in the root directory of the project as an example of what your `.env` file should look like. Simply copy the contents of `.env.example` into your `.env.dev` file and replace the placeholder values with your actual values.
 
-Remember to keep your `.env.dev` file secure and do not commit it to your version control system. It's already included in the `.gitignore` file to prevent accidental commits.
+Remember to keep your `.env` file secure and do not commit it to your version control system. It's already included in the `.gitignore` file to prevent accidental commits.
 
 ## Dependency Management
 

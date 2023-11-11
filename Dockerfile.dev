@@ -54,12 +54,6 @@ COPY --chown=wagtail:wagtail entrypoint.dev.sh /app/entrypoint.dev.sh
 # Make the entrypoint script executable
 RUN chmod +x /app/entrypoint.dev.sh
 
-# Copy the wait-for-it script
-COPY wait-for-it.sh /app/wait-for-it.sh
-
-# Make the script executable
-RUN chmod +x /app/wait-for-it.sh
-
 # Use user "wagtail" to run the build commands below and the server itself.
 USER wagtail
 

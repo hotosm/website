@@ -25,16 +25,17 @@ RUN apt-get update --yes --quiet && apt-get install --yes --quiet --no-install-r
  && rm -rf /var/lib/apt/lists/*
 
 # Install pipenv
-RUN pip install pipenv
+RUN pip install poetry
 
 # Install the application server.
 RUN pip install "gunicorn==20.0.4"
 
 # Copy Pipfile and Pipfile.lock
-COPY Pipfile Pipfile.lock ./
+COPY pyproject.toml poetry.lock* ./
 
 # Install the project requirements.
-RUN pipenv install --dev --system --deploy
+RUN poetry config virtualenvs.create false \
+  && poetry install --no-interaction --no-ansi
 
 # Use /app folder as a directory where the source code is stored.
 WORKDIR /app

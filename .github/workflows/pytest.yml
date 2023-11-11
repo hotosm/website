@@ -17,5 +17,5 @@ jobs:
         APP_VERSION=${{ github.ref_name }}
         COMMIT_REF=${{ github.sha }}
       compose_service: web
-      compose_command: /app/wait-for-it.sh db:5432 --strict --timeout=30 -- /app/wait-for-it.sh web:8000 --strict --timeout=30 -- pytest
+      compose_command: pytest --timeout=30
       compose_file: "docker-compose.dev.yml"

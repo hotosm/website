@@ -16,13 +16,7 @@ import os
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
-load_dotenv()
-
-# Determine the environment and load the correct .env file
-if os.getenv("ENV") == "prod":
-    load_dotenv(".env.prod")
-else:
-    load_dotenv(".env.dev")
+load_dotenv(".env")
 
 # Access environment variables
 SECRET_KEY = os.getenv("SECRET_KEY")

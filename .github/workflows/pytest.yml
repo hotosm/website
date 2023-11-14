@@ -17,5 +17,5 @@ jobs:
         APP_VERSION=${{ github.ref_name }}
         COMMIT_REF=${{ github.sha }}
       compose_service: web
-      compose_command: pytest --timeout=30
+      compose_command: bash -c "pytest --timeout=30"
       compose_file: "docker-compose.dev.yml"

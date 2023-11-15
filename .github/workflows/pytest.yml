@@ -11,11 +11,10 @@ jobs:
     uses: hotosm/gh-workflows/.github/workflows/test_compose.yml@main
     with:
       image_name: ghcr.io/${{ github.repository }}/backend
-      build_context: ./
       build_dockerfile: Dockerfile.dev
       extra_build_args: |
         APP_VERSION=${{ github.ref_name }}
         COMMIT_REF=${{ github.sha }}
       compose_service: web
-      compose_command: bash -c "pytest --timeout=30"
+      compose_command: pytest
       compose_file: "docker-compose.dev.yml"

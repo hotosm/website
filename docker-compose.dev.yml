@@ -1,4 +1,4 @@
-version: "3.9"
+version: "3.11"
 services:
   web:
     image: "ghcr.io/hotosm/website/backend:${TAG_OVERRIDE:-debug}"
@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile.dev
     command: >
-      bash -c "python manage.py runserver 0.0.0.0:8000"
+      bash -c "./wait-for-it.sh db:5432 -- python manage.py runserver 0.0.0.0:8000"
     ports:
       - 8000:8000
     env_file:

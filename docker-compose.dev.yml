@@ -12,7 +12,8 @@ services:
     env_file:
       - .env
     depends_on:
-      - db
+      db:
+        condition: service_healthy
   db:
     image: postgres
     env_file:
@@ -23,5 +24,11 @@ services:
       POSTGRES_USER: ${DB_USER}
     volumes:
       - postgres_data:/var/lib/postgresql/data/
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      start_period: 5s
+      interval: 10s
+      timeout: 5s
+      retries: 3
 volumes:
   postgres_data:

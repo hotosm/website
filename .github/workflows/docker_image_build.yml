@@ -1,4 +1,5 @@
-name: Use hotosm workflow immage build fors pushes to main or release branches
+# Use hotosm workflow immage build fors pushes to main or release branches
+name: Image Build
 
 on:
   push:
@@ -6,14 +7,12 @@ on:
       - 'main'
       - 'release/*'
       - 'dev'
+
 jobs:
   pytest:
     uses: hotosm/gh-workflows/.github/workflows/test_pytest.yml@main
     secrets: inherit
     with:
-      build_context: .
-      build_dockerfile: ${{ github.event_name == 'pull_request' && './Dockerfile.dev' || './Dockerfile.prod' }}
       image_name: ghcr.io/${{ github.repository }}
-      extra_build_args: |
-        COMMIT_REF=${{ github.sha }}
+      build_target: prod
       environment: dev

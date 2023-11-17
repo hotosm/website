@@ -1,4 +1,5 @@
-name: Use hotosm workflow test_compose for pull requests to main or release branches
+# Use hotosm workflow test_compose for pull requests to main or release branches
+name: PyTest
 
 on:
   pull_request:
@@ -12,11 +13,10 @@ jobs:
     secrets: inherit
     with:
       image_name: ghcr.io/${{ github.repository }}/backend
-      build_dockerfile: Dockerfile.dev
-      extra_build_args: |
-        APP_VERSION=${{ github.ref_name }}
-        COMMIT_REF=${{ github.sha }}
+      build_dockerfile: Dockerfile
       build_target: test
       compose_service: test
-      compose_command: ""
+      compose_command: "pytest"
       compose_file: "docker-compose.dev.yml"
+      cache_extra_imgs: |
+        "docker.io/postgres:16-alpine3.18"

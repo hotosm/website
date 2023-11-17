@@ -35,3 +35,15 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+
+# Github workflows
+.github
+
+# Git
+.git
+
+# Docker compose
+docker-compose*
+
+# Makefile
+Makefile

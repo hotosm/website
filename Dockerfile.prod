@@ -45,9 +45,6 @@ EXPOSE 8000
 # Set PORT variable that is used by Gunicorn. This should match "EXPOSE" command.
 ENV PORT=8000
 
-# Install the application server.
-RUN pip install "gunicorn==20.0.4"
-
 # Copy the source code of the project into the container.
 COPY --chown=wagtail:wagtail . .
 

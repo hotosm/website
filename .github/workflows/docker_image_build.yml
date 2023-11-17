@@ -9,6 +9,7 @@ on:
 jobs:
   pytest:
     uses: hotosm/gh-workflows/.github/workflows/test_pytest.yml@main
+    secrets: inherit
     with:
       build_context: .
       build_dockerfile: ${{ github.event_name == 'pull_request' && './Dockerfile.dev' || './Dockerfile.prod' }}

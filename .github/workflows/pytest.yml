@@ -16,6 +16,7 @@ jobs:
       extra_build_args: |
         APP_VERSION=${{ github.ref_name }}
         COMMIT_REF=${{ github.sha }}
+      build_target: test
       compose_service: test
       compose_command: pytest
       compose_file: "docker-compose.dev.yml"

@@ -9,7 +9,7 @@ build-prod:
 	@docker compose -f docker-compose.prod.yml up -d
 
 test:
-	@docker build --target test -t myproject:test -f Dockerfile.dev .
+	@docker build --target test -t myproject:test -f Dockerfile .
 	@docker run --rm myproject:test
 	@docker rmi myproject:test
 

@@ -28,6 +28,9 @@ COPY pyproject.toml poetry.lock* ./
 RUN poetry config virtualenvs.create false \
   && poetry install --no-dev --no-interaction --no-ansi
 
+# Add /usr/local/bin to the PATH
+ENV PATH="/usr/local/bin:${PATH}"
+
 # Use /app folder as a directory where the source code is stored.
 WORKDIR /app
 

@@ -32,7 +32,8 @@ WORKDIR /opt/python
 COPY pyproject.toml poetry.lock* /opt/python/
 RUN pip install --no-cache-dir --upgrade pip \
     && pip install --no-cache-dir \
-    poetry==1.7.1 poetry-plugin-export==1.6.0
+    poetry==1.7.1 poetry-plugin-export==1.6.0 \
+    && poetry config warnings.export false
 RUN poetry export --without dev --output requirements.txt
 RUN poetry export --only dev --output requirements-dev.txt
 
@@ -107,8 +108,8 @@ COPY --from=extract-deps \
     /opt/python/requirements-dev.txt /opt/python/
 # Copy packages from user to root dirs (run ci as root)
 # && install dev dependencies (pytest)
-RUN mv /home/appuser/.local/bin/* /usr/local/bin/ \
-    && mv /home/appuser/.local/lib/python${PYTHON_IMG_TAG}/site-packages/* \
+RUN mv /home/wagtail/.local/bin/* /usr/local/bin/ \
+    && mv /home/wagtail/.local/lib/python${PYTHON_IMG_TAG}/site-packages/* \
     /usr/local/lib/python${PYTHON_IMG_TAG}/site-packages/ \
     && pip install --upgrade --no-warn-script-location \
     --no-cache-dir -r \

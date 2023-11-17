@@ -9,6 +9,7 @@ on:
 jobs:
   pytest:
     uses: hotosm/gh-workflows/.github/workflows/test_compose.yml@main
+    secrets: inherit
     with:
       image_name: ghcr.io/${{ github.repository }}/backend
       build_dockerfile: Dockerfile.dev

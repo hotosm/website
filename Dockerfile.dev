@@ -30,6 +30,16 @@ WORKDIR /app
 # Create user "wagtail"
 RUN useradd -m wagtail
 
+# Use user "wagtail" to run the build commands below and the server itself.
+USER wagtail
+
+FROM base as test
+
+# Copy the source code of the project into the container.
+COPY --chown=wagtail:wagtail . .
+
+ENTRYPOINT [ "pytest" ]
+
 # Define the server stage
 FROM base as server
 
@@ -44,9 +54,6 @@ COPY --chown=wagtail:wagtail entrypoint.dev.sh /app/entrypoint.dev.sh
 
 # Make the entrypoint script executable
 RUN chmod +x /app/entrypoint.dev.sh
-
-# Use user "wagtail" to run the build commands below and the server itself.
-USER wagtail
 
 # Use the entrypoint script as the Docker entrypoint
 ENTRYPOINT ["/app/entrypoint.dev.sh"]

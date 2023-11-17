@@ -33,8 +33,8 @@ COPY pyproject.toml poetry.lock* /opt/python/
 RUN pip install --no-cache-dir --upgrade pip \
     && pip install --no-cache-dir \
     poetry==1.7.1 poetry-plugin-export==1.6.0
-RUN poetry export --without dev --output requirement.txt
-RUN poetry export --only dev --output requirement-dev.txt
+RUN poetry export --without dev --output requirements.txt
+RUN poetry export --only dev --output requirements-dev.txt
 
 
 # Define build stage (install deps)

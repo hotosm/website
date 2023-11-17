@@ -15,7 +15,7 @@ jobs:
       image_name: ghcr.io/${{ github.repository }}/backend
       build_dockerfile: Dockerfile
       build_target: test
-      compose_service: test
+      compose_service: web
       compose_command: "pytest"
       compose_file: "docker-compose.dev.yml"
       cache_extra_imgs: |

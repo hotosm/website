@@ -27,8 +27,14 @@ RUN poetry config virtualenvs.create false \
 # Use /app folder as a directory where the source code is stored.
 WORKDIR /app
 
+# Copy project
+COPY . /app/
+
 # Create user "wagtail"
 RUN useradd -m wagtail
+
+# Change the ownership of the /app directory to the user "wagtail"
+RUN chown -R wagtail:wagtail /app
 
 # Use user "wagtail" to run the build commands below and the server itself.
 USER wagtail
@@ -42,9 +48,6 @@ ENTRYPOINT [ "pytest" ]
 
 # Define the server stage
 FROM base as server
-
-# Install the application server.
-RUN pip install "gunicorn==20.0.4"
 
 # Copy the source code of the project into the container.
 COPY --chown=wagtail:wagtail . .

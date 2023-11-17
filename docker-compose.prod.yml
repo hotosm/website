@@ -1,10 +1,13 @@
 version: "3.9"
 services:
   web:
+    image: "ghcr.io/hotosm/website/backend:${TAG_OVERRIDE:-main}"
     build:
       context: .
-      dockerfile: Dockerfile.prod
-    command: python /app/manage.py runserver 0.0.0.0:8000
+      dockerfile: Dockerfile
+      target: prod
+      args:
+        APP_VERSION: "${TAG_OVERRIDE:-main}"
     volumes:
       - .:/app
     ports:
@@ -14,8 +17,9 @@ services:
     depends_on:
       db:
         condition: service_healthy
+
   db:
-    image: postgres
+    image: "docker.io/postgres:${POSTGRES_TAG:-16-alpine3.18}"
     env_file:
       - .env
     environment:
@@ -30,5 +34,6 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3
+
 volumes:
   postgres_data:

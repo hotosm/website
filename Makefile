@@ -6,9 +6,12 @@ build-dev:
 
 build-prod:
 	@docker compose -f docker-compose.prod.yml build
+	@docker compose -f docker-compose.prod.yml up -d
 
 test:
-	@pytest
+	@docker build --target test -t myproject:test -f Dockerfile.dev .
+	@docker run --rm myproject:test
+	@docker rmi myproject:test
 
 up-dev:
 	@docker compose -f docker-compose.dev.yml up -d

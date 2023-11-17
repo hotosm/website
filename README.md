@@ -6,7 +6,7 @@ This project is a website for the Humanitarian OpenStreetMap Team. It's built us
 
 The codebase is structured as a standard Django project with a `settings` directory containing different settings files for different environments: `base.py` for common settings, `dev.py` for development settings, and `production.py` for production settings. Several Django apps are included for different parts of the website, with the main app being the `home` app, which contains the models, views, and templates for the homepage and other top-level pages.
 
-The project uses Docker for development and production environments, with separate Docker Compose files for each. The `Dockerfile.dev` file is used for the development environment, and the `Dockerfile.prod` file is used for the production environment.
+The project uses Docker for development and production environments, with separate Docker Compose files for each.
 
 ## Setting Up Environment Variables
 

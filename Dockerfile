@@ -83,7 +83,7 @@ RUN set -ex \
         "libwebp-dev" \
     && rm -rf /var/lib/apt/lists/*
 # Copy the entrypoint script into the Docker image
-COPY --chown=wagtail:wagtail entrypoint.dev.sh /app/entrypoint.dev.sh
+COPY --chown=wagtail:wagtail container-entrypoint.sh /
 # Copy pip dependencies from build stage
 COPY --from=build \
     /root/.local \
@@ -95,9 +95,11 @@ COPY . /app/
 # Add non-root user, permissions
 RUN useradd -u 1001 -m -c "hotosm account" -d /home/wagtail -s /bin/false wagtail \
     && chown -R wagtail:wagtail /app /home/wagtail \
-    && chmod +x /app/entrypoint.dev.sh
+    && chmod +x /container-entrypoint.sh
 # Change to non-root user
 USER wagtail
+# Add entrypoint for all following stages
+ENTRYPOINT ["/container-entrypoint.sh"]
 
 
 # Define test (ci) stage
@@ -117,7 +119,7 @@ RUN mv /home/wagtail/.local/bin/* /usr/local/bin/ \
     && rm -r /opt/python \
     # Pre-compile packages to .pyc (init speed gains)
     && python -c "import compileall; compileall.compile_path(maxlevels=10, quiet=1)"
-CMD [ "pytest" ]
+CMD ["pytest"]
 
 
 # Define debug (development) stage
@@ -125,10 +127,7 @@ FROM runtime as debug
 # Add Healthcheck
 HEALTHCHECK --start-period=10s --interval=5s --retries=20 --timeout=5s \
     CMD curl --fail http://localhost:8000 || exit 1
-# Use the entrypoint script as the Docker entrypoint
-ENTRYPOINT ["/app/entrypoint.dev.sh"]
-CMD ["./wait-for-it.sh", "db:5432", "--", \
-    "python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
 
 
 # Define prod stage
@@ -137,16 +136,5 @@ FROM runtime as prod
 HEALTHCHECK --start-period=10s --interval=5s --retries=20 --timeout=5s \
     CMD curl --fail http://localhost:8000 || exit 1
 # Pre-compile packages to .pyc (init speed gains)
-RUN python -c "import compileall; compileall.compile_path(maxlevels=10, quiet=1)" \
-    # Collect static files
-    && python manage.py collectstatic --noinput --clear
-# Runtime command that executes when "docker run" is called, it does the
-# following:
-#   1. Migrate the database.
-#   2. Start the application server.
-# WARNING:
-#   Migrating database at the same time as starting the server IS NOT THE BEST
-#   PRACTICE. The database should be migrated manually or using the release
-#   phase facilities of your hosting platform. This is used only so the
-#   Wagtail instance can be started with a simple "docker run" command.
-CMD set -xe; python manage.py migrate --noinput; gunicorn hot_osm.wsgi:application
+RUN python -c "import compileall; compileall.compile_path(maxlevels=10, quiet=1)"
+CMD ["gunicorn", "hot_osm.wsgi:application"]

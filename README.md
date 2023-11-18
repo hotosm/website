@@ -18,9 +18,9 @@ Remember to keep your `.env` file secure and do not commit it to your version co
 
 ## Dependency Management
 
-This project uses Pipenv for dependency management. Pipenv is a Python tool that combines the best features of pip (Python's package installer), Pipfile (a manifest file format for Python package requirements), and virtualenv (a tool for creating isolated Python environments).
+This project uses Poetry for dependency management. Poetry is a Python tool that helps to handle dependency installation, building packages, and versioning. It simplifies package management and deployment by adding a layer of abstraction over the standard setup tools.
 
-Dependencies are specified in the `Pipfile`, and the exact versions of the dependencies are locked in the `Pipfile.lock`. To install the dependencies, run `pipenv install`. To add a new dependency, run `pipenv install {dependency}`.
+Dependencies are specified in the `pyproject.toml`, and the exact versions of the dependencies are locked in the `poetry.lock`. To install the dependencies, run `poetry install`. To add a new dependency, run `poetry add {dependency}`.
 
 ## Using the Makefile
 

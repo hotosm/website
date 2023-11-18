@@ -1,7 +1,5 @@
 # Django project
 /media/
-/static/
-*.sqlite3
 
 # Python and others
 __pycache__
@@ -37,3 +35,15 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+
+# Github workflows
+.github
+
+# Git
+.git
+
+# Docker compose
+docker-compose*
+
+# Makefile
+Makefile

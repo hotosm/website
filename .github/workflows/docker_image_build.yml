@@ -9,10 +9,9 @@ on:
       - 'dev'
 
 jobs:
-  pytest:
-    uses: hotosm/gh-workflows/.github/workflows/test_pytest.yml@main
+  build:
+    uses: hotosm/gh-workflows/.github/workflows/image_build.yml@main
     secrets: inherit
     with:
       image_name: ghcr.io/${{ github.repository }}
       build_target: prod
-      environment: dev

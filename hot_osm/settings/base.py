@@ -16,7 +16,7 @@ import os
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
-load_dotenv()
+load_dotenv(".env")
 
 # Access environment variables
 SECRET_KEY = os.getenv("SECRET_KEY")

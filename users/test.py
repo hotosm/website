@@ -25,5 +25,5 @@ class TestUser:
         assert user2.username == "user2"
         assert user2.first_name == "first_name2"
         assert user2.last_name == "last_name2"
-        assert user2.email == "email2@hotosm.ca"
+        assert user2.email == "email2@hotosm.com"
         assert user2.check_password("password")

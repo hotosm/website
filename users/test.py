@@ -8,11 +8,11 @@ User = get_user_model()
 
 @pytest.mark.django_db
 class TestUser:
-    def test_user_factory():
+    def test_user_factory(self):
         user = UserFactory()
         assert isinstance(user, User)
 
-    def test_user_model():
+    def test_user_model(self):
         user1 = UserFactory()
         user2 = UserFactory()
 

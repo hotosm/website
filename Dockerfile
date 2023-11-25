@@ -35,7 +35,7 @@ RUN pip install --no-cache-dir --upgrade pip \
     poetry==1.7.1 poetry-plugin-export==1.6.0 \
     && poetry config warnings.export false
 RUN poetry export --without dev --output requirements.txt
-RUN poetry export --only dev --output requirements-dev.txt
+RUN poetry export --with dev --output requirements-dev.txt
 
 
 # Define build stage (install deps)
@@ -123,7 +123,7 @@ CMD ["pytest"]
 
 
 # Define debug (development) stage
-FROM runtime as debug
+FROM test as debug
 # Add Healthcheck
 HEALTHCHECK --start-period=10s --interval=5s --retries=20 --timeout=5s \
     CMD curl --fail http://localhost:8000 || exit 1

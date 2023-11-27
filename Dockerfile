@@ -102,28 +102,31 @@ USER wagtail
 ENTRYPOINT ["/container-entrypoint.sh"]
 
 
+# Define dev-deps stage (install requirements-dev)
+FROM runtime as dev-deps
+COPY --from=extract-deps --chown=wagtail \
+    /opt/python/requirements-dev.txt /home/wagtail/
+RUN pip install --user --no-warn-script-location \
+    --no-cache-dir -r /home/wagtail/requirements-dev.txt \
+    && rm -r /home/wagtail/requirements-dev.txt
+
+
 # Define test (ci) stage
-FROM runtime as test
+FROM dev-deps as test
 USER root
 ARG PYTHON_IMG_TAG
-COPY --from=extract-deps \
-    /opt/python/requirements-dev.txt /opt/python/
 # Copy packages from user to root dirs (run ci as root)
-# && install dev dependencies (pytest)
 RUN mv /home/wagtail/.local/bin/* /usr/local/bin/ \
-    && mv /home/wagtail/.local/lib/python${PYTHON_IMG_TAG}/site-packages/* \
+    && cp -R /home/wagtail/.local/lib/python${PYTHON_IMG_TAG}/site-packages/* \
     /usr/local/lib/python${PYTHON_IMG_TAG}/site-packages/ \
-    && pip install --upgrade --no-warn-script-location \
-    --no-cache-dir -r \
-    /opt/python/requirements-dev.txt \
-    && rm -r /opt/python \
+    && rm -rf /home/wagtail/.local/ \
     # Pre-compile packages to .pyc (init speed gains)
     && python -c "import compileall; compileall.compile_path(maxlevels=10, quiet=1)"
 CMD ["pytest"]
 
 
 # Define debug (development) stage
-FROM test as debug
+FROM dev-deps as debug
 # Add Healthcheck
 HEALTHCHECK --start-period=10s --interval=5s --retries=20 --timeout=5s \
     CMD curl --fail http://localhost:8000 || exit 1

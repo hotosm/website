@@ -1,6 +1,6 @@
 .PHONY: build-dev build-prod test up-dev up-prod down-dev down-prod
 
-build-dev:
+build:
 	@docker compose -f docker-compose.dev.yml build
 	@docker compose -f docker-compose.dev.yml up -d
 
@@ -9,17 +9,15 @@ build-prod:
 	@docker compose -f docker-compose.prod.yml up -d
 
 test:
-	@docker build --target test -t myproject:test -f Dockerfile .
-	@docker run --rm myproject:test
-	@docker rmi myproject:test
+	@docker compose -f docker-compose.dev.yml run --rm web pytest
 
-up-dev:
+up:
 	@docker compose -f docker-compose.dev.yml up -d
 
 up-prod:
 	@docker compose -f docker-compose.prod.yml up
 
-down-dev:
+down:
 	@docker compose -f docker-compose.dev.yml down
 
 down-prod:

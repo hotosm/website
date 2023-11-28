@@ -9,7 +9,7 @@ build-prod:
 	@docker compose -f docker-compose.prod.yml up -d
 
 test:
-	@docker compose -f docker-compose.dev.yml run web pytest
+	@docker compose -f docker-compose.dev.yml run --rm web pytest
 
 up-dev:
 	@docker compose -f docker-compose.dev.yml up -d

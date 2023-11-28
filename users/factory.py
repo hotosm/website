@@ -11,6 +11,7 @@ class UserFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = "users.User"
+        skip_postgeneration_save = True
 
 
 register(UserFactory)

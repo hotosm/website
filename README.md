@@ -27,9 +27,9 @@ Dependencies are specified in the `pyproject.toml`, and the exact versions of th
 Ensure you have the superuser credentials you want in your .env.dev file prior to running `make build-dev`.
 The Makefile provides several commands for building and running the project:
 
-- `make build-dev`: Builds and starts the Docker images for the development environment.
-- `make up-dev`: Starts the Docker containers for the development environment.
-- `make down-dev`: Stops the Docker containers for the development environment.
+- `make build`: Builds and starts the Docker images for the development environment.
+- `make up`: Starts the Docker containers for the development environment.
+- `make down`: Stops the Docker containers for the development environment.
 - `make build-prod`: Builds the Docker images for the production environment.
 - `make up-prod`: Starts the Docker containers for the production environment.
 - `make down-prod`: Stops the Docker containers for the production environment.

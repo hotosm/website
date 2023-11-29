@@ -1,0 +1,30 @@
+{
+  "name": "hot_osm",
+  "version": "1.0.0",
+  "description": "A Wagtail CMS for the Humanitarian OpenStreetMap Team",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hotosm/website.git"
+  },
+  "keywords": [
+    "\"openstreetmap\"",
+    "\"mapping\"",
+    "\"humanitarian\"",
+    "\"geospatial\"",
+    "\"gis\"",
+    "\"data",
+    "visualization\"",
+    "\"HOT",
+    "CMS\""
+  ],
+  "author": "Humanitarian OpenStreetMap Team",
+  "license": "AGPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/hotosm/website/issues"
+  },
+  "homepage": "https://github.com/hotosm/website#readme"
+}

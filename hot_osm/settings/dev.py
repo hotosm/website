@@ -8,6 +8,8 @@ ALLOWED_HOSTS = ["*"]
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
+INSTALLED_APPS = INSTALLED_APPS + ["django_browser_reload"]  # noqa: F405
+MIDDLEWARE = MIDDLEWARE + ["django_browser_reload.middleware.BrowserReloadMiddleware"]  # noqa: F405
 
 try:
     from .local import *

@@ -1,5 +1,12 @@
 ARG PYTHON_IMG_TAG=3.11
+ARG NODE_IMG_TAG=20.5.1
 
+FROM node:${NODE_IMG_TAG}-bookworm-slim as frontend-base
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
 
 # Define the base stage
 FROM docker.io/python:${PYTHON_IMG_TAG}-slim-bookworm as base
@@ -51,12 +58,16 @@ RUN set -ex \
         "libjpeg62-turbo-dev" \
         "zlib1g-dev" \
         "libwebp-dev" \
+        "nodejs" \
+        "npm" \
     && rm -rf /var/lib/apt/lists/*
 COPY --from=extract-deps \
     /opt/python/requirements.txt /opt/python/
+# Copy the built CSS from the Node.js stage
+# COPY --from=frontend-base /dist/ /dist/
+# Install dependencies
 RUN pip install --user --no-warn-script-location \
     --no-cache-dir -r /opt/python/requirements.txt
-
 
 # Define run stage
 FROM base as runtime
@@ -88,10 +99,15 @@ COPY --chown=wagtail:wagtail container-entrypoint.sh /
 COPY --from=build \
     /root/.local \
     /home/wagtail/.local
+# Copy compiled css from frontend stage
+COPY --from=frontend-base \
+    /app/dist \
+    /app/dist
 # Use /app folder as a directory where the source code is stored.
 WORKDIR /app
 # Copy project
 COPY . /app/
+
 # Add non-root user, permissions
 RUN useradd -u 1001 -m -c "hotosm account" -d /home/wagtail -s /bin/false wagtail \
     && chown -R wagtail:wagtail /app /home/wagtail \

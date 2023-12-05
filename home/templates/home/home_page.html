@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load compress %}
 {% block body_class %}
     template-homepage
 {% endblock body_class %}
@@ -7,7 +8,9 @@
     {% comment %}
 Delete the line below if you're just getting started and want to remove the welcome screen!
     {% endcomment %}
-    <link rel="stylesheet" href="{% static 'css/welcome_page.css' %}">
+    {% compress css %}
+        <link rel="stylesheet" href="{% static 'css/welcome_page_processed.css' %}">
+    {% endcompress css %}
 {% endblock extra_css %}
 {% block content %}
     {% comment %}

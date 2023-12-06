@@ -3,7 +3,7 @@ ARG NODE_IMG_TAG=20.5.1
 
 FROM node:${NODE_IMG_TAG}-bookworm-slim as frontend-base
 WORKDIR /app
-COPY package*.json ./
+COPY frontend/package*.json ./
 RUN npm install
 COPY . .
 RUN npm run build

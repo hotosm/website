@@ -3,10 +3,9 @@ ARG NODE_IMG_TAG=20.5.1
 
 FROM node:${NODE_IMG_TAG}-bookworm-slim as frontend-base
 WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
-RUN npm run build
+COPY ./frontend ./frontend
+RUN cd frontend && npm install
+RUN cd frontend && npm run build
 
 # Define the base stage
 FROM docker.io/python:${PYTHON_IMG_TAG}-slim-bookworm as base
@@ -101,8 +100,8 @@ COPY --from=build \
     /home/wagtail/.local
 # Copy compiled css from frontend stage
 COPY --from=frontend-base \
-    /app/dist \
-    /app/dist
+    /app/frontend/dist \
+    /app/frontend/dist
 # Use /app folder as a directory where the source code is stored.
 WORKDIR /app
 # Copy project

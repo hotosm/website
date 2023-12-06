@@ -11,8 +11,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "for file in ./*/static/css/*.css; do postcss $file -o ./dist/css/$(basename $file .css)_processed.css; done",
-    "start": "postcss ./*/static/css/*.css -d ./dist/css/ --watch"
+    "build": "for file in ../*/static/css/*.css; do postcss $file -o ./dist/css/$(basename $file .css)_processed.css; done",
+    "start": "for file in ../*/static/css/*.css; do postcss $file -o ./dist/css/$(basename $file .css)_processed.css --watch; done"
   },
   "repository": {
     "type": "git",

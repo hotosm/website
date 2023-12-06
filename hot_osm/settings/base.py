@@ -142,7 +142,7 @@ STATICFILES_FINDERS = [
 ]
 
 STATICFILES_DIRS = [
-    "dist",
+    os.path.join(BASE_DIR, "frontend", "dist"),
 ]
 
 # Djang Compressor settings

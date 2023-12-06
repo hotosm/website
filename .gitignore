@@ -5,4 +5,4 @@
 **/.pytest_cache/
 **/.venv/
 node_modules
-/dist/
+**/dist/

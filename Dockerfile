@@ -2,10 +2,12 @@ ARG PYTHON_IMG_TAG=3.11
 ARG NODE_IMG_TAG=20.5.1
 
 FROM node:${NODE_IMG_TAG}-bookworm-slim as frontend-base
-WORKDIR /app
-COPY ./frontend ./frontend
-RUN cd frontend && npm install
-RUN cd frontend && npm run build
+WORKDIR /app/frontend
+COPY ./frontend/package*.json ./
+RUN npm install
+COPY ./frontend ./
+COPY .. /app
+RUN npm run build
 
 # Define the base stage
 FROM docker.io/python:${PYTHON_IMG_TAG}-slim-bookworm as base

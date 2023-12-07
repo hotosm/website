@@ -40,7 +40,13 @@ module.exports = {
         "hot-off-white": "#F0EFEF",
         "hot-white": "#FFFFFF",
         "hot-black": "#000000",
-      }
+      },
+      borderRadius: {
+        '8': '8px',
+      },
+      borderWidth: {
+        '2pt': '2.66667px',
+      },
     },
   },
   variants: {

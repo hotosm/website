@@ -16,6 +16,20 @@ module.exports = {
       '12': '120px',
     },
     extend: {
+      fontFamily: {
+        'barlow': ['"Barlow Condensed"', 'sans-serif'],
+        'archivo': ['Archivo', 'sans-serif'],
+      },
+      fontSize: {
+        'h1': ['56pt', 'auto'],
+        'h2': ['48pt', 'auto'],
+        'h3': ['38pt', 'auto'],
+        'h4': ['32pt', 'auto'],
+        'h5': ['28pt', 'auto'],
+        'intro': ['22pt', 'auto'],
+        'base-18': ['18pt', 'auto'],
+        'base-16': ['16pt', 'auto'],
+      },
       colors: {
         "hot-red": "#D73F3F",
         "hot-navy": "#20365B",

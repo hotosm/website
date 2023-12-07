@@ -7,13 +7,14 @@
     "autoprefixer": "^10.4.16",
     "postcss": "^8.4.31",
     "postcss-cli": "^10.1.0",
+    "prettier-plugin-tailwindcss": "^0.5.9",
     "tailwindcss": "^3.3.5"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "for file in ../*/static/css/*.css; do postcss $file -o ./dist/css/$(basename $file .css)_processed.css; done",
-    "start": "for file in ../*/static/css/*.css; do postcss $file -o ./dist/css/$(basename $file .css)_processed.css --watch; done"
-  },
+    "build": "for file in ../*/static/css/*.css; do postcss $file -o ./dist/css/$(basename $file .css)_processed.css; done && prettier --write .",
+    "start": "for file in ../*/static/css/*.css; do postcss $file -o ./dist/css/$(basename $file .css)_processed.css; done && prettier --write ."
+    },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/hotosm/website.git"

@@ -15,9 +15,6 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    volumes:
-      - .:/app
-
   db:
     image: "docker.io/postgres:${POSTGRES_TAG:-16-alpine3.18}"
     env_file:

@@ -24,25 +24,12 @@
         {% if request.in_preview_panel %}<base target="_blank">{% endif %}
         {# Global stylesheets #}
         {% compress css %}
-            <link rel="stylesheet"
-                  type="text/css"
-                  href="{% static 'css/hot_osm_processed.css' %}">
+            <link rel="stylesheet" href="{% static 'css/hot_osm_processed.css' %}">
         {% endcompress css %}
         {% block extra_css %}{# Override this in templates to add extra stylesheets #}{% endblock %}
     </head>
     <body class="min-h-screen {% block body_class %}{% endblock body_class %}">
-        {% comment %} {% block header %}
-            {% include "includes/header.html" %}
-        {% endblock header %}
-        {% block content %}
-        {% endblock content %}
-        {% block footer %}
-            {% include "includes/footer.html" %}
-        {% endblock footer %}
-        {% block extra_js %}
-        {% endblock extra_js %}
-        {% block js %}
-        {% endblock js %} {% endcomment %}
+        {% include "components/navbar.html" %}
         {% block content %}
         {% endblock content %}
         {% django_browser_reload_script %}

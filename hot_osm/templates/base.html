@@ -1,5 +1,6 @@
 {% load static wagtailcore_tags wagtailuserbar %}
 {% load compress %}
+{% load django_browser_reload %}
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -29,14 +30,22 @@
         {% endcompress css %}
         {% block extra_css %}{# Override this in templates to add extra stylesheets #}{% endblock %}
     </head>
-    <body class="{% block body_class %}{% endblock body_class %}">
-        {% wagtailuserbar %}
+    <body class="min-h-screen {% block body_class %}{% endblock body_class %}">
+        {% comment %} {% block header %}
+            {% include "includes/header.html" %}
+        {% endblock header %}
         {% block content %}
         {% endblock content %}
-        {# Global javascript #}
-        <script type="text/javascript" src="{% static 'js/hot_osm.js' %}"></script>
+        {% block footer %}
+            {% include "includes/footer.html" %}
+        {% endblock footer %}
         {% block extra_js %}
-            {# Override this in templates to add extra javascript #}
         {% endblock extra_js %}
+        {% block js %}
+        {% endblock js %} {% endcomment %}
+        {% block content %}
+        {% endblock content %}
+        {% django_browser_reload_script %}
+        {% wagtailuserbar %}
     </body>
 </html>

@@ -25,3 +25,4 @@ repos:
     hooks:
       - id: djlint-reformat-django
       - id: djlint-django
+        exclude: '^hot_osm/templates/components/navbar.html$'

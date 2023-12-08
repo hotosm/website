@@ -7,6 +7,7 @@
         @apply font-archivo;
     }
 
+    /* light mode */
     .btn {
         @apply font-archivo text-base-18 bg-hot-red text-hot-white h-10 px-7.5 rounded-8 border-2pt border-transparent;
     }
@@ -31,4 +32,28 @@
     .dark .btn:focus {
         @apply bg-transparent text-hot-off-white border-hot-off-white outline-none;
     }
+
+    /* nav links */
+    .nav-link {
+        @apply font-barlow text-h1 text-hot-black;
+    }
+
+    .nav-link::after {
+        content: "\21B4";
+        display: inline-block;
+        margin-left: 10px;
+        vertical-align: middle;
+    }
+
+    .nav-link:hover {
+        @apply underline;
+    }
+
+    .focused {
+        outline: 2px solid black;
+        padding-left: 15px;
+        padding-right: 15px;
+        height: 40px;
+    }
+
 }

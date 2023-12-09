@@ -2,9 +2,9 @@
 module.exports = {
   darkMode: "media",
   content: [
-    "../**/templates/*.{html,js}",
-    "../**/templates/components/*.{html,js}",
-  ],
+    "../*/templates/*.{html,js}",
+    "../*/templates/**/*.{html,js}",
+],
   theme: {
     spacing: {
       1: "10px",

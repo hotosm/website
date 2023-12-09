@@ -8,6 +8,10 @@ services:
       target: debug
       args:
         APP_VERSION: "${TAG_OVERRIDE:-main}"
+    volumes:
+      - .:/app  # Mount the codebase for development
+      - /app/frontend/dist/css  # Mount only the necessary directory for live reload
+      - /app/*/templates  # Mount Django templates directory
     ports:
       - 8000:8000
     env_file:

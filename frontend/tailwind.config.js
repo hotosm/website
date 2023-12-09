@@ -1,10 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: "media",
-  content: [
-    "../*/templates/*.{html,js}",
-    "../*/templates/**/*.{html,js}",
-],
+  content: ["../*/templates/*.{html,js}", "../*/templates/**/*.{html,js}"],
   theme: {
     spacing: {
       1: "10px",

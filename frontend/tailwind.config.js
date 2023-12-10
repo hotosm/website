@@ -3,11 +3,9 @@
 const defaultConfig = require('tailwindcss/defaultConfig')
 
 module.exports = {
-  ...defaultConfig,
+  future: {},
+  purge: ["../*/templates/*.{html,js}", "../*/templates/**/*.{html,js}"],
   darkMode: "media",
-  purge: {
-    content: ["../*/templates/*.{html,js}", "../*/templates/**/*.{html,js}"],
-  },
   theme: {
       extend: {
         spacing: {
@@ -57,8 +55,6 @@ module.exports = {
         },
     },
   },
-  variants: {
-    extend: {},
-  },
+  variants: {},
   plugins: [],
 };

@@ -4,6 +4,7 @@
   "description": "A Wagtail CMS for the Humanitarian OpenStreetMap Team",
   "main": "index.js",
   "devDependencies": {
+    "@tailwindcss/forms": "^0.5.7",
     "autoprefixer": "^10.4.16",
     "postcss": "^8.4.32",
     "postcss-cli": "^10.1.0",

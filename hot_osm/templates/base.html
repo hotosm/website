@@ -27,6 +27,10 @@
             <link rel="stylesheet" href="{% static 'css/hot_osm_processed.css' %}">
         {% endcompress css %}
         {% block extra_css %}{# Override this in templates to add extra stylesheets #}{% endblock %}
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500&display=swap"
+              rel="stylesheet">
     </head>
     <body class="min-h-screen {% block body_class %}{% endblock body_class %}">
         {% include "components/navbar.html" %}

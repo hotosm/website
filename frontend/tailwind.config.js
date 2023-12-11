@@ -1,13 +1,14 @@
 /** @type {import('tailwindcss').Config} */
 
-const defaultConfig = require('tailwindcss/defaultConfig')
-
 module.exports = {
   future: {},
   purge: ["../*/templates/*.{html,js}", "../*/templates/**/*.{html,js}"],
   darkMode: "media",
   theme: {
-      extend: {
+    extend: {
+      screens: {
+          "nav-breakpoint": "1050px",
+        },
         spacing: {
           "hot-1": "0.625rem", // 10px
           "hot-1.2": "0.75rem", // 12px

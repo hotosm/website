@@ -16,6 +16,7 @@ module.exports = {
           "hot-2": "1.25rem", // 20px
           "hot-2.6": "1.625rem", // 26px
           "hot-3": "1.875rem", // 30px
+          "hot-3.4": "2.125rem", // 34px
           "hot-4": "2.5rem", // 40px
           "hot-6": "3.75rem", // 60px
           "hot-6.6": "4.125rem", // 66px

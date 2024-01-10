@@ -7,7 +7,7 @@ module.exports = {
   theme: {
     extend: {
       screens: {
-          "nav-breakpoint": "1050px",
+          "nav-breakpoint": "1050px", // prevents nav  links from wrapping into two lines
         },
         spacing: {
           "hot-1": "0.625rem", // 10px

@@ -1,7 +1,7 @@
 <header>
     <div class="border-b border-hot-light">
         <div class="mx-auto max-w-7xl px-2 sm:px-4 ">
-            <div class="relative flex h-12 max-w-7xl justify-between ">
+            <div class="hidden md:relative md:flex md:h-12 md:max-w-7xl justify-between ">
                 <div class="relative z-10 flex items-center px-2 lg:px-0">
                     <!-- Social media icons -->
                     <div class="flex flex-shrink-0 items-center h-hot-2 space-x-1">
@@ -43,111 +43,114 @@
                          aria-hidden="true">
                         <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />
                     </svg>
-                    <ul class="hidden font-medium font-barlow p-4 text-base-16 items-center mt-4 border border-gray-100 bg-transparent md:p-0 md:flex md:flex-row md:space-x-2 md:mt-0 md:border-0"
+                    <ul class="hidden font-medium font-barlow p-4 text-base-16 items-center mt-4 border text-hot-black border-gray-100 bg-transparent md:p-0 md:flex md:flex-row md:space-x-2 md:mt-0 md:border-0"
                         aria-label="main">
                         <li>
-                            <div class="w-full">
-                                <label for="search" class="sr-only">Search</label>
-                                <div class="relative">
-                                    <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                                        <svg class="h-5 w-5 text-gray-400"
-                                             viewBox="0 0 20 20"
-                                             fill="currentColor"
-                                             aria-hidden="true">
-                                            <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />
-                                        </svg>
-                                    </div>
-                                    <input id="search"
-                                           name="search"
-                                           class="font-barlow block w-full rounded-md border-0 bg-white py-1.5 pl-10 pr-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-hot-dark-grey focus:ring-inset focus:ring- sm:text-sm sm:leading-6"
-                                           placeholder="Search"
-                                           type="search">
-                                </div>
-                            </li>
-                            <li>
-                                <a href="#"
-                                   class="block py-2 px-3 text-hot-black rounded md:p=0  hover:underline">EN</a>
-                            </li>
-                            <li>
-                                <a href="#"
-                                   class="block py-2 px-3 text-hot-black rounded md:p=0  hover:underline">News</a>
-                            </li>
-                            <li>
-                                <a href="#"
-                                   class="block py-2 px-3 text-hot-black rounded whitespace-nowrap md:p=0  hover:underline">
-                                    Contact Us
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
+                            <svg class="h-5 w-5 mx-3 hover:cursor-pointer flex"
+                                 viewBox="0 0 20 20"
+                                 fill="currentColor"
+                                 aria-hidden="true"
+                                 alt="Search">
+                                <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />
+                            </svg>
+                        </li>
+                        <li>
+                            <a href="#"
+                               class="block py-2 px-3 text-hot-black rounded md:p=0  hover:underline">EN
+                                <span class="absolute translate-y-[-15%] translate-x-1">⌄</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#"
+                               class="block py-2 px-3 text-hot-black rounded md:p=0  hover:underline">News</a>
+                        </li>
+                        <li>
+                            <a href="#"
+                               class="block py-2 px-3 text-hot-black rounded whitespace-nowrap md:p=0  hover:underline">
+                                Contact Us
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
     </div>
-    <div class="mx-auto max-w-7xl p-hot-1.5 flex flex-wrap items-center justify-between">
-        <a class="h-10" href="/">{% include "./logo.html" %}</a>
-        <!-- Mobile menu button: Open -->
+</div>
+<div class="mx-auto max-w-7xl p-hot-1.5 flex flex-wrap items-center justify-between">
+    <a class="h-10" href="/">{% include "./logo.html" %}</a>
+    <!-- Mobile menu button: Open -->
+    <div class="relative z-0 flex items-center justify-end">
+        <svg class="md:hidden h-5 w-5 mr-1 hover:cursor-pointer text-gray-500"
+             viewBox="0 0 20 20"
+             fill="currentColor"
+             aria-hidden="true"
+             alt="Search">
+            <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />
+        </svg>
         <button data-collapse-toggle="navbar-default"
-                type="button"
-                class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg nav-breakpoint:hidden hover:bg-gray-100 focus:outline-none focus:ring-2                                 focus:ring-hot-dark-grey dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-                aria-controls="navbar-default"
-                aria-expanded="false">
+            type="button"
+            class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg nav-breakpoint:hidden hover:bg-gray-100 focus:outline-none
+            focus:ring-inset
+            aria-controls="navbar-default"
+            aria-expanded="false">
             <span class="sr-only">Open main menu</span>
-            <svg class="w-5 h-5"
-                 aria-hidden="true"
-                 xmlns="http://www.w3.org/2000/svg"
+            <svg class="block h-6 w-6"
                  fill="none"
-                 viewBox="0 0 17 14">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15" />
+                 viewBox="0 0 24 24"
+                 stroke-width="1.5"
+                 stroke="currentColor"
+                 aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
             </svg>
         </button>
-        <!-- Nav menu -->
-        <div class="hidden w-full nav-breakpoint:block nav-breakpoint:w-auto">
-            <nav>
-                <ul class="font-medium font-barlow flex flex-col p-4 text-base-18 md:p-0 mt-4 border border-gray-100 rounded-lg bg-transparent md:flex-row md:space-x-4 md:mt-0 md:border-0  dark:border-gray-700"
-                    aria-label="main">
-                    <li>
-                        <a href="#"
-                           class="block py-2 px-3 text-hot-black rounded md:p=0  hover:underline">
-                            Who We Are
-                            <span class="absolute translate-y-[-15%] translate-x-1">⌄</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#"
-                           class="block py-2 px-3 text-hot-black rounded md:p=0  hover:underline ">
-                            Our Work
-                            <span class="absolute translate-y-[-15%] translate-x-1">⌄</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#"
-                           class="block py-2 px-3 text-hot-black rounded md:p=0  hover:underline">
-                            Open Mapping Hubs
-                            <span class="absolute translate-y-[-15%] translate-x-1">⌄</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#"
-                           class="block py-2 px-3 text-hot-black rounded md:p=0  hover:underline">
-                            Tools &amp; Resources
-                            <span class="absolute translate-y-[-15%] translate-x-1">⌄</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#"
-                           class="block py-2 px-3 text-hot-black rounded md:p=0  hover:underline">
-                            Get Involved
-                            <span class="absolute translate-y-[-15%] translate-x-1">⌄</span>
-                        </a>
-                    </li>
-                    <li>
-                        <button class="h-hot-4 bg-hot-red text-hot-white h-hot-4 px-hot-3 rounded-8 border-2pt border-transparent hover:bg-hot-off-white hover:text-hot-red focus:bg-transparent focus:text-hot-red focus:outline-none md:ml-3">
-                            Start Mapping
-                        </button>
-                    </li>
-                </ul>
-            </nav>
-        </div>
     </div>
+    <!-- Nav menu -->
+    <div class="hidden w-full nav-breakpoint:block nav-breakpoint:w-auto">
+        <nav>
+            <ul class="font-medium font-barlow flex flex-col p-4 text-base-18 md:p-0 mt-4 border border-gray-100 rounded-lg bg-transparent md:flex-row md:space-x-4 md:mt-0 md:border-0  dark:border-gray-700"
+                aria-label="main">
+                <li>
+                    <a href="#"
+                       class="block py-2 px-3 text-hot-black rounded md:p=0  hover:underline">
+                        Who We Are
+                        <span class="absolute translate-y-[-15%] translate-x-1">⌄</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#"
+                       class="block py-2 px-3 text-hot-black rounded md:p=0  hover:underline ">
+                        Our Work
+                        <span class="absolute translate-y-[-15%] translate-x-1">⌄</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#"
+                       class="block py-2 px-3 text-hot-black rounded md:p=0  hover:underline">
+                        Open Mapping Hubs
+                        <span class="absolute translate-y-[-15%] translate-x-1">⌄</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#"
+                       class="block py-2 px-3 text-hot-black rounded md:p=0  hover:underline">
+                        Tools &amp; Resources
+                        <span class="absolute translate-y-[-15%] translate-x-1">⌄</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#"
+                       class="block py-2 px-3 text-hot-black rounded md:p=0  hover:underline">
+                        Get Involved
+                        <span class="absolute translate-y-[-15%] translate-x-1">⌄</span>
+                    </a>
+                </li>
+                <li>
+                    <button class="h-hot-4 bg-hot-red text-hot-white h-hot-4 px-hot-3 rounded-8 border-2pt border-transparent hover:bg-hot-off-white hover:text-hot-red focus:bg-transparent focus:text-hot-red focus:outline-none md:ml-3">
+                        Start Mapping
+                    </button>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
 </header>

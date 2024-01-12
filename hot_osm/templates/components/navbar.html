@@ -1,9 +1,9 @@
-<header>
+<header x-data="{ isOpen: false }">
     <!--Desktop banner-->
     <div class="hidden nav-breakpoint:block border-b border-hot-light">
         <div class="flex h-12 mx-auto max-w-7xl px-2 justify-between items-center">
             <!-- Social media icons -->
-            <div class="flex flex-shrink-0 h-hot-2 space-x-1 px-2">
+            <div class="flex flex-shrink-0 h-hot-2 space-x-1">
                 <a href="https://www.facebook.com/hotosm" aria-label="Facebook">
                     <svg class="h-full w-6" viewBox="0 0 15 14">
                         <title>Facebook</title>
@@ -21,7 +21,7 @@
                 <a href="https://www.instagram.com/open.mapping.hubs/"
                    aria-label="Instagram">
                     <svg xmlns="http://www.w3.org/2000/svg"
-                         class="h-full w-6"
+                         class="h-full w-5"
                          viewBox="0 0 14 14">
                         <title>Instagram</title>
                         <g fill="#D73F3F" fill-rule="evenodd">
@@ -56,7 +56,7 @@
                 </li>
                 <li>
                     <div class="py-2 pr-5 relative">
-                        <a href="#" class="text-hot-black rounded hover:underline">EN</a>
+                        <a href="#" class="text-hot-black hover:underline">EN</a>
                         <span class="absolute translate-y-[-15%] translate-x-1">⌄</span>
                     </div>
                 </li>
@@ -73,23 +73,31 @@
     </div>
     <div class="mx-auto max-w-7xl p-hot-1.5 flex flex-wrap items-center justify-between">
         <a class="h-10" href="/">{% include "./logo.html" %}</a>
-        <!-- Mobile menu button: Open -->
+        <!-- Mobile search icon -->
         <div class="relative z-0 flex items-center justify-end">
-            <svg class="nav-breakpoint:hidden h-5 w-5 mr-1 hover:cursor-pointer text-gray-500"
-                 viewBox="0 0 20 20"
+            <svg class="nav-breakpoint:hidden h-5 w-5 mr-hot-1.2 hover:cursor-pointer text-gray-500"
+                 width="viewBox"
+                 None="0 0 20 20"
                  fill="currentColor"
                  aria-hidden="true"
                  alt="Search">
                 <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />
             </svg>
-            <button data-collapse-toggle="navbar-default"
-                type="button"
-                class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg nav-breakpoint:hidden hover:bg-gray-100 focus:outline-none
-                focus:ring-inset
-                aria-controls="navbar-default"
-                aria-expanded="false">
+            <!-- Mobile menu button -->
+            <button type="button"
+                    @click="isOpen = !isOpen"
+                    class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-inset nav-breakpoint:hidden"
+                    aria-controls="mobile-menu"
+                    aria-expanded="false">
+                <span class="absolute -inset-0.5"></span>
                 <span class="sr-only">Open main menu</span>
-                <svg class="block h-6 w-6"
+                <!--
+                Icon when menu is closed.
+
+                Menu open: "hidden", Menu closed: "block"
+              -->
+                <svg x-show="!isOpen"
+                     class="h-6 w-6"
                      fill="none"
                      viewBox="0 0 24 24"
                      stroke-width="1.5"
@@ -97,44 +105,53 @@
                      aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                 </svg>
+                <!--
+                Icon when menu is open.
+
+                Menu open: "block", Menu closed: "hidden"
+              -->
+                <svg x-show="isOpen"
+                     class="h-6 w-6"
+                     fill="none"
+                     viewBox="0 0 24 24"
+                     stroke-width="1.5"
+                     stroke="currentColor"
+                     aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
             </button>
         </div>
-        <!-- Nav menu -->
-        <div class="hidden w-full nav-breakpoint:block nav-breakpoint:w-auto">
+        <!-- Desktop navigation -->
+        <div class="hidden nav-breakpoint:block">
             <nav>
-                <ul class="font-medium font-barlow flex flex-col p-4 text-base-18 nav-breakpoint:p-0 mt-4 border border-gray-100 rounded-lg bg-transparent nav-breakpoint:flex-row nav-breakpoint:space-x-4 nav-breakpoint:mt-0 nav-breakpoint:border-0  dark:border-gray-700"
+                <ul class="font-medium font-barlow flex text-base-18 p-0 flex-row space-x-4 mt-0 border-0"
                     aria-label="main">
                     <li>
-                        <a href="#"
-                           class="block py-2 px-3 text-hot-black rounded nav-breakpoint:p=0  hover:underline">
+                        <a href="#" class="block py-2 px-3 text-hot-black hover:underline">
                             Who We Are
                             <span class="absolute translate-y-[-15%] translate-x-1">⌄</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#"
-                           class="block py-2 px-3 text-hot-black rounded nav-breakpoint:p=0  hover:underline ">
+                        <a href="#" class="block py-2 px-3 text-hot-black  hover:underline ">
                             Our Work
                             <span class="absolute translate-y-[-15%] translate-x-1">⌄</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#"
-                           class="block py-2 px-3 text-hot-black rounded nav-breakpoint:p=0  hover:underline">
+                        <a href="#" class="block py-2 px-3 text-hot-black hover:underline">
                             Open Mapping Hubs
                             <span class="absolute translate-y-[-15%] translate-x-1">⌄</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#"
-                           class="block py-2 px-3 text-hot-black rounded nav-breakpoint:p=0  hover:underline">
+                        <a href="#" class="block py-2 px-3 text-hot-black   hover:underline">
                             Tools &amp; Resources
                             <span class="absolute translate-y-[-15%] translate-x-1">⌄</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#"
-                           class="block py-2 px-3 text-hot-black rounded nav-breakpoint:p=0  hover:underline">
+                        <a href="#" class="block py-2 px-3 text-hot-black  hover:underline">
                             Get Involved
                             <span class="absolute translate-y-[-15%] translate-x-1">⌄</span>
                         </a>
@@ -146,6 +163,50 @@
                     </li>
                 </ul>
             </nav>
+        </div>
+    </div>
+    <!-- Mobile navigation -->
+    <div x-show="isOpen"
+         class="font-barlow nav-breakpoint:hidden"
+         id="mobile-menu">
+        <div class="space-y-1 pb-3 pt-2 font-medium text-base-18">
+            <!-- Current: "bg-indigo-50 border-indigo-500 text-indigo-700", Default: "border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800" -->
+            <!--Current-->
+            <a href="#"
+               class="block border-l-4 border-hot-red bg-hot-light-grey py-2 pl-3 pr-4 text-base font-medium text-hot-red">                            Who We Are
+                <span class="absolute translate-y-[-15%] translate-x-1">⌄</span>
+            </a>
+            <a href="#"
+               class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800">                            Our Work
+                <span class="absolute translate-y-[-15%] translate-x-1">⌄</span>
+            </a>
+            <a href="#"
+               class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800">                            Open Mapping Hubs
+                <span class="absolute translate-y-[-15%] translate-x-1">⌄</span>
+            </a>
+            <a href="#"
+               class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800">                            Tools &amp; Resources
+                <span class="absolute translate-y-[-15%] translate-x-1">⌄</span>
+            </a>
+            <a href="#"
+               class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800">                            Get Involved
+                <span class="absolute translate-y-[-15%] translate-x-1">⌄</span>
+            </a>
+            <button class="h-hot-4 bg-hot-red text-hot-white h-hot-4 my-4 ml-3 mr-4 px-hot-3 rounded-8 border-2pt border-transparent hover:bg-hot-off-white hover:text-hot-red focus:bg-transparent focus:text-hot-red focus:outline-none nav-breakpoint:ml-3">
+                Start Mapping
+            </button>
+        </div>
+        <div class="border-t border-b border-gray-200 pb-3 py-4">
+            <div class="flex items-center px-4"></div>
+            <div class="mt-3 space-y-1">
+                <a href="#"
+                   class="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800">EN
+                    <span class="absolute translate-y-[-15%] translate-x-1">⌄</span></a>
+                <a href="#"
+                   class="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800">News</a>
+                <a href="#"
+                   class="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800">Contact Us</a>
+            </div>
         </div>
     </div>
 </header>

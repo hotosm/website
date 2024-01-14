@@ -1,0 +1,7 @@
+<a href="{{ link }}"
+   class="block font-medium font-barlow text-hot-black py-2 pl-3 pr-4 border-l-4 text-base {% if selected|default:False %}border-hot-red bg-hot-light-grey text-hot-red {% else %} border-transparent hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800 {% endif %}{{ classes }}">
+    {{ text }}
+    {% if parent|default:False %}
+        <span class="absolute translate-y-[-15%] translate-x-1">⌄</span>
+    {% endif %}
+</a>

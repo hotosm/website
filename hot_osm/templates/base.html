@@ -35,7 +35,7 @@
                 src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
     </head>
     <body class="min-h-screen {% block body_class %}{% endblock body_class %}">
-        {% include "components/navbar/navbar.html" %}
+        {% include "components/header/header.html" %}
         {% block content %}
         {% endblock content %}
         {% django_browser_reload_script %}

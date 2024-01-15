@@ -1,0 +1,15 @@
+<div class="hidden nav-breakpoint:block border-b border-hot-light">
+    <nav class="flex h-12 mx-auto max-w-7xl px-2 justify-between items-center">
+        <!-- Social media icons -->
+        {% include "../branded_elements/social_icons.html" %}
+        <!-- Search, Language, News, Contact Us -->
+        <ul class="font-medium font-barlow text-base-16 items-center text-hot-black border-gray-100 bg-transparent flex border-0"
+            role="navigation"
+            aria-label="Secondary Menu">
+            <li>{% include "../search/search_icon.html" with classes="mr-6" %}</li>
+            <li>{% include "../branded_elements/link.html" with link="#" text="EN" classes="py-2 pr-5" parent=True %}</li>
+            <li>{% include "../branded_elements/link.html" with link="#" text="News" classes="py-2 px-3" %}</li>
+            <li>{% include "../branded_elements/link.html" with link="#" text="Contact Us" classes="py-2 px-3" %}</li>
+        </ul>
+    </nav>
+</div>

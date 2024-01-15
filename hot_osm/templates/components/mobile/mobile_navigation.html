@@ -1,0 +1,23 @@
+<div x-show="isOpen"
+     @click.outside="isOpen = false"
+     class="font-barlow nav-breakpoint:hidden"
+     id="mobile-menu">
+    <nav class="space-y-1 pb-3 pt-2 font-medium text-base-18"
+         aria-label="Global - Mobile">
+        <ul class="list-none pl-0">
+            <li>{% include "../mobile/mobile_menu_link.html" with link="#" text="Who We Are" selected=True parent=True %}</li>
+            <li>{% include "../mobile/mobile_menu_link.html" with link="#" text="Our Work" parent=True %}</li>
+            <li>{% include "../mobile/mobile_menu_link.html" with link="#" text="Open Mapping Hubs" parent=True %}</li>
+            <li>{% include "../mobile/mobile_menu_link.html" with link="#" text="Tools &amp; Resources" parent=True %}</li>
+            <li>{% include "../mobile/mobile_menu_link.html" with link="#" text="Get Involved" parent=True %}</li>
+            <li>{% include "../branded_elements/button.html" with text="Start Mapping" classes="my-2 ml-3 mr-4" %}</li>
+        </ul>
+    </nav>
+    <nav class="border-t border-b border-gray-200 py-2">
+        <ul class="space-y-0.5 list-none pl-0">
+            <li>{% include "../mobile/mobile_menu_link.html" with link="#" text="EN" parent=True classes="px-4" %}</li>
+            <li>{% include "../mobile/mobile_menu_link.html" with link="#" text="News" classes="px-4" %}</li>
+            <li>{% include "../mobile/mobile_menu_link.html" with link="#" text="Contact Us" classes="px-4" %}</li>
+        </ul>
+    </nav>
+</div>

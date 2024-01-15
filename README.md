@@ -8,6 +8,14 @@ The codebase is structured as a standard Django project with a `settings` direct
 
 The project uses Docker for development and production environments, with separate Docker Compose files for each.
 
+This project's frontend leverages TailwindCSS and Alpine.js. The design of the components is inspired by TailwindUI.
+
+TailwindCSS is a utility-first CSS framework that we've used for styling our application. It allows for rapid UI development with its low-level utility classes.
+
+Alpine.js, on the other hand, is a minimal JavaScript framework used for managing component behavior. It operates entirely on the client-side, in the browser. This means that Alpine.js interacts with the HTML after Django has completed its server-side rendering.
+
+Together, TailwindCSS and Alpine.js provide a powerful and efficient combination for building interactive user interfaces.
+
 ## Setting Up Environment Variables
 
 To set up environment variables for your local development environment, you'll need to create a `.env' file in the root directory of the project. This file will store your environment variables.

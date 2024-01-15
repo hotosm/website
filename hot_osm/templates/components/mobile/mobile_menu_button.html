@@ -1,5 +1,5 @@
 <button type="button"
-        @click="isOpen = !isOpen"
+        @click="isMenuOpen = !isMenuOpen"
         class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-inset nav-breakpoint:hidden"
         aria-controls="mobile-menu"
         aria-expanded="false">
@@ -10,7 +10,7 @@
 
     Menu open: "hidden", Menu closed: "block"
     -->
-    <svg x-show="!isOpen"
+    <svg x-show="!isMenuOpen"
          class="h-6 w-6"
          fill="none"
          viewBox="0 0 24 24"
@@ -24,7 +24,7 @@
 
     Menu open: "block", Menu closed: "hidden"
     -->
-    <svg x-show="isOpen"
+    <svg x-show="isMenuOpen"
          class="h-6 w-6"
          fill="none"
          viewBox="0 0 24 24"

@@ -15,8 +15,6 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "for file in ../*/static/css/*.css; do npx tailwindcss build $file -o ./dist/css/$(basename $file .css)_processed.css; done && prettier --write .",
-
-    "build": "postcss ../hot_osm/static/css/hot_osm.css -o ./dist/css/hot_osm_processed.css && prettier --write .",
     "start": "for file in ../*/static/css/*.css; do postcss $file -o ./dist/css/$(basename $file .css)_processed.css; done && prettier --write ."
   },
   "repository": {

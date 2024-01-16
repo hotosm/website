@@ -2,7 +2,7 @@
 
 module.exports = {
   future: {},
-  purge: ["../*/templates/*.{html,js}", "../*/templates/**/*.{html,js}"],
+  content: ["../*/templates/*.{html,js}", "../*/templates/**/*.{html,js}"],
   darkMode: "media",
   theme: {
     extend: {

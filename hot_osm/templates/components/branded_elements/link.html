@@ -1,5 +1,6 @@
 <a href="{{ link }}"
-   class="hover:underline block font-medium font-barlow text-hot-black {{ classes }}">
+   class="hover:underline block font-medium font-barlow text-hot-black {{ classes }}"
+   aria-label="{{ text }}{% if parent|default:False %}, submenu{% endif %}">
     {{ text }}
     {% if parent|default:False %}
         <span class="absolute translate-y-[-15%] translate-x-1">⌄</span>

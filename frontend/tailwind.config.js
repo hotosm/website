@@ -49,9 +49,6 @@ module.exports = {
           "hot-white": "#FFFFFF",
           "hot-black": "#000000",
         },
-        borderRadius: {
-          8: "8px",
-        },
     },
   },
   variants: {},

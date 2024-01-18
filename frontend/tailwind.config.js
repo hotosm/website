@@ -25,29 +25,29 @@ module.exports = {
           "hot-12": "7.5rem", // 120px
         },
         fontFamily: {
-          barlow: ['"Barlow Condensed"', "sans-serif"],
-          archivo: ["Archivo", "sans-serif"],
+          barlow: "var(--font-barlow)",
+          archivo: "var(--font-archivo)",
         },
         fontSize: {
-          h1: ["3.5rem", "auto"], // 56pt
-          h2: ["3rem", "auto"], // 48pt
-          h3: ["2.375rem", "auto"], // 38pt
-          h4: ["2rem", "auto"], // 32pt
-          h5: ["1.75rem", "auto"], // 28pt
-          intro: ["1.375rem", "auto"], // 22pt
-          "base-20": ["1.25rem", "auto"], // 20pt
-          "base-18": ["1.125rem", "auto"], // 18pt
-          "base-16": ["1rem", "auto"], // 16pt
+          h1: "var(--font-size-h1)", // 56pt
+          h2: "var(--font-size-h2)", // 48pt
+          h3: "var(--font-size-h3)", // 38pt
+          h4: "var(--font-size-h4)", // 32pt
+          h5: "var(--font-size-h5)", // 28pt
+          intro: "var(--font-size-intro)", // 22pt
+          "base-20": "var(--font-size-base-20)", // 20pt
+          "base-18": "var(--font-size-base-18)", // 18pt
+          "base-16": "var(--font-size-base-16)", // 16pt
         },
         colors: {
-          "hot-red": "#D73F3F",
-          "hot-navy": "#20365B",
-          "hot-dark-grey": "#68707F",
-          "hot-slate-grey": "#929D83",
-          "hot-light-grey": "#E1E0E0",
-          "hot-off-white": "#F0EFEF",
-          "hot-white": "#FFFFFF",
-          "hot-black": "#000000",
+          "hot-red": "var(--hot-red)",
+          "hot-navy": "var(--hot-navy)",
+          "hot-dark-grey": "var(--hot-dark-grey)",
+          "hot-slate-grey": "var(--hot-slate-grey)",
+          "hot-light-grey": "var(--hot-light-grey)",
+          "hot-off-white": "var(--hot-off-white)",
+          "hot-white": "var(--hot-white)",
+          "hot-black": "var(--hot-black)",
         },
     },
   },

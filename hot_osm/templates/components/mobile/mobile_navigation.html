@@ -2,7 +2,7 @@
      @click.outside="isMenuOpen = false"
      class="font-barlow nav-breakpoint:hidden"
      id="mobile-menu">
-    <nav class="space-y-1 pb-3 pt-2 font-medium text-base-18"
+    <nav class="gap-y-1 pb-3 pt-2 font-medium text-base-18"
          aria-label="Global - Mobile">
         <ul class="list-none pl-0">
             <li>{% include "../mobile/mobile_menu_link.html" with link="#" text="Who We Are" selected=True parent=True %}</li>
@@ -14,7 +14,7 @@
         </ul>
     </nav>
     <nav class="border-t border-b border-gray-200 py-2">
-        <ul class="space-y-0.5 list-none pl-0">
+        <ul class="gap-y-0.5 list-none pl-0">
             <li>{% include "../mobile/mobile_menu_link.html" with link="#" text="EN" parent=True classes="px-4" %}</li>
             <li>{% include "../mobile/mobile_menu_link.html" with link="#" text="News" classes="px-4" %}</li>
             <li>{% include "../mobile/mobile_menu_link.html" with link="#" text="Contact Us" classes="px-4" %}</li>

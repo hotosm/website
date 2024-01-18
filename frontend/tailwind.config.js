@@ -6,9 +6,6 @@ module.exports = {
   darkMode: "media",
   theme: {
     extend: {
-      screens: {
-          "nav-breakpoint": "1050px", // prevents nav  links from wrapping into two lines
-        },
         spacing: {
           "hot-1": "0.625rem", // 10px
           "hot-1.2": "0.75rem", // 12px

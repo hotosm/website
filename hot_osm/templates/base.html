@@ -1,4 +1,6 @@
 {% load static wagtailcore_tags wagtailuserbar %}
+{% load compress %}
+{% load django_browser_reload %}
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -21,19 +23,22 @@
         {# Force all links in the live preview panel to be opened in a new tab #}
         {% if request.in_preview_panel %}<base target="_blank">{% endif %}
         {# Global stylesheets #}
-        <link rel="stylesheet"
-              type="text/css"
-              href="{% static 'css/hot_osm.css' %}">
+        {% compress css %}
+            <link rel="stylesheet" href="{% static 'css/hot_osm_processed.css' %}">
+        {% endcompress css %}
         {% block extra_css %}{# Override this in templates to add extra stylesheets #}{% endblock %}
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500&display=swap"
+              rel="stylesheet">
+        <script defer
+                src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
     </head>
-    <body class="{% block body_class %}{% endblock body_class %}">
-        {% wagtailuserbar %}
+    <body class="min-h-screen {% block body_class %}{% endblock body_class %}">
+        {% include "components/header/header.html" %}
         {% block content %}
         {% endblock content %}
-        {# Global javascript #}
-        <script type="text/javascript" src="{% static 'js/hot_osm.js' %}"></script>
-        {% block extra_js %}
-            {# Override this in templates to add extra javascript #}
-        {% endblock extra_js %}
+        {% django_browser_reload_script %}
+        {% wagtailuserbar %}
     </body>
 </html>

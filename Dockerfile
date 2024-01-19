@@ -2,11 +2,10 @@ ARG PYTHON_IMG_TAG=3.11
 ARG NODE_IMG_TAG=20.5.1
 
 FROM node:${NODE_IMG_TAG}-bookworm-slim as frontend-base
+COPY . ./app
 WORKDIR /app/frontend
-COPY ./frontend/package*.json ./
 RUN npm install
-COPY ./frontend ./
-COPY .. /app
+RUN mkdir -p ./dist/css
 RUN npm run build
 
 # Define the base stage
@@ -64,8 +63,6 @@ RUN set -ex \
     && rm -rf /var/lib/apt/lists/*
 COPY --from=extract-deps \
     /opt/python/requirements.txt /opt/python/
-# Copy the built CSS from the Node.js stage
-# COPY --from=frontend-base /dist/ /dist/
 # Install dependencies
 RUN pip install --user --no-warn-script-location \
     --no-cache-dir -r /opt/python/requirements.txt
@@ -101,9 +98,8 @@ COPY --from=build \
     /root/.local \
     /home/wagtail/.local
 # Copy compiled css from frontend stage
-COPY --from=frontend-base \
-    /app/frontend/dist \
-    /app/frontend/dist
+# In the final stage of your Dockerfile...
+COPY --from=frontend-base /app/frontend/dist/css /app/frontend/dist/css
 # Use /app folder as a directory where the source code is stored.
 WORKDIR /app
 # Copy project

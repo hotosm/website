@@ -4,15 +4,17 @@
   "description": "A Wagtail CMS for the Humanitarian OpenStreetMap Team",
   "main": "index.js",
   "devDependencies": {
+    "@tailwindcss/forms": "^0.5.7",
     "autoprefixer": "^10.4.16",
-    "postcss": "^8.4.31",
+    "postcss": "^8.4.32",
     "postcss-cli": "^10.1.0",
-    "tailwindcss": "^3.3.5"
+    "postcss-import": "^15.1.0",
+    "prettier-plugin-tailwindcss": "^0.5.9",
+    "tailwindcss": "^3.3.6"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "for file in ../*/static/css/*.css; do postcss $file -o ./dist/css/$(basename $file .css)_processed.css; done",
-    "start": "for file in ../*/static/css/*.css; do postcss $file -o ./dist/css/$(basename $file .css)_processed.css --watch; done"
+    "build": "npx postcss ../hot_osm/static/css/hot_osm.css --config ./postcss.config.js -o ./dist/css/hot_osm_processed.css && prettier --write ."
   },
   "repository": {
     "type": "git",

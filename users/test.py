@@ -4,8 +4,6 @@ from django.db import IntegrityError
 
 from .factory import UserFactory
 
-User = get_user_model()
-
 
 @pytest.mark.django_db
 class TestUser:
@@ -16,7 +14,7 @@ class TestUser:
     def test_user_factory(self):
         user = UserFactory()
 
-        assert isinstance(user, User)
+        assert isinstance(user, get_user_model())
 
     def test_user_str(self):
         user = UserFactory(username="testuser")

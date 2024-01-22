@@ -11,6 +11,8 @@ build-prod:
 test:
 	@docker compose -f docker-compose.dev.yml run --rm web pytest
 
+cov:
+	@docker compose -f docker-compose.dev.yml run --rm web coverage run -m pytest
 up:
 	@docker compose -f docker-compose.dev.yml up -d
 

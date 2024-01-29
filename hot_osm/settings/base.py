@@ -51,6 +51,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "compressor",
+    "wagtail_localize",
+    "wagtail_localize.locales",
 ]
 
 MIDDLEWARE = [

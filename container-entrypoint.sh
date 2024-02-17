@@ -10,6 +10,13 @@
 echo "Apply database migrations"
 python manage.py migrate
 
+# Apply localizations
+echo "Apply localizations"
+python manage.py makemessages -l en
+python manage.py makemessages -l fr
+python manage.py makemessages -l es
+python manage.py compilemessages
+
 # Collect static
 echo "Collect static files"
 python manage.py collectstatic --noinput --clear

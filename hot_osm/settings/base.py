@@ -136,6 +136,10 @@ WAGTAIL_I18N_ENABLED = True
 
 USE_TZ = True
 
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR, "locale"),
+]
+
 WAGTAIL_CONTENT_LANGUAGES = [
     ("en", "English"),
     ("fr", "French"),

@@ -22,7 +22,7 @@ LABEL org.hotosm.fmtm.app-name="backend" \
 RUN set -ex \
     && apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install \
-    -y --no-install-recommends "locales" "ca-certificates" \
+    -y --no-install-recommends "locales" "ca-certificates" "gettext" \
     && DEBIAN_FRONTEND=noninteractive apt-get upgrade -y \
     && rm -rf /var/lib/apt/lists/* \
     && update-ca-certificates

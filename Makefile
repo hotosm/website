@@ -14,10 +14,12 @@ test:
 cov:
 	@docker compose -f docker-compose.dev.yml run --rm web coverage run -m pytest
 
-messages:
+makemessages:
 	@docker compose -f docker-compose.dev.yml run --rm web python manage.py makemessages -l en
 	@docker compose -f docker-compose.dev.yml run --rm web python manage.py makemessages -l fr
 	@docker compose -f docker-compose.dev.yml run --rm web python manage.py makemessages -l es
+
+makecompile:
 	@docker compose -f docker-compose.dev.yml run --rm web python manage.py compilemessages
 
 up:

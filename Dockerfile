@@ -79,7 +79,6 @@ ENV PORT=8000 \
     PYTHON_LIB="/home/wagtail/.local/lib/python$PYTHON_IMG_TAG/site-packages" \
     SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt \
     REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt \
-    EXAMPLE_DOTENV=.env.example \
     CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
 # Install non-dev versions of packages (smaller)
 RUN set -ex \

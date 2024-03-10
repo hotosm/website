@@ -136,7 +136,7 @@ WAGTAIL_I18N_ENABLED = True
 
 USE_TZ = True
 
-WAGTAIL_CONTENT_LANGUAGES = [
+WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
     ("en", "English"),
     ("fr", "French"),
     ("es", "Spanish"),

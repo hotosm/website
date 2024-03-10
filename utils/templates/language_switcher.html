@@ -1,0 +1,16 @@
+{% load i18n %}
+<div>
+    <form action="{% url "utils:set_language" %}" method="post">
+        {% csrf_token %}
+        <select name="language_code">
+            {% get_current_language as LANGUAGE_CODE %} {# returns preferred lang as a string - i.e. "en" #}
+            {% get_available_languages as LANGUAGES %} {# returns a list of tuples - i.e. ("en", "English")  #}
+            {% get_language_info_list for LANGUAGES as languages %}
+            {% for language in languages %}
+                <option value="{{ language.code }}"
+                        {% if language == LANGUAGE_CODE %}selected{% endif %}>{{ language.name_local }}</option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="{% trans "Switch" %}" />
+    </form>
+</div>

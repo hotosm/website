@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load util_filters %}
 {% get_current_language as LANGUAGE_CODE %} {# returns preferred lang as a string - i.e. "en" #}
 <div x-data="{language: '{{ LANGUAGE_CODE }}'}">
     <form action="{% url "utils:set_language" %}" method="post">
@@ -10,7 +11,9 @@
             {% get_language_info_list for LANGUAGES as languages %}
             {% for language in languages %}
                 <option value="{{ language.code }}"
-                        {% if language.code == LANGUAGE_CODE %}selected{% endif %}>{{ language.name_local }}</option>
+                        {% if language.code == LANGUAGE_CODE %}selected{% endif %}>
+                    {{ language.name_local|title_case }}
+                </option>
             {% endfor %}
         </select>
     </form>

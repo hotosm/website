@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     "home",
     "search",
     "users",
+    "utils",
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
     "wagtail.embeds",

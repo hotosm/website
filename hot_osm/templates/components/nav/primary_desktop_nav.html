@@ -1,9 +1,17 @@
+{% load i18n %}
 <div class="hidden lg:block">
     <nav>
         <ul class="flex text-base-18 p-0 flex-row py-0 gap-x-5" aria-label="main">
-            <li>{% include "../branded_elements/link.html" with link="#" text="Who We Are" classes="py-2" parent=True %}</li>
-            <li>{% include "../branded_elements/link.html" with link="#" text="Our Work" classes="py-2" parent=True %}</li>
-            <li>{% include "../branded_elements/link.html" with link="#" text="Our Mapping Hubs" classes="py-2" parent=True %}</li>
+            {% comment %} Strings for translation {% endcomment %}
+            {% translate "Who We Are" as who_we_are %}
+            {% translate "Our Work" as our_work %}
+            {% translate "Our Mapping Hubs" as our_mapping_hubs %}
+            {% translate "Tools &amp; Resources" as tools_resources %}
+            {% translate "Get Involved" as get_involved %}
+            {% translate "Start Mapping" as start_mapping %}
+            <li>{% include "../branded_elements/link.html" with link="#" text=who_we_are classes="py-2" parent=True %}</li>
+            <li>{% include "../branded_elements/link.html" with link="#" text=our_work classes="py-2" parent=True %}</li>
+            <li>{% include "../branded_elements/link.html" with link="#" text=our_mapping_hubs classes="py-2" parent=True %}</li>
             <li>
                 {% include "../branded_elements/link.html" with link="#" text="Tools &amp; Resources" classes="py-2" parent=True %}
             </li>

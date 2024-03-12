@@ -2,8 +2,10 @@
 {% load util_filters %}
 {% get_current_language as LANGUAGE_CODE %} {# returns preferred lang as a string - i.e. "en" #}
 <div x-data="{language: '{{ LANGUAGE_CODE }}'}">
-    <form action="{% url "utils:set_language" %}" method="post">
+    {{ request.language_code }}
+    <form action="{% url "set_language" %}" method="post">
         {% csrf_token %}
+        <input name="next" type="hidden" value="{{ redirect_to }}">
         <select name="language"
                 x-model="language"
                 @change="$event.target.form.submit()">

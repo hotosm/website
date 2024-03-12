@@ -58,13 +58,13 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.middleware.security.SecurityMiddleware",
-    "django.middleware.locale.LocaleMiddleware",
     "wagtail.contrib.redirects.middleware.RedirectMiddleware",
 ]
 
@@ -134,12 +134,15 @@ TIME_ZONE = "UTC"
 
 USE_I18N = True
 
+USE_L10N = True
+
 WAGTAIL_I18N_ENABLED = True
 
 USE_TZ = True
 
 LOCALE_PATHS = [
     os.path.join(BASE_DIR, "locale"),
+    os.path.join(BASE_DIR, "hot_osm", "locale"),
 ]
 
 WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [

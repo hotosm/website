@@ -1,8 +1,7 @@
-from django.urls import path
-from django.views.i18n import set_language
+# from django.urls import include, path
 
-app_name = "utils"
-urlpatterns = [
-    # ... your other urls
-    path("setlang/", set_language, name="set_language"),
-]
+# app_name = "utils"
+# urlpatterns = [
+#     # ... your other urls
+#     path("i18n/", include("django.conf.urls.i18n")),
+# ]

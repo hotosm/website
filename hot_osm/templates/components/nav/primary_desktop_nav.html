@@ -12,11 +12,9 @@
             <li>{% include "../branded_elements/link.html" with link="#" text=who_we_are classes="py-2" parent=True %}</li>
             <li>{% include "../branded_elements/link.html" with link="#" text=our_work classes="py-2" parent=True %}</li>
             <li>{% include "../branded_elements/link.html" with link="#" text=our_mapping_hubs classes="py-2" parent=True %}</li>
-            <li>
-                {% include "../branded_elements/link.html" with link="#" text="Tools &amp; Resources" classes="py-2" parent=True %}
-            </li>
-            <li>{% include "../branded_elements/link.html" with link="#" text="Get Involved" classes="py-2" parent=True %}</li>
-            <li>{% include "../branded_elements/button.html" with text="Start Mapping" %}</li>
+            <li>{% include "../branded_elements/link.html" with link="#" text=tools_resources classes="py-2" parent=True %}</li>
+            {% include "../branded_elements/link.html" with link="#" text=get_involved classes="py-2" parent=True %}
+            <li>{% include "../branded_elements/button.html" with text=start_mapping %}</li>
         </ul>
     </nav>
 </div>

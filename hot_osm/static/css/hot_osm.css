@@ -40,6 +40,11 @@
     padding-right: 27.25px;
 }
   /* For IE (thanks to @SaiManoj) */
-  .language-select::-ms-expand {
-    display: none;
-  }
+.language-select::-ms-expand {
+  display: none;
+}
+
+.language-select:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}

@@ -8,9 +8,6 @@ build-prod:
 	@docker compose -f docker-compose.prod.yml build
 	@docker compose -f docker-compose.prod.yml up -d
 
-build-frontend:
-	@docker compose -f docker-compose.dev.yml run --rm web npm run build
-
 test:
 	@docker compose -f docker-compose.dev.yml run --rm web pytest
 

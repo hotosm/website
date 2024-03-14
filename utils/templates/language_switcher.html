@@ -9,7 +9,7 @@
                 x-model="language"
                 @change="$event.target.form.submit()"
                 arial-labelledby="language-select-label"
-                class="language-select w-full border-none">
+                class="language-select border-none pl-4 lg:pl-0">
             {% get_available_languages as LANGUAGES %} {# returns a list of tuples - i.e. ("en", "English")  #}
             {% get_language_info_list for LANGUAGES as languages %}
             {% for language in languages %}
@@ -19,6 +19,5 @@
                 </option>
             {% endfor %}
         </select>
-        <div aria-hidden="true"></div>
     </form>
 </div>

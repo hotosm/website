@@ -1,18 +1,20 @@
 {% load i18n %}
 {% load util_filters %}
-{% get_current_language as LANGUAGE_CODE %} {# returns preferred lang as a string - i.e. "en" #}
+{% get_current_language as LANGUAGE_CODE %} {# Fetches the current language code, e.g., "en" #}
 <div x-data="{language: '{{ LANGUAGE_CODE }}'}">
     <form action="{% url "set_language" %}" method="post">
         {% csrf_token %}
         <input name="next" type="hidden" value="{{ redirect_to }}">
+        <!-- The select element with custom styling for language selection -->
         <select name="language"
                 x-model="language"
                 @change="$event.target.form.submit()"
                 arial-labelledby="language-select-label"
                 class="language-select hover:underline border-none appearance-none focus:outline-none pl-4 cursor-pointer lg:pl-0">
-            {% get_available_languages as LANGUAGES %} {# returns a list of tuples - i.e. ("en", "English")  #}
+            {% get_available_languages as LANGUAGES %} {# Fetches a list of available languages as tuples, e.g., ("en", "English") #}
             {% get_language_info_list for LANGUAGES as languages %}
             {% for language in languages %}
+                <!-- Option elements for each available language -->
                 <option value="{{ language.code }}"
                         {% if language.code == LANGUAGE_CODE %}selected{% endif %}>
                     {{ language.name_local|title_case }}

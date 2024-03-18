@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     "home",
     "search",
     "users",
+    "utils",
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
     "wagtail.embeds",
@@ -57,13 +58,13 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.middleware.security.SecurityMiddleware",
-    "django.middleware.locale.LocaleMiddleware",
     "wagtail.contrib.redirects.middleware.RedirectMiddleware",
 ]
 
@@ -74,6 +75,7 @@ TEMPLATES = [
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [
             os.path.join(PROJECT_DIR, "templates"),
+            os.path.join(PROJECT_DIR, "..", "utils", "templates"),
         ],
         "APP_DIRS": True,
         "OPTIONS": {
@@ -126,11 +128,13 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "en"
 
 TIME_ZONE = "UTC"
 
 USE_I18N = True
+
+USE_L10N = True
 
 WAGTAIL_I18N_ENABLED = True
 
@@ -138,9 +142,10 @@ USE_TZ = True
 
 LOCALE_PATHS = [
     os.path.join(BASE_DIR, "locale"),
+    os.path.join(BASE_DIR, "hot_osm", "locale"),
 ]
 
-WAGTAIL_CONTENT_LANGUAGES = [
+WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
     ("en", "English"),
     ("fr", "French"),
     ("es", "Spanish"),

@@ -42,9 +42,9 @@
 }
 
 /* Removes IE's default dropdown arrow */
-.language-select::-ms-expand {
+/* .language-select::-ms-expand {
   display: none;
-}
+} */
 
 /* Removes the default focus outline and box-shadow */
 .language-select:focus {

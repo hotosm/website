@@ -13,10 +13,5 @@ Delete the line below if you're just getting started and want to remove the welc
     {% endcompress css %}
 {% endblock extra_css %}
 {% block content %}
-    {% comment %} <p class="bg-hot-red">Home weeee</p>
-    <p class="bg-violet-50">This is the homepage</p> {% endcomment %}
-    {% comment %}
-Delete the line below if you're just getting started and want to remove the welcome screen!
-    {% endcomment %}
-    {% comment %} {% include "home/welcome_page.html" %} {% endcomment %}
+    {{ self.landing_page_cta }}
 {% endblock content %}

@@ -1,16 +1,15 @@
 <a href="{{ link }}"
-   class="hover:underline inline-block font-medium font-barlow text-hot-black {{ classes }}"
+   x-bind:class="{'hover:underline inline-block font-medium font-archivo text-hot-white {{ classes }}': isLandingPage, 'hover:underline inline-block font-medium font-archivo text-hot-black {{ classes }}': !isLandingPage}"
    aria-label="{{ text }}{% if parent|default:False %}, submenu{% endif %}">
     <span class="flex items-center">
         {{ text }}
         {% if parent|default:False %}
             <svg xmlns="http://www.w3.org/2000/svg"
-                 width="15px"
-                 height="15px"
-                 viewBox="0 0 24 24"
-                 fill="currentColor"
-                 class="ml-0.5">
-                <path d="M5.70711 9.71069C5.31658 10.1012 5.31658 10.7344 5.70711 11.1249L10.5993 16.0123C11.3805 16.7927 12.6463 16.7924 13.4271 16.0117L18.3174 11.1213C18.708 10.7308 18.708 10.0976 18.3174 9.70708C17.9269 9.31655 17.2937 9.31655 16.9032 9.70708L12.7176 13.8927C12.3271 14.2833 11.6939 14.2832 11.3034 13.8927L7.12132 9.71069C6.7308 9.32016 6.09763 9.32016 5.70711 9.71069Z" />
+                 width="12.816"
+                 height="8.406"
+                 viewBox="0 0 12.816 8.406"
+                 class="ml-2.5">
+                <path id="Path_4533" data-name="Path 4533" d="M-21684.635-21196.645l5-6,5,6" transform="translate(-21673.227 -21195.236) rotate(180)" fill="none" stroke="#d23f3f" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
             </svg>
         {% endif %}
     </span>

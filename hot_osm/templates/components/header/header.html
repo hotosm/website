@@ -1,8 +1,7 @@
-<header x-data="{ isMenuOpen: false, isSearchClicked: false }">
+<header x-data="{ isLandingPage: true }"
+        :class="{ 'absolute inset-x-0 top-0 z-50': isLandingPage }">
     <!-- Search modal -->
     {% include "../search/search_modal.html" %}
-    <!-- Secondary navigation for desktop -->
-    {% include "../nav/secondary_desktop_nav.html" %}
     <!-- Main mobile/desktop navigation -->
     {% include "./header_navigation.html" %}
     <!-- Mobile navigation -->

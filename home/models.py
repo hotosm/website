@@ -16,7 +16,7 @@ class HomePage(Page):
         help_text="Banner image",
     )
     hero_text = models.CharField(
-        max_length=100,
+        max_length=500,
         blank=False,
         null=True,
         help_text="Write an introduction for the hero/landing page section",

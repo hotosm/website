@@ -194,6 +194,7 @@ MEDIA_URL = "/media/"
 # Wagtail settings
 
 WAGTAIL_SITE_NAME = "hot_osm"
+WAGTAILIMAGES_MAX_UPLOAD_SIZE = 20 * 1024 * 1024  # 20MB
 
 # Search
 # https://docs.wagtail.org/en/stable/topics/search/backends.html

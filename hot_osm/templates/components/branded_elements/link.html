@@ -1,5 +1,5 @@
 <a href="{{ link }}"
-   x-bind:class="{'hover:underline inline-block font-medium font-archivo text-hot-white {{ classes }}': isLandingPage, 'hover:underline inline-block font-medium font-archivo text-hot-black {{ classes }}': !isLandingPage}"
+   x-bind:class="{'hover:underline inline-block font-regular font-archivo text-hot-white {{ classes }}': isLandingPage, 'hover:underline inline-block font-regular font-archivo text-hot-black {{ classes }}': !isLandingPage}"
    aria-label="{{ text }}{% if parent|default:False %}, submenu{% endif %}">
     <span class="flex items-center">
         {{ text }}

@@ -1,5 +1,5 @@
 <a href="{{ link }}"
-   class="block font-medium font-archivo text-hot-black py-2 pl-3 pr-4 border-l-4 text-base {% if selected|default:False %}border-hot-red bg-hot-light-grey text-hot-red {% else %} border-transparent hover:border-hot-navy hover:bg-hot-off-white {% endif %}{{ classes }}"
+   class="block font-regular font-archivo text-hot-black py-2 pl-3 pr-4 border-l-4 text-base {% if selected|default:False %}border-hot-red bg-hot-light-grey text-hot-red {% else %} border-transparent hover:border-hot-navy hover:bg-hot-off-white {% endif %}{{ classes }}"
    aria-label="{{ text }}{% if parent|default:False %}, submenu{% endif %}">
     <span class="flex items-center">
         {{ text }}

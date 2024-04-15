@@ -6,11 +6,7 @@
     template-homepage
 {% endblock body_class %}
 {% block extra_css %}
-    {% comment %}
-Delete the line below if you're just getting started and want to remove the welcome screen!
-    {% endcomment %}
     {% compress css %}
-        {% comment %} <link rel="stylesheet" href="{% static 'css/welcome_page_processed.css' %}"> {% endcomment %}
     {% endcompress css %}
 {% endblock extra_css %}
 {% block content %}
@@ -19,32 +15,21 @@ Delete the line below if you're just getting started and want to remove the welc
         {% if page.image %}
             {% image page.image fill-2830x2130 class="absolute inset-0 -z-10 h-full w-full object-cover" %}
         {% endif %}
-        <div class="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
-             aria-hidden="true">
-            <div class="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-20 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem] clip-path-polygon">
-            </div>
-        </div>
-        <div class="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
-            <div class="hidden sm:mb-8 sm:flex sm:justify-center">
-                <div class="relative rounded-full px-3 py-1 text-sm leading-6 text-gray-400 ring-1 ring-white/10 hover:ring-white/20">
-                    Announcing our next round of funding. <a href="#" class="font-semibold text-white"><span class="absolute inset-0" aria-hidden="true"></span>Read more <span aria-hidden="true">→</span></a>
+        <div class="mx-auto max-w-7xl py-32 sm:py-48 lg:py-56 text-hot-white ">
+            <div class="flex sm: flex-col lg:flex-row lg:justify-between">
+                <div class="w-full lg:w-1/2">
+                    <div class="font-semibold text-h2 leading-tight">{{ page.hero_text }}</div>
+                    <div class="mt-10">{% include "components/branded_elements/button.html" with link="" text=page.hero_cta %}</div>
                 </div>
-            </div>
-            <div class="text-center">
-                <h1 class="text-4xl font-bold tracking-tight text-white sm:text-6xl">Data to enrich your online business</h1>
-                <p class="mt-6 text-lg leading-8 text-gray-300">
-                    Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo. Elit sunt amet fugiat veniam occaecat fugiat aliqua.
-                </p>
-                <div class="mt-10 flex items-center justify-center gap-x-6">
-                    <a href="#"
-                       class="rounded-md bg-indigo-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400">Get started</a>
-                    <a href="#" class="text-sm font-semibold leading-6 text-white">Learn more <span aria-hidden="true">→</span></a>
+                <div class="w-full lg:w-1/2 flex justify-center">
+                    <div class="w-[398px] space-y-4 backdrop-blur-md px-5 pt-7 pb-12 shadow-2xl h-[300px] flex flex-col justify-center">
+                        <div class="text-h4 font-bold h-fit">Immediate Action</div>
+                        <div class="text-lg font-regular h-fit">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam viverra mollis libero a consectetur placerat. Consectetur adipiscing elit. Aliquam viverra mollis libero a consectetur placerat.
+                        </div>
+                        <div class="text-intro font-medium h-fit">Take Action Now</div>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div class="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]"
-             aria-hidden="true">
-            <div class="relative left-[calc(50%+3rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-20 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem] clip-path-polygon">
             </div>
         </div>
     </div>

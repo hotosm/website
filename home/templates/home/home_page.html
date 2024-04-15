@@ -15,14 +15,14 @@
         {% if page.image %}
             {% image page.image fill-2830x2130 class="absolute inset-0 -z-10 h-full w-full object-cover" %}
         {% endif %}
-        <div class="mx-auto max-w-7xl py-32 sm:py-48 lg:py-56 text-hot-white ">
-            <div class="flex sm: flex-col lg:flex-row lg:justify-between">
+        <div class="mx-auto max-w-7xl text-hot-white py-32 px-12 sm:py-48 lg:py-56 xl:px-0">
+            <div class="flex flex-col lg:flex-row lg:justify-between">
                 <div class="w-full lg:w-1/2">
-                    <div class="font-semibold text-h2 leading-tight">{{ page.hero_text }}</div>
+                    <div class="font-semibold text-h2 leading-tight sm:text-h3">{{ page.hero_text }}</div>
                     <div class="mt-10">{% include "components/branded_elements/button.html" with link="" text=page.hero_cta %}</div>
                 </div>
                 <div class="w-full lg:w-1/2 flex justify-center">
-                    <div class="w-[398px] space-y-4 backdrop-blur-md px-5 pt-7 pb-12 shadow-2xl h-[300px] flex flex-col justify-center">
+                    <div class="sm:mt-30 lg:mt-0 lg:w-[398px] mt-20 space-y-4 backdrop-blur-md px-5 pt-7 pb-12 shadow-2xl h-[300px] flex flex-col justify-center">
                         <div class="text-h4 font-bold h-fit">Immediate Action</div>
                         <div class="text-lg font-regular h-fit">
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam viverra mollis libero a consectetur placerat. Consectetur adipiscing elit. Aliquam viverra mollis libero a consectetur placerat.

@@ -50,15 +50,15 @@
                     {% endfor %}
                     <div class="flex flex-row lg:flex-col">
                         <button @click="slide=0"
-                                class="bg-hot-red shadow w-[45px] h-[45px] text-2xl text-hot-white font-bold flex items-center justify-center">
+                                x-bind:class="{'bg-hot-red shadow w-[45px] h-[45px] text-2xl text-hot-white font-bold flex items-center justify-center': slide === 0, 'backdrop-blur-lg shadow w-[45px] h-[45px] text-2xl text-hot-white font-regular flex items-center justify-center': slide !== 0}">
                             1
                         </button>
                         <button @click="slide=1"
-                                class="backdrop-blur-lg shadow w-[45px] h-[45px] text-2xl text-hot-white font-regular flex items-center justify-center">
+                                x-bind:class="{'bg-hot-red shadow w-[45px] h-[45px] text-2xl text-hot-white font-bold flex items-center justify-center': slide === 1, 'backdrop-blur-lg shadow w-[45px] h-[45px] text-2xl text-hot-white font-regular flex items-center justify-center': slide !== 1}">
                             2
                         </button>
                         <button @click="slide=2"
-                                class="backdrop-blur-lg shadow w-[45px] h-[45px] text-2xl text-hot-white font-regular flex items-center justify-center">
+                                x-bind:class="{'bg-hot-red shadow w-[45px] h-[45px] text-2xl text-hot-white font-bold flex items-center justify-center': slide === 2, 'backdrop-blur-lg shadow w-[45px] h-[45px] text-2xl text-hot-white font-regular flex items-center justify-center': slide !== 2}">
                             3
                         </button>
                     </div>

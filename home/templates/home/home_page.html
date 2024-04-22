@@ -15,14 +15,18 @@
         {% if page.image %}
             {% image page.image fill-2830x2130 class="absolute inset-0 -z-10 h-full w-full object-cover" %}
         {% endif %}
-        <div class="mx-auto max-w-7xl text-hot-white py-32 px-12 sm:py-48 lg:py-56 xl:px-0">
+        <!-- Banner -->
+        <div class="mx-auto max-w-7xl text-hot-white max-h-full py-32 px-12 sm:py-48 lg:py-56 xl:px-0 space-y-28">
+            <!-- Call to action components-->
             <div class="flex flex-col lg:flex-row lg:justify-between">
-                <div class="w-full lg:w-1/2">
+                <!-- Static CTA -->
+                <div class="w-128 lg:w-1/2">
                     <div class="font-semibold text-h2 md:text-center lg:text-left leading-tight sm:text-h3">{{ page.hero_text }}</div>
                     <div class="mt-10 md:text-center lg:text-left">
                         {% include "components/branded_elements/button.html" with link="" text=page.hero_cta %}
                     </div>
                 </div>
+                <!-- Dynamic CTA -->
                 <div class="w-full lg:w-1/2 flex flex-col lg:flex-row justify-center">
                     <div class="sm:mt-30 lg:mt-0 lg:w-[398px] mt-20 space-y-4 backdrop-blur-md px-5 pt-7 pb-12 shadow-2xl h-[300px] flex flex-col justify-center">
                         <div class="text-h4 font-bold h-fit">Immediate Action</div>
@@ -50,6 +54,25 @@
                             3
                         </div>
                     </div>
+                </div>
+            </div>
+            <!--CTA Statistics, TODO: Use HTMX to query endpoint for stats once the endpoint exists  -->
+            <div class="flex flex-row justify-center items-center space-x-5 h-full">
+                <div class="backdrop-blur-lg shadow flex flex-col justify-center text-center w-52 h-32">
+                    <div class="font-barlow font-semibold text-h4">468K</div>
+                    <div class="font-regular text-base-18">Total Mappers ⓘ</div>
+                </div>
+                <div class="backdrop-blur-lg shadow flex flex-col justify-center text-center w-52 h-32">
+                    <div class="font-barlow font-semibold text-h4">246.7M</div>
+                    <div class="font-regular text-base-18">Total Map Edits ⓘ</div>
+                </div>
+                <div class="backdrop-blur-lg shadow flex flex-col justify-center text-center w-52 h-32">
+                    <div class="font-barlow font-semibold text-h4">147.5M</div>
+                    <div class="font-regular text-base-18">Buildings Mapped ⓘ</div>
+                </div>
+                <div class="backdrop-blur-lg shadow flex flex-col justify-center items-center text-center w-52 h-32">
+                    <div class="font-barlow font-semibold text-h4">2.7M</div>
+                    <div class="font-regular text-base-18">Roads Mapped(KM) ⓘ</div>
                 </div>
             </div>
         </div>

@@ -6,7 +6,9 @@
 #   phase facilities of your hosting platform. This is used only so the
 #   Wagtail instance can be started with a simple "docker run" command.
 
-# Apply database migrations
+# Migrate database
+echo "Create database migrations"
+python manage.py makemigrations
 echo "Apply database migrations"
 python manage.py migrate
 

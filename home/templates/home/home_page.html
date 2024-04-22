@@ -16,7 +16,7 @@
             {% image page.image fill-2830x2130 class="absolute inset-0 -z-10 h-full w-full object-cover" %}
         {% endif %}
         <!-- Banner -->
-        <div class="mx-auto max-w-7xl text-hot-white max-h-full py-32 px-12 sm:py-48 lg:py-56 xl:px-0 space-y-28">
+        <div class="mx-auto max-w-7xl text-hot-white py-32 px-12 sm:py-48 lg:py-56 xl:px-0 space-y-28">
             <!-- Call to action components-->
             <div class="flex flex-col lg:flex-row lg:justify-between">
                 <!-- Static CTA -->
@@ -26,33 +26,41 @@
                         {% include "components/branded_elements/button.html" with link="" text=page.hero_cta %}
                     </div>
                 </div>
-                <!-- Dynamic CTA -->
-                <div class="w-full lg:w-1/2 flex flex-col lg:flex-row justify-center">
-                    <div class="sm:mt-30 lg:mt-0 lg:w-[398px] mt-20 space-y-4 backdrop-blur-md px-5 pt-7 pb-12 shadow-2xl h-[300px] flex flex-col justify-center">
-                        <div class="text-h4 font-bold h-fit">Immediate Action</div>
-                        <div class="text-lg font-regular h-fit">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam viverra mollis libero a consectetur placerat. Consectetur adipiscing elit. Aliquam viverra mollis libero a consectetur placerat.
+                <!-- Carousel CTA -->
+                <div x-data="{ slide: 0, slides: [] }"
+                     x-init="slides = [...$el.children];"
+                     class="w-full lg:w-1/2 flex flex-col lg:flex-row justify-center">
+                    {% for block in page.carousel %}
+                        <div x-show="slide === {{ forloop.counter0 }}"
+                             class="sm:mt-30 lg:mt-0 lg:w-[398px] mt-20 space-y-4 backdrop-blur-md px-5 pt-7 pb-12 shadow-2xl h-[300px] flex flex-col justify-center">
+                            <div class="text-h4 font-bold h-fit">{{ block.value.header }}</div>
+                            <div class="text-lg font-regular h-fit">{{ block.value.body }}</div>
+                            <a href="{{ block.value.action_button.link }}">
+                                <div class="text-intro font-medium inline-flex space-x-5 items-center">
+                                    <span>{{ block.value.action_button.text }}</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                         width="10.689"
+                                         height="16.819"
+                                         viewBox="0 0 10.689 16.819">
+                                        <path id="Path_4671" data-name="Path 4671" d="M0,8.28,7,0l7,8.28" transform="translate(9.689 1.409) rotate(90)" fill="none" stroke="#d43f3f" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+                                    </svg>
+                                </div>
+                            </a>
                         </div>
-                        <div class="text-intro font-medium h-fit inline-flex space-x-5 items-center">
-                            <span>Take Action Now</span>
-                            <svg xmlns="http://www.w3.org/2000/svg"
-                                 width="10.689"
-                                 height="16.819"
-                                 viewBox="0 0 10.689 16.819">
-                                <path id="Path_4671" data-name="Path 4671" d="M0,8.28,7,0l7,8.28" transform="translate(9.689 1.409) rotate(90)" fill="none" stroke="#d43f3f" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
-                            </svg>
-                        </div>
-                    </div>
+                    {% endfor %}
                     <div class="flex flex-row lg:flex-col">
-                        <div class="bg-hot-red shadow w-[45px] h-[45px] text-2xl text-hot-white font-bold flex items-center justify-center">
+                        <button @click="slide=0"
+                                class="bg-hot-red shadow w-[45px] h-[45px] text-2xl text-hot-white font-bold flex items-center justify-center">
                             1
-                        </div>
-                        <div class="backdrop-blur-lg shadow w-[45px] h-[45px] text-2xl text-hot-white font-regular flex items-center justify-center">
+                        </button>
+                        <button @click="slide=1"
+                                class="backdrop-blur-lg shadow w-[45px] h-[45px] text-2xl text-hot-white font-regular flex items-center justify-center">
                             2
-                        </div>
-                        <div class="backdrop-blur-lg shadow w-[45px] h-[45px] text-2xl text-hot-white font-regular flex items-center justify-center">
+                        </button>
+                        <button @click="slide=2"
+                                class="backdrop-blur-lg shadow w-[45px] h-[45px] text-2xl text-hot-white font-regular flex items-center justify-center">
                             3
-                        </div>
+                        </button>
                     </div>
                 </div>
             </div>

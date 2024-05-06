@@ -30,9 +30,11 @@ This project uses Poetry for dependency management. Poetry is a Python tool that
 
 Dependencies are specified in the `pyproject.toml`, and the exact versions of the dependencies are locked in the `poetry.lock`. To install the dependencies, run `poetry install`. To add a new dependency, run `poetry add {dependency}`.
 
+Note that you don't need to run `poetry install`, as Docker handles this when building.
+
 ## Using the Makefile
 
-Ensure you have the superuser credentials you want in your .env.dev file prior to running `make build-dev`.
+Ensure you have the superuser credentials you want in your .env.dev file prior to running `make build`.
 The Makefile provides several commands for building and running the project:
 
 - `make build`: Builds and starts the Docker images for the development environment.
@@ -43,3 +45,24 @@ The Makefile provides several commands for building and running the project:
 - `make down-prod`: Stops the Docker containers for the production environment.
 - `make test`: Runs the tests.
 - `make refresh-db`: Deletes all Docker volumes (use with caution).
+
+## Building Tailwind
+
+When you attempt to use a class that isn't currently used anywhere in the project, the live reload will not rebuild the CSS, and thus, these classes won't work until you rebuild the CSS:
+
+1. Open Docker Desktop
+2. In the Containers tab, click on the `web-1` container (within the `website` container)
+3. Move to the `Exec` tab within this container
+4. Move into the `frontend` folder with `cd frontend`
+5. Run `npm run build` to rebuild the CSS
+
+You'll need to do this every time you use a currently unused class.
+
+## Wagtail Migrations
+
+Wagtail migrations should be handled within the Docker container. The process for doing this is largely the same as building Tailwind:
+
+1. Open Docker Desktop
+2. In the Containers tab, click on the `web-1` container (within the `website` container)
+3. Move to the `Exec` tab within this container
+4. Run `python manage.py makemigrations` and then `python manage.py migrate` (if successful)

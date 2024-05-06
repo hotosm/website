@@ -4,6 +4,7 @@ ARG NODE_IMG_TAG=20.5.1
 FROM node:${NODE_IMG_TAG}-bookworm-slim as frontend-base
 COPY . ./app
 WORKDIR /app/frontend
+RUN mkdir -p ./node_modules
 RUN npm install
 RUN mkdir -p ./dist/css
 RUN npm run build
@@ -81,6 +82,7 @@ ENV PORT=8000 \
     REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt \
     CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
 # Install non-dev versions of packages (smaller)
+RUN apt-get update && apt-get install -y "curl"
 RUN set -ex \
     && apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install \
@@ -90,6 +92,8 @@ RUN set -ex \
         "libjpeg62-turbo" \
         "zlib1g" \
         "libwebp-dev" \
+        "nodejs" \
+        "npm" \
     && rm -rf /var/lib/apt/lists/*
 # Copy the entrypoint script into the Docker image
 COPY --chown=wagtail:wagtail container-entrypoint.sh /
@@ -100,6 +104,7 @@ COPY --from=build \
 # Copy compiled css from frontend stage
 # In the final stage of your Dockerfile...
 COPY --from=frontend-base /app/frontend/dist/css /app/frontend/dist/css
+COPY --from=frontend-base /app/frontend/node_modules /app/frontend/node_modules
 # Use /app folder as a directory where the source code is stored.
 WORKDIR /app
 # Copy project

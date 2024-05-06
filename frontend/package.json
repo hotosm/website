@@ -14,7 +14,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npx postcss ../hot_osm/static/css/hot_osm.css --config ./postcss.config.js -o ./dist/css/hot_osm_processed.css && prettier --write ."
+    "build": "npx postcss ../hot_osm/static/css/hot_osm.css --config ./postcss.config.js -o ./dist/css/hot_osm_processed.css && prettier --write .",
+    "watch:css": "npx postcss ../hot_osm/static/css/hot_osm.css --config ./postcss.config.js -o ./dist/css/hot_osm_processed.css --watch"
   },
   "repository": {
     "type": "git",

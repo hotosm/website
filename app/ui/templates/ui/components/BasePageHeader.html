@@ -1,0 +1,24 @@
+{% comment %}
+==> PARAMETERS
+- title: A string, the title shown in the header
+- intro: An HTML element (regular usage would be a <p> with some text in it)
+- image: A Wagtail image
+{% endcomment %}
+
+{% load wagtailimages_tags %}
+
+{% image image original as image_p %}
+<div class="w-full min-h-[24rem] flex flex-wrap content-end bg-no-repeat bg-cover" style="background-image: url('{{ image_p.url }}')">
+    <div class="bg-gradient-to-t from-black/70 to-transparent w-full">
+        <div class="h-fit w-full flex flex-wrap py-10 text-white max-w-7xl mx-auto">
+            <div class="flex-none text-h1 px-10 w-full lg:w-auto pb-4 lg:pb-0 h-fit font-bold lg:font-normal">
+                <h1>
+                    {{ title }}
+                </h1>
+            </div>
+            <div class="flex-1 text-intro px-10 h-fit">
+                {{ intro|safe }}
+            </div>
+        </div>
+    </div>
+</div>

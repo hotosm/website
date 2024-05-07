@@ -10,7 +10,7 @@
     {% endcompress css %}
 {% endblock extra_css %}
 {% block content %}
-    <div x-data="{isLandingPage: true}"
+    <div x-init="setIsLandingPage(true)"
          class="relative isolate overflow-hidden pt-14">
         {% if page.image %}
             {% image page.image fill-2830x2130 class="absolute inset-0 -z-10 h-full w-full object-cover" %}

@@ -1,3 +1,11 @@
+{% comment %}
+==> PARAMETERS
+- image: A Wagtail image, shows at the top
+- title: A string, the title shown just under the image (and at the Learn More about [title])
+- description: An HTML element (regular usage would be a <p> with some text in it)
+- link: The link for learning more
+{% endcomment %}
+
 {% load wagtailimages_tags %}
 {% image image original as image_p %}
 

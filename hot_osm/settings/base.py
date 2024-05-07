@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     "home",
     "app.impact_areas",
     "app.ui",
+    "app.projects",
     "search",
     "users",
     "utils",

@@ -11,6 +11,7 @@ services:
     volumes:
       - .:/app  # Mount the codebase for development
       - /app/frontend/dist/css  # Mount only the necessary directory for live reload
+      - /app/frontend/node_modules
       - /app/*/templates  # Mount Django templates directory
     ports:
       - 8000:8000

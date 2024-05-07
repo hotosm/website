@@ -13,32 +13,37 @@
     --hot-white: #FFFFFF;
     --hot-black: #000000;
 
-        /* Font Family */
+    /* Font Family */
     --font-barlow: "Barlow Condensed", sans-serif;
     --font-archivo: "Archivo", sans-serif;
+    font-family: var(--font-archivo);
 
     /* Font Size */
-    --font-size-h1: 3.5rem; /* 56pt */
-    --font-size-h2: 3rem; /* 48pt */
-    --font-size-h3: 2.375rem; /* 38pt */
-    --font-size-h4: 2rem; /* 32pt */
-    --font-size-h5: 1.75rem; /* 28pt */
-    --font-size-intro: 1.375rem; /* 22pt */
-    --font-size-base-20: 1.25rem; /* 20pt */
-    --font-size-base-18: 1.125rem; /* 18pt */
-    --font-size-base-16: 1rem; /* 16pt */
+    --font-size-h1: 2.55rem;
+    --font-size-h2: 2.11rem;
+    --font-size-h3: 1.77rem;
+    --font-size-h4: 1.66rem;
+    --font-size-h5: 1.33rem;
+    --font-size-intro: 1.11rem;
+    --font-size-base: 1rem;
 }
 
 /* Custom styling for the language select element */
 .language-select {
-  -moz-appearance: none; /* Removes Firefox's default select styling */
-  -webkit-appearance: none; /* Removes Chrome's default select styling */
-  appearance: none; /* Removes the default select styling for other browsers */
-  /* Custom Globe SVG: */
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256' id='globe'%3E%3Crect width='16' height='16' fill='none'%3E%3C/rect%3E%3Ccircle cx='128' cy='128' r='96' fill='none' stroke='%23000' stroke-linecap='round' stroke-linejoin='round' stroke-width='8'%3E%3C/circle%3E%3Cline x1='37.467' x2='218.532' y1='96' y2='96' fill='none' stroke='%23000' stroke-linecap='round' stroke-linejoin='round' stroke-width='8'%3E%3C/line%3E%3Cline x1='37.471' x2='218.534' y1='160' y2='160' fill='none' stroke='%23000' stroke-linecap='round' stroke-linejoin='round' stroke-width='8'%3E%3C/line%3E%3Cellipse cx='128' cy='128' fill='none' stroke='%23000' stroke-linecap='round' stroke-linejoin='round' stroke-width='8' rx='40' ry='93.423'%3E%3C/ellipse%3E%3C/svg%3E");
-  background-repeat: no-repeat; /* Ensures the SVG only appears once */
-  background-size: 18px 18px; /* Controls the size of the SVG */
-  padding-right: 27.25px; /* Adds space on the right side of the select element to prevent SVG overlap with the text */
+    -moz-appearance: none;
+    /* Removes Firefox's default select styling */
+    -webkit-appearance: none;
+    /* Removes Chrome's default select styling */
+    appearance: none;
+    /* Removes the default select styling for other browsers */
+    /* Custom Globe SVG: */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256' id='globe'%3E%3Crect width='16' height='16' fill='none'%3E%3C/rect%3E%3Ccircle cx='128' cy='128' r='96' fill='none' stroke='%23000' stroke-linecap='round' stroke-linejoin='round' stroke-width='8'%3E%3C/circle%3E%3Cline x1='37.467' x2='218.532' y1='96' y2='96' fill='none' stroke='%23000' stroke-linecap='round' stroke-linejoin='round' stroke-width='8'%3E%3C/line%3E%3Cline x1='37.471' x2='218.534' y1='160' y2='160' fill='none' stroke='%23000' stroke-linecap='round' stroke-linejoin='round' stroke-width='8'%3E%3C/line%3E%3Cellipse cx='128' cy='128' fill='none' stroke='%23000' stroke-linecap='round' stroke-linejoin='round' stroke-width='8' rx='40' ry='93.423'%3E%3C/ellipse%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    /* Ensures the SVG only appears once */
+    background-size: 18px 18px;
+    /* Controls the size of the SVG */
+    padding-right: 27.25px;
+    /* Adds space on the right side of the select element to prevent SVG overlap with the text */
 }
 
 /* Removes IE's default dropdown arrow */
@@ -48,6 +53,6 @@
 
 /* Removes the default focus outline and box-shadow */
 .language-select:focus {
-  outline: none !important;
-  box-shadow: none !important;
+    outline: none !important;
+    box-shadow: none !important;
 }

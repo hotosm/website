@@ -37,8 +37,7 @@ module.exports = {
         h4: "var(--font-size-h4)", // 32pt
         h5: "var(--font-size-h5)", // 28pt
         intro: "var(--font-size-intro)", // 22pt
-        "base-lg": "var(--font-size-base-20)", // 20pt
-        "base-md": "var(--font-size-base-18)", // 18pt
+        base: "var(--font-size-base)", // 20pt
       },
       colors: {
         "hot-red": "var(--hot-red)",

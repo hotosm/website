@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load static %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+{% load compress %}
+{% block body_class %}template-impactareaspage{% endblock %}
+{% block extra_css %}
+    {% compress css %}
+    {% endcompress css %}
+{% endblock extra_css %}
+
+{% block content %}
+    {% include "ui/components/BasePageHeader.html" with title=page.title intro=page.intro image=page.image %}
+    
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 lg:gap-4 px-6 mt-6">
+        {% for block in page.impact_area_blocks %}
+            {% include "ui/components/LearnMoreAboutBlurbWithImage.html" with title=block.value.title description=block.value.description image=block.value.image link=block.value.link %}
+        {% endfor %}
+    </div>
+{% endblock %}

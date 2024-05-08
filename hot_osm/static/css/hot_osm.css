@@ -6,12 +6,14 @@
     /* Colors */
     --hot-red: #D73F3F;
     --hot-navy: #20365B;
+    --hot-navy-grey: #2C3038;
     --hot-dark-grey: #68707F;
     --hot-slate-grey: #929D83;
     --hot-light-grey: #E1E0E0;
     --hot-off-white: #F0EFEF;
     --hot-white: #FFFFFF;
     --hot-black: #000000;
+    --hot-off-black: #101010;
 
     /* Font Family */
     --font-barlow: "Barlow Condensed", sans-serif;
@@ -23,7 +25,7 @@
     --font-size-h2: 2.11rem;
     --font-size-h3: 1.77rem;
     --font-size-h4: 1.66rem;
-    --font-size-h5: 1.33rem;
+    --font-size-h5: 1.22rem;
     --font-size-intro: 1.11rem;
     --font-size-base: 1rem;
 }
@@ -55,4 +57,71 @@
 .language-select:focus {
     outline: none !important;
     box-shadow: none !important;
+}
+
+.base-article h1 {
+    font-size: var(--font-size-h1);
+    margin-top: 2.2rem;
+    margin-bottom: 0.8rem;
+}
+
+.base-article h2 {
+    font-size: var(--font-size-h2);
+    margin-top: 0.8rem;
+    margin-bottom: 0.6rem;
+}
+
+.base-article h3 {
+    font-size: var(--font-size-h3);
+    margin-top: 0.8rem;
+    margin-bottom: 0.6rem;
+}
+
+.base-article h4 {
+    font-size: var(--font-size-h4);
+    margin-top: 0.7rem;
+    margin-bottom: 0.5rem;
+}
+
+.base-article h5 {
+    font-size: var(--font-size-h5);
+    margin-top: 0.7rem;
+    margin-bottom: 0.5rem;
+}
+
+.base-article h1,
+.base-article h2,
+.base-article h3,
+.base-article h4,
+.base-article h5 {
+    font-weight: bold;
+}
+
+.base-article p,
+.base-article img {
+    margin-top: 0.45rem;
+    margin-bottom: 0.45rem;
+}
+
+.base-article p {
+    color: var(--hot-off-black);
+}
+
+.base-article blockquote {
+    padding: 0.3rem 2rem;
+    border-left: 0.2rem solid var(--hot-light-grey);
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.dogear-box-red {
+    background: linear-gradient(45deg, var(--hot-red) 0%, var(--hot-red) 92.4%, transparent 92.5%, transparent 100%);
+    height: 100%;
+    width: 100%;
+}
+
+.dogear-box-black {
+    background: linear-gradient(45deg, var(--hot-navy-grey) 0%, var(--hot-navy-grey) 92.4%, transparent 92.5%, transparent 100%);
+    height: 100%;
+    width: 100%;
 }

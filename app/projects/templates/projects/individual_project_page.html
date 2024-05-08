@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load static %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+{% load compress %}
+{% block body_class %}template-impactareaspage{% endblock %}
+{% block extra_css %}
+    {% compress css %}
+    {% endcompress css %}
+{% endblock extra_css %}
+
+{% block content %}
+    {% include "ui/components/BasePageHeader.html" with title=page.title subtitle=page.program|add:" • "|add:page.location image=page.header_image %}
+
+    <div class="max-w-7xl mx-auto" x-init="isLandingPage = false">
+        <div class="grid grid-cols-1 lg:grid-cols-3">
+            
+            {% comment %} BODY {% endcomment %}
+            <div class="p-10 col-span-2">
+                <div class="base-article">
+                    <div class="text-intro">
+                        {{ page.intro|safe }}
+                    </div>
+                    {{ page.description }}
+                </div>
+                {% include "ui/components/CTABodyPanelBase.html" with title="Call to Action" text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam viverra mollis libero a consectetur placerat." linktext="Custom Call to Action" linkurl="#" %}
+            </div>
+
+            {% comment %} SIDEBAR {% endcomment %}
+            <div class="p-10 col-span-1">
+                <div class="base-article">
+                    {% include "ui/components/sidebar/SmallSectionWithHeaderAndDivider.html" with header=page.impact_areas_title text=page.impact_areas %}
+                    {% include "ui/components/sidebar/SmallSectionWithHeaderAndDivider.html" with header=page.region_hub_title text=page.region_hub %}
+                    {% include "ui/components/sidebar/SmallSectionWithHeaderAndDivider.html" with header=page.duration_title text=page.duration %}
+                    {% include "ui/components/sidebar/SmallSectionWithHeaderAndDivider.html" with header=page.partners_title text=page.partners %}
+                    {% include "ui/components/sidebar/SmallSectionWithHeaderAndDivider.html" with header=page.tools_title text=page.tools %}
+                    {% include "ui/components/sidebar/SmallSectionWithHeaderAndDivider.html" with header=page.contact_title text=page.contact %}
+                </div>
+
+                <div class="my-12">
+                    <h1 class="text-h2 font-bold mb-4">
+                        {{ page.related_news_title }}
+                    </h1>
+                    {% include "ui/components/BaseLink.html" with linkurl="#" linktext=page.view_all_news_text %}
+                </div>
+                
+                <div class="my-12">
+                    <h1 class="text-h2 font-bold mb-4">
+                        {{ page.related_events_title }}
+                    </h1>
+                    {% include "ui/components/BaseLink.html" with linkurl="#" linktext=page.view_all_events_text %}
+                </div>
+            </div>
+        </div>
+
+        {% comment %} BOTTOM AREA {% endcomment %}
+        <div class="grid grid-cols-1 md:grid-cols-2 text-white my-10 mx-5">
+            <div class="mx-5 mb-10 md:mb-0">
+                {% include "ui/components/dogear_boxes/DogearRed.html" with title="Chat with Our Community" linktext="Link to something" linkurl="#" %}
+            </div>
+            <div class="mx-5">
+                {% include "ui/components/dogear_boxes/DogearBlack.html" with title="Our Work" linktext="Link to something" linkurl="#" %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

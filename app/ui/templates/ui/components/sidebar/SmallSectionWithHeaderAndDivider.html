@@ -1,0 +1,12 @@
+{% comment %}
+==> PARAMETERS
+- header: The text for the header; a string
+- text: The text for the body; an element. Should be a <p> element
+{% endcomment %}
+
+<div class="[&_p]:text-intro">
+    <p class="font-bold mb-2">{{ header }}</p>
+    {{ text|safe }}
+
+    <hr class="border-black my-6" />
+</div>

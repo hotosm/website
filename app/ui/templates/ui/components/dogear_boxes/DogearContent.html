@@ -1,0 +1,25 @@
+{% comment %}
+==> PARAMETERS
+- title: a string; the title of the box
+- linkurl: a string; the link's url
+- linktext: a string; the text that shows for the link
+- color: a string; the color that the caret next to the link text should show as
+    - it's just using css styling, so you can use anything that a css style color would use
+      (including variables, so you should probably use the colours from the hot_osm.css!)
+{% endcomment %}
+
+<h1 class="font-bold text-h2 my-0">
+    {{ title }}
+</h1>
+<a href="{{ linkurl }}" class="mt-auto pt-6">
+    <p class="text-h5 font-medium">
+        {{ linktext }}
+        <span class="ml-2" 
+        {% if color %}
+            style="color: {{ color }}"
+        {% endif %}
+        >
+            {% include "ui/components/icon_svgs/LinkCaret.html" %}
+        </span>
+    </p>
+</a>

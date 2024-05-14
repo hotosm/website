@@ -68,3 +68,7 @@ class HomePage(Page):
         ),
         FieldPanel("carousel"),
     ]
+
+
+class BlankInaccessiblePage(Page):
+    pass

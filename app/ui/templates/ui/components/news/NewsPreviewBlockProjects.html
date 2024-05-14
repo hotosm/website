@@ -1,0 +1,23 @@
+<div class="my-4">
+    <a href="{{ news.url }}">
+        <p class="text-hot-red text-small font-semibold">
+            Blog
+        </p>
+
+        <hr class="my-2" />
+
+        <p class="text-h5 font-bold my-2">
+            {{ news.title }}
+        </p>
+
+        <div class="[&_p]:max-h-20 [&_p]:text-ellipsis [&_p]:overflow-hidden [&_p]:text-small">
+            {{ news.intro|safe }}
+        </div>
+
+        <p class="my-2">
+            <span class="text-small text-hot-dark-grey">
+                {{ news.date }}
+            </span>
+        </p>
+    </a>
+</div>

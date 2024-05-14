@@ -1,0 +1,24 @@
+<div class="my-4">
+    <p>
+        <span class="text-small text-hot-dark-grey">
+            {{ news.date }}
+        </span>
+    </p>
+
+    <p class="text-h5 font-bold my-2">
+        {{ news.title }}
+    </p>
+
+    <div class="[&_p]:max-h-20 [&_p]:text-ellipsis [&_p]:overflow-hidden [&_p]:text-small">
+        {{ news.intro|safe }}
+    </div>
+
+    <p class="mt-6 font-medium">
+        <a href="{{ news.url }}" class="text-hot-red">
+            <span class="pr-2">
+                Read More
+            </span>
+            {% include "ui/components/icon_svgs/LinkCaret.html" %}
+        </a>
+    </p>
+</div>

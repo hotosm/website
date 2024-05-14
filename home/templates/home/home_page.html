@@ -9,78 +9,85 @@
     {% compress css %}
     {% endcompress css %}
 {% endblock extra_css %}
+
 {% block content %}
-    <div x-data="{isLandingPage: true}"
-         class="relative isolate overflow-hidden pt-14">
-        {% if page.image %}
-            {% image page.image fill-2830x2130 class="absolute inset-0 -z-10 h-full w-full object-cover" %}
-        {% endif %}
+    {% image page.image original as image_p %}
+    
+    <div x-init="setIsLandingPage(true)"
+         class="relative isolate overflow-hidden">
+        {% comment %} {% if page.image %}
+            {% image page.image fill-2830x2130 class="absolute inset-0 -z-10 h-full w-full object-cover " %}
+        {% endif %} {% endcomment %}
         <!-- Banner -->
-        <div class="mx-auto max-w-7xl text-hot-white py-32 px-12 sm:py-48 lg:py-56 xl:px-0 space-y-28">
-            <!-- Call to action components-->
-            <div class="flex flex-col lg:flex-row lg:justify-between">
-                <!-- Static CTA -->
-                <div class="w-128 lg:w-1/2">
-                    <div class="font-semibold text-h2 md:text-center lg:text-left leading-tight sm:text-h3">{{ page.hero_text }}</div>
-                    <div class="mt-10 md:text-center lg:text-left">
-                        {% include "components/branded_elements/button.html" with link="" text=page.hero_cta %}
-                    </div>
-                </div>
-                <!-- Carousel CTA -->
-                <div x-data="{ slide: 0, slides: [] }"
-                     x-init="slides = [...$el.children];"
-                     class="w-full lg:w-1/2 flex flex-col lg:flex-row justify-center">
-                    {% for block in page.carousel %}
-                        <div x-show="slide === {{ forloop.counter0 }}"
-                             class="sm:mt-30 lg:mt-0 lg:w-[398px] mt-20 space-y-4 backdrop-blur-md px-5 pt-7 pb-12 shadow-2xl h-[300px] flex flex-col justify-center">
-                            <div class="text-h4 font-bold h-fit">{{ block.value.header }}</div>
-                            <div class="text-lg font-regular h-fit">{{ block.value.body }}</div>
-                            <a href="{{ block.value.action_button.link }}">
-                                <div class="text-intro font-medium inline-flex space-x-5 items-center">
-                                    <span>{{ block.value.action_button.text }}</span>
-                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                         width="10.689"
-                                         height="16.819"
-                                         viewBox="0 0 10.689 16.819">
-                                        <path id="Path_4671" data-name="Path 4671" d="M0,8.28,7,0l7,8.28" transform="translate(9.689 1.409) rotate(90)" fill="none" stroke="#d43f3f" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
-                                    </svg>
-                                </div>
-                            </a>
+        <div class="bg-no-repeat bg-cover" style="background-image: url('{{ image_p.url }}')">
+            <div class="bg-gradient-to-r from-black/70 to-transparent">
+                <div class="mx-auto max-w-7xl text-hot-white py-32 px-12 sm:py-48 lg:py-56 xl:px-0 space-y-28">
+                    <!-- Call to action components-->
+                    <div class="flex flex-col lg:flex-row lg:justify-between">
+                        <!-- Static CTA -->
+                        <div class="w-128 lg:w-1/2">
+                            <div class="font-semibold text-h2 md:text-center lg:text-left leading-tight sm:text-h3">{{ page.hero_text }}</div>
+                            <div class="mt-10 md:text-center lg:text-left">
+                                {% include "components/branded_elements/button.html" with link="" text=page.hero_cta %}
+                            </div>
                         </div>
-                    {% endfor %}
-                    <div class="flex flex-row lg:flex-col">
-                        <button @click="slide=0"
-                                x-bind:class="{'bg-hot-red shadow w-[45px] h-[45px] text-2xl text-hot-white font-bold flex items-center justify-center': slide === 0, 'backdrop-blur-lg shadow w-[45px] h-[45px] text-2xl text-hot-white font-regular flex items-center justify-center': slide !== 0}">
-                            1
-                        </button>
-                        <button @click="slide=1"
-                                x-bind:class="{'bg-hot-red shadow w-[45px] h-[45px] text-2xl text-hot-white font-bold flex items-center justify-center': slide === 1, 'backdrop-blur-lg shadow w-[45px] h-[45px] text-2xl text-hot-white font-regular flex items-center justify-center': slide !== 1}">
-                            2
-                        </button>
-                        <button @click="slide=2"
-                                x-bind:class="{'bg-hot-red shadow w-[45px] h-[45px] text-2xl text-hot-white font-bold flex items-center justify-center': slide === 2, 'backdrop-blur-lg shadow w-[45px] h-[45px] text-2xl text-hot-white font-regular flex items-center justify-center': slide !== 2}">
-                            3
-                        </button>
+                        <!-- Carousel CTA -->
+                        <div x-data="{ slide: 0, slides: [] }"
+                            x-init="slides = [...$el.children];"
+                            class="w-full lg:w-1/2 flex flex-col lg:flex-row justify-center">
+                            {% for block in page.carousel %}
+                                <div x-show="slide === {{ forloop.counter0 }}"
+                                    class="sm:mt-30 lg:mt-0 lg:w-[398px] mt-20 space-y-4 backdrop-blur-md px-5 pt-7 pb-12 shadow-md h-[300px] flex flex-col justify-center">
+                                    <div class="text-h4 font-bold h-fit">{{ block.value.header }}</div>
+                                    <div class="text-lg font-regular h-fit">{{ block.value.body }}</div>
+                                    <a href="{{ block.value.action_button.link }}">
+                                        <div class="text-intro font-medium inline-flex space-x-5 items-center">
+                                            <span>{{ block.value.action_button.text }}</span>
+                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                width="10.689"
+                                                height="16.819"
+                                                viewBox="0 0 10.689 16.819">
+                                                <path id="Path_4671" data-name="Path 4671" d="M0,8.28,7,0l7,8.28" transform="translate(9.689 1.409) rotate(90)" fill="none" stroke="#d43f3f" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+                                            </svg>
+                                        </div>
+                                    </a>
+                                </div>
+                            {% endfor %}
+                            <div class="flex flex-row lg:flex-col">
+                                <button @click="slide=0"
+                                        x-bind:class="{'bg-hot-red shadow w-[45px] h-[45px] text-2xl text-hot-white font-bold flex items-center justify-center': slide === 0, 'backdrop-blur-lg shadow w-[45px] h-[45px] text-2xl text-hot-white font-regular flex items-center justify-center': slide !== 0}">
+                                    1
+                                </button>
+                                <button @click="slide=1"
+                                        x-bind:class="{'bg-hot-red shadow w-[45px] h-[45px] text-2xl text-hot-white font-bold flex items-center justify-center': slide === 1, 'backdrop-blur-lg shadow w-[45px] h-[45px] text-2xl text-hot-white font-regular flex items-center justify-center': slide !== 1}">
+                                    2
+                                </button>
+                                <button @click="slide=2"
+                                        x-bind:class="{'bg-hot-red shadow w-[45px] h-[45px] text-2xl text-hot-white font-bold flex items-center justify-center': slide === 2, 'backdrop-blur-lg shadow w-[45px] h-[45px] text-2xl text-hot-white font-regular flex items-center justify-center': slide !== 2}">
+                                    3
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <!--CTA Statistics, TODO: Use HTMX to query endpoint for stats once the endpoint exists  -->
-            <div class="flex flex-row justify-center items-center space-x-5 h-full">
-                <div class="backdrop-blur-lg shadow flex flex-col justify-center text-center w-52 h-32">
-                    <div class="font-barlow font-semibold text-h4">468K</div>
-                    <div class="font-regular text-base-18">Total Mappers ⓘ</div>
-                </div>
-                <div class="backdrop-blur-lg shadow flex flex-col justify-center text-center w-52 h-32">
-                    <div class="font-barlow font-semibold text-h4">246.7M</div>
-                    <div class="font-regular text-base-18">Total Map Edits ⓘ</div>
-                </div>
-                <div class="backdrop-blur-lg shadow flex flex-col justify-center text-center w-52 h-32">
-                    <div class="font-barlow font-semibold text-h4">147.5M</div>
-                    <div class="font-regular text-base-18">Buildings Mapped ⓘ</div>
-                </div>
-                <div class="backdrop-blur-lg shadow flex flex-col justify-center items-center text-center w-52 h-32">
-                    <div class="font-barlow font-semibold text-h4">2.7M</div>
-                    <div class="font-regular text-base-18">Roads Mapped(KM) ⓘ</div>
+                    <!--CTA Statistics, TODO: Use HTMX to query endpoint for stats once the endpoint exists  -->
+                    <div class="flex flex-row justify-center items-center space-x-5 h-full">
+                        <div class="backdrop-blur-lg shadow-md flex flex-col justify-center text-center w-52 h-32">
+                            <div class="font-barlow font-semibold text-h4">468K</div>
+                            <div class="font-regular text-base-18">Total Mappers ⓘ</div>
+                        </div>
+                        <div class="backdrop-blur-lg shadow-md flex flex-col justify-center text-center w-52 h-32">
+                            <div class="font-barlow font-semibold text-h4">246.7M</div>
+                            <div class="font-regular text-base-18">Total Map Edits ⓘ</div>
+                        </div>
+                        <div class="backdrop-blur-lg shadow-md flex flex-col justify-center text-center w-52 h-32">
+                            <div class="font-barlow font-semibold text-h4">147.5M</div>
+                            <div class="font-regular text-base-18">Buildings Mapped ⓘ</div>
+                        </div>
+                        <div class="backdrop-blur-lg shadow-md flex flex-col justify-center items-center text-center w-52 h-32">
+                            <div class="font-barlow font-semibold text-h4">2.7M</div>
+                            <div class="font-regular text-base-18">Roads Mapped(KM) ⓘ</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

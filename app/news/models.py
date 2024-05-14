@@ -27,6 +27,14 @@ class NewsCategory(models.Model):
         verbose_name_plural = "News Categories"
 
 
+class NewsTag(TaggedItemBase):
+    content_object = ParentalKey(
+        'IndividualNewsPage',
+        related_name="tagged_items",
+        on_delete=models.CASCADE
+    )
+
+
 class IndividualNewsPage(Page):
     image = models.ForeignKey(
         "wagtailimages.Image",
@@ -63,6 +71,7 @@ class IndividualNewsPage(Page):
     categories = ParentalManyToManyField('news.NewsCategory', blank=True)
 
     tags_title = models.CharField(default="Tags")
+    tags = ClusterTaggableManager(through=NewsTag, blank=True)
 
     content_panels = Page.content_panels + [
         MultiFieldPanel([
@@ -82,6 +91,7 @@ class IndividualNewsPage(Page):
             FieldPanel('categories_title'),
             FieldPanel('categories', widget=forms.CheckboxSelectMultiple),
             FieldPanel('tags_title'),
+            FieldPanel('tags'),
         ], heading="Sidebar"),
     ]
 

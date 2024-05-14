@@ -14,7 +14,7 @@
         {% comment %} HEADER {% endcomment %}
         <div class="base-article px-10 py-5">
             <h1>{{ page.title }}</h1>
-            <p>Posted by <b>person</b> on date</p>
+            <p>Posted by <b>Author</b> on {{ page.date }}</p>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3">
@@ -25,10 +25,13 @@
                     {{ page.intro|safe }}
                 </div>
                 {{ page.article_body }}
+
+                {% include "ui/components/sharers/ShareSection.html" %}
             </div>
 
             {% comment %} SIDEBAR {% endcomment %}
             <div class="base-article px-10 py-5 sidebar [&>div]:my-12 [&_div:first-child_hr]:hidden [&_hr]:mb-8">
+                {% if page.related_projects%}
                 <div>
                     <hr />
                     <h1 class="text-h2 font-bold mb-4">
@@ -37,12 +40,14 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1">
                         {% with projects=page.related_projects %}
                             {% for project in projects %}
-                                {% include "ui/components/projects/ProjectPreviewBlock.html" with project=project.value %}
+                                {% include "ui/components/projects/ProjectPreviewBlockNews.html" with project=project.value %}
                             {% endfor %}
                         {% endwith %}
                     </div>
                 </div>
+                {% endif %}
 
+                {% if page.related_news %}
                 <div>
                     <hr />
                     <h1 class="text-h2 font-bold mb-4">
@@ -52,12 +57,14 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1">
                         {% with allnews=page.related_news %}
                             {% for news in allnews %}
-                                {% include "ui/components/news/NewsPreviewBlock.html" with news=news.value %}
+                                {% include "ui/components/news/NewsPreviewBlockNews.html" with news=news.value %}
                             {% endfor %}
                         {% endwith %}
                     </div>
                 </div>
+                {% endif %}
 
+                {% if page.categories.all %}
                 <div>
                     <hr />
                     <h1 class="text-h2 font-bold mb-4">
@@ -71,13 +78,23 @@
                         {% endwith %}
                     </p>
                 </div>
+                {% endif %}
 
+                {% if page.tags.all %}
                 <div>
                     <hr />
                     <h1 class="text-h2 font-bold mb-4">
                         {{ page.tags_title }}
                     </h1>
+                    <p>
+                        {% with tags=page.tags.all %}
+                            {% for tag in tags %}
+                                <a href="#" class="text-hot-red">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        {% endwith %}
+                    </p>
                 </div>
+                {% endif %}
             </div>
         </div>
     </div>

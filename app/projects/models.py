@@ -3,7 +3,7 @@ from django.db import models
 from wagtail.models import Page
 from wagtail.fields import RichTextField, StreamField
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel
-from wagtail.blocks import CharBlock, StreamBlock, StructBlock, URLBlock, RichTextBlock
+from wagtail.blocks import CharBlock, StreamBlock, StructBlock, URLBlock, RichTextBlock, PageChooserBlock
 
 # Create your models here.
 class IndividualProjectPage(Page):
@@ -54,6 +54,9 @@ class IndividualProjectPage(Page):
     # Question: are related news/events chosen for the article, or are they based off something?
     related_news_title = models.CharField(default="Related News")
     view_all_news_text = models.CharField(default="View all News")
+    related_news = StreamField([
+        ('news_page', PageChooserBlock(page_type="news.IndividualNewsPage"))
+    ], use_json_field=True, null=True, blank=True)
 
     related_events_title = models.CharField(default="Related Events")
     view_all_events_text = models.CharField(default="View all Events")
@@ -97,6 +100,7 @@ class IndividualProjectPage(Page):
             FieldPanel('contact'),
             FieldPanel('related_news_title'),
             FieldPanel('view_all_news_text'),
+            FieldPanel('related_news'),
             FieldPanel('related_events_title'),
             FieldPanel('view_all_events_text'),
         ], heading="Sidebar"),

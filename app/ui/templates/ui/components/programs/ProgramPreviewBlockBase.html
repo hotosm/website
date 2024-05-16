@@ -1,0 +1,15 @@
+{% load wagtailimages_tags %}
+
+{% image program.header_image original as image_p %}
+<a href="{{ program.url }}">
+    <div class="min-h-[14rem] content-end bg-no-repeat bg-cover" style="background-image: url('{{ image_p.url }}')">
+        <div class="bg-gradient-to-t from-black/90 to-transparent w-full">
+            <div class="text-white p-4 text-small">
+                <h1 class="text-h5 font-bold mb-2">
+                    {{ program.title }}
+                </h1>
+                {{ program.subtitle|safe }}
+            </div>
+        </div>
+    </div>
+</a>

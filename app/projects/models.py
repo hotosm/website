@@ -2,13 +2,19 @@ from django.db import models
 
 from wagtail.models import Page
 from wagtail.fields import RichTextField, StreamField
-from wagtail.admin.panels import FieldPanel, MultiFieldPanel
+from wagtail.admin.panels import FieldPanel, MultiFieldPanel, PageChooserPanel
 from wagtail.blocks import CharBlock, StreamBlock, StructBlock, URLBlock, RichTextBlock, PageChooserBlock
 
-# Create your models here.
+
 class IndividualProjectPage(Page):
     # > HEADER
-    program = models.CharField(blank=True)
+    owner_program = models.ForeignKey(
+        'wagtailcore.Page',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
     location = models.CharField(blank=True)
     header_image = models.ForeignKey(
         "wagtailimages.Image",
@@ -71,7 +77,7 @@ class IndividualProjectPage(Page):
 
     content_panels = Page.content_panels + [
         MultiFieldPanel([
-            FieldPanel('program'),
+            PageChooserPanel('owner_program', 'programs.IndividualProgramPage'),
             FieldPanel('location'),
             FieldPanel('header_image')
         ], heading="Header"),

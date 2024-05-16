@@ -33,6 +33,8 @@ INSTALLED_APPS = [
     "app.ui",
     "app.projects",
     "app.news",
+    "app.programs",
+    "app.core",
     "search",
     "users",
     "utils",

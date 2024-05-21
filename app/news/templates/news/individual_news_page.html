@@ -37,7 +37,7 @@
                     <h1 class="text-h2 font-bold mb-4">
                         {{ page.related_projects_title }}
                     </h1>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-x-4">
                         {% with projects=page.related_projects %}
                             {% for project in projects %}
                                 {% include "ui/components/projects/ProjectPreviewBlockNews.html" with project=project.value %}
@@ -54,7 +54,7 @@
                         {{ page.related_news_title }}
                     </h1>
                     {% include "ui/components/BaseLink.html" with linkurl="#" linktext=page.view_all_news_text %}
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-x-4">
                         {% with allnews=page.related_news %}
                             {% for news in allnews %}
                                 {% include "ui/components/news/NewsPreviewBlockNews.html" with news=news.value %}

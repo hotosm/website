@@ -1,6 +1,10 @@
 <div class="bg-hot-off-white">
-    <h1>
-        {{ text }}
-    </h1>
-    
+    <div class="max-w-7xl p-12 text-center">
+        <h1 class="text-h2 font-bold mb-8">
+            {{ text }}
+        </h1>
+        <a href="{{ url }}">
+            {% include "components/branded_elements/button.html" with text=buttontext %}
+        </a>
+    </div>
 </div>

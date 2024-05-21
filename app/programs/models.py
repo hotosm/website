@@ -1,11 +1,14 @@
 from django import forms
 from django.db import models
+from django.core.exceptions import ValidationError
 
 from wagtail.models import Page
 from wagtail.fields import RichTextField, StreamField
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.blocks import CharBlock, StreamBlock, StructBlock, URLBlock, RichTextBlock, PageChooserBlock
+from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
+
 from app.projects.models import IndividualProjectPage
 
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
@@ -78,6 +81,10 @@ class IndividualProgramPage(Page):
         ('program_page', PageChooserBlock(page_type="programs.IndividualProgramPage"))
     ], use_json_field=True, null=True, blank=True)
 
+    bottom_banner_text = models.CharField(default="Check out the many opportunities to get involved with HOT!")
+    bottom_banner_url = models.URLField(blank=True)
+    bottom_banner_url_text = models.CharField(default="Get Involved with HOT")
+
     content_panels = Page.content_panels + [
         MultiFieldPanel([
             FieldPanel("subtitle"),
@@ -110,5 +117,10 @@ class IndividualProgramPage(Page):
             FieldPanel("view_all_programs_title"),
             FieldPanel("view_all_programs_link"),
             FieldPanel("more_programs"),
-        ], heading="Programs")
+        ], heading="Programs"),
+        MultiFieldPanel([
+            FieldPanel('bottom_banner_text'),
+            FieldPanel('bottom_banner_url'),
+            FieldPanel('bottom_banner_url_text'),
+        ])
     ]

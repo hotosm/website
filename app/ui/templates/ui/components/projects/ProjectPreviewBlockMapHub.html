@@ -1,0 +1,27 @@
+{% load wagtailimages_tags %}
+
+<div class="font-medium my-4">
+    <a href="{{ project.url }}">
+        <div>
+            {% if showimage and project.header_image %}
+                {% image project.header_image original class="h-36 object-cover w-full mb-3" %}
+            {% endif %}
+
+            <p class="text-mini">
+                <span class="text-hot-dark-grey">
+                    {{ project.location }}
+                </span>
+            </p>
+            
+            <p class="my-2">
+                {{ project.title }}
+            </p>
+        </div>
+    </a>
+
+    <p class="text-mini">
+        <a class="text-hot-red" href="#">
+            {{ project.owner_region_hub.title }}
+        </a>
+    </p>
+</div>

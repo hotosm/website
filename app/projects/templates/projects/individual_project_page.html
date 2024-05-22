@@ -30,7 +30,7 @@
             <div class="p-10 col-span-1">
                 <div class="base-article-m">
                     {% include "ui/components/sidebar/SmallSectionWithHeaderAndDivider.html" with header=page.impact_areas_title text=page.impact_areas %}
-                    {% include "ui/components/sidebar/SmallSectionWithHeaderAndDivider.html" with header=page.region_hub_title text=page.region_hub %}
+                    {% include "ui/components/sidebar/SmallSectionWithHeaderAndDivider.html" with header=page.region_hub_title text=page.owner_region_hub.title %}
                     {% include "ui/components/sidebar/SmallSectionWithHeaderAndDivider.html" with header=page.duration_title text=page.duration %}
                     {% include "ui/components/sidebar/SmallSectionWithHeaderAndDivider.html" with header=page.partners_title text=page.partners %}
                     {% include "ui/components/sidebar/SmallSectionWithHeaderAndDivider.html" with header=page.tools_title text=page.tools %}

@@ -43,7 +43,13 @@ class IndividualProjectPage(Page):
     impact_areas = RichTextField(null=True, blank=True)  # Will need to reference an impact area once impact areas are added
     
     region_hub_title = models.CharField(default="Region Hub")
-    region_hub = RichTextField(null=True, blank=True)  # Will need to reference a region hub when region hubs are added
+    owner_region_hub = models.ForeignKey(
+        'wagtailcore.Page',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
     
     duration_title = models.CharField(default="Duration")
     duration = models.CharField(default="Ongoing", blank=True)
@@ -95,7 +101,7 @@ class IndividualProjectPage(Page):
             FieldPanel('impact_areas_title'),
             FieldPanel('impact_areas'),
             FieldPanel('region_hub_title'),
-            FieldPanel('region_hub'),
+            PageChooserPanel('owner_region_hub', 'mapping_hubs.IndividualMappingHubPage'),
             FieldPanel('duration_title'),
             FieldPanel('duration'),
             FieldPanel('partners_title'),

@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% load static %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+{% load compress %}
+{% block body_class %}template-individualmappinghubpage{% endblock %}
+{% block extra_css %}
+    {% compress css %}
+    {% endcompress css %}
+{% endblock extra_css %}
+
+{% block content %}
+    {% include "./components/header.html" %}
+
+    <div class="max-w-7xl mx-auto mb-20">
+        <div class="px-8">
+            {% comment %} MAIN BODY PART {% endcomment %}
+            <div class="grid grid-cols-1 lg:grid-cols-3 mt-8 gap-8">
+                <div class="text-h5 font-bold">
+                    {{ page.intro|safe }}
+                </div>
+                <div class="col-span-2 base-article-m [&_p:first-child]:mt-0">
+                    {{ page.main_body_text|safe }}
+                </div>
+            </div>
+
+            {% comment %} PROJECT SECTION {% endcomment %}
+            <div class="grid grid-cols-1 lg:grid-cols-2 mt-20">
+                <div>
+                    {% include "ui/components/SectionHeadingWithUnderline.html" with title=page.project_section_title %}
+                </div>
+                <div class="text-left lg:text-right text-intro mt-4 lg:mt-0 self-center">
+                    {% include "ui/components/BaseLink.html" with linktext=page.project_section_link_text linkurl=page.project_section_link_url %}
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 py-6">
+                {% for project in projects %}
+                    {% include "ui/components/projects/ProjectPreviewBlockMapHub.html" with project=project showimage="True" %}
+                {% endfor %}
+            </div>
+
+            {% comment %} NEWS AND EVENTS SECTIONS {% endcomment %}
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-10 mb-20">
+                {% include "ui/components/dogear_boxes/SpecialDogearLinkBox.html" with colour=page.main_colour title=page.news_section_title description=page.news_section_description linktext=page.news_section_link_text linkurl=page.news_section_link_url %}
+                {% include "ui/components/dogear_boxes/SpecialDogearLinkBox.html" with colour=page.main_colour title=page.events_section_title description=page.events_section_description linktext=page.events_section_link_text linkurl=page.events_section_link_url %}
+            </div>
+
+            {% comment %} PARTNERS SECTION {% endcomment %}
+            <div class="grid grid-cols-1 md:grid-cols-2 mt-10">
+                <div>
+                    {% include "ui/components/SectionHeadingWithUnderline.html" with title=page.partners_section_title %}
+                </div>
+                <div class="text-left md:text-right text-intro mt-4 md:mt-0 self-center">
+                    {% include "ui/components/BaseLink.html" with linktext=page.partners_section_link_text linkurl=page.partners_section_link_url %}
+                </div>
+            </div>
+            {% include "ui/components/partners/PartnerViewBlock.html" with partners=page.partners.all %}
+
+            {% comment %} DOGEAR BOXES SECTION (OPTIONAL) {% endcomment %}
+            {% if page.dogear_boxes %}
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 my-20">
+                    {% for box in page.dogear_boxes %}
+                        {% include "ui/components/dogear_boxes/DogearAnyColour.html" with colour=page.main_colour title=box.value.title linkurl=box.value.link_url linktext=box.value.link_text %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% comment %} CONTACT US SECTION {% endcomment %}
+            <div class="max-w-5xl mx-auto my-20">
+                <h1 class="font-bold text-h2 border-b-hot-light-grey border-b-2 pb-4 mb-6">
+                    {{ page.contact_section_title }}
+                </h1>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="text-intro font-medium">
+                        {{ page.contact_section_description|safe }}
+                    </div>
+                    <div class="text-intro font-medium">
+                        {% for link in page.contact_section_links %}
+                            <p class="mb-4">
+                                {% include "ui/components/BaseLink.html" with linktext=link.value.link_text %}
+                            </p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            {% comment %} SUBSCRIBE DOGEAR BOX SECTION {% endcomment %}
+            {% include "ui/components/dogear_boxes/DogearAnyColourLong.html" with colour=page.main_colour title=page.subscribe_box_text linktext=page.subscribe_box_signup_text linkurl=page.subscribe_box_signup_link %}
+
+            {% comment %} EXPLORE OTHER HUBS SECTION {% endcomment %}
+            <h1 class="text-h2 font-bold mt-20 mb-10">
+                {{ page.explore_section_title }}
+            </h1>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {% for hub in other_hubs %}
+                    {% if hub != page %}
+                        {% include "ui/components/mapping_hub/MappingHubPreviewBlock.html" with hub=hub %}
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

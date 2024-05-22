@@ -92,6 +92,11 @@
     font-weight: bold;
 }
 
+.base-article a,
+.base-article-m a {
+    color: var(--hot-red);
+}
+
 .base-article-m p,
 .base-article-m img {
     margin-top: 0.45rem;

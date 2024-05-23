@@ -1,3 +1,11 @@
+{% comment %}
+==> PARAMETERS
+- linkurl: a string; the link's url
+- linktext: a string; the text that should show for the link
+- colour: a string; the colour of the underline and arrow
+          this is optional, and defaults to the HOT red
+{% endcomment %}
+
 <a href="{{ linkurl }}">
     <span class="border-b-hot-red border-b-2 pb-1 font-medium" {% if colour %}style="border-color: {{ colour }}"{% endif %}>{{ linktext }}</span>
     

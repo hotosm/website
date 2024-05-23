@@ -91,7 +91,7 @@
             <h1 class="text-h2 font-bold mt-20 mb-10">
                 {{ page.explore_section_title }}
             </h1>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {% for hub in other_hubs %}
                     {% if hub != page %}
                         {% include "ui/components/mapping_hub/MappingHubPreviewBlock.html" with hub=hub %}

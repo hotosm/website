@@ -75,17 +75,17 @@ class IndividualProjectPage(Page):
 
     # > BOTTOM AREA
     red_box_title = models.CharField(default="Chat with Our Community")
-    red_box_link_text = RichTextField(default="Get connected now")
+    red_box_link_text = models.CharField(default="Get connected now")
     red_box_link_url = models.URLField(null=True, blank=True)
     black_box_title = models.CharField(default="Our Work")
-    black_box_link_text = RichTextField(default="View Our Work")
+    black_box_link_text = models.CharField(default="View Our Work")
     black_box_link_url = models.URLField(null=True, blank=True)
 
     content_panels = Page.content_panels + [
         MultiFieldPanel([
             PageChooserPanel('owner_program', 'programs.IndividualProgramPage'),
             FieldPanel('location'),
-            FieldPanel('header_image')
+            FieldPanel('header_image'),
         ], heading="Header"),
         MultiFieldPanel([
             FieldPanel('intro'),
@@ -110,11 +110,13 @@ class IndividualProjectPage(Page):
             FieldPanel('tools'),
             FieldPanel('contact_title'),
             FieldPanel('contact'),
-            FieldPanel('related_news_title'),
+            MultiFieldPanel([
+                FieldPanel('related_news_title'),
             FieldPanel('view_all_news_text'),
             FieldPanel('related_news'),
             FieldPanel('related_events_title'),
             FieldPanel('view_all_events_text'),
+            ], heading="Related Pages"),
         ], heading="Sidebar"),
         MultiFieldPanel([
             FieldPanel('red_box_title'),
@@ -123,5 +125,5 @@ class IndividualProjectPage(Page):
             FieldPanel('black_box_title'),
             FieldPanel('black_box_link_text'),
             FieldPanel('black_box_link_url'),
-        ], heading="Bottom")
+        ], heading="Bottom"),
     ]

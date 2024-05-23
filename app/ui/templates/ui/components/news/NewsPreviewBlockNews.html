@@ -1,3 +1,9 @@
+{% comment %}
+==> PARAMETERS
+- news: an IndividualNewsPage object; the news page to be previewed
+- readmoretext: a string; the text that should show for the "read more" button
+{% endcomment %}
+
 <div class="my-4">
     <p>
         <span class="text-small text-hot-dark-grey">
@@ -16,7 +22,11 @@
     <p class="mt-6 font-medium">
         <a href="{{ news.url }}" class="text-hot-red">
             <span class="pr-2">
-                Read More
+                {% if readmoretext %}
+                    {{ readmoretext }}
+                {% else %}
+                    Read More
+                {% endif %}
             </span>
             {% include "ui/components/icon_svgs/LinkCaret.html" %}
         </a>

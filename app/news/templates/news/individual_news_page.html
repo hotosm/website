@@ -57,7 +57,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-x-4">
                         {% with allnews=page.related_news %}
                             {% for news in allnews %}
-                                {% include "ui/components/news/NewsPreviewBlockNews.html" with news=news.value %}
+                                {% include "ui/components/news/NewsPreviewBlockNews.html" with news=news.value readmoretext=page.read_more_text %}
                             {% endfor %}
                         {% endwith %}
                     </div>

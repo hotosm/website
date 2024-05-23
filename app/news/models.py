@@ -66,6 +66,7 @@ class IndividualNewsPage(Page):
     related_news = StreamField([
         ('news_page', PageChooserBlock(page_type="news.IndividualNewsPage"))
     ], use_json_field=True, null=True, blank=True)
+    news_read_more_text = models.CharField(default="Read More")
 
     categories_title = models.CharField(default="Categories")
     categories = ParentalManyToManyField('news.NewsCategory', blank=True)
@@ -88,6 +89,7 @@ class IndividualNewsPage(Page):
             FieldPanel('related_news_title'),
             FieldPanel('view_all_news_text'),
             FieldPanel('related_news'),
+            FieldPanel('news_read_more_text'),
             FieldPanel('categories_title'),
             FieldPanel('categories', widget=forms.CheckboxSelectMultiple),
             FieldPanel('tags_title'),

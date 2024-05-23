@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     "app.news",
     "app.programs",
     "app.core",
+    "app.mapping_hubs",
     "search",
     "users",
     "utils",

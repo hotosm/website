@@ -92,6 +92,11 @@
     font-weight: bold;
 }
 
+.base-article a,
+.base-article-m a {
+    color: var(--hot-red);
+}
+
 .base-article-m p,
 .base-article-m img {
     margin-top: 0.45rem;
@@ -143,6 +148,27 @@
     font-size: var(--font-size-h2);
 }
 
+.project-sidebar {
+    font-size: var(--font-size-intro);
+}
+
+.project-sidebar div {
+    padding: 1.5em 0;
+    border-bottom: 0.1em solid black;
+}
+
+.project-sidebar div:first-child {
+    padding-top: 0;
+}
+
+.project-sidebar div p {
+    margin: 0.2em 0;
+}
+
+.project-sidebar div p:first-child {
+    font-weight: bold;
+}
+
 .dogear-box-red {
     background: linear-gradient(45deg, var(--hot-red) 0%, var(--hot-red) 92.4%, transparent 92.5%, transparent 100%);
     height: 100%;
@@ -153,4 +179,19 @@
     background: linear-gradient(45deg, var(--hot-navy-grey) 0%, var(--hot-navy-grey) 92.4%, transparent 92.5%, transparent 100%);
     height: 100%;
     width: 100%;
+}
+
+.image-overshadow-gradient {
+    position: relative;
+}
+
+.image-overshadow-gradient::before {
+    content: '';
+    z-index: 10;
+    width: 100%;
+    height: 100%;
+    display: block;
+    position: absolute;
+    top: 0;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0) 50%);
 }

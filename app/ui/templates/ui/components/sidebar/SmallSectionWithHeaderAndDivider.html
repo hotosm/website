@@ -4,9 +4,11 @@
 - text: The text for the body; an element. Should be a <p> element
 {% endcomment %}
 
-<div class="[&_p]:text-intro">
+<div class="text-intro">
     <p class="font-bold mb-2">{{ header }}</p>
-    {{ text|safe }}
+    <p>
+        {{ text|safe }}
+    </p>
 
     <hr class="border-black my-6" />
 </div>

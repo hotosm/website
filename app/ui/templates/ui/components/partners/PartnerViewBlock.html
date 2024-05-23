@@ -1,0 +1,33 @@
+{% comment %}
+==> PARAMETERS
+- partners: a list of partner snippets. 
+            An example of how this should be accumulated can be found in the IndividualMappingHubPage.
+            Alternatively, you can just do it like this: "ParentalManyToManyField('core.Partner', blank=True)"
+
+==> TODO:
+- make the system of assigning order smarter because it's kind of. unwieldy. as you can see
+{% endcomment %}
+
+{% load wagtailimages_tags %}
+<div x-data="{ partnerIndex: 0, fixedIndex(x) {return ({{partners|length}} + x + this.partnerIndex) % {{partners|length}}}, moveIndex(x) {this.partnerIndex = this.fixedIndex(x)} }">
+    <div class="flex justify-between">
+        <div x-on:click="moveIndex(1)" class="p-4 order-first rotate-180 text-hot-red flex flex-col justify-center">
+            <div class="inline border-hot-red border-2 rounded-full h-8 w-8 text-center">
+                {% include "ui/components/icon_svgs/LinkCaret.html" %}
+            </div>
+        </div>
+        {% for partner in partners %}
+            <div x-show="partnerIndex=={{forloop.counter0}} || fixedIndex(1)=={{forloop.counter0}} || fixedIndex(2)=={{forloop.counter0}} || fixedIndex(3)=={{forloop.counter0}}"
+                x-bind:class="{'order-1': partnerIndex=={{forloop.counter0}}, 'order-2': fixedIndex(1)=={{forloop.counter0}}, 'order-3 hidden md:block': fixedIndex(2)=={{forloop.counter0}}, 'order-4 hidden lg:block': fixedIndex(3)=={{forloop.counter0}},}"
+                class="p-4"
+            >
+                {% image partner.partner_logo original class="max-h-16 max-w-24 h-auto w-auto" %}
+            </div>
+        {% endfor %}
+        <div x-on:click="moveIndex(-1)" class="p-4 order-last text-hot-red flex flex-col justify-center">
+            <div class="inline border-hot-red border-2 rounded-full h-8 w-8 text-center">
+                {% include "ui/components/icon_svgs/LinkCaret.html" %}
+            </div>
+        </div>
+    </div>
+</div>

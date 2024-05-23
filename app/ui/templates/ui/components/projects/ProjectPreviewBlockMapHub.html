@@ -1,0 +1,37 @@
+{% comment %}
+==> PARAMETERS
+- project: An IndividualProjectPage object; the project page to be previewed
+- showimage: a boolean; whether or not the image should be shown in the preview
+{% endcomment %}
+
+{% load wagtailimages_tags %}
+
+{% image project.header_image original as image_p %}
+<div class="font-medium my-4">
+    <a href="{{ project.url }}">
+        <div>
+            {% if showimage %}
+                <div class="w-full min-h-[9rem] mb-3 content-end bg-no-repeat bg-cover image-overshadow-gradient" style="background-image: url('{{ image_p.url }}')">
+                    <div>
+                    </div>
+                </div>
+            {% endif %}
+
+            <p class="text-mini">
+                <span class="text-hot-dark-grey">
+                    {{ project.location }}
+                </span>
+            </p>
+            
+            <p class="my-2">
+                {{ project.title }}
+            </p>
+        </div>
+    </a>
+
+    <p class="text-mini">
+        <a class="text-hot-red" href="#">
+            {{ project.owner_region_hub.title }}
+        </a>
+    </p>
+</div>

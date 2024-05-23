@@ -10,7 +10,7 @@
 {% endblock extra_css %}
 
 {% block content %}
-    {% include "ui/components/BasePageHeader.html" with title=page.title subtitle=page.program|add:" • "|add:page.location image=page.header_image %}
+    {% include "ui/components/BasePageHeader.html" with title=page.title subtitle=page.owner_program.title|add:" • "|add:page.location image=page.header_image %}
 
     <div class="max-w-7xl mx-auto" x-init="isLandingPage = false">
         <div class="grid grid-cols-1 lg:grid-cols-3">

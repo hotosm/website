@@ -1,0 +1,14 @@
+<div class="bg-hot-off-white p-4 flex flex-col">
+    <h1 class="text-hot-red text-h4 font-bold">
+        {{ number }}.
+    </h1>
+    <div class="my-2">
+        {{ body }}
+    </div>
+    <a href={{ linkurl }} class="text-hot-red mt-auto font-medium py-2">
+        <p>
+            {{ linktext }}
+            {% include "ui/components/icon_svgs/LinkCaret.html" %}
+        </p>
+    </a>
+</div>

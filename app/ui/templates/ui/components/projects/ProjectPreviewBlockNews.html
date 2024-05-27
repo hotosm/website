@@ -23,16 +23,17 @@
                 </span>
             </p>
             
-            <p class="my-2">
+            <p class="my-1">
                 {{ project.title }}
             </p>
         </div>
     </a>
 
     <p class="text-mini">
-        <a class="text-hot-red" href="#">
-            {% comment %} REPLACE THIS ONCE IMPACT AREAS ARE MADE {% endcomment %}
-            Disasters &amp; Climate Resilience
-        </a>
+        {% for area in project.impact_area_list %}
+            <a class="text-hot-red text-mini" href="{{ area.value.url }}">
+                <p>{{ area.value.title }}{% if not forloop.last %},{% endif %}</p>
+            </a>
+        {% endfor %}
     </p>
 </div>

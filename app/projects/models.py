@@ -29,7 +29,7 @@ class IndividualProjectPage(Page):
     intro = RichTextField(blank=True)
     description = StreamField([
         ('text_block', RichTextBlock(features=[
-        'h1', 'h2', 'h3', 'h4', 'bold', 'italic', 'link', 'ol', 'ul', 'hr', 'link', 'document-link', 'image', 'embed', 'code', 'blockquote'
+        'h1', 'h2', 'h3', 'h4', 'bold', 'italic', 'link', 'ol', 'ul', 'hr', 'document-link', 'image', 'embed', 'code', 'blockquote'
         ]))
     ], use_json_field=True, null=True)
 
@@ -40,7 +40,7 @@ class IndividualProjectPage(Page):
 
     # > SIDE BAR
     impact_areas_title = models.CharField(default="Impact Areas")
-    impact_areas = RichTextField(null=True, blank=True)  # Will need to reference an impact area once impact areas are added
+    impact_area_list = StreamField([('impact_area', PageChooserBlock(page_type="impact_areas.IndividualImpactAreaPage"))], use_json_field=True, null=True, blank=True)
     
     region_hub_title = models.CharField(default="Region Hub")
     owner_region_hub = models.ForeignKey(
@@ -99,7 +99,7 @@ class IndividualProjectPage(Page):
         ], heading="Body"),
         MultiFieldPanel([
             FieldPanel('impact_areas_title'),
-            FieldPanel('impact_areas'),
+            FieldPanel('impact_area_list'),
             FieldPanel('region_hub_title'),
             PageChooserPanel('owner_region_hub', 'mapping_hubs.IndividualMappingHubPage'),
             FieldPanel('duration_title'),
@@ -112,10 +112,10 @@ class IndividualProjectPage(Page):
             FieldPanel('contact'),
             MultiFieldPanel([
                 FieldPanel('related_news_title'),
-            FieldPanel('view_all_news_text'),
-            FieldPanel('related_news'),
-            FieldPanel('related_events_title'),
-            FieldPanel('view_all_events_text'),
+                FieldPanel('view_all_news_text'),
+                FieldPanel('related_news'),
+                FieldPanel('related_events_title'),
+                FieldPanel('view_all_events_text'),
             ], heading="Related Pages"),
         ], heading="Sidebar"),
         MultiFieldPanel([

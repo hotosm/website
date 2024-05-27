@@ -14,13 +14,13 @@
 
     <div class="max-w-7xl mx-auto">
         <div class="grid grid-cols-1 lg:grid-cols-2 p-10 gap-x-10">
-            {% image page.intro_image original class="pb-8" %}
-            <div class="base-article-m [&_p:first-child]:mt-0">
+            <div class="base-article-m [&_p:first-child]:mt-0 lg:order-2">
                 <div class="text-intro font-medium">
                     {{ page.intro|safe }}
                 </div>
                 {{ page.description|safe }}
             </div>
+            {% image page.intro_image original class="pb-8 lg:order-1" %}
         </div>
 
         <h1 class="text-h2 px-10 font-bold">

@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% load static %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+{% load compress %}
+{% block body_class %}template-individualmappinghubpage{% endblock %}
+{% block extra_css %}
+    {% compress css %}
+    {% endcompress css %}
+{% endblock extra_css %}
+
+{% block content %}
+    {% include "ui/components/PageHeaderWithBlur.html" with title=page.title subtitle=page.header_text image=page.header_image full_length=True %}
+
+    <div class="max-w-7xl mx-auto mb-20">
+        <div class="px-8 my-10">
+            {% comment %} MAIN BODY {% endcomment %}
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-10">
+                <div class="base-article-m [&_p:first-child]:mt-0 lg:order-2">
+                    <div class="text-intro font-medium">
+                        {{ page.intro|safe }}
+                    </div>
+                    {{ page.description|safe }}
+                </div>
+                {% image page.intro_image original class="pb-8 lg:order-1" %}
+            </div>
+
+            {% comment %} USE CASES {% endcomment %}
+            {% include "ui/components/SectionHeadingWithUnderline.html" with title=page.use_cases_title %}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 my-10">
+                {% for case in page.use_cases %}
+                    {% include "./components/UseCaseBox.html" with number=forloop.counter body=case.value.description linktext=case.value.link_text linkurl=case.value.link_url %}
+                {% endfor %}
+            </div>
+
+            {% comment %} PROJECTS {% endcomment %}
+            <div class="my-20">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-y-4">
+                    <div>
+                        {% include "ui/components/SectionHeadingWithUnderline.html" with title=page.projects_title %}
+                    </div>
+                    <p class="md:text-right">
+                        {% include "ui/components/BaseLink.html" with linktext=page.view_all_projects_text linkurl=page.view_all_projects_link %}
+                    </p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 mt-10" id="projects-list">
+                    {% for project in projects %}
+                        {% include "ui/components/projects/ProjectPreviewBlockNews.html" with project=project showimage=True %}
+                    {% endfor %}
+                </div>
+                <p class="text-center mt-10" id="next-project" class="{% if not projects.has_next %}hidden{% endif %}">
+                    {% if projects.has_next %}
+                            {% comment %} <a href="?page={{ projects.next_page_number }}"></a> {% endcomment %}
+                            <button hx-get="?page={{ projects.next_page_number }}"
+                                hx-trigger="click"
+                                hx-select="#projects-list, #next-project"
+                                hx-swap="beforeend"
+                                hx-select-oob="#projects-list:beforeend, #next-project:outerHTML"
+                            >
+                                <span class="border-b-hot-red border-b-2 pb-1 font-medium mr-4 text-intro">
+                                    Load More Projects
+                                </span>
+                                {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-90 text-hot-red" %}
+                            </button>
+                    {% endif %}
+                </p>
+            </div>
+            
+            {% comment %} OTHER IMPACT AREAS {% endcomment %}
+            <div class="my-20">
+                <h1 class="text-h2 font-bold">
+                    {{ page.explore_impact_areas_text }}
+                </h1>
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mt-10">
+                    {% for area in other_impact_areas %}
+                        {% if area != page %}
+                            <a href="{{ area.url }}" class="rounded-2xl shadow-md">
+                                <div class="bg-hot-off-white p-6 text-center font-medium text-intro h-full">
+                                    {% image area.external_icon fill-200x200 class="px-10" %}
+                                    <p>
+                                        {{ area.title }}
+                                    </p>
+                                </div>
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            
+
+            {% comment %} DOGEAR BOXES {% endcomment %}
+            <div class="grid grid-cols-1 md:grid-cols-2 text-white my-10 gap-8">
+                <div>
+                    {% include "ui/components/dogear_boxes/DogearRed.html" with title=page.red_dogear_box_title linktext=page.red_dogear_box_link_text linkurl=page.red_dogear_box_link_url %}
+                </div>
+                <div>
+                    {% include "ui/components/dogear_boxes/DogearBlack.html" with title=page.black_dogear_box_title linktext=page.black_dogear_box_link_text linkurl=page.black_dogear_box_link_url %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -195,3 +195,7 @@
     top: 0;
     background: linear-gradient(180deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0) 50%);
 }
+
+.bold-override b {
+    font-weight: inherit;
+}

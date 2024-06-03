@@ -10,7 +10,9 @@
     {% endcompress css %}
 {% endblock extra_css %}
 
+
 {% block content %}
+    {% image page.our_work_background original as our_work_bg %}
     {% image page.image original as image_p %}
     
     <div x-init="setIsLandingPage(true)"
@@ -21,73 +23,212 @@
         <!-- Banner -->
         <div class="bg-no-repeat bg-cover" style="background-image: url('{{ image_p.url }}')">
             <div class="bg-gradient-to-r from-black/70 to-transparent">
-                <div class="mx-auto max-w-7xl text-hot-white py-32 px-12 sm:py-48 lg:py-56 xl:px-0 space-y-28">
+                <div class="mx-auto max-w-7xl text-hot-white pt-48 md:pb-16">
                     <!-- Call to action components-->
                     <div class="flex flex-col lg:flex-row lg:justify-between">
                         <!-- Static CTA -->
-                        <div class="w-128 lg:w-1/2">
-                            <div class="font-semibold text-h2 md:text-center lg:text-left leading-tight sm:text-h3">{{ page.hero_text }}</div>
+                        <div class="w-128 lg:w-1/2 px-12">
+                            <div class="font-semibold text-h2 md:text-center lg:text-left leading-tight md:text-h1">{{ page.hero_text }}</div>
                             <div class="mt-10 md:text-center lg:text-left">
                                 {% include "components/branded_elements/button.html" with link="" text=page.hero_cta %}
                             </div>
                         </div>
                         <!-- Carousel CTA -->
-                        <div x-data="{ slide: 0, slides: [] }"
-                            x-init="slides = [...$el.children];"
-                            class="w-full lg:w-1/2 flex flex-col lg:flex-row justify-center">
-                            {% for block in page.carousel %}
-                                <div x-show="slide === {{ forloop.counter0 }}"
-                                    class="sm:mt-30 lg:mt-0 lg:w-[398px] mt-20 space-y-4 backdrop-blur-md px-5 pt-7 pb-12 shadow-md h-[300px] flex flex-col justify-center">
-                                    <div class="text-h4 font-bold h-fit">{{ block.value.header }}</div>
-                                    <div class="text-lg font-regular h-fit">{{ block.value.body }}</div>
-                                    <a href="{{ block.value.action_button.link }}">
-                                        <div class="text-intro font-medium inline-flex space-x-5 items-center">
-                                            <span>{{ block.value.action_button.text }}</span>
-                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                width="10.689"
-                                                height="16.819"
-                                                viewBox="0 0 10.689 16.819">
-                                                <path id="Path_4671" data-name="Path 4671" d="M0,8.28,7,0l7,8.28" transform="translate(9.689 1.409) rotate(90)" fill="none" stroke="#d43f3f" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
-                                            </svg>
-                                        </div>
-                                    </a>
-                                </div>
-                            {% endfor %}
-                            <div class="flex flex-row lg:flex-col">
-                                <button @click="slide=0"
-                                        x-bind:class="{'bg-hot-red shadow w-[45px] h-[45px] text-2xl text-hot-white font-bold flex items-center justify-center': slide === 0, 'backdrop-blur-lg shadow w-[45px] h-[45px] text-2xl text-hot-white font-regular flex items-center justify-center': slide !== 0}">
-                                    1
-                                </button>
-                                <button @click="slide=1"
-                                        x-bind:class="{'bg-hot-red shadow w-[45px] h-[45px] text-2xl text-hot-white font-bold flex items-center justify-center': slide === 1, 'backdrop-blur-lg shadow w-[45px] h-[45px] text-2xl text-hot-white font-regular flex items-center justify-center': slide !== 1}">
-                                    2
-                                </button>
-                                <button @click="slide=2"
-                                        x-bind:class="{'bg-hot-red shadow w-[45px] h-[45px] text-2xl text-hot-white font-bold flex items-center justify-center': slide === 2, 'backdrop-blur-lg shadow w-[45px] h-[45px] text-2xl text-hot-white font-regular flex items-center justify-center': slide !== 2}">
-                                    3
-                                </button>
-                            </div>
-                        </div>
+                        {% include "home/components/HomeSpecificCarousel.html" %}
                     </div>
                     <!--CTA Statistics, TODO: Use HTMX to query endpoint for stats once the endpoint exists  -->
-                    <div class="flex flex-row justify-center items-center space-x-5 h-full">
-                        <div class="backdrop-blur-lg shadow-md flex flex-col justify-center text-center w-52 h-32">
+                    <div class="grid grid-cols-2 md:grid-cols-4 h-full md:pt-16 bg-hot-red md:bg-transparent gap-8 max-w-5xl mx-auto md:px-4">
+                        <div class="md:backdrop-blur-lg md:shadow-md flex flex-col justify-center text-center h-32 p-4">
                             <div class="font-barlow font-semibold text-h4">468K</div>
                             <div class="font-regular text-base-18">Total Mappers ⓘ</div>
                         </div>
-                        <div class="backdrop-blur-lg shadow-md flex flex-col justify-center text-center w-52 h-32">
+                        <div class="md:backdrop-blur-lg md:shadow-md flex flex-col justify-center text-center h-32 p-4">
                             <div class="font-barlow font-semibold text-h4">246.7M</div>
                             <div class="font-regular text-base-18">Total Map Edits ⓘ</div>
                         </div>
-                        <div class="backdrop-blur-lg shadow-md flex flex-col justify-center text-center w-52 h-32">
+                        <div class="md:backdrop-blur-lg md:shadow-md flex flex-col justify-center text-center h-32 p-4">
                             <div class="font-barlow font-semibold text-h4">147.5M</div>
                             <div class="font-regular text-base-18">Buildings Mapped ⓘ</div>
                         </div>
-                        <div class="backdrop-blur-lg shadow-md flex flex-col justify-center items-center text-center w-52 h-32">
+                        <div class="md:backdrop-blur-lg md:shadow-md flex flex-col justify-center text-center h-32 p-4">
                             <div class="font-barlow font-semibold text-h4">2.7M</div>
                             <div class="font-regular text-base-18">Roads Mapped(KM) ⓘ</div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        {% comment %} OUR WORK {% endcomment %}
+        <div class="bg-cover bg-no-repeat" style="background-image: url('{{ our_work_bg.url }}')">
+            <div class="mx-auto max-w-7xl px-6 md:px-10 pt-10 pb-20">
+                {% include "ui/components/SectionHeadingWithUnderline.html" with title=page.our_work_title %}
+                {% comment %} HIGHLIGHTED PROGRAMS {% endcomment %}
+                <div class="grid grid-cols-1 lg:grid-cols-5 mt-10 mb-5 gap-4">
+                    <div class="col-span-3">
+                        <h2 class="text-h4 font-semibold">
+                            {{ page.highlighted_programs_title }}
+                        </h2>
+                        <div class="text-intro">
+                            {{ page.highlighted_programs_description|safe }}
+                        </div>
+                    </div>
+                    <div class="col-span-2 lg:text-right text-intro">
+                        {% include "ui/components/BaseLink.html" with linktext=page.view_all_programs_text linkurl=page.view_all_programs_link %}
+                    </div>
+                </div>
+                <div class="mb-10">
+                    {% include "ui/components/programs/ProgramCarouselBlock.html" with programs=page.highlighted_programs %}
+                </div>
+
+                {% comment %} IMPACT AREAS {% endcomment %}
+                <div class="lg:w-3/5 my-10">
+                    <h2 class="text-h4 font-semibold">
+                        {{ page.impact_areas_title }}
+                    </h2>
+                    <div class="text-intro">
+                        {{ page.impact_areas_description|safe }}
+                    </div>
+                </div>
+                {% include "home/components/ImpactAreasPanel.html" %}
+                
+            </div>
+        </div>
+        
+        <div class="mx-auto max-w-7xl px-6 md:px-10 my-20">
+            {% comment %} WHO WE ARE {% endcomment %}
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                {% image page.who_we_are_image original class="order-1 lg:order-2" %}
+                <div class="order-2 lg:order-1">
+                    <div class="text-h2 [&_b]:text-hot-red bold-override font-bold lg:font-semibold">
+                        {{page.who_we_are_intro_title|safe}}
+                    </div>
+                    <div class="text-intro my-2">
+                        {{page.who_we_are_intro_description|safe}}
+                    </div>
+                    <a href="{{page.who_we_are_button_link}}">
+                        {% include "components/branded_elements/button.html" with text=page.who_we_are_button_text classes="mt-4" %}
+                    </a>
+                </div>
+            </div>
+
+            {% comment %} MAPPING HUBS {% endcomment %}
+            {% include "home/components/MappingHubsPanel.html" with class="my-20" %}
+        </div>
+
+        {% comment %} TOOLS & RESOURCES {% endcomment %}
+        <div class="bg-hot-off-white">
+            <div class="px-6 md:px-10 py-10 mx-auto max-w-7xl grid lg:grid-cols-2">
+                {% image page.tools_resources_image original as tr_image %}
+                <div class="min-h-[20rem] bg-cover bg-no-repeat" style="background-image: url('{{tr_image.url}}')"></div>
+                <div class="flex flex-col justify-center lg:px-8 py-8 py:8">
+                    <div class="text-h2 [&_b]:text-hot-red bold-override font-bold lg:font-semibold">
+                        {{page.tools_resources_title|safe}}
+                    </div>
+                    <div class="text-intro font-medium my-4">
+                        {{page.tools_resources_description|safe}}
+                    </div>
+                    <a href="{{page.tools_resources_button_url}}">
+                        {% include "components/branded_elements/button.html" with text=page.tools_resources_button_text classes="mt-4" %}
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        {% comment %} OPPORTUNITIES {% endcomment %}
+        <div class="bg-hot-navy-grey text-white">
+            <div class="mx-auto max-w-7xl grid lg:grid-cols-5">
+                {% image page.opportunities_image original as op_image %}
+                <div class="lg:order-2 min-h-[20rem] bg-cover bg-no-repeat lg:col-span-2" style="background-image: url('{{op_image.url}}')"></div>
+                <div class="lg:order-1 px-6 md:px-10 py-10 flex flex-col justify-center lg:col-span-3">
+                    <div class="text-h2 [&_b]:text-hot-red bold-override font-bold lg:font-semibold">
+                        {{page.opportunities_title|safe}}
+                    </div>
+                    <div class="text-intro font-medium my-4">
+                        {{page.opportunities_description|safe}}
+                    </div>
+                    <div class="flex gap-4">
+                        <a href="{{page.get_involved_button_link}}">
+                            {% include "components/branded_elements/button.html" with text=page.get_involved_button_text classes="mt-4" %}
+                        </a>
+                        <a href="{{page.get_involved_button_link}}">
+                            {% include "components/branded_elements/button_bordered.html" with text=page.get_involved_button_text classes="mt-4" %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mx-auto max-w-7xl px-6 md:px-10 my-20">
+            {% comment %} NEWS {% endcomment %}
+            <div class="grid grid-cols-2">
+                <div>
+                    {% include "ui/components/SectionHeadingWithUnderline.html" with title=page.news_title %}
+                </div>
+                <div class="text-right text-intro self-center">
+                    {% include "ui/components/BaseLink.html" with linktext=page.view_all_news_text linkurl=page.view_all_news_url %}
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:[&_.image-hide-small]:block [&_.image-hide-small]:hidden mt-4">
+                {% for news in page.displayed_news %}
+                    <div class="{% if forloop.counter0 > 1 %}md:hidden lg:block{% endif %}">
+                        {% include "ui/components/news/NewsPreviewBlockProjects.html" with news=news.value showimage=True %}
+                    </div>
+                {% endfor %}
+            </div>
+
+            {% comment %} SUBSCRIBE {% endcomment %}
+            <div class="rounded-2xl shadow-md">
+                <div class="bg-hot-off-white py-8 px-16 my-20">
+                    <h1 class="text-h2 font-bold">
+                        {{ page.subscribe_title }}
+                    </h1>
+                    <form class=" mt-4 [&_label]:block 
+                                [&_input]:border-none
+                    ">
+                        <div class="flex gap-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 grow">
+                                <div>
+                                    <label for="firstname" class="font-medium mb-2">{{ page.subscribe_first_name_text }}</label>
+                                    <div class="rounded-2xl shadow-md">
+                                        <input name="firstname" id="firstname" type="text" placeholder="{{page.subscribe_first_name_field_hint}}" class="w-full">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="lastname" class="font-medium mb-2">{{ page.subscribe_last_name_text }}</label>
+                                    <div class="rounded-2xl shadow-md">
+                                        <input name="lastname" id="lastname" type="text" placeholder="{{page.subscribe_last_name_field_hint}}" class="w-full">
+                                    </div>
+                                </div>
+                                <div class="md:col-span-2 lg:col-span-1 flex gap-4">
+                                    <div class="grow">
+                                        <label for="email" class="font-medium mb-2">{{ page.subscribe_email_text }}</label>
+                                        <div class="rounded-2xl shadow-md">
+                                            <input name="email" id="email" type="text" placeholder="{{page.subscribe_email_field_hint}}" class="w-full">
+                                        </div>
+                                    </div>
+                                    <div class="cursor-pointer hidden md:block lg:hidden self-end">
+                                        {% include "components/branded_elements/button.html" with text=page.subscribe_submit_button_text %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="cursor-pointer hidden lg:block self-end">
+                                {% include "components/branded_elements/button.html" with text=page.subscribe_submit_button_text %}
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center mt-4 mb-4 md:mb-0">
+                            <input type="checkbox" id="agreecheckmark" name="agreecheckmark" value="Agree" class="rounded shadow-md">
+                            <label for="agreecheckmark" class="ml-2 [&_a]:font-medium">
+                                {{page.subscribe_checkbox_text|safe}}
+                            </label>
+                        </div>
+
+                        <div class="cursor-pointer md:hidden">
+                            {% include "components/branded_elements/button.html" with text=page.subscribe_submit_button_text %}
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

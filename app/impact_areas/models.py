@@ -27,13 +27,9 @@ class IndividualImpactAreaPage(Page):
 
         projects_list = IndividualProjectPage.objects.live().filter(
             Q(impact_area_list__contains=[{'type': 'impact_area', 'value': context['page'].id}])
-        )
-        # print(IndividualProjectPage.objects.first().impact_area_list[0].value.id)
-        # print(context['page'].id)
-        # print(IndividualProjectPage.objects.first().impact_area_list.__contains__([{'value__id': context['page'].id}]))
-        # print(dir(IndividualProjectPage.objects.first().impact_area_list))
+        ).filter(locale=context['page'].locale)
         page = request.GET.get('page', 1)
-        paginator = Paginator(projects_list, 4)
+        paginator = Paginator(projects_list, 8)  # if you want more/less items per page (i.e., per load), change the number here to something else
         try:
             projects = paginator.page(page)
         except PageNotAnInteger:
@@ -42,7 +38,7 @@ class IndividualImpactAreaPage(Page):
             projects = paginator.page(paginator.num_pages)
         
         context['projects'] = projects
-        other_impact_areas = IndividualImpactAreaPage.objects.live()
+        other_impact_areas = IndividualImpactAreaPage.objects.live().filter(locale=context['page'].locale)
         context['other_impact_areas'] = other_impact_areas
         return context
 

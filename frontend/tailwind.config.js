@@ -44,6 +44,7 @@ module.exports = {
       colors: {
         "hot-red": "var(--hot-red)",
         "hot-navy": "var(--hot-navy)",
+        "hot-navy-grey": "var(--hot-navy-grey)",
         "hot-dark-grey": "var(--hot-dark-grey)",
         "hot-slate-grey": "var(--hot-slate-grey)",
         "hot-light-grey": "var(--hot-light-grey)",

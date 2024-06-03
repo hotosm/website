@@ -3,8 +3,18 @@
 - news: an IndividualNewsPage object; the news page to be previewed
 {% endcomment %}
 
+{% load wagtailimages_tags %}
+
+{% image news.image original as image_p %}
 <div class="my-4">
     <a href="{{ news.url }}">
+        {% if showimage %}
+            <div class="image-hide-small w-full min-h-[9rem] mb-3 content-end bg-no-repeat bg-cover image-overshadow-gradient" style="background-image: url('{{ image_p.url }}')">
+                <div>
+                </div>
+            </div>
+        {% endif %}
+
         <p class="text-hot-red text-small font-semibold">
             Blog
         </p>

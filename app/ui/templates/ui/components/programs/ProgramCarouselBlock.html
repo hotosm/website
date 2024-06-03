@@ -1,0 +1,26 @@
+{% load wagtailimages_tags %}
+<div x-data="{ partnerIndex: 0, fixedIndex(x) {return ({{programs|length}} + x + this.partnerIndex) % {{programs|length}}}, moveIndex(x) {this.partnerIndex = this.fixedIndex(x)} }" class="{{class}}">
+    <div class="text-right mb-4">
+        <div x-on:click="moveIndex(1)" class="pr-4 text-hot-red inline-flex flex-col justify-center">
+            <div class="border-hot-red border-2 rounded-full h-8 w-8 text-center">
+                {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-180" %}
+            </div>
+        </div>
+        <div x-on:click="moveIndex(-1)" class="text-hot-red inline-flex flex-col justify-center">
+            <div class="border-hot-red border-2 rounded-full h-8 w-8 text-center">
+                {% include "ui/components/icon_svgs/LinkCaret.html" %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {% for program in programs %}
+            <div x-show="partnerIndex=={{forloop.counter0}} || fixedIndex(1)=={{forloop.counter0}} || fixedIndex(2)=={{forloop.counter0}} || fixedIndex(3)=={{forloop.counter0}}"
+                x-bind:class="{'order-1': partnerIndex=={{forloop.counter0}}, 'order-2': fixedIndex(1)=={{forloop.counter0}}, 'order-3 hidden md:block': fixedIndex(2)=={{forloop.counter0}}, 'order-4 hidden lg:block': fixedIndex(3)=={{forloop.counter0}},}"
+                
+            >
+                {% include "ui/components/programs/ProgramPreviewBlockBase.html" with program=program.value %}
+            </div>
+        {% endfor %}
+    </div>
+</div>

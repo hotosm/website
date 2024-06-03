@@ -29,11 +29,11 @@
         </div>
     </a>
 
-    <p class="text-mini">
+    <div class="text-mini my-2">
         {% for area in project.impact_area_list %}
             <a class="text-hot-red text-mini" href="{{ area.value.url }}">
                 <p>{{ area.value.title }}{% if not forloop.last %},{% endif %}</p>
             </a>
         {% endfor %}
-    </p>
+    </div>
 </div>

@@ -1,0 +1,113 @@
+{% load wagtailimages_tags %}
+
+{% image page.mapping_hubs_background original as image_p %}
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 {{class}}"
+     x-data="{ selIndex: 0 }"
+     @mouseleave="selIndex = 0"
+>
+    <div class="lg:col-span-3 grid">
+        <div :class="selIndex == 0 ? '' : 'md:invisible'" class="grid row-start-1 col-start-1 bg-black text-white">
+            <div class="row-start-1 col-start-1 bg-no-repeat bg-cover" style="background-image: url('{{image_p.url}}')"></div>
+            <div class="row-start-1 col-start-1 bg-gradient-to-b from-black/80 to-transparent p-10">
+                <div class="text-h2 [&_b]:text-hot-red bold-override font-bold lg:font-semibold">
+                    {{ page.mapping_hubs_title|safe }}
+                </div>
+                <hr class="border-hot-red w-20 border-b-2" />
+
+                <div class="text-intro my-6">
+                    {{ page.mapping_hubs_description|safe }}
+                </div>
+                
+                <a href="{{page.mapping_hubs_link_url}}" class="font-medium text-intro mt-4">
+                    <p class="text-hot-red">
+                        <span class="text-white mr-2">{{ page.mapping_hubs_link_text }}</span>
+                        {% include "ui/components/icon_svgs/LinkCaret.html" with class="" %}
+                    </p>
+                </a>
+            </div>
+        </div>
+        {% for hub in mapping_hubs %}
+            <div :class="selIndex == {{forloop.counter}} ? '' : 'invisible'" class="row-start-1 col-start-1 text-white lg:grid lg:grid-cols-3 md:block hidden" style="background-color: {{hub.main_colour}}">
+                {% image hub.header_image original as hub_image %}
+                <div class="hidden lg:block bg-no-repeat bg-cover" style="background-image: url('{{hub_image.url}}')">
+                </div>
+                <div class="col-span-2 p-10">
+                    <div class="flex items-center">
+                        <div class="inline-grid mr-2">
+                            <div class="row-start-1 col-start-1 inline mr-2" style="filter: grayscale(100%) invert(100%) contrast(2)">
+                                {% image hub.main_icon original class="w-14 h-auto" %}
+                            </div>
+                            <div class="row-start-1 col-start-1 inline mr-2" style="mix-blend-mode: overlay; filter: saturate(4)">
+                                {% image hub.main_icon original class="w-14 h-auto" %}
+                            </div>
+                        </div>
+                        <div>
+                            <div class="text-h4 lg:text-h2 [&_b]:text-hot-red bold-override font-bold lg:font-semibold">
+                                {{ page.mapping_hubs_title|safe }}
+                            </div>
+                            <p class="text-h5">
+                                {{ hub.title }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="my-4 text-intro">
+                        {{ hub.intro|safe }}
+                    </div>
+                    
+                    <a href="{{ hub.url }}">
+                        <p class="text-intro font-medium">
+                            <span>{{page.mapping_hubs_hub_learn_more}}</span>
+                            {% include "ui/components/icon_svgs/LinkCaret.html" with class="text-hot-red" %}
+                        </p>
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="lg:col-span-2 grid gap-4">
+        {% for hub in mapping_hubs %}
+            <div class="flex w-full">
+                <div class="w-0 h-0 self-center 
+                            border-t-[1rem] border-t-transparent 
+                            border-b-[1rem] border-b-transparent 
+                            border-r-[1rem] hidden md:block" 
+                     style="border-right-color: {{hub.main_colour}}"
+                     :class="selIndex == {{forloop.counter}} ? '' : 'invisible'"
+                >
+                </div>
+                <div class="p-3 pr-6 grow flex items-center"
+                    :style="selIndex == {{forloop.counter}} ? `background-color: {{hub.main_colour}}; color: white` : `background-color: var(--hot-off-white)`
+                            "
+                    @click="selIndex={{forloop.counter}}" @mouseover="selIndex={{forloop.counter}}"
+                >
+                    <div class="w-full">
+                        <div class="flex items-center text-h5 font-bold">
+                            <div class="inline-grid">
+                                <div class="row-start-1 col-start-1 inline mr-2" :style="selIndex == {{forloop.counter}} ? 'filter: grayscale(100%) invert(100%) contrast(2)' : ''">
+                                    {% image hub.main_icon original class="w-12 h-auto" %}
+                                </div>
+                                <div class="row-start-1 col-start-1 inline mr-2" style="mix-blend-mode: overlay; filter: saturate(4)" :class="selIndex == {{forloop.counter}} ? '' : 'hidden'">
+                                    {% image hub.main_icon original class="w-12 h-auto" %}
+                                </div>
+                            </div>
+                            
+                            <p class="cursor-default">{{ hub.title }}</p>
+                        </div>
+                        <div class="md:hidden px-2" :class="selIndex == {{forloop.counter}} ? '' : 'hidden'">
+                            <div class="my-4">
+                                {{ hub.intro|safe }}
+                            </div>
+                            <a href="{{ hub.url }}">
+                                <p class="text-intro font-medium my-4">
+                                    <span>{{page.mapping_hubs_hub_learn_more}}</span>
+                                    {% include "ui/components/icon_svgs/LinkCaret.html" with class="text-hot-red" %}
+                                </p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>

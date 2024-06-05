@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load static %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+{% load compress %}
+{% block body_class %}template-individualmappinghubpage{% endblock %}
+{% block extra_css %}
+    {% compress css %}
+    {% endcompress css %}
+{% endblock extra_css %}
+
+{% block content %}
+    <div class="max-w-7xl mx-auto px-6 md:px-10 my-10">
+        {% comment %} BODY SECTION {% endcomment %}
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="w-full">
+                {% if page.image %}
+                    {% image page.image original class="md:w-full h-auto w-auto max-h-[24rem] object-contain" %}
+                {% endif %}
+            </div>
+            <div class="col-span-2">
+                {% comment %} TODO: REMOVE PLACEHOLDER AND IMPLEMENT PROPER (BASICALLY REQUIRES OTHER PAGES COMPLETION) {% endcomment %}
+                <p class="text-intro font-medium">
+                    <span class="text-hot-red">Board</span>
+                    /
+                    <span class="text-hot-red">Voting Member</span>
+                    /
+                    <span class="text-hot-red">Staff</span>
+                </p>
+                <h1 class="text-h1 font-semibold my-2">{{page.title}}</h1>
+                <p class="text-intro font-medium my-4">
+                    <span>{{page.position}}</span>
+                    /
+                    <a href="{{page.location_hub.url}}" class="text-hot-red">{{page.location_hub.title}}</a>
+                </p>
+                <div class="base-article-m">
+                    {{page.introduction|safe}}
+                </div>
+            </div>
+        </div>
+
+        {% comment %} ON THE WEB LINKS {% endcomment %}
+        {% if page.on_the_web_links %}
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
+                <div></div>
+                <div class="col-span-2">
+                    <h1 class="text-h2 font-bold my-2">{{page.get_parent.specific.on_the_web_title}}</h1>
+                    <div class="text-intro flex gap-x-8 gap-y-4 flex-wrap">
+                        {% for link in page.on_the_web_links %}
+                            <p>
+                                {% include "ui/components/BaseLink.html" with linktext=link.value.link_text linkurl=link.value.link_url %}
+                            </p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        {% comment %} NEWS POSTS {% endcomment %}
+        {% if posts %}
+            <div class="my-20">
+                {% include "ui/components/news/NewsPreviewCarousel.html" with news=posts title=page.get_parent.specific.posts_title %}
+            </div>
+        {% endif %}
+
+        {% comment %} CONTRIBUTIONS {% endcomment %}
+        {% if contributions%}
+            <div class="my-20">
+                {% include "ui/components/projects/ProjectPreviewCarousel.html" with projects=contributions title=page.get_parent.specific.project_contribution_title %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

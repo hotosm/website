@@ -24,7 +24,7 @@
         </div>
 
         <h1 class="text-h2 px-10 font-bold">
-            {{ page.stats_title }}
+            {{ page.get_parent.specific.stats_title }}
         </h1>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 px-10 py-6">
             {% for stat in page.stats %}
@@ -42,7 +42,7 @@
 
         <div class="px-10 py-6">
             <h1 class="text-h2 font-bold">
-                {{ page.goals_title }}
+                {{ page.get_parent.specific.goals_title }}
             </h1>
             <hr class="border-hot-red w-16 border-b-2" />
         </div>
@@ -60,7 +60,7 @@
 
         <div class="px-10 py-6">
             <h1 class="text-h2 font-bold">
-                {{ page.projects_title }}
+                {{ page.get_parent.specific.projects_title }}
             </h1>
             <hr class="border-hot-red w-16 border-b-2" />
 
@@ -75,13 +75,13 @@
             <div class="grid grid-cols-1 md:grid-cols-2">
                 <div>
                     <h1 class="text-h2 font-bold">
-                        {{ page.partners_title }}
+                        {{ page.get_parent.specific.partners_title }}
                     </h1>
                     <hr class="border-hot-red w-16 border-b-2" />
                 </div>
 
                 <div class="text-right self-center">
-                    {% include "ui/components/BaseLink.html" with linkurl=page.view_all_partners_link linktext=page.view_all_partners_title %}
+                    {% include "ui/components/BaseLink.html" with linkurl=page.get_parent.specific.view_all_partners_link linktext=page.get_parent.specific.view_all_partners_title %}
                 </div>
             </div>
             
@@ -92,11 +92,11 @@
         <div class="px-10 py-6">
             <div class="grid grid-cols-1 md:grid-cols-2">
                 <h1 class="text-h2 font-bold">
-                    {{ page.more_programs_title }}
+                    {{ page.get_parent.specific.more_programs_title }}
                 </h1>
 
                 <div class="text-right self-center">
-                    {% include "ui/components/BaseLink.html" with linkurl=page.view_all_programs_link linktext=page.view_all_programs_title %}
+                    {% include "ui/components/BaseLink.html" with linkurl=page.get_parent.specific.view_all_programs_link linktext=page.get_parent.specific.view_all_programs_title %}
                 </div>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mt-6">
@@ -106,5 +106,5 @@
             </div>
         </div>
     </div>
-    {% include "ui/components/FooterBannerWithTextAndLink.html" with text=page.bottom_banner_text buttontext=page.bottom_banner_url_text url=page.bottom_banner_url %}
+    {% include "ui/components/FooterBannerWithTextAndLink.html" with text=page.get_parent.specific.bottom_banner_text buttontext=page.get_parent.specific.bottom_banner_url_text url=page.get_parent.specific.bottom_banner_url %}
 {% endblock %}

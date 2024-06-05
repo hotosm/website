@@ -26,7 +26,7 @@
             </div>
 
             {% comment %} USE CASES {% endcomment %}
-            {% include "ui/components/SectionHeadingWithUnderline.html" with title=page.use_cases_title %}
+            {% include "ui/components/SectionHeadingWithUnderline.html" with title=page.get_parent.specific.use_cases_title %}
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 my-10">
                 {% for case in page.use_cases %}
                     {% include "./components/UseCaseBox.html" with number=forloop.counter body=case.value.description linktext=case.value.link_text linkurl=case.value.link_url %}
@@ -37,10 +37,10 @@
             <div class="my-20">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-y-4">
                     <div>
-                        {% include "ui/components/SectionHeadingWithUnderline.html" with title=page.projects_title %}
+                        {% include "ui/components/SectionHeadingWithUnderline.html" with title=page.get_parent.specific.projects_title %}
                     </div>
                     <p class="md:text-right">
-                        {% include "ui/components/BaseLink.html" with linktext=page.view_all_projects_text linkurl=page.view_all_projects_link %}
+                        {% include "ui/components/BaseLink.html" with linktext=page.get_parent.specific.view_all_projects_text linkurl=page.view_all_projects_link %}
                     </p>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 mt-10" id="projects-list">
@@ -58,7 +58,7 @@
                                 hx-select-oob="#projects-list:beforeend, #next-project:outerHTML"
                             >
                                 <span class="border-b-hot-red border-b-2 pb-1 font-medium mr-4 text-intro">
-                                    Load More Projects
+                                    {{page.get_parent.specific.load_more_projects_text}}
                                 </span>
                                 {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-90 text-hot-red" %}
                             </button>
@@ -69,7 +69,7 @@
             {% comment %} OTHER IMPACT AREAS {% endcomment %}
             <div class="my-20">
                 <h1 class="text-h2 font-bold">
-                    {{ page.explore_impact_areas_text }}
+                    {{ page.get_parent.specific.explore_impact_areas_text }}
                 </h1>
                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mt-10">
                     {% for area in other_impact_areas %}
@@ -91,10 +91,10 @@
             {% comment %} DOGEAR BOXES {% endcomment %}
             <div class="grid grid-cols-1 md:grid-cols-2 text-white my-10 gap-8">
                 <div>
-                    {% include "ui/components/dogear_boxes/DogearRed.html" with title=page.red_dogear_box_title linktext=page.red_dogear_box_link_text linkurl=page.red_dogear_box_link_url %}
+                    {% include "ui/components/dogear_boxes/DogearRed.html" with title=page.get_parent.specific.red_dogear_box_title linktext=page.get_parent.specific.red_dogear_box_link_text linkurl=page.get_parent.specific.red_dogear_box_link_url %}
                 </div>
                 <div>
-                    {% include "ui/components/dogear_boxes/DogearBlack.html" with title=page.black_dogear_box_title linktext=page.black_dogear_box_link_text linkurl=page.black_dogear_box_link_url %}
+                    {% include "ui/components/dogear_boxes/DogearBlack.html" with title=page.get_parent.specific.black_dogear_box_title linktext=page.get_parent.specific.black_dogear_box_link_text linkurl=page.get_parent.specific.black_dogear_box_link_url %}
                 </div>
             </div>
         </div>

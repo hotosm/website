@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     "app.programs",
     "app.core",
     "app.mapping_hubs",
+    "app.members",
     "search",
     "users",
     "utils",

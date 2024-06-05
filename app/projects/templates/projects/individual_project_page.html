@@ -14,7 +14,6 @@
 
     <div class="max-w-7xl mx-auto" x-init="isLandingPage = false">
         <div class="grid grid-cols-1 lg:grid-cols-3">
-            
             {% comment %} BODY {% endcomment %}
             <div class="p-10 col-span-2">
                 <div class="base-article-m">
@@ -31,52 +30,62 @@
                 {% comment %} NOTE TO SELF: the "safe" thing is only needed temporarily until everything is put in {% endcomment %}
                 <div class="project-sidebar">
                     <div>
-                        <p>{{page.impact_areas_title}}</p>
-                        <p>{{page.impact_areas|safe}}</p>
+                        <p>{{page.get_parent.specific.impact_areas_title}}</p>
+                        {% for area in page.impact_area_list %}
+                            <p><a href="{{area.value.url}}">{{area.value.title}}</a></p>
+                        {% endfor %}
                     </div>
                     <div>
-                        <p>{{page.region_hub_title}}</p>
+                        <p>{{page.get_parent.specific.region_hub_title}}</p>
                         <p><a href="{{page.owner_region_hub.url}}">{{page.owner_region_hub.title}}</a></p>
                     </div>
                     <div>
-                        <p>{{page.duration_title}}</p>
+                        <p>{{page.get_parent.specific.duration_title}}</p>
                         <p>{{page.duration}}</p>
                     </div>
                     <div>
-                        <p>{{page.partners_title}}</p>
-                        <p>{{page.partners|safe}}</p>
+                        <p>{{page.get_parent.specific.partners_title}}</p>
+                        {% for partner in page.partners_list.all %}
+                            <p><a href="{{partner.partner_url}}">{{partner.partner_name}}</a></p>
+                        {% endfor %}
                     </div>
                     <div>
-                        <p>{{page.tools_title}}</p>
+                        <p>{{page.get_parent.specific.tools_title}}</p>
                         <p>{{page.tools|safe}}</p>
                     </div>
                     <div>
-                        <p>{{page.contact_title}}</p>
+                        <p>{{page.get_parent.specific.contact_title}}</p>
                         <p>{{page.contact|safe}}</p>
                     </div>
                 </div>
 
+                {% comment %} RELATED NEWS {% endcomment %}
                 {% if page.related_news %}
-                <div class="my-12">
-                    <h1 class="text-h2 font-bold mb-4">
-                        {{ page.related_news_title }}
-                    </h1>
-                    {% include "ui/components/BaseLink.html" with linkurl="#" linktext=page.view_all_news_text %}
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-4 mt-4">
-                        {% with allnews=page.related_news %}
-                            {% for news in allnews %}
-                                {% include "ui/components/news/NewsPreviewBlockProjects.html" with news=news.value %}
-                            {% endfor %}
-                        {% endwith %}
+                    <div class="my-12">
+                        <h1 class="text-h2 font-bold mb-4">
+                            {{ page.get_parent.specific.related_news_title }}
+                        </h1>
+                        <div class="[&_span]:text-black text-intro">
+                            {% include "ui/components/BaseLink.html" with linkurl=page.get_parent.specific.view_all_news_url linktext=page.get_parent.specific.view_all_news_text %}
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-4 mt-4">
+                            {% with allnews=page.related_news %}
+                                {% for news in allnews %}
+                                    {% include "ui/components/news/NewsPreviewBlockProjects.html" with news=news.value %}
+                                {% endfor %}
+                            {% endwith %}
+                        </div>
                     </div>
-                </div>
                 {% endif %}
                 
+                {% comment %} RELATED EVENTS {% endcomment %}
                 <div class="my-12">
                     <h1 class="text-h2 font-bold mb-4">
-                        {{ page.related_events_title }}
+                        {{ page.get_parent.specific.related_events_title }}
                     </h1>
-                    {% include "ui/components/BaseLink.html" with linkurl="#" linktext=page.view_all_events_text %}
+                    <div class="[&_span]:text-black text-intro">
+                        {% include "ui/components/BaseLink.html" with linkurl=page.get_parent.specific.view_all_events_url linktext=page.get_parent.specific.view_all_events_text %}
+                    </div>
                 </div>
             </div>
         </div>
@@ -84,10 +93,10 @@
         {% comment %} BOTTOM AREA {% endcomment %}
         <div class="grid grid-cols-1 md:grid-cols-2 text-white my-10 mx-5">
             <div class="mx-5 mb-10 md:mb-0">
-                {% include "ui/components/dogear_boxes/DogearRed.html" with title=page.red_box_title linktext=page.red_box_link_text linkurl=page.red_box_link_url %}
+                {% include "ui/components/dogear_boxes/DogearRed.html" with title=page.get_parent.specific.red_box_title linktext=page.get_parent.specific.red_box_link_text linkurl=page.get_parent.specific.red_box_link_url %}
             </div>
             <div class="mx-5">
-                {% include "ui/components/dogear_boxes/DogearBlack.html" with title=page.black_box_title linktext=page.black_box_link_text linkurl=page.black_box_link_url %}
+                {% include "ui/components/dogear_boxes/DogearBlack.html" with title=page.get_parent.specific.black_box_title linktext=page.get_parent.specific.black_box_link_text linkurl=page.get_parent.specific.black_box_link_url %}
             </div>
         </div>
     </div>

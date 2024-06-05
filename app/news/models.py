@@ -12,6 +12,36 @@ from wagtail.blocks import CharBlock, StreamBlock, StructBlock, URLBlock, RichTe
 from wagtail.snippets.models import register_snippet
 
 
+class NewsOwnerPage(Page):
+    max_count = 1
+
+    authors_posted_by_text = models.CharField(default="Posted by", help_text="The text which appears prior to the authors names; with 'posted by', the text displays as 'posted by [author]'.")
+    authors_posted_on_text = models.CharField(default="on", help_text="The text which appears prior to the date; with 'on', it would display as 'on [date]'.")
+    related_projects_title = models.CharField(default="Related Projects")
+    related_news_title = models.CharField(default="Related News")
+    view_all_news_text = models.CharField(default="View all News")
+    view_all_news_url = models.URLField(blank=True)
+    news_read_more_text = models.CharField(default="Read More")
+    categories_title = models.CharField(default="Categories")
+    tags_title = models.CharField(default="Tags")
+
+    content_panels = Page.content_panels + [
+        MultiFieldPanel([
+            FieldPanel("authors_posted_by_text"),
+            FieldPanel("authors_posted_on_text"),
+        ], heading="Info"),
+        MultiFieldPanel([
+            FieldPanel('related_projects_title'),
+            FieldPanel('related_news_title'),
+            FieldPanel('view_all_news_text'),
+            FieldPanel('view_all_news_url'),
+            FieldPanel('news_read_more_text'),
+            FieldPanel('categories_title'),
+            FieldPanel('tags_title'),
+        ], heading="Sidebar"),
+    ]
+
+
 @register_snippet
 class NewsCategory(models.Model):
     category_name = models.CharField()
@@ -36,6 +66,12 @@ class NewsTag(TaggedItemBase):
 
 
 class IndividualNewsPage(Page):
+    parent_page_type = [
+        'news.NewsOwnerPage'
+    ]
+
+    authors = StreamField([('author', PageChooserBlock(page_type="members.IndividualMemberPage"))], use_json_field=True, null=True, blank=True)
+
     image = models.ForeignKey(
         "wagtailimages.Image",
         null=True,
@@ -47,7 +83,7 @@ class IndividualNewsPage(Page):
 
     intro = RichTextField(blank=True)
 
-    date = models.DateField("Post date")
+    date = models.DateField(help_text="Post date")
 
     article_body = StreamField([
         ('text_block', RichTextBlock(features=[
@@ -55,28 +91,22 @@ class IndividualNewsPage(Page):
         ]))
     ], use_json_field=True, null=True, blank=True)
 
-    # Question: are related projects/news chosen for the article, or are they based off something?
-    related_projects_title = models.CharField(default="Related Projects")
     related_projects = StreamField([
         ('project_page', PageChooserBlock(page_type="projects.IndividualProjectPage"))
     ], use_json_field=True, null=True, blank=True)
 
-    related_news_title = models.CharField(default="Related News")
-    view_all_news_text = models.CharField(default="View all News")
     related_news = StreamField([
         ('news_page', PageChooserBlock(page_type="news.IndividualNewsPage"))
     ], use_json_field=True, null=True, blank=True)
-    news_read_more_text = models.CharField(default="Read More")
 
-    categories_title = models.CharField(default="Categories")
     categories = ParentalManyToManyField('news.NewsCategory', blank=True)
 
-    tags_title = models.CharField(default="Tags")
     tags = ClusterTaggableManager(through=NewsTag, blank=True)
 
     content_panels = Page.content_panels + [
         MultiFieldPanel([
-            FieldPanel("date")
+            FieldPanel("authors"),
+            FieldPanel("date"),
         ], heading="Info"),
         MultiFieldPanel([
             FieldPanel("image"),
@@ -84,15 +114,9 @@ class IndividualNewsPage(Page):
             FieldPanel("article_body"),
         ], heading="Body"),
         MultiFieldPanel([
-            FieldPanel('related_projects_title'),
             FieldPanel('related_projects'),
-            FieldPanel('related_news_title'),
-            FieldPanel('view_all_news_text'),
             FieldPanel('related_news'),
-            FieldPanel('news_read_more_text'),
-            FieldPanel('categories_title'),
             FieldPanel('categories', widget=forms.CheckboxSelectMultiple),
-            FieldPanel('tags_title'),
             FieldPanel('tags'),
         ], heading="Sidebar"),
     ]

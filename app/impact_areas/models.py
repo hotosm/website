@@ -42,6 +42,10 @@ class IndividualImpactAreaPage(Page):
         context['other_impact_areas'] = other_impact_areas
         return context
 
+    parent_page_type = [
+        'impact_areas.ImpactAreasPage'
+    ]
+
     header_image = models.ForeignKey(
         "wagtailimages.Image",
         null=True,
@@ -71,23 +75,7 @@ class IndividualImpactAreaPage(Page):
     intro = RichTextField(blank=True)
     description = RichTextField(blank=True)
 
-    use_cases_title = models.CharField(default="Use Cases")
     use_cases = StreamField(UseCaseBlock(), use_json_field=True, blank=True, null=True)
-
-    projects_title = models.CharField(default="Projects")
-    view_all_projects_text = models.CharField(default="View all projects")
-    view_all_projects_link = models.URLField(blank=True)
-    load_more_projects_text = models.CharField(default="Load More Projects")
-
-    explore_impact_areas_text = models.CharField(default="Explore Other Impact Areas")
-
-    red_dogear_box_title = models.CharField(blank=True)
-    red_dogear_box_link_text = models.CharField(blank=True)
-    red_dogear_box_link_url = models.URLField(blank=True)
-
-    black_dogear_box_title = models.CharField(blank=True)
-    black_dogear_box_link_text = models.CharField(blank=True)
-    black_dogear_box_link_url = models.URLField(blank=True)
 
     content_panels = Page.content_panels + [
         MultiFieldPanel([
@@ -101,24 +89,8 @@ class IndividualImpactAreaPage(Page):
             FieldPanel('description'),
         ], heading="Body"),
         MultiFieldPanel([
-            FieldPanel('use_cases_title'),
             FieldPanel('use_cases'),
         ], heading="Use Cases"),
-        MultiFieldPanel([
-            FieldPanel('projects_title'),
-            FieldPanel('view_all_projects_text'),
-            FieldPanel('view_all_projects_link'),
-            FieldPanel('load_more_projects_text'),
-        ], heading="Projects"),
-        FieldPanel('explore_impact_areas_text'),
-        MultiFieldPanel([
-            FieldPanel('red_dogear_box_title'),
-            FieldPanel('red_dogear_box_link_text'),
-            FieldPanel('red_dogear_box_link_url'),
-            FieldPanel('black_dogear_box_title'),
-            FieldPanel('black_dogear_box_link_text'),
-            FieldPanel('black_dogear_box_link_url'),
-        ], heading="Dogear Boxes"),
     ]
 
 
@@ -134,6 +106,8 @@ class ImpactAreaBlock(StreamBlock):
 
 
 class ImpactAreasPage(Page):
+    max_count = 1
+    
     intro = RichTextField(blank=True)
 
     image = models.ForeignKey(
@@ -147,10 +121,48 @@ class ImpactAreasPage(Page):
 
     impact_area_blocks = StreamField(ImpactAreaBlock(), use_json_field=True, null=True)
 
+    # > IMPACT AREA SHARED FIELDS
+    use_cases_title = models.CharField(default="Use Cases")
+
+    projects_title = models.CharField(default="Projects")
+    view_all_projects_text = models.CharField(default="View all projects")
+    view_all_projects_link = models.URLField(blank=True)
+    load_more_projects_text = models.CharField(default="Load More Projects")
+
+    explore_impact_areas_text = models.CharField(default="Explore Other Impact Areas")
+
+    red_dogear_box_title = models.CharField(default="Learn more about Tools & Resources and Data Access")
+    red_dogear_box_link_text = models.CharField(default="View Tools & Resources")
+    red_dogear_box_link_url = models.URLField(blank=True)
+
+    black_dogear_box_title = models.CharField(default="Check many opportunities to get involved with HOT!")
+    black_dogear_box_link_text = models.CharField(default="Get Involved with HOT")
+    black_dogear_box_link_url = models.URLField(blank=True)
+
     content_panels = Page.content_panels + [
         MultiFieldPanel([
             FieldPanel('image'),
             FieldPanel('intro')
         ], heading="Header section"),
-        FieldPanel('impact_area_blocks')
+        FieldPanel('impact_area_blocks'),
+        MultiFieldPanel([
+            MultiFieldPanel([
+                FieldPanel('use_cases_title'),
+            ], heading="Use Cases"),
+            MultiFieldPanel([
+                FieldPanel('projects_title'),
+                FieldPanel('view_all_projects_text'),
+                FieldPanel('view_all_projects_link'),
+                FieldPanel('load_more_projects_text'),
+            ], heading="Projects"),
+            FieldPanel('explore_impact_areas_text'),
+            MultiFieldPanel([
+                FieldPanel('red_dogear_box_title'),
+                FieldPanel('red_dogear_box_link_text'),
+                FieldPanel('red_dogear_box_link_url'),
+                FieldPanel('black_dogear_box_title'),
+                FieldPanel('black_dogear_box_link_text'),
+                FieldPanel('black_dogear_box_link_url'),
+            ], heading="Dogear Boxes"),
+        ], heading="Impact Area Shared Fields"),
     ]

@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load static %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+{% load compress %}
+{% block body_class %}template-individualmappinghubpage{% endblock %}
+{% block extra_css %}
+    {% compress css %}
+    {% endcompress css %}
+{% endblock extra_css %}
+
+{% block content %}
+    <div class="max-w-7xl mx-auto">
+        {% comment %} HEADER {% endcomment %}
+        <div class="base-article px-10 py-5">
+            <h1>{{ page.title }}</h1>
+            <p class="mt-2">
+                {{ page.start_date_time }} &#x2013; {% if page.start_date_time.date == page.end_date_time.date %}{{ page.end_date_time.time }} {% else %} {{page.end_date_time}} {% endif %}
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 px-10 gap-8 pb-20">
+            {% comment %} BODY {% endcomment %}
+            <div class="base-article-m py-5 col-span-2">
+                {% image page.image original class="pb-8" %}
+                <div class="text-intro">
+                    {{ page.intro|safe }}
+                </div>
+                {{ page.extended_description }}
+
+                {% include "ui/components/sharers/ShareSection.html" with class="mt-10" %}
+            </div>
+
+            {% comment %} SIDEBAR {% endcomment %}
+            <div class="base-article py-5 sidebar">
+                <h1>
+                    {{page.get_parent.specific.event_location_title}}
+                </h1>
+                <p class="my-2">
+                    {{page.event_location}}
+                </p>
+                <hr class="my-6" />
+
+                {% if page.rsvp_description or page.rsvp_link %}
+                    <div class="bg-hot-off-white p-8 my-8">
+                        <h1 class="mb-4">
+                            {{page.get_parent.specific.join_event_title}}
+                        </h1>
+                        {{page.rsvp_description|safe}}
+
+                        {% if page.rsvp_link %}
+                            <a href="{{page.rsvp_link}}" class="[&_button]:mt-4">
+                                {% include "components/branded_elements/button.html" with text=page.get_parent.specific.rsvp_button_text %}
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+                <div>
+                    <h1>
+                        {{page.get_parent.specific.more_events_title}}
+                    </h1>
+                    <div class="text-intro [&_span]:text-black my-4">
+                        {% include "ui/components/BaseLink.html" with linktext=page.get_parent.specific.view_all_events_text linkurl=page.get_parent.specific.view_all_events_url %}
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-12 mt-10">
+                        {% for event in page.more_events %}
+                            {% include "ui/components/events/EventPreviewBlockEvent.html" with event=event.value %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

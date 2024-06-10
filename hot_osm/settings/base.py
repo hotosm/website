@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "app.core",
     "app.mapping_hubs",
     "app.members",
+    "app.events",
     "search",
     "users",
     "utils",
@@ -63,6 +64,8 @@ INSTALLED_APPS = [
     "compressor",
     "wagtail_localize",
     "wagtail_localize.locales",
+    "wagtail_modeladmin",
+    "wagtailmenus"
 ]
 
 MIDDLEWARE = [
@@ -94,6 +97,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "wagtail.contrib.settings.context_processors.settings",
+                "wagtailmenus.context_processors.wagtailmenus",
             ],
         },
     },

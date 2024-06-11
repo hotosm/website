@@ -1,0 +1,59 @@
+{% load homepage_tags %}
+{% get_navigation as navigation %}
+{% get_home_page as home_page %}
+
+<header x-data="{ expanded: false }">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between" :class="{ 'absolute inset-x-0 top-0 z-50 text-white': isLandingPage }">
+        <a class="" href="/">{% include "components/branded_elements/logo.html" with class="h-10 my-2" %}</a>
+        <nav class="px-8 ml-auto my-2">
+            <ul class="flex text-base-18 p-0 flex-row py-0 gap-x-4 " aria-label="main">
+                {% comment %} NAVBAR ITEMS THAT AREN'T BUTTONS {% endcomment %}
+                {% for item in navigation %}
+                    <div class="hidden lg:block {%if forloop.last%}[&_.nav-grandchild]:left-auto [&_.nav-grandchild]:right-full lg:[&_.caret-arrow]:rotate-180{%endif%}">
+                        <li>
+                            {% include "ui/components/navigation/HeaderNavbarItem.html" with item=item.value %}
+                        </li>
+                    </div>
+                {% endfor %}
+
+                {% comment %} NAVBAR ITEM BUTTONS {% endcomment %}
+                {% for item in home_page.navigation_buttons %}
+                    <li class="hidden md:block">
+                        {% include "ui/components/navigation/HeaderNavbarButton.html" with item=item.value %}
+                    </li>
+                {% endfor %}
+
+                {% comment %} MOBILE BURGER/X BUTTON FOR OPENING/CLOSING THE NAV MENU {% endcomment %}
+                <div class="lg:hidden" @click="expanded = !expanded">
+                    <svg x-show="!expanded"
+                        class="h-6 w-6"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                    </svg>
+                    <svg x-show="expanded"
+                        class="h-6 w-6 text-black"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </div>
+            </ul>
+        </nav>
+    </div>
+    
+    {% comment %} MOBILE EXPANDED LIST {% endcomment %}
+    <ul class="text-black lg:hidden p-4" x-show="expanded" :class="{ 'pt-20 text-white': isLandingPage }">
+        {% for item in navigation %}
+            <li class="text-black {%if item.value.is_button%}md:hidden{%endif%}">
+                {% include "ui/components/navigation/HeaderNavbarItem.html" with item=item.value %}
+            </li>
+        {% endfor %}
+    </ul>
+</header>

@@ -1,0 +1,52 @@
+{% load homepage_tags %}
+{% get_home_page as home_page %}
+{% get_navigation as navigation %}
+{% load wagtailimages_tags %}
+
+<div class="bg-hot-barely-not-white py-10">
+    <div class="mx-auto max-w-7xl px-6 md:px-10">
+        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
+            {% comment %} LOGO {% endcomment %}
+            <div class="py-4">
+                {% include "components/branded_elements/logo.html" %}
+            </div>
+
+            {% comment %} NAVIGATION ITEMS {% endcomment %}
+            <div class="md:col-span-2 lg:col-span-3 md:columns-2 lg:columns-3">
+                {% for item in navigation %}
+                    {% if item.value.show_in_footer%}
+                        <div class="break-inside-avoid p-4">
+                            <p class="font-bold text-intro hover:text-hot-red">
+                                <a href="{%if item.link_page%}{{item.link_page.url}}{%elif item.link_url%}{{item.link_url}}{%else%}#{%endif%}">{{item.value.title}}</a>
+                            </p>
+                            {% for child in item.value.children %}
+                                <p class="pt-1 text-small hover:text-hot-red">
+                                    <a href="{%if child.value.link_page%}{{child.value.link_page.url}}{%elif child.value.link_url%}{{child.value.link_url}}{%else%}#{%endif%}">{{child.value.title}}</a>
+                                </p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        {% image home_page.footer_candid_seal original %}
+        <hr class="border-black my-6" />
+
+        {% comment %} COPYRIGHT + ASSORTED LINKS {% endcomment %}
+        <div class="grid grid-cols-1 lg:grid-cols-3 text-small">
+            <div class="lg:order-2 flex gap-4 lg:justify-end">
+                {% for link in home_page.footer_bottom_links %}
+                    <a href="{{link.value.url}}">
+                        <p>
+                            {{link.value.text}}
+                        </p>
+                    </a>
+                {% endfor %}
+            </div>
+            <div class="lg:order-1 col-span-2 [&_a]:text-hot-red [&_a]:font-bold mt-4 lg:mt-0">
+                {{home_page.footer_bottom_copyright|safe}}
+            </div>
+        </div>
+    </div>
+</div>

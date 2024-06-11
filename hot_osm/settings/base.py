@@ -65,7 +65,6 @@ INSTALLED_APPS = [
     "wagtail_localize",
     "wagtail_localize.locales",
     "wagtail_modeladmin",
-    "wagtailmenus"
 ]
 
 MIDDLEWARE = [
@@ -97,7 +96,6 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "wagtail.contrib.settings.context_processors.settings",
-                "wagtailmenus.context_processors.wagtailmenus",
             ],
         },
     },

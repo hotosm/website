@@ -1,6 +1,6 @@
 from django.db import models
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel
-from wagtail.blocks import CharBlock, StreamBlock, StructBlock, URLBlock, PageChooserBlock
+from wagtail.blocks import CharBlock, StreamBlock, StructBlock, URLBlock, PageChooserBlock, ListBlock, BooleanBlock
 from wagtail.fields import RichTextField, StreamField
 from wagtail.models import Page
 
@@ -23,6 +23,31 @@ class CarouselBlock(StreamBlock):
     slides = SlideBlock()
 
 
+class ThirdNavigationStructBlock(StructBlock):
+    title = CharBlock()
+    link_url = URLBlock(required=False, help_text="A link URL or page must be provided; if both are present, the link will default to the page.")
+    link_page = PageChooserBlock(required=False, help_text="A link URL or page must be provided; if both are present, the link will default to the page.")
+
+
+class SecondNavigationStructBlock(StructBlock):
+    title = CharBlock()
+    link_url = URLBlock(required=False, help_text="A link URL or page must be provided; if both are present, the link will default to the page.")
+    link_page = PageChooserBlock(required=False, help_text="A link URL or page must be provided; if both are present, the link will default to the page.")
+    children = StreamBlock([('nav_item',ThirdNavigationStructBlock())], use_json_field=True, null=True, blank=True, required=False)
+
+
+class NavigationStructBlock(StructBlock):
+    title = CharBlock()
+    link_url = URLBlock(required=False, help_text="A link URL or page must be provided; if both are present, the link will default to the page.")
+    link_page = PageChooserBlock(required=False, help_text="A link URL or page must be provided; if both are present, the link will default to the page.")
+    show_in_footer = BooleanBlock(required=False, help_text="If checked, this item (and its children) will show in the footer's navigation; otherwise, it will not show up.")
+    children = StreamBlock([('nav_item',SecondNavigationStructBlock())], use_json_field=True, null=True, blank=True, required=False)
+
+
+class NavigationBlock(StreamBlock):
+    blocks = NavigationStructBlock()
+
+
 class HomePage(Page):
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
@@ -34,6 +59,25 @@ class HomePage(Page):
         return context
     
     templates = "home/home_page.html"
+
+    # Navigation
+    navigation = StreamField(NavigationBlock(), use_json_field=True, null=True, blank=True, help_text="The items of the navigation; this is shown on all pages.")
+    navigation_buttons = StreamField([('button', ThirdNavigationStructBlock())], use_json_field=True, null=True, blank=True, help_text="The buttons of the navigation; these show up last in the navbar, and, unlike regular navigation items, show up at all times on medium screens.")
+    footer_candid_seal = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text="The Candid transparency seal image to be shown in the footer; this is shown on all pages.",
+    )
+    footer_bottom_copyright = RichTextField(features=['link'], blank=True)
+    footer_bottom_links = StreamField([
+        ('link', StructBlock([
+            ('text', CharBlock()),
+            ('url', URLBlock(required=False))
+        ]))
+    ], use_json_field=True, null=True, blank=True, help_text="The links which show in the bottom right corner of the footer; Privacy Policy, Terms and Conditions, etc.")
 
     # Hero section
     image = models.ForeignKey(
@@ -159,6 +203,13 @@ class HomePage(Page):
     subscribe_checkbox_text = RichTextField(blank=True, help_text="Ensure that you include a link to the privacy policy within this field.", features=['link'])
 
     content_panels = Page.content_panels + [
+        MultiFieldPanel([
+            FieldPanel('navigation'),
+            FieldPanel('navigation_buttons'),
+            FieldPanel('footer_candid_seal'),
+            FieldPanel('footer_bottom_copyright'),
+            FieldPanel('footer_bottom_links'),
+        ], heading="Navigation"),
         MultiFieldPanel(
             [
                 FieldPanel("image"),

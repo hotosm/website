@@ -40,10 +40,12 @@
         <div x-data="{ isMenuOpen: false, isSearchClicked: false, isLandingPage: false, setIsLandingPage(x) {this.isLandingPage = x} }">
             {% include "components/nav/secondary_desktop_nav.html" %}
             <div class="relative">
-                {% include "components/header/header.html" %}
+                {% comment %} {% include "components/header/header.html" %} {% endcomment %}
+                {% include "ui/components/navigation/HeaderNavbar.html" %}
                 {% block content %}
                 {% endblock content %}
             </div>
+            {% include "ui/components/navigation/FooterNavigation.html" %}
             {% django_browser_reload_script %}
             {% wagtailuserbar %}
         </div>

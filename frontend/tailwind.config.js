@@ -51,6 +51,7 @@ module.exports = {
         "hot-off-white": "var(--hot-off-white)",
         "hot-white": "var(--hot-white)",
         "hot-black": "var(--hot-black)",
+        "hot-barely-not-white": "var(--hot-barely-not-white)",
       },
     },
   },

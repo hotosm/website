@@ -14,6 +14,12 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import os
 
 from dotenv import load_dotenv
+import mimetypes 
+mimetypes.add_type("text/css", ".css", True)
+
+
+# import re
+# import dj_database_url
 
 # Load environment variables from .env file
 load_dotenv(".env")
@@ -76,6 +82,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "wagtail.contrib.redirects.middleware.RedirectMiddleware",
 ]
 
@@ -114,8 +121,18 @@ DATABASES = {
         "PASSWORD": os.getenv("DB_PASSWORD"),
         "HOST": os.getenv("DB_HOST"),
         "PORT": os.getenv("DB_PORT"),
+        "OPTIONS": {
+            "sslmode": "disable",
+        }
     }
 }
+# DATABASES = {
+#     "default": dj_database_url.parse(
+#         re.sub(r"^postgres(ql)?", "postgis", os.getenv("DATABASE_URL", None)),
+#         conn_max_age=600,
+#         ssl_require=False,
+#     )
+# }
 
 
 # Password validation
@@ -219,3 +236,11 @@ WAGTAILSEARCH_BACKENDS = {
 WAGTAILADMIN_BASE_URL = "http://example.com"
 
 AUTH_USER_MODEL = "users.User"
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://hotosm-staging-new.fly.dev",
+]
+
+WHITENOISE_MIMETYPES = {
+    '.css': 'text/css'
+}

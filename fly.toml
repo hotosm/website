@@ -1,0 +1,46 @@
+# fly.toml app configuration file generated for hotosm-staging-new on 2024-06-11T15:08:20-07:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'hotosm-staging-new'
+primary_region = 'sea'
+kill_signal = 'SIGINT'
+kill_timeout = '5s'
+console_command = '/code/manage.py shell'
+
+[build]
+
+[deploy]
+  strategy = 'rolling'
+ 
+[[services]]
+  protocol = 'tcp'
+  internal_port = 8000
+
+  [[services.ports]]
+    port = 80
+    handlers = ['http']
+    force_https = true
+
+  [[services.ports]]
+    port = 443
+    handlers = ['tls', 'http']
+
+  [services.concurrency]
+    hard_limit = 25
+    soft_limit = 20
+
+  [[services.tcp_checks]]
+    interval = '30s'
+    timeout = '10s'
+    grace_period = '30s'
+
+[[vm]]
+  memory = '1gb'
+  cpu_kind = 'shared'
+  cpus = 1
+
+[[statics]]
+  guest_path = '/code/static'
+  url_prefix = '/static/'

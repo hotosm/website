@@ -9,7 +9,7 @@
     </p>
 
     {% if item.children %}
-        <div class="show-at-large lg:absolute z-50 lg:mt-2 bg-white lg:py-4 text-black">
+        <div class="show-at-large lg:absolute z-50 lg:mt-2 bg-hot-off-white lg:py-4 text-black">
             {% comment %} CHILDREN NAVBAR ITEMS {% endcomment %}
             {% for child in item.children %}
                 <div class="[&>.show-at-large]:hidden [&:hover>.show-at-large]:block px-6 py-2 ">
@@ -24,7 +24,7 @@
 
                     {% comment %} GRANDCHILDREN NAVBAR ITEMS {% endcomment %}
                     {% if child.value.children%}
-                        <div class="show-at-large nav-grandchild lg:absolute lg:-mt-10 lg:left-full bg-white px-6 lg:py-4 lg:w-fit">
+                        <div class="show-at-large nav-grandchild lg:absolute lg:-mt-8 lg:left-full bg-hot-off-white px-6 lg:py-4 lg:w-fit">
                             {% for gchild in child.value.children %}
                                 <p class="py-2 lg:w-fit">
                                     <a href="{%if gchild.value.link_page%}{{gchild.value.link_page.url}}{%elif gchild.value.link_url%}{{gchild.value.link_url}}{%else%}#{%endif%}">

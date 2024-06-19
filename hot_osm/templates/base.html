@@ -24,14 +24,13 @@
         {# Force all links in the live preview panel to be opened in a new tab #}
         {% if request.in_preview_panel %}<base target="_blank">{% endif %}
         {# Global stylesheets #}
-        {% compress css %}
-            <link rel="stylesheet" href="{% static 'css/hot_osm_processed.css' %}">
-        {% endcompress css %}
+        <link type="text/css" rel="stylesheet" href="{% static 'css/hot_osm_processed.css' %}">
         {% block extra_css %}{# Override this in templates to add extra stylesheets #}{% endblock %}
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500&display=swap"
               rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
         <script defer
                 src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
         <script src="https://unpkg.com/htmx.org@1.9.12" integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2" crossorigin="anonymous"></script>
@@ -40,10 +39,12 @@
         <div x-data="{ isMenuOpen: false, isSearchClicked: false, isLandingPage: false, setIsLandingPage(x) {this.isLandingPage = x} }">
             {% include "components/nav/secondary_desktop_nav.html" %}
             <div class="relative">
-                {% include "components/header/header.html" %}
+                {% comment %} {% include "components/header/header.html" %} {% endcomment %}
+                {% include "ui/components/navigation/HeaderNavbar.html" %}
                 {% block content %}
                 {% endblock content %}
             </div>
+            {% include "ui/components/navigation/FooterNavigation.html" %}
             {% django_browser_reload_script %}
             {% wagtailuserbar %}
         </div>

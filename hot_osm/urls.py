@@ -1,3 +1,4 @@
+from django.apps import apps
 from django.conf import settings
 from django.conf.urls.i18n import i18n_patterns
 from django.contrib import admin
@@ -16,7 +17,6 @@ urlpatterns = [
     path("__reload__/", include("django_browser_reload.urls")),
 ]
 
-
 if settings.DEBUG:
     from django.conf.urls.static import static
     from django.contrib.staticfiles.urls import staticfiles_urlpatterns
@@ -24,6 +24,11 @@ if settings.DEBUG:
     # Serve static and media files from development server
     urlpatterns += staticfiles_urlpatterns()
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+    if apps.is_installed("pattern_library"):
+        urlpatterns += [
+            path("pattern-library/", include("pattern_library.urls")),
+        ]
 
 urlpatterns.extend(
     i18n_patterns(

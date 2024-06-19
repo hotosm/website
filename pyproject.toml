@@ -35,6 +35,8 @@ wagtailmenus = "^4.0"
 wagtail-modeladmin = "^2.0.0"
 dj-database-url = "^2.2.0"
 whitenoise = "^6.6.0"
+django-storages = "^1.14.3"
+boto3 = "^1.34.129"
 
 [tool.poetry.dev-dependencies]
 
@@ -45,3 +47,4 @@ pytest-timeout = "^2.2.0"
 pytest-factoryboy = "^2.6.0"
 django-browser-reload = "^1.12.1"
 coverage = "^7.4.0"
+django-pattern-library = "^1.2.0"

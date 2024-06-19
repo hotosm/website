@@ -157,5 +157,7 @@ FROM runtime as prod
 HEALTHCHECK --start-period=10s --interval=5s --retries=20 --timeout=5s \
     CMD curl --fail http://localhost:8000 || exit 1
 # Pre-compile packages to .pyc (init speed gains)
+USER root
 RUN python -c "import compileall; compileall.compile_path(maxlevels=10, quiet=1)"
-CMD ["gunicorn", "hot_osm.wsgi:application"]
+USER wagtail
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "hot_osm.wsgi:application"]

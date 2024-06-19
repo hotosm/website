@@ -1,0 +1,23 @@
+{% load static wagtailcore_tags wagtailuserbar %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Base</title>
+        <link type="text/css" rel="stylesheet" href="{% static 'css/hot_osm_processed.css' %}">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500&display=swap"
+              rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    </head>
+
+    <body>
+        {% block content %}
+        {# pattern_library_rendered_pattern is where the pattern library will inject the rendered pattern. #}
+        {{ pattern_library_rendered_pattern }}
+        {% endblock %}
+    </body>
+</html>

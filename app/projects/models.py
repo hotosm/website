@@ -123,6 +123,10 @@ class IndividualProjectPage(Page):
         ('news_page', PageChooserBlock(page_type="news.IndividualNewsPage"))
     ], use_json_field=True, null=True, blank=True)
 
+    related_events = StreamField([
+        ('event_page', PageChooserBlock(page_type="events.IndividualEventPage"))
+    ], use_json_field=True, null=True, blank=True)
+
     project_contributors = StreamField([('contributor', PageChooserBlock(page_type="members.IndividualMemberPage"))], use_json_field=True, null=True, blank=True)
 
     content_panels = Page.content_panels + [
@@ -150,6 +154,7 @@ class IndividualProjectPage(Page):
             FieldPanel('contact'),
             MultiFieldPanel([
                 FieldPanel('related_news'),
+                FieldPanel('related_events'),
             ], heading="Related Pages"),
         ], heading="Sidebar"),
         MultiFieldPanel([

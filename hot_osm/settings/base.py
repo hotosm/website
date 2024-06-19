@@ -14,6 +14,12 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import os
 
 from dotenv import load_dotenv
+import mimetypes 
+mimetypes.add_type("text/css", ".css", True)
+
+
+# import re
+# import dj_database_url
 
 # Load environment variables from .env file
 load_dotenv(".env")
@@ -37,6 +43,7 @@ INSTALLED_APPS = [
     "app.core",
     "app.mapping_hubs",
     "app.members",
+    "app.events",
     "search",
     "users",
     "utils",
@@ -63,6 +70,8 @@ INSTALLED_APPS = [
     "compressor",
     "wagtail_localize",
     "wagtail_localize.locales",
+    "wagtail_modeladmin",
+    "storages",
 ]
 
 MIDDLEWARE = [
@@ -74,6 +83,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "wagtail.contrib.redirects.middleware.RedirectMiddleware",
 ]
 
@@ -112,8 +122,18 @@ DATABASES = {
         "PASSWORD": os.getenv("DB_PASSWORD"),
         "HOST": os.getenv("DB_HOST"),
         "PORT": os.getenv("DB_PORT"),
+        "OPTIONS": {
+            "sslmode": "disable",
+        }
     }
 }
+# DATABASES = {
+#     "default": dj_database_url.parse(
+#         re.sub(r"^postgres(ql)?", "postgis", os.getenv("DATABASE_URL", None)),
+#         conn_max_age=600,
+#         ssl_require=False,
+#     )
+# }
 
 
 # Password validation
@@ -179,19 +199,6 @@ STATICFILES_DIRS = [
 # https://django-compressor.readthedocs.io
 COMPRESS_ENABLED = True
 
-# ManifestStaticFilesStorage is recommended in production, to prevent outdated
-# JavaScript / CSS assets being served from cache (e.g. after a Wagtail upgrade).
-# See https://docs.djangoproject.com/en/4.2/ref/contrib/staticfiles/#manifeststaticfilesstorage
-STORAGES = {
-    "default": {
-        "BACKEND": "django.core.files.storage.FileSystemStorage",
-        "LOCATION": os.path.join(BASE_DIR, "media"),
-    },
-    "staticfiles": {
-        "BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage",
-    },
-}
-
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 STATIC_URL = "/static/"
 
@@ -217,3 +224,32 @@ WAGTAILSEARCH_BACKENDS = {
 WAGTAILADMIN_BASE_URL = "http://example.com"
 
 AUTH_USER_MODEL = "users.User"
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://hotosm-staging-new.fly.dev",
+]
+
+WHITENOISE_MIMETYPES = {
+    '.css': 'text/css'
+}
+
+PATTERN_LIBRARY = {
+    # Groups of templates for the pattern library navigation. The keys
+    # are the group titles and the values are lists of template name prefixes that will
+    # be searched to populate the groups.
+    "SECTIONS": (
+        ("components", ["components", "ui/components"]),
+        ("pages", ["patterns/pages"]),
+    ),
+
+    # Configure which files to detect as templates.
+    "TEMPLATE_SUFFIX": ".html",
+
+    # Set which template components should be rendered inside of,
+    # so they may use page-level component dependencies like CSS.
+    "PATTERN_BASE_TEMPLATE_NAME": "patterns/base.html",
+
+    # Any template in BASE_TEMPLATE_NAMES or any template that extends a template in
+    # BASE_TEMPLATE_NAMES is a "page" and will be rendered as-is without being wrapped.
+    "BASE_TEMPLATE_NAMES": ["patterns/base_page.html"],
+}

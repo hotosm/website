@@ -1,0 +1,43 @@
+<div class="{{class}}">
+    <div class="flex w-full [&_p]:text-hot-dark-grey [&_p]:text-small justify-between flex-wrap">
+        {% if event.start_date_time.date == event.end_date_time.date %}
+            <p>
+                {{ event.start_date_time.date }}
+            </p>
+            <p>
+                {{event.start_date_time.time}} &#x2013; {{ event.end_date_time.time }}
+            </p>
+        {% else %}
+            <p>
+                {{event.start_date_time}} 
+            </p>
+            <p> &#x2013; </p>
+            <p>
+                {{event.end_date_time}}
+            </p>
+        {% endif %}
+    </div>
+    
+    <hr class="border-b-2 my-2" />
+
+    <p class="text-h5 font-bold mt-4">{{event.title}}</p>
+    <div class="my-2 [&_p]:text-small">{{event.intro|safe}}</div>
+
+    <div class="flex gap-4 mt-4">
+        <p class="text-hot-red">
+            <a href="{{event.url}}" class="font-medium">
+                {{event.get_parent.specific.event_read_more_text}}
+                {% include "ui/components/icon_svgs/LinkCaret.html" with class="ml-2" %}
+            </a>
+        </p>
+
+        {% if event.rsvp_link %}
+            <p class="text-hot-red">
+                <a href="{{event.rsvp_link}}" class="font-medium">
+                    {{event.get_parent.specific.rsvp_button_text}}
+                    {% include "ui/components/icon_svgs/LinkCaret.html" with class="ml-2" %}
+                </a>
+            </p>
+        {% endif %}
+    </div>
+</div>

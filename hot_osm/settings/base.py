@@ -71,6 +71,7 @@ INSTALLED_APPS = [
     "wagtail_localize",
     "wagtail_localize.locales",
     "wagtail_modeladmin",
+    "storages",
 ]
 
 MIDDLEWARE = [
@@ -198,19 +199,6 @@ STATICFILES_DIRS = [
 # https://django-compressor.readthedocs.io
 COMPRESS_ENABLED = True
 
-# ManifestStaticFilesStorage is recommended in production, to prevent outdated
-# JavaScript / CSS assets being served from cache (e.g. after a Wagtail upgrade).
-# See https://docs.djangoproject.com/en/4.2/ref/contrib/staticfiles/#manifeststaticfilesstorage
-STORAGES = {
-    "default": {
-        "BACKEND": "django.core.files.storage.FileSystemStorage",
-        "LOCATION": os.path.join(BASE_DIR, "media"),
-    },
-    "staticfiles": {
-        "BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage",
-    },
-}
-
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 STATIC_URL = "/static/"
 
@@ -243,4 +231,25 @@ CSRF_TRUSTED_ORIGINS = [
 
 WHITENOISE_MIMETYPES = {
     '.css': 'text/css'
+}
+
+PATTERN_LIBRARY = {
+    # Groups of templates for the pattern library navigation. The keys
+    # are the group titles and the values are lists of template name prefixes that will
+    # be searched to populate the groups.
+    "SECTIONS": (
+        ("components", ["components", "ui/components"]),
+        ("pages", ["patterns/pages"]),
+    ),
+
+    # Configure which files to detect as templates.
+    "TEMPLATE_SUFFIX": ".html",
+
+    # Set which template components should be rendered inside of,
+    # so they may use page-level component dependencies like CSS.
+    "PATTERN_BASE_TEMPLATE_NAME": "patterns/base.html",
+
+    # Any template in BASE_TEMPLATE_NAMES or any template that extends a template in
+    # BASE_TEMPLATE_NAMES is a "page" and will be rendered as-is without being wrapped.
+    "BASE_TEMPLATE_NAMES": ["patterns/base_page.html"],
 }

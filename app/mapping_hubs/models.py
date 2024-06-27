@@ -33,7 +33,7 @@ class DogearBoxBlock(StreamBlock):
 class IndividualMappingHubPage(Page):
     def get_context(self, request):
         context = super().get_context(request)
-        projects = IndividualProjectPage.objects.filter(owner_region_hub=context['page'], locale=context['page'].locale)
+        projects = context['page'].get_children()[0].get_children().filter(locale=context['page'].locale)
         context['projects'] = projects
         other_hubs = IndividualMappingHubPage.objects.live().filter(locale=context['page'].locale)
         context['other_hubs'] = other_hubs

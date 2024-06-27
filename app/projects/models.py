@@ -1,5 +1,7 @@
 from django import forms
 from django.db import models
+from django.db.models import Q
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from wagtail.models import Page
 from wagtail.fields import RichTextField, StreamField
@@ -8,9 +10,37 @@ from wagtail.blocks import CharBlock, StreamBlock, StructBlock, URLBlock, RichTe
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
 
 
+"""
+This page should only be created as a child of an IndividualMappingHubPage!
+Its template depends on fields from the IndividualMappingHubPage in order
+to create one unifying place where unchanging fields may be modified.
+"""
 class ProjectOwnerPage(Page):
-    max_count = 1
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+
+        projects_list = context['page'].get_children().filter(locale=context['page'].locale)
+        page = request.GET.get('page', 1)
+        paginator = Paginator(projects_list, 8)  # if you want more/less items per page (i.e., per load), change the number here to something else
+        try:
+            projects = paginator.page(page)
+        except PageNotAnInteger:
+            projects = paginator.page(1)
+        except EmptyPage:
+            projects = paginator.page(paginator.num_pages)
+        context['projects'] = projects
+        return context
     
+    parent_page_types = [
+        'mapping_hubs.IndividualMappingHubPage'
+    ]
+
+    subpage_types = [
+        'projects.IndividualProjectPage'
+    ]
+
+    load_more_projects_text = models.CharField(default="Load More Projects")
+
     impact_areas_title = models.CharField(default="Impact Areas")
     region_hub_title = models.CharField(default="Region Hub")
     duration_title = models.CharField(default="Duration")
@@ -34,29 +64,34 @@ class ProjectOwnerPage(Page):
 
     content_panels = Page.content_panels + [
         MultiFieldPanel([
-            FieldPanel('impact_areas_title'),
-            FieldPanel('region_hub_title'),
-            FieldPanel('duration_title'),
-            FieldPanel('partners_title'),
-            FieldPanel('tools_title'),
-            FieldPanel('contact_title'),
-            MultiFieldPanel([
-                FieldPanel('related_news_title'),
-                FieldPanel('view_all_news_text'),
-                FieldPanel('view_all_news_url'),
-                FieldPanel('related_events_title'),
-                FieldPanel('view_all_events_text'),
-                FieldPanel('view_all_events_url'),
-            ], heading="Related Pages"),
-        ], heading="Sidebar"),
+            FieldPanel('load_more_projects_text'),
+        ], heading="Project Open Mapping Hub Page"),
         MultiFieldPanel([
-            FieldPanel('red_box_title'),
-            FieldPanel('red_box_link_text'),
-            FieldPanel('red_box_link_url'),
-            FieldPanel('black_box_title'),
-            FieldPanel('black_box_link_text'),
-            FieldPanel('black_box_link_url'),
-        ], heading="Footer"),
+            MultiFieldPanel([
+                FieldPanel('impact_areas_title'),
+                FieldPanel('region_hub_title'),
+                FieldPanel('duration_title'),
+                FieldPanel('partners_title'),
+                FieldPanel('tools_title'),
+                FieldPanel('contact_title'),
+                MultiFieldPanel([
+                    FieldPanel('related_news_title'),
+                    FieldPanel('view_all_news_text'),
+                    FieldPanel('view_all_news_url'),
+                    FieldPanel('related_events_title'),
+                    FieldPanel('view_all_events_text'),
+                    FieldPanel('view_all_events_url'),
+                ], heading="Related Pages"),
+            ], heading="Sidebar"),
+            MultiFieldPanel([
+                FieldPanel('red_box_title'),
+                FieldPanel('red_box_link_text'),
+                FieldPanel('red_box_link_url'),
+                FieldPanel('black_box_title'),
+                FieldPanel('black_box_link_text'),
+                FieldPanel('black_box_link_url'),
+            ], heading="Footer"),
+        ], heading="Individual Project Page"),
     ]
 
 
@@ -66,7 +101,7 @@ Its template depends on fields from the ProjectOwnerPage in order
 to create one unifying place where unchanging fields may be modified.
 """
 class IndividualProjectPage(Page):
-    parent_page_type = [
+    parent_page_types = [
         'projects.ProjectOwnerPage'
     ]
     # > HEADER
@@ -102,14 +137,6 @@ class IndividualProjectPage(Page):
 
     # > SIDE BAR
     impact_area_list = StreamField([('impact_area', PageChooserBlock(page_type="impact_areas.IndividualImpactAreaPage"))], use_json_field=True, null=True, blank=True)
-    
-    owner_region_hub = models.ForeignKey(
-        'wagtailcore.Page',
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name='+'
-    )
     
     duration = models.CharField(default="Ongoing", blank=True)
     
@@ -147,7 +174,6 @@ class IndividualProjectPage(Page):
         ], heading="Body"),
         MultiFieldPanel([
             FieldPanel('impact_area_list'),
-            PageChooserPanel('owner_region_hub', 'mapping_hubs.IndividualMappingHubPage'),
             FieldPanel('duration'),
             FieldPanel('partners_list', widget=forms.CheckboxSelectMultiple),
             FieldPanel('tools'),

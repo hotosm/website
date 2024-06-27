@@ -7,7 +7,7 @@
 {% load wagtailimages_tags %}
 
 {% image project.header_image original as image_p %}
-<div class="font-medium my-4">
+<div class="font-medium {{class}}">
     <a href="{{ project.url }}">
         <div>
             {% if showimage %}

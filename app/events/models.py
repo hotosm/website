@@ -86,7 +86,7 @@ class EventOwnerPage(Page):
 
 
 class IndividualEventPage(Page):
-    parent_page_type = [
+    parent_page_types = [
         'projects.ProjectOwnerPage'
     ]
 

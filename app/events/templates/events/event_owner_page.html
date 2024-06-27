@@ -44,6 +44,7 @@
                 </div>
             </form>
 
+            {% comment %} EVENT ITEMS {% endcomment %}
             <h2 class="text-h2 font-bold my-8">{{events_paginator.count}} {{page.results_text}}</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {% for event in events %}
@@ -51,6 +52,7 @@
                 {% endfor %}
             </div>
 
+            {% comment %} PAGE NAVIGATION {% endcomment %}
             <div class="w-full flex justify-center items-center mt-10" 
                  x-data="{
                             page: params.get('page') ? params.get('page') : 1,

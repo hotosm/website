@@ -7,7 +7,7 @@
 {% load wagtailimages_tags %}
 
 {% image project.header_image original as image_p %}
-<div class="font-medium my-4">
+<div class="font-medium {{class}}">
     <a href="{{ project.url }}">
         <div>
             {% if showimage %}
@@ -30,8 +30,8 @@
     </a>
 
     <p class="text-mini">
-        <a class="text-hot-red" href="#">
-            {{ project.owner_region_hub.title }}
+        <a class="text-hot-red" href="{{project.get_parent.get_parent.url}}">
+            {{ project.get_parent.get_parent.title }}
         </a>
     </p>
 </div>

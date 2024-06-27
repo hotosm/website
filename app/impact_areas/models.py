@@ -42,7 +42,7 @@ class IndividualImpactAreaPage(Page):
         context['other_impact_areas'] = other_impact_areas
         return context
 
-    parent_page_type = [
+    parent_page_types = [
         'impact_areas.ImpactAreasPage'
     ]
 

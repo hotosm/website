@@ -170,7 +170,7 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:[&_.image-hide-small]:block [&_.image-hide-small]:hidden mt-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:[&_.image-hide-small]:block [&_.image-hide-small]:hidden mt-8">
                 {% for news in page.displayed_news %}
                     <div class="{% if forloop.counter0 > 1 %}md:hidden lg:block{% endif %}">
                         {% include "ui/components/news/NewsPreviewBlockProjects.html" with news=news.value showimage=True %}

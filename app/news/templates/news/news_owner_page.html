@@ -94,6 +94,7 @@
                 </div>
             </form>
 
+            {% comment %} NEWS ITEMS {% endcomment %}
             <h2 class="text-h2 font-bold my-8">{{news_paginator.count}} {{page.results_text}}</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {% for article in news %}
@@ -101,6 +102,7 @@
                 {% endfor %}
             </div>
 
+            {% comment %} PAGE NAVIGATION {% endcomment %}
             <div class="w-full flex justify-center items-center" 
                  x-data="{
                             page: params.get('page') ? params.get('page') : 1,

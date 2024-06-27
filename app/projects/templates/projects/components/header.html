@@ -1,0 +1,25 @@
+{% comment %}
+==> PARAMETERS
+- body: The content of the header
+- image: A Wagtail image
+{% endcomment %}
+
+{% load wagtailimages_tags %}
+
+{% image page.get_parent.specific.header_image original as image_p %}
+<div class="w-full min-h-[24rem] content-end bg-no-repeat bg-cover" style="background-image: url('{{ image_p.url }}')">
+    <div class="bg-gradient-to-t from-black/70 to-transparent w-full">
+        <div class="h-fit w-full pt-10 md:pb-16 text-white max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-2 md:px-8 pt-10">
+                <div class="[&_a]:text-intro [&_a]:font-medium [&_a_p]:mt-2 [&_svg]:text-hot-red px-8 md:px-0">
+                    <p class="font-bold text-h5">
+                        {{ page.get_parent.specific.header_hub_text_white }} <span class="text-hot-red">{{ page.get_parent.specific.header_hub_text_red }}</span>
+                    </p>
+                    <h1 class="text-h1 font-semibold mb-4">
+                        {{ page.get_parent.specific.project_section_title }}
+                    </h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

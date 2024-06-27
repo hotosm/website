@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% load static %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+{% load compress %}
+{% block body_class %}template-eventownerpage{% endblock %}
+{% block extra_css %}
+    {% compress css %}
+    {% endcompress css %}
+{% endblock extra_css %}
+
+{% block content %}
+    <div class="max-w-7xl mx-auto my-10" x-data="{ params: new URLSearchParams((new URL(window.location.href)).search) }">
+        <div class="px-6 md:px-10">
+            <h1 class="text-h1 font-semibold my-10">{{page.title}}</h1>
+            <form class="my-10">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {% comment %} KEYWORD SEARCH {% endcomment %}
+                    <div class="bg-hot-off-white flex items-center">
+                        <input class="w-full bg-transparent border-none" placeholder="{{page.keyword_search_hint}}" type="text" name="keyword" :value="params.get('keyword')">
+                        {% include "ui/components/icon_svgs/SearchIcon.html" with class="text-hot-red mx-3" %}
+                    </div>
+
+                    {% comment %} SORT {% endcomment %}
+                    <div class="relative" x-data="{ show: false, setSortType(text) {$refs.sorttype.innerText = text} }" @click.away="show = false">
+                        <div class="w-full h-full flex justify-between py-2 px-3 bg-hot-off-white items-center cursor-pointer" @click="show = !show">
+                            <p class="pointer-events-none" x-ref="sorttype">
+                                {{page.sort_by_new}}
+                            </p>
+                        {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-90 text-hot-red" %}
+                        </div>
+                        <div class="absolute z-20 bg-hot-off-white p-4 w-full" x-show="show">
+                            <hr class="border-b-2">
+                            {% include "./components/EventsSortOption.html" with sort_by=page.sort_by_new sort_id="sort.new" %}
+                            {% include "./components/EventsSortOption.html" with sort_by=page.sort_by_old sort_id="sort.old" %}
+                            {% include "./components/EventsSortOption.html" with sort_by=page.sort_by_titlea sort_id="sort.titlea" %}
+                            {% include "./components/EventsSortOption.html" with sort_by=page.sort_by_titlez sort_id="sort.titlez" %}
+                        </div>
+                    </div>
+
+                    <div class="bg-hot-red text-white font-semibold">
+                        <input type="submit" value="{{page.search_button_text}}" class="bg-transparent w-full h-full cursor-pointer py-2">
+                    </div>
+                </div>
+            </form>
+
+            <h2 class="text-h2 font-bold my-8">{{events_paginator.count}} {{page.results_text}}</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {% for event in events %}
+                    {% include "ui/components/events/EventPreviewBlockEvent.html" with event=event showimage=True %}
+                {% endfor %}
+            </div>
+
+            <div class="w-full flex justify-center items-center mt-10" 
+                 x-data="{
+                            page: params.get('page') ? params.get('page') : 1,
+                            paramsX: new URLSearchParams((new URL(window.location.href)).search),
+                            getPageLink(x) { this.paramsX.set('page', x); return '?' + this.paramsX.toString() } 
+            }">
+                <a :href="page > 1 ? getPageLink(parseInt(page) - 1) : ''" aria-label="Previous Page">
+                    <p class="cursor-pointer" :class="page == 1 ? 'text-hot-slate-grey' : 'text-hot-red'">
+                        {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-180" %}
+                    </p>
+                </a>
+                <div class="flex gap-2 mx-4">
+                    {% with ''|center:events_paginator.num_pages as range %}
+                        {% for _ in range %}
+                            {% if forloop.counter == 1 or forloop.counter == events_paginator.num_pages or forloop.counter == current_page or forloop.counter|add:1 == current_page or forloop.counter|add:'-1' == current_page %}
+                                <a :href="getPageLink(parseInt({{forloop.counter}}))">
+                                    <p class="px-2 font-bold" :class="page == {{forloop.counter}} ? 'bg-hot-red text-white' : 'bg-hot-off-white'">
+                                        {{forloop.counter}}
+                                    </p>
+                                </a>
+                            {% endif %}
+                            {% if forloop.counter|add:2 == current_page or forloop.counter|add:'-2' == current_page and not forloop.last %}
+                                {% comment %} 
+                                    for reasons that i can't begin to comprehend, the if statement 
+                                    below CANNOT be part of the if statement above. it just does
+                                    not work
+                                {% endcomment %}
+                                {% if not forloop.first %}
+                                    <p class="mx-1">...</p>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endwith %}
+                </div>
+                <a :href="page < {{events_paginator.num_pages}} ? getPageLink(parseInt(page) + 1) : ''" aria-label="Next Page">
+                    <p class="cursor-pointer" :class="page == {{events_paginator.num_pages}} ? 'text-hot-slate-grey' : 'text-hot-red'">
+                        {% include "ui/components/icon_svgs/LinkCaret.html" %}
+                    </p>
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

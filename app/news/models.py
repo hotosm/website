@@ -32,20 +32,20 @@ class NewsOwnerPage(Page):
             query = query | Q(tags__name=tag)
         news_list = news_list.filter(query).distinct()
 
+        if keyword:
+            news_list = news_list.search(keyword).get_queryset()
+
         match request.GET.get('sort', ''):
             case 'sort.new':
-                news_list = news_list.order_by('date')
-            case 'sort.old':
                 news_list = news_list.order_by('-date')
+            case 'sort.old':
+                news_list = news_list.order_by('date')
             case 'sort.titlea':
                 news_list = news_list.order_by('title')
             case 'sort.titlez':
                 news_list = news_list.order_by('-title')
             case _:
-                news_list = news_list.order_by('date')
-
-        if keyword:
-            news_list = news_list.search(keyword)
+                news_list = news_list.order_by('-date')
 
         page = request.GET.get('page', 1)
         paginator = Paginator(news_list, 6)  # if you want more/less items per page (i.e., per load), change the number here to something else

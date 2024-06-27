@@ -10,3 +10,4 @@ node_modules
 .coverage
 /hot_osm/locale
 /media
+/locale

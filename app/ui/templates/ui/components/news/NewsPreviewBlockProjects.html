@@ -6,7 +6,7 @@
 {% load wagtailimages_tags %}
 
 {% image news.image original as image_p %}
-<div class="my-4">
+<div class="my-4 {{class}}">
     <a href="{{ news.url }}">
         {% if showimage %}
             <div class="image-hide-small w-full min-h-[9rem] mb-3 content-end bg-no-repeat bg-cover image-overshadow-gradient" style="background-image: url('{{ image_p.url }}')">

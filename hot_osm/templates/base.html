@@ -2,6 +2,9 @@
 {% load static wagtailcore_tags wagtailuserbar %}
 {% load compress %}
 {% load django_browser_reload %}
+{% load debug_tags %}
+{% is_debug as debug %}
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -24,7 +27,13 @@
         {# Force all links in the live preview panel to be opened in a new tab #}
         {% if request.in_preview_panel %}<base target="_blank">{% endif %}
         {# Global stylesheets #}
-        <link type="text/css" rel="stylesheet" href="{% static 'css/hot_osm_processed.css' %}">
+        {% if debug %}
+            {% compress css %}
+                <link type="text/css" rel="stylesheet" href="{% static 'css/hot_osm_processed.css' %}">
+            {% endcompress css%}
+        {% else %}
+            <link type="text/css" rel="stylesheet" href="{% static 'css/hot_osm_processed.css' %}">
+        {% endif %}
         {% block extra_css %}{# Override this in templates to add extra stylesheets #}{% endblock %}
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

@@ -210,16 +210,13 @@ class HomePage(Page):
             FieldPanel('footer_bottom_copyright'),
             FieldPanel('footer_bottom_links'),
         ], heading="Navigation"),
-        MultiFieldPanel(
-            [
-                FieldPanel("image"),
-                FieldPanel("hero_text"),
-                FieldPanel("hero_cta"),
-                FieldPanel("hero_cta_link"),
-                FieldPanel("carousel"),
-            ],
-            heading="Banner",
-        ),
+        MultiFieldPanel([
+            FieldPanel("image"),
+            FieldPanel("hero_text"),
+            FieldPanel("hero_cta"),
+            FieldPanel("hero_cta_link"),
+            FieldPanel("carousel"),
+        ], heading="Banner"),
         MultiFieldPanel([
             FieldPanel('our_work_background'),
             FieldPanel('our_work_title'),

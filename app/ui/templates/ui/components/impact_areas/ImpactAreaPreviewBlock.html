@@ -1,0 +1,26 @@
+{% load wagtailimages_tags %}
+
+{% image ia.header_image original as image_p %}
+<div class="mx-4 my-8 lg:my-4">
+    <div class="bg-gradient-to-t from-black/70 to-transparent to-30%">
+        <img class="w-full h-72 object-cover -z-10 relative" src="{{ image_p.url }}" />
+    </div>
+    
+    <h2 class="text-h3 font-bold py-1">
+        {{ ia.title }}
+    </h2>
+
+    <div class="text-base py-1">
+        {{ ia.intro|safe }}
+    </div>
+
+    <p class="text-intro py-1">
+        <a href="{{ ia.url }}">
+            <span class="border-b-hot-red border-b-2 pb-1">Learn More about {{ ia.title }}</span>
+            
+            <svg class="inline ml-4" xmlns="http://www.w3.org/2000/svg" width="10.808" height="16.817" viewBox="0 0 10.808 16.817">
+                <path id="Path_13007" data-name="Path 13007" d="M0,8.4,7,0l7,8.4" transform="translate(9.808 1.408) rotate(90)" fill="none" stroke="#d43f3f" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+            </svg>
+        </a>
+    </p>
+</div>

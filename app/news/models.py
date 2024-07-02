@@ -64,6 +64,10 @@ class NewsOwnerPage(Page):
     
     max_count = 1
 
+    subpage_types = [
+        'news.IndividualNewsPage'
+    ]
+
     authors_posted_by_text = models.CharField(default="Posted by", help_text="The text which appears prior to the authors names; with 'posted by', the text displays as 'posted by [author]'.")
     authors_posted_on_text = models.CharField(default="on", help_text="The text which appears prior to the date; with 'on', it would display as 'on [date]'.")
     related_projects_title = models.CharField(default="Related Projects")

@@ -30,6 +30,33 @@ class DogearBoxBlock(StreamBlock):
     blocks = DogearBoxStructBlock()
 
 
+class OpenMappingHubsPage(Page):
+    max_count = 1
+
+    subpage_types = [
+        'mapping_hubs.IndividualMappingHubPage'
+    ]
+
+    header_image = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text="Header image",
+    )
+    header_description = RichTextField(blank=True)
+    hub_text = models.CharField(default="Hub", help_text="The text following a hub's name; i.e., if this field is 'Hub', the title for 'Asia-Pacific' would become 'Asia-Pacific Hub'.")
+    learn_more_text = models.CharField(default="Learn More about", help_text="The text preceeding the hub's name in the link text; i.e., if this field is 'Learn More about', the link text for 'Asia-Pacific Hub' would become 'Learn More about Asia-Pacific Hub'.")
+
+    content_panels = Page.content_panels + [
+        FieldPanel('header_image'),
+        FieldPanel('header_description'),
+        FieldPanel('hub_text'),
+        FieldPanel('learn_more_text'),
+    ]
+
+
 class IndividualMappingHubPage(Page):
     def get_context(self, request):
         context = super().get_context(request)

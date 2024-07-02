@@ -26,6 +26,8 @@ class OtherPagePreviewBlock(StructBlock):
 
 
 class WhoWeArePage(Page):
+    max_count = 1
+    
     header_image = models.ForeignKey(
         "wagtailimages.Image",
         null=True,

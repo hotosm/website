@@ -58,6 +58,8 @@ class HomePage(Page):
         context['mapping_hubs'] = mapping_hubs
         return context
     
+    max_count = 1
+    
     templates = "home/home_page.html"
 
     # Navigation

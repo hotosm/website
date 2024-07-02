@@ -1,0 +1,35 @@
+{% load wagtailimages_tags %}
+
+<div class="mx-auto max-w-7xl grid lg:grid-cols-5">
+    {% image image original as image_p %}
+    <div class="min-h-[20rem] bg-cover bg-no-repeat lg:col-span-2 {%if imageright%}lg:order-2{%endif%}" style="background-image: url('{{image_p.url}}')"></div>
+    <div class="px-6 md:px-10 py-10 flex flex-col justify-center lg:col-span-3 {%if imageright%}lg:order-1{%endif%}">
+        <div class="text-h2 [&_b]:text-hot-red bold-override font-bold lg:font-semibold">
+            {{title|safe}}
+        </div>
+        {% if title_underline %}
+            <hr class="border-hot-red w-20 border-b-2" />
+        {% endif %}
+        <div class="{%if bigdescription%}text-intro{%endif%} font-medium my-4 base-article-m">
+            {{description|safe}}
+        </div>
+        <div class="flex gap-4">
+            {% if button2_text %}
+                <a href="{{button2_link}}">
+                    {% include "components/branded_elements/button.html" with text=button2_text classes="mt-4" %}
+                </a>
+            {% endif %}
+            {% if button_text %}
+                {% if red_button %}
+                    <a href="{{button_link}}">
+                        {% include "components/branded_elements/button.html" with text=button_text classes="mt-4" %}
+                    </a>
+                {% else %}
+                    <a href="{{button_link}}">
+                        {% include "components/branded_elements/button_bordered.html" with text=button_text classes="mt-4" %}
+                    </a>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+</div>

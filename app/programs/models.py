@@ -35,6 +35,10 @@ class ProgramGoalBlock(StreamBlock):
 
 class ProgramOwnerPage(Page):
     max_count = 1
+
+    subpage_types = [
+        'programs.IndividualProgramPage'
+    ]
     
     stats_title = models.CharField(default="Stats")
     goals_title = models.CharField(default="Goals")

@@ -108,6 +108,10 @@ class ImpactAreaBlock(StreamBlock):
 class ImpactAreasPage(Page):
     max_count = 1
     
+    subpage_types = [
+        'impact_areas.IndividualImpactAreaPage'
+    ]
+    
     intro = RichTextField(blank=True)
 
     image = models.ForeignKey(

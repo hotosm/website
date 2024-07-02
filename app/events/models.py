@@ -47,6 +47,10 @@ class EventOwnerPage(Page):
     
     max_count = 1
 
+    subpage_types = [
+        'events.IndividualEventPage'
+    ]
+
     event_location_title = models.CharField(default="Event Location")
     join_event_title = models.CharField(default="Join This Event")
     rsvp_button_text = models.CharField(default="RSVP")
@@ -87,7 +91,7 @@ class EventOwnerPage(Page):
 
 class IndividualEventPage(Page):
     parent_page_types = [
-        'projects.ProjectOwnerPage'
+        'events.EventOwnerPage'
     ]
 
     start_date_time = models.DateTimeField()

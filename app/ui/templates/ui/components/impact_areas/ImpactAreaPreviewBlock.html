@@ -7,6 +7,7 @@
     </div>
     
     <h2 class="text-h3 font-bold py-1">
+        {% image ia.external_icon original class="black-image-redifier h-16 w-auto inline" %}
         {{ ia.title }}
     </h2>
 
@@ -14,7 +15,7 @@
         {{ ia.intro|safe }}
     </div>
 
-    <p class="text-intro py-1">
+    <p class="text-intro font-medium py-1">
         <a href="{{ ia.url }}">
             <span class="border-b-hot-red border-b-2 pb-1">Learn More about {{ ia.title }}</span>
             

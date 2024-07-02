@@ -1,6 +1,7 @@
 {% comment %}
 ==> PARAMETERS
 - title: a string; the title of the box
+- description: an html element; a description under the title (optional)
 - linkurl: a string; the link's url
 - linktext: a string; the text that shows for the link
 - color: a string; the color that the caret next to the link text should show as
@@ -11,6 +12,9 @@
 <h1 class="font-bold text-h2 my-0">
     {{ title }}
 </h1>
+{% if description %}
+    <p class="font-medium mt-2">{{description|safe}}</p>
+{% endif %}
 <a href="{{ linkurl }}" class="mt-auto pt-6">
     <p class="text-h5 font-medium">
         {{ linktext }}

@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "app.mapping_hubs",
     "app.members",
     "app.events",
+    "app.who_we_are",
     "search",
     "users",
     "utils",

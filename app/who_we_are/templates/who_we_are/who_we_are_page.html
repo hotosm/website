@@ -54,18 +54,7 @@
             {% comment %} PAGE PREVIEWS {% endcomment %}
             <div class="grid lg:grid-cols-2 gap-8 my-20">
                 {% for prev in page.other_page_preview_blocks %}
-                    {% image prev.value.image original as previmg %}
-                    <a href="{{prev.value.page.url}}">
-                        <div class="bg-gradient-to-t from-black to-transparent to-30% grid">
-                            <div class="min-h-[20rem] bg-cover bg-no-repeat -z-10 relative row-start-1 col-start-1" style="background-image: url('{{previmg.url}}')">
-                            </div>
-                            <div class="row-start-1 col-start-1 flex flex-col justify-end p-4">
-                                <h1 class="font-semibold text-h2 text-white">
-                                    {{prev.value.page.title}}
-                                </h1>
-                            </div>
-                        </div>
-                    </a>
+                    {% include "ui/components/misc_panels/PagePreviewBasic.html" with page=prev.value.page image=prev.value.image %}
                 {% endfor %}
             </div>
 

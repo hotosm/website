@@ -1,0 +1,12 @@
+{% load wagtailimages_tags %}
+
+<div>
+    {% image image original class="aspect-[2/1] object-cover" %}
+    <h1 class="my-2 text-h3 font-bold">{{title}}</h1>
+    <div class="my-2">
+        {{description}}
+    </div>
+    <p class="font-medium text-intro mt-2">
+        {% include "ui/components/BaseLink.html" %}
+    </p>
+</div>

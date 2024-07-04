@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load static %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+{% load compress %}
+{% block body_class %}template-getinvolvedpage{% endblock %}
+{% block extra_css %}
+    {% compress css %}
+    {% endcompress css %}
+{% endblock extra_css %}
+
+{% block content %}
+    {% include "ui/components/BasePageHeader.html" with title=page.title image=page.header_image %}
+    <div class="my-10">
+        {% include "ui/components/sections/BaseSectionWithImage.html" with title=page.partner_with_us_title image=page.partner_with_us_image imageright=True title_underline=True red_button=True button_text=page.partner_with_us_button_text button_link=page.partner_with_us_button_link description=page.partner_with_us_description %}
+    </div>
+
+    <div class="bg-hot-off-white py-20 my-20">
+        <div class="max-w-7xl mx-auto">
+            <div class="px-6 md:px-10">
+                {% include "ui/components/TitleWithUnderline.html" with title=page.get_involved_community_title %}
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 my-10">
+                    {% for panel in page.get_involved_large_panels %}
+                        {% include "ui/components/misc_panels/LinkBlockWithImage.html" with title=panel.value.title image=panel.value.image description=panel.value.description linktext=panel.value.link_text linkurl=panel.value.link_url %}
+                    {% endfor %}
+                </div>
+
+                <div class="my-20">
+                    {% include "ui/components/dogear_boxes/DogearAnyColourLong.html" with title=page.dogear_box_title linktext=page.dogear_box_link_text linkurl=page.dogear_box_link_url textcolour="black" colour="var(--hot-light-grey)" arrowcolour="black" %}
+                </div>
+
+                {% include "ui/components/FlexTitleWithLink.html" with title=page.events_title linktext=page.view_all_events_text linkurl=page.view_all_events_link class="my-4" %}
+                <div class="mt-8 md:mt-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:[&_div:nth-child(3)]:hidden lg:[&_div:nth-child(3)]:block [&_.image-hide-small]:hidden md:[&_.image-hide-small]:block">
+                    {% for event in page.events %}
+                        {% include "ui/components/events/EventPreviewBlockEvent.html" with event=event.value showimage=True %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto">
+        <div class="px-6 md:px-10">
+            {% include "ui/components/TitleWithUnderline.html" with title=page.join_us_title %}
+
+            <div class="mt-8 md:mt-4 mb-20 grid grid-cols-1 lg:grid-cols-3 gap-8">
+                {% for panel in page.join_us_panels %}
+                    {% include "ui/components/misc_panels/PagePreviewWithTabletDescription.html" with image=panel.value.image page=panel.value.page tablet_description=panel.value.tablet_description read_more_text=page.join_us_panel_read_more %}
+                {% endfor %}
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-white my-10">
+                <div>
+                    {% include "ui/components/dogear_boxes/DogearRed.html" with title=page.red_box_title linktext=page.red_box_link_text linkurl=page.red_box_link_url %}
+                </div>
+                <div>
+                    {% include "ui/components/dogear_boxes/DogearBlack.html" with title=page.black_box_title linktext=page.black_box_link_text linkurl=page.black_box_link_url %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

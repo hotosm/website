@@ -1,0 +1,8 @@
+<div class="md:flex md:justify-between gap-4 md:items-center {{class}}">
+    <h1 class="{%if titleclass%}{{titleclass}}{%else%}text-h3{%endif%} font-bold">
+        {{title}}
+    </h1>
+    <p class="text-intro mt-4 md:mt-0">
+        {% include "ui/components/BaseLink.html" %}
+    </p>
+</div>

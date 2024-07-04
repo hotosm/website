@@ -60,7 +60,8 @@ class OpenMappingHubsPage(Page):
 class IndividualMappingHubPage(Page):
     def get_context(self, request):
         context = super().get_context(request)
-        projects = context['page'].get_children()[0].get_children().filter(locale=context['page'].locale)
+        projects = context['page'].get_children()
+        projects = projects[0].get_children().filter(locale=context['page'].locale) if projects else None
         context['projects'] = projects
         other_hubs = IndividualMappingHubPage.objects.live().filter(locale=context['page'].locale)
         context['other_hubs'] = other_hubs

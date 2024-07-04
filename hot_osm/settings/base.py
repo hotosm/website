@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "app.members",
     "app.events",
     "app.who_we_are",
+    "app.get_involved",
     "search",
     "users",
     "utils",

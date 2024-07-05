@@ -2,7 +2,7 @@
 
 <div class="mx-auto max-w-7xl grid lg:grid-cols-5">
     {% image image original as image_p %}
-    <div class="min-h-[20rem] bg-cover bg-no-repeat lg:col-span-2 {%if imageright%}lg:order-2{%endif%}" style="background-image: url('{{image_p.url}}')"></div>
+    <div class="min-h-[20rem] bg-cover bg-no-repeat lg:col-span-2 {%if imageright%}lg:order-2{%else%}lg:order-1{%endif%} {%if imagebottom%}order-2{%endif%} {%if imagenotwide%}mx-6 md:mx-10 lg:ml-0{%endif%}" style="background-image: url('{{image_p.url}}')"></div>
     <div class="px-6 md:px-10 py-10 flex flex-col justify-center lg:col-span-3 {%if imageright%}lg:order-1{%endif%}">
         <div class="text-h2 [&_b]:text-hot-red bold-override font-bold lg:font-semibold">
             {{title|safe}}

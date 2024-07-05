@@ -5,6 +5,10 @@
 
 {% load wagtailimages_tags %}
 
-<a href="{{ hub.url }}">
-    {% include "./MappingHubPreviewBlockBase.html" %}
-</a>
+<div>
+    {% image hub.main_external_hub_image fill-600x300 %}
+    
+    <p class="text-h5 font-bold mt-4">
+        {{ hub.title }}
+    </p>
+</div>

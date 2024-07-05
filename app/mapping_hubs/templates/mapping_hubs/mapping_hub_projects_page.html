@@ -3,14 +3,14 @@
 {% load wagtailcore_tags %}
 {% load wagtailimages_tags %}
 {% load compress %}
-{% block body_class %}template-projectownerpage{% endblock %}
+{% block body_class %}template-mappinghubprojectspage{% endblock %}
 {% block extra_css %}
     {% compress css %}
     {% endcompress css %}
 {% endblock extra_css %}
 
 {% block content %}
-    {% include "ui/components/BasePageHeader.html" with title=page.title image=page.header_image %}
+    {% include "./components/projects_header.html" %}
     <div class="max-w-7xl mx-auto my-10" x-data="{ params: new URLSearchParams((new URL(window.location.href)).search) }">
         <div class="px-6 md:px-10">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" id="projects-list">
@@ -18,7 +18,7 @@
                     {% include "ui/components/projects/ProjectPreviewBlockNews.html" with project=project.specific showimage=True %}
                 {% endfor %}
             </div>
-            <p class="text-center mt-10" id="next-project" class="{% if not projects.has_next %}hidden{% endif %}">
+            <p class="text-center my-10" id="next-project" class="{% if not projects.has_next %}hidden{% endif %}">
                 {% if projects.has_next %}
                         {% comment %} <a href="?page={{ projects.next_page_number }}"></a> {% endcomment %}
                         <button hx-get="?page={{ projects.next_page_number }}"
@@ -34,6 +34,28 @@
                         </button>
                 {% endif %}
             </p>
+
+            <h1 class="mt-20 mb-4 font-bold text-h2">
+                {{page.projects_by_hub_title}}
+            </h1>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                {% for hub in other_hubs %}
+                    {% if hub != page %}
+                        <a href="{{hub.url}}">
+                            {% include "ui/components/mapping_hub/MappingHubPreviewBlockBase.html" with hub=hub.get_parent.specific %}
+                        </a>
+                        {% endif %}
+                {% endfor %}
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-white my-10">
+                <div>
+                    {% include "ui/components/dogear_boxes/DogearRed.html" with title=page.red_box_title linktext=page.red_box_link_text linkurl=page.red_box_link_url %}
+                </div>
+                <div>
+                    {% include "ui/components/dogear_boxes/DogearBlack.html" with title=page.black_box_title linktext=page.black_box_link_text linkurl=page.black_box_link_url %}
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}

@@ -31,13 +31,20 @@ class ProjectOwnerPage(Page):
         context['projects'] = projects
         return context
     
-    parent_page_types = [
-        'mapping_hubs.IndividualMappingHubPage'
-    ]
+    max_count = 1
 
     subpage_types = [
         'projects.IndividualProjectPage'
     ]
+
+    header_image = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text="Header image"
+    )
 
     load_more_projects_text = models.CharField(default="Load More Projects")
 
@@ -64,8 +71,9 @@ class ProjectOwnerPage(Page):
 
     content_panels = Page.content_panels + [
         MultiFieldPanel([
+            FieldPanel('header_image'),
             FieldPanel('load_more_projects_text'),
-        ], heading="Project Open Mapping Hub Page"),
+        ], heading="Project Page"),
         MultiFieldPanel([
             MultiFieldPanel([
                 FieldPanel('impact_areas_title'),
@@ -104,6 +112,7 @@ class IndividualProjectPage(Page):
     parent_page_types = [
         'projects.ProjectOwnerPage'
     ]
+
     # > HEADER
     owner_program = models.ForeignKey(
         'wagtailcore.Page',
@@ -138,6 +147,8 @@ class IndividualProjectPage(Page):
     # > SIDE BAR
     impact_area_list = StreamField([('impact_area', PageChooserBlock(page_type="impact_areas.IndividualImpactAreaPage"))], use_json_field=True, null=True, blank=True)
     
+    region_hub_list = StreamField([('region_hub', PageChooserBlock(page_type="mapping_hubs.IndividualMappingHubPage"))], use_json_field=True, null=True, blank=True)
+
     duration = models.CharField(default="Ongoing", blank=True)
     
     partners_list = ParentalManyToManyField('core.Partner', blank=True)
@@ -174,6 +185,7 @@ class IndividualProjectPage(Page):
         ], heading="Body"),
         MultiFieldPanel([
             FieldPanel('impact_area_list'),
+            FieldPanel('region_hub_list'),
             FieldPanel('duration'),
             FieldPanel('partners_list', widget=forms.CheckboxSelectMultiple),
             FieldPanel('tools'),

@@ -37,7 +37,9 @@
                     </div>
                     <div>
                         <p>{{page.get_parent.specific.region_hub_title}}</p>
-                        <p><a href="{{page.get_parent.get_parent.url}}">{{page.get_parent.get_parent.title}}</a></p>
+                        {% for hub in page.region_hub_list %}
+                            <p><a href="{{hub.value.url}}">{{hub.value.title}}</a></p>
+                        {% endfor %}
                     </div>
                     <div>
                         <p>{{page.get_parent.specific.duration_title}}</p>

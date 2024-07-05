@@ -30,8 +30,8 @@
     </a>
 
     <p class="text-mini">
-        <a class="text-hot-red" href="{{project.get_parent.get_parent.url}}">
-            {{ project.get_parent.get_parent.title }}
-        </a>
+        {% for hub in project.region_hub_list %}
+            <a class="text-hot-red text-mini" href="{{ hub.value.url }}">{{ hub.value.title }}</a>{% if not forloop.last %},{% endif %}
+        {% endfor %}
     </p>
 </div>

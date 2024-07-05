@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load static %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+{% load compress %}
+{% block body_class %}template-toolsandresourcespage{% endblock %}
+{% block extra_css %}
+    {% compress css %}
+    {% endcompress css %}
+{% endblock extra_css %}
+
+{% block content %}
+    {% include "ui/components/BasePageHeader.html" with title=page.title image=page.header_image %}
+
+    <div class="max-w-7xl mx-auto">
+        <div class="px-6 md:px-10">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 my-10">
+                <div class="lg:order-2">
+                    <h1 class="text-h2 font-bold">{{page.intro_header}}</h1>
+
+                    <div class="my-2 text-intro font-medium">
+                        {{page.intro|safe}}
+                    </div>
+
+                    <div class="base-article-m">
+                        {{page.description|safe}}
+                    </div>
+
+                    <a href="{{page.learn_more_data_principles_link}}">
+                        <p class="text-hot-red font-medium">
+                            {{page.learn_more_data_principles_text}}
+                            {% include "ui/components/icon_svgs/LinkCaret.html" with class="ml-4" %}
+                        </p>
+                    </a>
+                </div>
+                {% image page.intro_image original %}
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 my-20">
+                {% for panel in page.large_panels %}
+                    {% include "ui/components/misc_panels/LinkBlockWithImage.html" with title=panel.value.title image=panel.value.image description=panel.value.description linktext=panel.value.link_text linkurl=panel.value.link_url %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="my-10">
+        {% include "ui/components/sections/BaseSectionWithImage.html" with title=page.resource_learning_title image=page.resource_learning_image imageright=True red_button=True button_text=page.get_connected_button_text button_link=page.get_connected_button_link description=page.resource_learning_description imagenotwide=True %}
+    </div>
+
+    <div class="max-w-7xl mx-auto">
+        <div class="px-6 md:px-10">
+            <div class="my-20">
+                {% include "ui/components/dogear_boxes/DogearAnyColourLong.html" with title=page.dogear_tech_news_title linktext=page.dogear_tech_news_link_text linkurl=page.dogear_tech_news_link_url textcolour="black" colour="var(--hot-off-white)" arrowcolour="black" %}
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-white my-10">
+                <div>
+                    {% include "ui/components/dogear_boxes/DogearRed.html" with title=page.red_box_title linktext=page.red_box_link_text linkurl=page.red_box_link_url %}
+                </div>
+                <div>
+                    {% include "ui/components/dogear_boxes/DogearBlack.html" with title=page.black_box_title linktext=page.black_box_link_text linkurl=page.black_box_link_url %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

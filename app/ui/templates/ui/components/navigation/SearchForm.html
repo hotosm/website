@@ -1,0 +1,16 @@
+<form class="w-full flex items-center" action="/search">
+    <button class="px-4 py-2" aria-label="Search form submit button">
+        {% include "ui/components/icon_svgs/SearchIcon.html" with class="text-gray-400" %}
+    </button>
+    <input type="text"
+            id="keyword"
+            name="keyword"
+            class="w-full border-0 bg-transparent text-gray-900 placeholder:text-gray-400 focus:ring-0"
+            {% if has_ref %}
+                x-ref="searchforminput"
+            {% endif %}
+            placeholder="Search"
+            role="combobox"
+            aria-expanded="false"
+            aria-controls="options">
+</form>

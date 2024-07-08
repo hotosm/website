@@ -7,7 +7,9 @@ from wagtail.models import Page
 from wagtail.fields import RichTextField, StreamField
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel, PageChooserPanel
 from wagtail.blocks import CharBlock, StreamBlock, StructBlock, URLBlock, RichTextBlock, PageChooserBlock
+from wagtail.search import index
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
+from app.core.models import HotSearchablePage
 
 
 """
@@ -166,6 +168,12 @@ class IndividualProjectPage(Page):
     ], use_json_field=True, null=True, blank=True)
 
     project_contributors = StreamField([('contributor', PageChooserBlock(page_type="members.IndividualMemberPage"))], use_json_field=True, null=True, blank=True)
+
+    search_fields = Page.search_fields + [
+        index.SearchField('title'),
+        index.SearchField('search_description'),
+        index.SearchField('intro'),
+    ]
 
     content_panels = Page.content_panels + [
         MultiFieldPanel([

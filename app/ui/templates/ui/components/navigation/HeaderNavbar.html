@@ -50,6 +50,7 @@
     
     {% comment %} MOBILE EXPANDED LIST {% endcomment %}
     <ul class="text-black lg:hidden p-4" x-show="expanded" :class="{ 'pt-20 text-white': isLandingPage }">
+        <li class="border-b border-b-hot-off-white mb-2 md:hidden">{% include "ui/components/navigation/SearchForm.html" %}</li>
         {% for item in navigation %}
             <li class="text-black {%if item.value.is_button%}md:hidden{%endif%}">
                 {% include "ui/components/navigation/HeaderNavbarItem.html" with item=item.value %}

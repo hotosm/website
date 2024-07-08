@@ -1,4 +1,6 @@
 from django.db import models
+from wagtail.models import Page
+from wagtail.fields import RichTextField
 
 from wagtail.snippets.models import register_snippet
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel, InlinePanel
@@ -27,3 +29,7 @@ class Partner(models.Model):
     
     class Meta:
         verbose_name_plural = "Partners"
+
+
+class HotSearchablePage(Page):
+    pass

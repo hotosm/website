@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "app.who_we_are",
     "app.get_involved",
     "app.tools_and_resources",
+    "app.search_page",
     "search",
     "users",
     "utils",

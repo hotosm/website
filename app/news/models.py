@@ -186,6 +186,7 @@ class IndividualNewsPage(Page):
         index.SearchField('intro'),
         index.FilterField('newscategory_id'),  # the console warns you about this but if you don't have this then category search doesn't work
         index.FilterField('name'),
+        index.SearchField('search_description'),
     ]
 
     content_panels = Page.content_panels + [

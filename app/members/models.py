@@ -6,6 +6,7 @@ from wagtail.models import Page
 from django.db.models import Q
 from app.projects.models import IndividualProjectPage
 from app.news.models import IndividualNewsPage
+from wagtail.search import index
 
 class WebLinkStructBlock(StructBlock):
     link_text = CharBlock(required=True)
@@ -70,13 +71,20 @@ class IndividualMemberPage(Page):
         on_delete=models.SET_NULL,
         related_name='+'
     )
-    introduction = RichTextField()
+    intro = RichTextField()
     on_the_web_links = StreamField(WebLinkBlock(), blank=True, use_json_field=True)
+
+    
+    search_fields = Page.search_fields + [
+        index.SearchField('title'),
+        index.SearchField('search_description'),
+        index.SearchField('intro'),
+    ]
 
     content_panels = Page.content_panels + [
         FieldPanel('image'),
         FieldPanel('position'),
         FieldPanel('location_hub'),
-        FieldPanel('introduction'),
+        FieldPanel('intro'),
         FieldPanel('on_the_web_links'),
     ]

@@ -1,0 +1,47 @@
+{% comment %}
+PARAMETERS:
+=> paginator: a paginator object
+=> current_page: an integer, the current page
+{% endcomment %}
+<div x-data="{ params: new URLSearchParams((new URL(window.location.href)).search) }">
+    <div class="w-full flex justify-center items-center" 
+            x-data="{
+                    page: params.get('page') ? params.get('page') : 1,
+                    paramsX: new URLSearchParams((new URL(window.location.href)).search),
+                    getPageLink(x) { this.paramsX.set('page', x); return '?' + this.paramsX.toString() } 
+    }">
+        <a :href="page > 1 ? getPageLink(parseInt(page) - 1) : ''" aria-label="Previous Page">
+            <p class="cursor-pointer" :class="page == 1 ? 'text-hot-slate-grey' : 'text-hot-red'">
+                {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-180" %}
+            </p>
+        </a>
+        <div class="flex gap-2 mx-4">
+            {% with ''|center:paginator.num_pages as range %}
+                {% for _ in range %}
+                    {% if forloop.counter == 1 or forloop.counter == paginator.num_pages or forloop.counter == current_page or forloop.counter|add:1 == current_page or forloop.counter|add:'-1' == current_page %}
+                        <a :href="getPageLink(parseInt({{forloop.counter}}))">
+                            <p class="px-2 font-bold" :class="page == {{forloop.counter}} ? 'bg-hot-red text-white' : 'bg-hot-off-white'">
+                                {{forloop.counter}}
+                            </p>
+                        </a>
+                    {% endif %}
+                    {% if forloop.counter|add:2 == current_page or forloop.counter|add:'-2' == current_page and not forloop.last %}
+                        {% comment %} 
+                            for reasons that i can't begin to comprehend, the if statement 
+                            below CANNOT be part of the if statement above. it just does
+                            not work
+                        {% endcomment %}
+                        {% if not forloop.first %}
+                            <p class="mx-1">...</p>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            {% endwith %}
+        </div>
+        <a :href="page < {{paginator.num_pages}} ? getPageLink(parseInt(page) + 1) : ''" aria-label="Next Page">
+            <p class="cursor-pointer" :class="page == {{paginator.num_pages}} ? 'text-hot-slate-grey' : 'text-hot-red'">
+                {% include "ui/components/icon_svgs/LinkCaret.html" %}
+            </p>
+        </a>
+    </div>
+</div>

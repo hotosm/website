@@ -123,6 +123,7 @@ class IndividualEventPage(Page):
     search_fields = Page.search_fields + [
         index.SearchField('title'),
         index.SearchField('intro'),
+        index.SearchField('search_description'),
     ]
 
     content_panels = Page.content_panels + [

@@ -1,3 +1,8 @@
+{% comment %}
+==> PARAMETERS
+- news: list of IndividualNewsPages
+- title: string; an optional title for the section
+{% endcomment %}
 {% load wagtailimages_tags %}
 <div x-data="{ partnerIndex: 0, fixedIndex(x) {return ({{news|length}} + x + this.partnerIndex) % {{news|length}}}, moveIndex(x) {this.partnerIndex = this.fixedIndex(x)} }" 
      class="grid {{class}}">

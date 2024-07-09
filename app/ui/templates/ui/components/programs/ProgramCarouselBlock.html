@@ -1,3 +1,7 @@
+{% comment %}
+==> PARAMETERS
+- programs: a list of IndividualProgramPages
+{% endcomment %}
 {% load wagtailimages_tags %}
 <div x-data="{ partnerIndex: 0, fixedIndex(x) {return ({{programs|length}} + x + this.partnerIndex) % {{programs|length}}}, moveIndex(x) {this.partnerIndex = this.fixedIndex(x)} }" class="{{class}}">
     <div class="text-right mb-4">

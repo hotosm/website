@@ -1,3 +1,11 @@
+{% comment %}
+==> PARAMETERS
+- title: string; the title
+- class: string; the classes for the containing div
+- titleclass: string; the classes for the title specifically. If no class is provided, the title will be h3 title size
+- linktext: string; the text to be shown for the link
+- linkurl: string; the url for the link
+{% endcomment %}
 <div class="md:flex md:justify-between gap-4 md:items-center {{class}}">
     <h1 class="{%if titleclass%}{{titleclass}}{%else%}text-h3{%endif%} font-bold">
         {{title}}

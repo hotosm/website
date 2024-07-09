@@ -2,9 +2,11 @@
 ==> PARAMETERS
 - title: A string, the title shown in the header
 - intro: An HTML element (regular usage would be a <p> with some text in it)
+- subtitle: An HTML element
 - image: A Wagtail image
-{% endcomment %}
 
+Only one of either intro or subtitle should be present; you probably would not want both.
+{% endcomment %}
 {% load wagtailimages_tags %}
 
 {% image image original as image_p %}
@@ -23,11 +25,11 @@
                     </div>
                 {% endif %}
             </div>
-            <div class="px-10">
-                {% if subtitle %}
+            {% if subtitle %}
+                <div class="px-10">
                     {{ subtitle|safe }}
-                {% endif %}
-            </div>
+                </div>
+            {% endif %}
         </div>
     </div>
 </div>

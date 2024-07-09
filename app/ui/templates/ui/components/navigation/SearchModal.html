@@ -1,3 +1,6 @@
+{% comment %}
+No parameters; this component is only used for the search popup on desktop sizes.
+{% endcomment %}
 <div x-show="isSearchClicked"
      @shown="$refs.searchforminput.focus(); console.log('hi')"
      class="absolute top-0 left-0 z-[100] w-screen h-screen"

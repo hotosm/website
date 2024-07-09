@@ -1,3 +1,8 @@
+{% comment %}
+==> PARAMETERS
+- projects: list of IndividualProjectPages
+- title: string; an optional title for the section
+{% endcomment %}
 {% load wagtailimages_tags %}
 <div x-data="{ partnerIndex: 0, fixedIndex(x) {return ({{projects|length}} + x + this.partnerIndex) % {{projects|length}}}, moveIndex(x) {this.partnerIndex = this.fixedIndex(x)} }" 
      class="grid {{class}}">

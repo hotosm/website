@@ -29,7 +29,3 @@ class Partner(models.Model):
     
     class Meta:
         verbose_name_plural = "Partners"
-
-
-class HotSearchablePage(Page):
-    pass

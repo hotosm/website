@@ -9,7 +9,6 @@ from wagtail.admin.panels import FieldPanel, MultiFieldPanel, PageChooserPanel
 from wagtail.blocks import CharBlock, StreamBlock, StructBlock, URLBlock, RichTextBlock, PageChooserBlock
 from wagtail.search import index
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
-from app.core.models import HotSearchablePage
 
 
 """

@@ -21,6 +21,9 @@ class NewsOwnerPage(Page):
 
         keyword = request.GET.get('keyword', '')
         news_list = IndividualNewsPage.objects.live().filter(locale=context['page'].locale)
+        
+        if keyword:
+            news_list = news_list.search(keyword).get_queryset()
 
         categories = NewsCategory.objects.all()
         tags = [x[4:] for x in request.GET.keys() if x.startswith("tag.")]
@@ -28,12 +31,12 @@ class NewsOwnerPage(Page):
         for category in categories:
             if request.GET.get(str(category), ''):
                 query = query | Q(categories=category)
+        news_list = news_list.filter(query).distinct()
+        
+        query = Q()
         for tag in tags:
             query = query | Q(tags__name=tag)
         news_list = news_list.filter(query).distinct()
-
-        if keyword:
-            news_list = news_list.search(keyword).get_queryset()
 
         match request.GET.get('sort', ''):
             case 'sort.new':
@@ -184,8 +187,8 @@ class IndividualNewsPage(Page):
     search_fields = Page.search_fields + [
         index.SearchField('title'),
         index.SearchField('intro'),
-        index.FilterField('newscategory_id'),  # the console warns you about this but if you don't have this then category search doesn't work
-        index.FilterField('name'),
+        # index.FilterField('newscategory_id'),  # the console warns you about this but if you don't have this then category search doesn't work
+        # index.FilterField('name'),
         index.SearchField('search_description'),
     ]
 

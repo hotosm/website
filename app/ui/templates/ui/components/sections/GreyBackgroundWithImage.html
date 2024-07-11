@@ -1,0 +1,21 @@
+{% comment %}
+==> PARAMETERS
+- image: image object; the image for the section
+- title: html element; the title for the section
+- description: html element; the description for the section
+- button2_text: string; the left button's text
+- button2_link: string; the left button's link
+- button_text: string; the right button's text
+- button_link: string; the right button's link
+
+- red_button: if truthy, the right button will be red; otherwise it will be outlined
+- bigdescription: if truthy, the description will have larger text
+- imagebottom: if truthy, the image will always be on the bottom in tablet/mobile sizes
+- imageright: if truthy, the image will always be on the right on desktop size
+- imagenotwide: if truthy, the image will not stretch to the edge of the screen in tablet/mobile sizes
+{% endcomment %}
+{% load wagtailimages_tags %}
+
+<div class="bg-hot-off-white text-black">
+    {% include "./BaseSectionWithImage.html" %}
+</div>

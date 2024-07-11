@@ -1,3 +1,7 @@
+{% comment %}
+==> PARAMETERS
+- item: a navigation item; has a title and a link_page OR link_url
+{% endcomment %}
 <a href="{%if item.link_page%}{{item.link_page.url}}{%elif item.link_url%}{{item.link_url}}{%else%}#{%endif%}">
     <div class="text-small font-medium [&>.absolute]:hidden [&:hover>.absolute]:block p-2 bg-hot-red text-white px-6">
         <p class="">

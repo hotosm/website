@@ -43,7 +43,7 @@
                         {% include "ui/components/BaseLink.html" with linktext=page.get_parent.specific.view_all_projects_text linkurl=page.view_all_projects_link %}
                     </p>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 mt-10" id="projects-list">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-10" id="projects-list">
                     {% for project in projects %}
                         {% include "ui/components/projects/ProjectPreviewBlockNews.html" with project=project showimage=True %}
                     {% endfor %}

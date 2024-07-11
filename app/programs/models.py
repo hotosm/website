@@ -8,6 +8,7 @@ from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.blocks import CharBlock, StreamBlock, StructBlock, URLBlock, RichTextBlock, PageChooserBlock
 from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
+from wagtail.search import index
 
 from app.projects.models import IndividualProjectPage
 
@@ -35,6 +36,10 @@ class ProgramGoalBlock(StreamBlock):
 
 class ProgramOwnerPage(Page):
     max_count = 1
+
+    subpage_types = [
+        'programs.IndividualProgramPage'
+    ]
     
     stats_title = models.CharField(default="Stats")
     goals_title = models.CharField(default="Goals")
@@ -117,6 +122,12 @@ class IndividualProgramPage(Page):
     more_programs = StreamField([
         ('program_page', PageChooserBlock(page_type="programs.IndividualProgramPage"))
     ], use_json_field=True, null=True, blank=True)
+
+    search_fields = Page.search_fields + [
+        index.SearchField('title'),
+        index.SearchField('search_description'),
+        index.SearchField('intro'),
+    ]
 
     content_panels = Page.content_panels + [
         MultiFieldPanel([

@@ -1,5 +1,6 @@
 from django import forms
 from django.db import models
+from django.db.models import Q
 
 from wagtail.models import Page
 from wagtail.fields import RichTextField, StreamField
@@ -30,10 +31,82 @@ class DogearBoxBlock(StreamBlock):
     blocks = DogearBoxStructBlock()
 
 
+class MappingHubProjectsPage(Page):
+    def get_context(self, request):
+        context = super().get_context(request)
+
+        parent_hub = context['page'].get_parent()
+
+        projects = IndividualProjectPage.objects.live().filter(
+            Q(region_hub_list__contains=[{'type': 'region_hub', 'value': parent_hub.id}])
+        ).filter(locale=context['page'].locale)
+
+        other_hubs_projects = MappingHubProjectsPage.objects.live().filter(locale=context['page'].locale)
+
+        context['projects'] = projects
+        context['other_hubs'] = other_hubs_projects
+        return context
+    
+    parent_page_types = [
+        'mapping_hubs.IndividualMappingHubPage'
+    ]
+
+    load_more_projects_text = models.CharField(default="Load More Projects")
+
+    projects_by_hub_title = models.CharField(default="See Projects by Open Mapping Hub")
+
+    red_box_title = models.CharField(default="See all of HOT's projects")
+    red_box_link_text = models.CharField(default="Explore projects")
+    red_box_link_url = models.URLField(null=True, blank=True)
+    black_box_title = models.CharField(default="See the many ways to get involved with HOT and open mapping")
+    black_box_link_text = models.CharField(default="Get involved")
+    black_box_link_url = models.URLField(null=True, blank=True)
+
+    content_panels = Page.content_panels + [
+        FieldPanel('load_more_projects_text'),
+        FieldPanel('projects_by_hub_title'),
+        FieldPanel('red_box_title'),
+        FieldPanel('red_box_link_text'),
+        FieldPanel('red_box_link_url'),
+        FieldPanel('black_box_title'),
+        FieldPanel('black_box_link_text'),
+        FieldPanel('black_box_link_url'),
+    ]
+
+
+class OpenMappingHubsPage(Page):
+    max_count = 1
+
+    subpage_types = [
+        'mapping_hubs.IndividualMappingHubPage'
+    ]
+
+    header_image = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text="Header image",
+    )
+    header_description = RichTextField(blank=True)
+    hub_text = models.CharField(default="Hub", help_text="The text following a hub's name; i.e., if this field is 'Hub', the title for 'Asia-Pacific' would become 'Asia-Pacific Hub'.")
+    learn_more_text = models.CharField(default="Learn More about", help_text="The text preceeding the hub's name in the link text; i.e., if this field is 'Learn More about', the link text for 'Asia-Pacific Hub' would become 'Learn More about Asia-Pacific Hub'.")
+
+    content_panels = Page.content_panels + [
+        FieldPanel('header_image'),
+        FieldPanel('header_description'),
+        FieldPanel('hub_text'),
+        FieldPanel('learn_more_text'),
+    ]
+
+
 class IndividualMappingHubPage(Page):
     def get_context(self, request):
         context = super().get_context(request)
-        projects = IndividualProjectPage.objects.filter(owner_region_hub=context['page'], locale=context['page'].locale)
+        projects = IndividualProjectPage.objects.live().filter(
+            Q(region_hub_list__contains=[{'type': 'region_hub', 'value': context['page'].id}])
+        ).filter(locale=context['page'].locale)
         context['projects'] = projects
         other_hubs = IndividualMappingHubPage.objects.live().filter(locale=context['page'].locale)
         context['other_hubs'] = other_hubs

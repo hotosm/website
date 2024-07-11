@@ -17,7 +17,7 @@
             <p>
                 {{page.get_parent.specific.authors_posted_by_text}}
                 {% for author in page.authors %}
-                    <b>{{author.value.title}}</b>
+                    <a href="{{author.value.url}}"><b class="text-black">{{author.value.title}}</b></a>
                     {% if not forloop.last %}
                     ,
                     {% endif %}
@@ -41,70 +41,70 @@
             {% comment %} SIDEBAR {% endcomment %}
             <div class="base-article px-10 py-5 sidebar [&>div]:my-12 [&_div:first-child_hr]:hidden [&_hr]:mb-8">
                 {% if page.related_projects%}
-                <div>
-                    <hr />
-                    <h1 class="text-h2 font-bold mb-4">
-                        {{ page.get_parent.specific.related_projects_title }}
-                    </h1>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-x-4">
-                        {% with projects=page.related_projects %}
-                            {% for project in projects %}
-                                {% include "ui/components/projects/ProjectPreviewBlockNews.html" with project=project.value %}
-                            {% endfor %}
-                        {% endwith %}
+                    <div>
+                        <hr />
+                        <h1 class="text-h2 font-bold mb-4">
+                            {{ page.get_parent.specific.related_projects_title }}
+                        </h1>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-4">
+                            {% with projects=page.related_projects %}
+                                {% for project in projects %}
+                                    {% include "ui/components/projects/ProjectPreviewBlockNews.html" with project=project.value %}
+                                {% endfor %}
+                            {% endwith %}
+                        </div>
                     </div>
-                </div>
                 {% endif %}
 
                 {% if page.related_news %}
-                <div>
-                    <hr />
-                    <h1 class="text-h2 font-bold mb-4">
-                        {{ page.get_parent.specific.related_news_title }}
-                    </h1>
-                    <div class="[&_span]:text-black text-intro">
-                        {% include "ui/components/BaseLink.html" with linkurl="#" linktext=page.get_parent.specific.view_all_news_text %}
+                    <div>
+                        <hr />
+                        <h1 class="text-h2 font-bold mb-4">
+                            {{ page.get_parent.specific.related_news_title }}
+                        </h1>
+                        <div class="[&_span]:text-black text-intro">
+                            {% include "ui/components/BaseLink.html" with linkurl="#" linktext=page.get_parent.specific.view_all_news_text %}
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-4 mt-4">
+                            {% with allnews=page.related_news %}
+                                {% for news in allnews %}
+                                    {% include "ui/components/news/NewsPreviewBlockNews.html" with news=news.value readmoretext=page.get_parent.specific.read_more_text %}
+                                {% endfor %}
+                            {% endwith %}
+                        </div>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-x-4">
-                        {% with allnews=page.related_news %}
-                            {% for news in allnews %}
-                                {% include "ui/components/news/NewsPreviewBlockNews.html" with news=news.value readmoretext=page.get_parent.specific.read_more_text %}
-                            {% endfor %}
-                        {% endwith %}
-                    </div>
-                </div>
                 {% endif %}
 
                 {% if page.categories.all %}
-                <div>
-                    <hr />
-                    <h1 class="text-h2 font-bold mb-4">
-                        {{ page.get_parent.specific.categories_title }}
-                    </h1>
-                    <p>
-                        {% with categories=page.categories.all %}
-                            {% for category in categories %}
-                                <a href="#" class="text-hot-red">{{ category.category_name }}</a>{% if not forloop.last %}, {% endif %}
-                            {% endfor %}
-                        {% endwith %}
-                    </p>
-                </div>
+                    <div>
+                        <hr />
+                        <h1 class="text-h2 font-bold mb-4">
+                            {{ page.get_parent.specific.categories_title }}
+                        </h1>
+                        <p>
+                            {% with categories=page.categories.all %}
+                                {% for category in categories %}
+                                    <a href="#" class="text-hot-red">{{ category.category_name }}</a>{% if not forloop.last %}, {% endif %}
+                                {% endfor %}
+                            {% endwith %}
+                        </p>
+                    </div>
                 {% endif %}
 
                 {% if page.tags.all %}
-                <div>
-                    <hr />
-                    <h1 class="text-h2 font-bold mb-4">
-                        {{ page.get_parent.specific.tags_title }}
-                    </h1>
-                    <p>
-                        {% with tags=page.tags.all %}
-                            {% for tag in tags %}
-                                <a href="#" class="text-hot-red">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
-                            {% endfor %}
-                        {% endwith %}
-                    </p>
-                </div>
+                    <div>
+                        <hr />
+                        <h1 class="text-h2 font-bold mb-4">
+                            {{ page.get_parent.specific.tags_title }}
+                        </h1>
+                        <p>
+                            {% with tags=page.tags.all %}
+                                {% for tag in tags %}
+                                    <a href="#" class="text-hot-red">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
+                                {% endfor %}
+                            {% endwith %}
+                        </p>
+                    </div>
                 {% endif %}
             </div>
         </div>

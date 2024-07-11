@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% load static %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+{% load compress %}
+{% block body_class %}template-membergrouppage{% endblock %}
+{% block extra_css %}
+    {% compress css %}
+    {% endcompress css %}
+{% endblock extra_css %}
+
+{% block content %}
+    {% include "ui/components/PageHeaderWithBlur.html" with title=page.title subtitle=page.intro image=page.header_image %}
+
+    <div class="max-w-7xl mx-auto px-6 md:px-10 my-10" x-data="{ params: new URLSearchParams((new URL(window.location.href)).search) }">
+        <div class="max-w-3xl">
+            <div class="text-intro">
+                {{page.body_intro|safe}}
+            </div>
+            <div class="base-article-m">
+                {{page.body_description|safe}}
+            </div>
+        </div>
+
+        {% if page.show_search_options %}
+            <form class="mt-20 mb-10">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {% comment %} KEYWORD SEARCH {% endcomment %}
+                    <div class="bg-hot-off-white flex items-center">
+                        <input class="w-full bg-transparent border-none" placeholder="{{page.get_parent.specific.search_placeholder}}" type="text" name="keyword" :value="params.get('keyword')">
+                        {% include "ui/components/icon_svgs/SearchIcon.html" with class="text-hot-red mx-3" %}
+                    </div>
+
+                    {% comment %} COUNTRY {% endcomment %}
+                    <div class="relative" x-data="{ show: false }" @click.away="show = false">
+                        <div class="w-full h-full flex justify-between py-2 px-3 bg-hot-off-white items-center cursor-pointer" @click="show = !show">
+                            <p class="pointer-events-none">
+                                {{page.get_parent.specific.filter_by_country}}
+                            </p>
+                            {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-90 text-hot-red" %}
+                        </div>
+                        <div class="absolute z-20 bg-hot-off-white p-4 w-full" x-show="show">
+                            <hr class="border-b-2">
+                            {% for hub in hubs %}
+                                <div class="mt-4 flex">
+                                    <label for="cat-{{forloop.counter}}">{{hub.title}}</label>
+                                    <input class="ml-auto checked:bg-hot-red checked:hover:bg-hot-red checked:focus:bg-hot-red" id="cat-{{forloop.counter}}" type="checkbox" name="{{hub.title}}" :checked="params.get('{{hub.title}}')">
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    {% comment %} SORT {% endcomment %}
+                    <div class="relative" x-data="{ show: false, setSortType(text) {$refs.sorttype.innerText = text} }" @click.away="show = false">
+                        <div class="w-full h-full flex justify-between py-2 px-3 bg-hot-off-white items-center cursor-pointer" @click="show = !show">
+                            <p class="pointer-events-none" x-ref="sorttype">
+                                {{page.get_parent.specific.sort_by_titlea}}
+                            </p>
+                        {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-90 text-hot-red" %}
+                        </div>
+                        <div class="absolute z-20 bg-hot-off-white p-4 w-full" x-show="show">
+                            <hr class="border-b-2">
+                            {% include "./components/MembersSortOption.html" with sort_by=page.get_parent.specific.sort_by_titlea sort_id="sort.titlea" %}
+                            {% include "./components/MembersSortOption.html" with sort_by=page.get_parent.specific.sort_by_titlez sort_id="sort.titlez" %}
+                        </div>
+                    </div>
+
+                    <div class="bg-hot-red text-white font-semibold">
+                        <input type="submit" value="{{page.get_parent.specific.search_button_text}}" class="bg-transparent w-full h-full cursor-pointer py-2">
+                    </div>
+                </div>
+            </form>
+        {% endif %}
+
+        {% comment %} MEMBERS LIST {% endcomment %}
+        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-{{page.desktop_size_items_per_row}} gap-8 lg:gap-y-16 mb-10" id="members-list">
+            {% for member in members %}
+                {% include "ui/components/members/MemberPreviewBlock.html" with member=member position_shown=page.position_shown hub_shown=page.hub_shown %}
+            {% endfor %}
+        </div>
+        <p class="text-center mt-10 mb-20" id="next-member" class="{% if not members.has_next %}hidden{% endif %}">
+            {% if members.has_next %}
+                    {% comment %} <a href="?page={{ projects.next_page_number }}"></a> {% endcomment %}
+                    <button hx-get="?page={{ members.next_page_number }}"
+                        hx-trigger="click"
+                        hx-select="#members-list, #next-project"
+                        hx-swap="beforeend"
+                        hx-select-oob="#members-list:beforeend, #next-member:outerHTML"
+                    >
+                        <span class="border-b-hot-red border-b-2 pb-1 font-medium mr-4 text-intro">
+                            {{page.get_parent.specific.load_more_text}} {{page.title}}
+                        </span>
+                        {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-90 text-hot-red" %}
+                    </button>
+            {% endif %}
+        </p>
+
+        {% comment %} BOTTOM AREA {% endcomment %}
+        <div class="grid grid-cols-1 md:grid-cols-2 text-white gap-8 mt-20">
+            {% for group in groups %}
+                {% if forloop.counter0|divisibleby:2 %}
+                    <div>
+                        {% include "ui/components/dogear_boxes/DogearRed.html" with title=group.title linktext=page.get_parent.specific.view_all_text|add:' '|add:group.title linkurl=group.url %}
+                    </div>
+                    {% else %}
+                    <div>
+                        {% include "ui/components/dogear_boxes/DogearBlack.html" with title=group.title linktext=page.get_parent.specific.view_all_text|add:' '|add:group.title linkurl=group.url %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="my-10">
+            {% include "ui/components/FooterBannerWithTextAndLink.html" with text=page.get_parent.specific.footer_box_title url=page.get_parent.specific.footer_box_button_link buttontext=page.get_parent.specific.footer_box_button_text description=page.get_parent.specific.footer_box_description %}
+        </div>
+    </div>
+{% endblock %}

@@ -42,7 +42,7 @@ class IndividualImpactAreaPage(Page):
         context['other_impact_areas'] = other_impact_areas
         return context
 
-    parent_page_type = [
+    parent_page_types = [
         'impact_areas.ImpactAreasPage'
     ]
 
@@ -62,7 +62,7 @@ class IndividualImpactAreaPage(Page):
         blank=True,
         on_delete=models.SET_NULL,
         related_name="+",
-        help_text="The icon representing this page which is shown for previews of this page on other pages."
+        help_text="The icon representing this page which is shown for previews of this page on other pages. This should be a purely black image which is ideally as wide as it is tall."
     )
     intro_image = models.ForeignKey(
         "wagtailimages.Image",
@@ -107,6 +107,10 @@ class ImpactAreaBlock(StreamBlock):
 
 class ImpactAreasPage(Page):
     max_count = 1
+    
+    subpage_types = [
+        'impact_areas.IndividualImpactAreaPage'
+    ]
     
     intro = RichTextField(blank=True)
 

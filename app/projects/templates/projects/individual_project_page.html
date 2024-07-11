@@ -37,7 +37,9 @@
                     </div>
                     <div>
                         <p>{{page.get_parent.specific.region_hub_title}}</p>
-                        <p><a href="{{page.owner_region_hub.url}}">{{page.owner_region_hub.title}}</a></p>
+                        {% for hub in page.region_hub_list %}
+                            <p><a href="{{hub.value.url}}">{{hub.value.title}}</a></p>
+                        {% endfor %}
                     </div>
                     <div>
                         <p>{{page.get_parent.specific.duration_title}}</p>
@@ -68,7 +70,7 @@
                         <div class="[&_span]:text-black text-intro">
                             {% include "ui/components/BaseLink.html" with linkurl=page.get_parent.specific.view_all_news_url linktext=page.get_parent.specific.view_all_news_text %}
                         </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-4 mt-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-4 mt-8">
                             {% with allnews=page.related_news %}
                                 {% for news in allnews %}
                                     {% include "ui/components/news/NewsPreviewBlockProjects.html" with news=news.value %}

@@ -1,3 +1,8 @@
+{% comment %}
+==> PARAMETERS
+- item: a navigation item; has a title and a link_page OR link_url, as well as potentially children
+    - these children will have the same parameters, and those children's children will have the same except they cannot have children
+{% endcomment %}
 <div class="text-small font-medium [&>.show-at-large]:hidden [&:hover>.show-at-large]:block p-2 [&>p]:hover:text-hot-red [&_p:hover]:text-hot-red text-left">
     <p class="">
         <a href="{%if item.link_page%}{{item.link_page.url}}{%elif item.link_url%}{{item.link_url}}{%else%}#{%endif%}">

@@ -1,12 +1,12 @@
 {% comment %}
 ==> PARAMETERS
 - news: an IndividualNewsPage object; the news page to be previewed
+- showimage: optional; if Truthy, the article's image will show up in the preview
 {% endcomment %}
-
 {% load wagtailimages_tags %}
 
 {% image news.image original as image_p %}
-<div class="my-4 {{class}}">
+<div class=" {{class}}">
     <a href="{{ news.url }}">
         {% if showimage %}
             <div class="image-hide-small w-full min-h-[9rem] mb-3 content-end bg-no-repeat bg-cover image-overshadow-gradient" style="background-image: url('{{ image_p.url }}')">

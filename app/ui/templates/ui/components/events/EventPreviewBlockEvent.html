@@ -1,4 +1,18 @@
+{% comment %}
+==> PARAMETERS
+- event: an IndividualEventPage object; should be passed directly here
+{% endcomment %}
+{% load wagtailimages_tags %}
+
+{% image event.image original as image_p %}
 <div class="{{class}}">
+    {% if showimage %}
+        <div class="image-hide-small w-full min-h-[9rem] mb-3 content-end bg-no-repeat bg-cover image-overshadow-gradient" style="background-image: url('{{ image_p.url }}')">
+            <div>
+            </div>
+        </div>
+    {% endif %}
+
     <div class="flex w-full [&_p]:text-hot-dark-grey [&_p]:text-small justify-between flex-wrap">
         {% if event.start_date_time.date == event.end_date_time.date %}
             <p>

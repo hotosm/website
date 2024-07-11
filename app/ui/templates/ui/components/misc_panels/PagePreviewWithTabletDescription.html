@@ -1,0 +1,31 @@
+{% comment %}
+==> PARAMETERS
+- page: Page object; its link and title is used here
+- previmg: image object; the image for the preview
+- tablet_description: html element; the description of the block, which only shows on tablet sizes and smaller
+- read_more_text: string; the text to show for "read more"
+{% endcomment %}
+{% load wagtailimages_tags %}
+
+{% image image original as previmg %}
+<a href="{{page.url}}">
+    <div class="bg-gradient-to-t from-black to-transparent to-30% grid">
+        <div class="min-h-[16rem] bg-cover bg-no-repeat -z-10 relative row-start-1 col-start-1" style="background-image: url('{{previmg.url}}')">
+        </div>
+        <div class="row-start-1 col-start-1 flex-col justify-end p-4 hidden lg:flex">
+            <h1 class="font-semibold text-h3 text-white">
+                {{page.title}}
+            </h1>
+        </div>
+    </div>
+    <div class="lg:hidden">
+        <h1 class="font-bold text-h3 my-2">{{page.title}}</h1>
+        <div class="my-2">
+            {{tablet_description}}
+        </div>
+        <p class="text-hot-red font-medium">
+            {{read_more_text}}
+            {% include "ui/components/icon_svgs/LinkCaret.html" with class="ml-2" %}
+        </p>
+    </div>
+</a>

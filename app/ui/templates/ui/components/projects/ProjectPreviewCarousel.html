@@ -1,3 +1,8 @@
+{% comment %}
+==> PARAMETERS
+- projects: list of IndividualProjectPages
+- title: string; an optional title for the section
+{% endcomment %}
 {% load wagtailimages_tags %}
 <div x-data="{ partnerIndex: 0, fixedIndex(x) {return ({{projects|length}} + x + this.partnerIndex) % {{projects|length}}}, moveIndex(x) {this.partnerIndex = this.fixedIndex(x)} }" 
      class="grid {{class}}">
@@ -27,7 +32,7 @@
         </div>
     </div>
     
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-4">
         {% for project in projects %}
             <div :class="{ 'hidden md:block': fixedIndex({{forloop.counter0}}) == 1, 
                            'hidden lg:block': fixedIndex({{forloop.counter0}}) == 2,

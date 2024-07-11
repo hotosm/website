@@ -13,8 +13,8 @@
     {% include "ui/components/BasePageHeader.html" with title=page.title intro=page.intro image=page.image %}
     
     <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 lg:gap-4 px-6 mt-6">
-        {% for block in page.impact_area_blocks %}
-            {% include "ui/components/LearnMoreAboutBlurbWithImage.html" with title=block.value.title description=block.value.description image=block.value.image link=block.value.link %}
+        {% for child in page.get_children %}
+            {% include "ui/components/impact_areas/ImpactAreaPreviewBlock.html" with ia=child.specific %}
         {% endfor %}
     </div>
 {% endblock %}

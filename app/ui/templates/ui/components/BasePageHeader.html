@@ -2,9 +2,11 @@
 ==> PARAMETERS
 - title: A string, the title shown in the header
 - intro: An HTML element (regular usage would be a <p> with some text in it)
+- subtitle: An HTML element
 - image: A Wagtail image
-{% endcomment %}
 
+Only one of either intro or subtitle should be present; you probably would not want both.
+{% endcomment %}
 {% load wagtailimages_tags %}
 
 {% image image original as image_p %}
@@ -13,21 +15,21 @@
         <div class="h-fit w-full py-10 text-white max-w-7xl mx-auto">
             <div class="grid grid-cols-1 lg:grid-cols-3">
                 <div class="px-10 pb-4 h-fit {% if intro %}col-span-1{% else %}col-span-3{% endif %}">
-                    <h1 class="text-h1 font-bold lg:font-normal text-wrap">
+                    <h1 class="text-h1 font-bold lg:font-semibold text-wrap">
                         {{ title }}
                     </h1>
                 </div>
                 {% if intro %}
-                    <div class="flex-1 text-intro px-10 h-fit col-span-2">
+                    <div class="flex-1 text-intro px-10 h-fit col-span-2 mt-auto">
                         {{ intro|safe }}
                     </div>
                 {% endif %}
             </div>
-            <div class="px-10">
-                {% if subtitle %}
+            {% if subtitle %}
+                <div class="px-10">
                     {{ subtitle|safe }}
-                {% endif %}
-            </div>
+                </div>
+            {% endif %}
         </div>
     </div>
 </div>

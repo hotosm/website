@@ -3,7 +3,7 @@
 {% load wagtailcore_tags %}
 {% load wagtailimages_tags %}
 {% load compress %}
-{% block body_class %}template-individualnewspage{% endblock %}
+{% block body_class %}template-newsownerpage{% endblock %}
 {% block extra_css %}
     {% compress css %}
     {% endcompress css %}
@@ -94,53 +94,16 @@
                 </div>
             </form>
 
+            {% comment %} NEWS ITEMS {% endcomment %}
             <h2 class="text-h2 font-bold my-8">{{news_paginator.count}} {{page.results_text}}</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-10">
                 {% for article in news %}
                     {% include "ui/components/news/NewsPreviewBlockProjects.html" with news=article showimage=True class="[&_.image-hide-small]:hidden md:[&_.image-hide-small]:block" %}
                 {% endfor %}
             </div>
 
-            <div class="w-full flex justify-center items-center" 
-                 x-data="{
-                            page: params.get('page') ? params.get('page') : 1,
-                            paramsX: new URLSearchParams((new URL(window.location.href)).search),
-                            getPageLink(x) { this.paramsX.set('page', x); return '?' + this.paramsX.toString() } 
-            }">
-                <a :href="page > 1 ? getPageLink(parseInt(page) - 1) : ''" aria-label="Previous Page">
-                    <p class="cursor-pointer" :class="page == 1 ? 'text-hot-slate-grey' : 'text-hot-red'">
-                        {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-180" %}
-                    </p>
-                </a>
-                <div class="flex gap-2 mx-4">
-                    {% with ''|center:news_paginator.num_pages as range %}
-                        {% for _ in range %}
-                            {% if forloop.counter == 1 or forloop.counter == news_paginator.num_pages or forloop.counter == current_page or forloop.counter|add:1 == current_page or forloop.counter|add:'-1' == current_page %}
-                                <a :href="getPageLink(parseInt({{forloop.counter}}))">
-                                    <p class="px-2 font-bold" :class="page == {{forloop.counter}} ? 'bg-hot-red text-white' : 'bg-hot-off-white'">
-                                        {{forloop.counter}}
-                                    </p>
-                                </a>
-                            {% endif %}
-                            {% if forloop.counter|add:2 == current_page or forloop.counter|add:'-2' == current_page and not forloop.last %}
-                                {% comment %} 
-                                    for reasons that i can't begin to comprehend, the if statement 
-                                    below CANNOT be part of the if statement above. it just does
-                                    not work
-                                {% endcomment %}
-                                {% if not forloop.first %}
-                                    <p class="mx-1">...</p>
-                                {% endif %}
-                            {% endif %}
-                        {% endfor %}
-                    {% endwith %}
-                </div>
-                <a :href="page < {{news_paginator.num_pages}} ? getPageLink(parseInt(page) + 1) : ''" aria-label="Next Page">
-                    <p class="cursor-pointer" :class="page == {{news_paginator.num_pages}} ? 'text-hot-slate-grey' : 'text-hot-red'">
-                        {% include "ui/components/icon_svgs/LinkCaret.html" %}
-                    </p>
-                </a>
-            </div>
+            {% comment %} PAGE NAVIGATION {% endcomment %}
+            {% include "ui/components/utilities/PaginatorNavigation.html" with paginator=news_paginator current_page=current_page %}
         </div>
     </div>
 {% endblock %}

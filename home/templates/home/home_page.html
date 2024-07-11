@@ -136,28 +136,7 @@
         </div>
 
         {% comment %} OPPORTUNITIES {% endcomment %}
-        <div class="bg-hot-navy-grey text-white">
-            <div class="mx-auto max-w-7xl grid lg:grid-cols-5">
-                {% image page.opportunities_image original as op_image %}
-                <div class="lg:order-2 min-h-[20rem] bg-cover bg-no-repeat lg:col-span-2" style="background-image: url('{{op_image.url}}')"></div>
-                <div class="lg:order-1 px-6 md:px-10 py-10 flex flex-col justify-center lg:col-span-3">
-                    <div class="text-h2 [&_b]:text-hot-red bold-override font-bold lg:font-semibold">
-                        {{page.opportunities_title|safe}}
-                    </div>
-                    <div class="text-intro font-medium my-4">
-                        {{page.opportunities_description|safe}}
-                    </div>
-                    <div class="flex gap-4">
-                        <a href="{{page.get_involved_button_link}}">
-                            {% include "components/branded_elements/button.html" with text=page.get_involved_button_text classes="mt-4" %}
-                        </a>
-                        <a href="{{page.partner_with_us_button_link}}">
-                            {% include "components/branded_elements/button_bordered.html" with text=page.partner_with_us_button_text classes="mt-4" %}
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
+        {% include "home/components/CheckOutOpportunitiesSection.html" %}
 
         <div class="mx-auto max-w-7xl px-6 md:px-10 my-20">
             {% comment %} NEWS {% endcomment %}
@@ -170,7 +149,7 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:[&_.image-hide-small]:block [&_.image-hide-small]:hidden mt-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:[&_.image-hide-small]:block [&_.image-hide-small]:hidden mt-8">
                 {% for news in page.displayed_news %}
                     <div class="{% if forloop.counter0 > 1 %}md:hidden lg:block{% endif %}">
                         {% include "ui/components/news/NewsPreviewBlockProjects.html" with news=news.value showimage=True %}

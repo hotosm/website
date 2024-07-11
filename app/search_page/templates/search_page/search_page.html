@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load static wagtailcore_tags %}
+{% block body_class %}
+    template-searchpage
+{% endblock body_class %}
+{% block content %}
+    <div class="max-w-7xl mx-auto my-10">
+        <div class="px-6 md:px-10">
+            <div class="flex flex-col lg:flex-row justify-between mb-10 gap-8">
+                <h1 class="font-bold text-h5">
+                    {% if results %}
+                        {{page.search_text_prefix}} <span class="text-hot-red">"{{keyword}}"</span> {{page.search_text_midfix}} {{results_paginator.count}} {{page.search_text_postfix}}
+                        {% else %}
+                        {{page.no_results_text}} <span class="text-hot-red">"{{keyword}}"</span>
+                    {% endif %}
+                </h1>
+                <div class="bg-hot-off-white [&_button]:order-2 [&_svg]:text-hot-red lg:w-96 max-w-[24rem]">
+                    {% include "ui/components/navigation/SearchForm.html" %}
+                </div>
+            </div>
+            {% if results %}
+                <div class="grid gap-8 max-w-3xl my-10">
+                    {% for result in results %}
+                        <div class="grid gap-2">
+                            <h2 class="text-h4 font-semibold">{{result.title}}</h2>
+                            {% if result.get_ancestors|length > 2 %}
+                                <p>
+                                    {% for ancestor in result.get_ancestors|slice:"2:" %}
+                                        <a href="{{ancestor.url}}" class="text-hot-red font-medium">{{ancestor.title}}</a>
+                                        {% if not forloop.last %} &gt; {% endif %}
+                                    {% endfor %}
+                                </p>
+                            {% endif %}
+                            
+                            {% if result.specific.intro %}
+                                <div>
+                                    {{result.specific.intro|safe}}
+                                </div>
+                                {% else %}
+                                {% if result.search_description %}
+                                    <p>{{result.search_description}}</p>
+                                {% endif %}
+                            {% endif %}
+                            
+                            <p>
+                                <a class="text-hot-red font-medium" href="{{result.url}}">{{result.full_url}}</a>
+                            </p>
+                        </div>
+                    {% endfor %}
+                </div>
+                {% include "ui/components/utilities/PaginatorNavigation.html" with paginator=results_paginator current_page=current_page %}
+                
+                {% else %}
+                <p class="text-intro mb-20">
+                    {% include "ui/components/BaseLink.html" with linktext=page.no_results_go_back linkurl="javascript:history.back()" %}
+                </p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock content %}

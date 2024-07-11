@@ -1,0 +1,24 @@
+{% load wagtailimages_tags %}
+
+<div class="grid grid-cols-3 gap-4 md:block">
+    <a href="{{member.url}}">
+        {% image member.image original class="aspect-[4/5] object-cover w-full col-span-1" %}
+    </a>
+    <div class="col-span-2 flex md:block flex-col justify-center">
+        <a href="{{member.url}}">
+        <h2 class="text-intro md:text-h5 font-bold leading-snug mt-2 mb-1">{{member.title}}</h2>
+        {% if position_shown %}
+            <p class="text-small mt-1">
+                {{member.position}}
+            </p>
+        {% endif %}
+        </a>
+        {% if hub_shown and member.location_hub %}
+            <p class="mt-0.5">
+                <a href="{{member.location_hub.url}}" class="text-hot-red text-small">
+                    {{member.location_hub.title}}
+                </a>
+            </p>
+        {% endif %}
+    </div>
+</div>

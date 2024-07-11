@@ -1,0 +1,20 @@
+{% comment %}
+==> PARAMETERS
+- title: string; the title
+- description: html element; the description for the section
+- links: list of link objects; these objects should have a .value.text and a .value.link
+{% endcomment %}
+<h1 class="text-h2 font-bold">{{title}}</h1>
+<hr class="my-4 border-t-2">
+<div class="grid lg:grid-cols-5 gap-8">
+    <div class="lg:col-span-3 text-intro">
+        {{description|safe}}
+    </div>
+    <div class="lg:col-span-2 flex flex-wrap lg:flex-col gap-8 lg:gap-4 font-medium text-intro">
+        {% for link in links %}
+            <p>
+                {% include "ui/components/BaseLink.html" with linktext=link.value.text linkurl=link.value.link %}
+            </p>
+        {% endfor %}
+    </div>
+</div>

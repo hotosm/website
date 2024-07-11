@@ -1,3 +1,13 @@
+{% comment %}
+==> PARAMETERS
+- carousel: list of blocks; each block should have a .value, which should have:
+    - .header: string
+    - .body: string
+    - .action_button.text: string
+    - .action_button.link: string
+
+If you'd like, refer to app.ui.models to see the specifics of what makes up a carousel block.
+{% endcomment %}
 <div x-data="{ slide: 0, slides: [] }"
     x-init="slides = [...$el.children];"
     class="w-full lg:w-[30rem] flex flex-col lg:flex-row justify-center">

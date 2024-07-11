@@ -1,6 +1,6 @@
 {% load i18n %}
-<div class="hidden lg:block border-b border-hot-light">
-    <nav class="flex h-12 mx-auto max-w-7xl px-4 justify-between items-center">
+<div class="hidden md:block border-b border-hot-light">
+    <nav class="flex min-h-[3rem] mx-auto max-w-7xl px-4 justify-between items-center">
         <!-- Social media icons -->
         {% include "../branded_elements/social_icons.html" %}
         <!-- Search, Language, News, Contact Us -->
@@ -10,10 +10,11 @@
             {% comment %} Strings for Translations {% endcomment %}
             {% translate "News" as news %}
             {% translate "Contact Us" as contact_us %}
-            <li>{% include "../search/search_icon.html" %}</li>
-            <li>{% include "language_switcher.html" %}</li>
-            <li>{% include "../branded_elements/link.html" with link="#" text=news %}</li>
-            <li>{% include "../branded_elements/link.html" with link="#" text=contact_us %}</li>
+            <li class="hidden lg:block">{% include "../search/search_icon.html" %}</li>
+            <li class="lg:hidden border-b border-b-hot-off-white">{% include "ui/components/navigation/SearchForm.html" %}</li>
+            <li class="hidden lg:block">{% include "language_switcher.html" %}</li>
+            <li class="hidden lg:block">{% include "../branded_elements/link.html" with link="#" text=news %}</li>
+            <li class="hidden lg:block">{% include "../branded_elements/link.html" with link="#" text=contact_us %}</li>
         </ul>
     </nav>
 </div>

@@ -1,0 +1,19 @@
+{% comment %}
+No parameters; this component is only used for the search popup on desktop sizes.
+{% endcomment %}
+<div x-show="isSearchClicked"
+     @shown="$refs.searchforminput.focus(); console.log('hi')"
+     class="absolute top-0 left-0 z-[100] w-screen h-screen"
+     role="dialog"
+     aria-modal="true">
+    <!-- Background backdrop, show/hide based on modal state -->
+    <div class="fixed inset-0 bg-transparent bg-opacity-20 backdrop-blur-sm transition-opacity"></div>
+    <div class="fixed inset-0 z-10 w-screen overflow-y-auto p-4 sm:p-6 md:p-20 flex justify-center items-center bg-white/30">
+        <!-- Command palette, show/hide based on modal state -->
+        <div @click.outside="isSearchClicked = false"
+             @keydown.escape.window="isSearchClicked = false"
+             class="max-w-xl w-full m-8 py-2 transform divide-y divide-gray-100 overflow-hidden rounded-xl bg-white shadow-2xl ring-1 ring-black ring-opacity-5 transition-all">
+            {% include "./SearchForm.html" with has_ref=True %}
+        </div>
+    </div>
+</div>

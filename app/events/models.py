@@ -1,14 +1,55 @@
 from django.db import models
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from wagtail.models import Page
 from wagtail.fields import RichTextField, StreamField
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel, PageChooserPanel
 from wagtail.blocks import CharBlock, StreamBlock, StructBlock, URLBlock, RichTextBlock, PageChooserBlock
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
+from wagtail.search import index
 
 
 class EventOwnerPage(Page):
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+
+        keyword = request.GET.get('keyword', '')
+        events_list = IndividualEventPage.objects.live().filter(locale=context['page'].locale)
+        
+        if keyword:
+            events_list = events_list.search(keyword).get_queryset()
+        
+        match request.GET.get('sort', ''):
+            case 'sort.new':
+                events_list = events_list.order_by('-start_date_time')
+            case 'sort.old':
+                events_list = events_list.order_by('start_date_time')
+            case 'sort.titlea':
+                events_list = events_list.order_by('title')
+            case 'sort.titlez':
+                events_list = events_list.order_by('-title')
+            case _:
+                events_list = events_list.order_by('-start_date_time')
+
+        page = request.GET.get('page', 1)
+        paginator = Paginator(events_list, 6)  # if you want more/less items per page (i.e., per load), change the number here to something else
+        try:
+            events = paginator.page(page)
+        except PageNotAnInteger:
+            events = paginator.page(1)
+        except EmptyPage:
+            events = paginator.page(paginator.num_pages)
+        
+        context['events'] = events
+        context['events_paginator'] = paginator
+        context['current_page'] = int(page)
+        return context
+    
     max_count = 1
+
+    subpage_types = [
+        'events.IndividualEventPage'
+    ]
 
     event_location_title = models.CharField(default="Event Location")
     join_event_title = models.CharField(default="Join This Event")
@@ -18,20 +59,39 @@ class EventOwnerPage(Page):
     view_all_events_url = models.URLField(blank=True)
     event_read_more_text = models.CharField(default="Read more")
 
+    keyword_search_hint = models.CharField(default="Search by keyword")
+    sort_by_new = models.CharField(default="Sort by New")
+    sort_by_old = models.CharField(default="Sort by Old")
+    sort_by_titlea = models.CharField(default="Sort by Title Alphabetical")
+    sort_by_titlez = models.CharField(default="Sort by Title Reverse Alphabetical")
+    search_button_text = models.CharField(default="Search")
+    results_text = models.CharField(default="Results")
+
     content_panels = Page.content_panels + [
-        FieldPanel('event_location_title'),
-        FieldPanel('join_event_title'),
-        FieldPanel('rsvp_button_text'),
-        FieldPanel('more_events_title'),
-        FieldPanel('view_all_events_text'),
-        FieldPanel('view_all_events_url'),
-        FieldPanel('event_read_more_text'),
+        MultiFieldPanel([
+            FieldPanel('keyword_search_hint'),
+            FieldPanel('sort_by_new'),
+            FieldPanel('sort_by_old'),
+            FieldPanel('sort_by_titlea'),
+            FieldPanel('sort_by_titlez'),
+            FieldPanel('search_button_text'),
+            FieldPanel('results_text'),
+        ], heading="Event Search Page"),
+        MultiFieldPanel([
+            FieldPanel('event_location_title'),
+            FieldPanel('join_event_title'),
+            FieldPanel('rsvp_button_text'),
+            FieldPanel('more_events_title'),
+            FieldPanel('view_all_events_text'),
+            FieldPanel('view_all_events_url'),
+            FieldPanel('event_read_more_text'),
+        ], heading="Individual Event Page"),
     ]
 
 
 class IndividualEventPage(Page):
-    parent_page_type = [
-        'projects.ProjectOwnerPage'
+    parent_page_types = [
+        'events.EventOwnerPage'
     ]
 
     start_date_time = models.DateTimeField()
@@ -59,6 +119,12 @@ class IndividualEventPage(Page):
     more_events = StreamField([
         ('event', PageChooserBlock(page_type="events.IndividualEventPage"))
     ], use_json_field=True, null=True, blank=True)
+
+    search_fields = Page.search_fields + [
+        index.SearchField('title'),
+        index.SearchField('intro'),
+        index.SearchField('search_description'),
+    ]
 
     content_panels = Page.content_panels + [
         MultiFieldPanel([

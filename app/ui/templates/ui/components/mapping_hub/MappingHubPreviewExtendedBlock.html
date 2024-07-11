@@ -1,0 +1,25 @@
+{% comment %}
+==> PARAMETERS
+- hub: An IndividualMappingHubPage object; the mapping hub page to be previewed
+{% endcomment %}
+{% load wagtailimages_tags %}
+
+<div>
+    <div class="grid">
+        {% image hub.header_image original class="col-start-1 row-start-1 aspect-[2/1] object-cover" %}
+        <div class="col-start-1 row-start-1 border-b-8" style="border-color: {{ hub.main_colour }}; background: linear-gradient(45deg, transparent 0%, transparent 92.4%, {{ hub.main_colour }} 92.5%, {{ hub.main_colour }} 100%);">
+        </div>
+    </div>
+    <div class="flex items-center gap-4 my-4">
+        {% image hub.main_icon original class="w-14 h-auto" %}
+        <h1 class="text-h3 font-semibold">
+            {{hub.title}} {{hub_text}}
+        </h1>
+    </div>
+    <div class="base-article my-4">
+        {{hub.intro|safe}}
+    </div>
+    <p class="text-intro">
+        {% include "ui/components/BaseLink.html" with linktext=learn_more_text|add:" "|add:hub.title|add:" "|add:hub_text linkurl=hub.url %}
+    </p>
+</div>

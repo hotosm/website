@@ -21,6 +21,9 @@ class NewsOwnerPage(Page):
 
         keyword = request.GET.get('keyword', '')
         news_list = IndividualNewsPage.objects.live().filter(locale=context['page'].locale)
+        
+        if keyword:
+            news_list = news_list.search(keyword).get_queryset()
 
         categories = NewsCategory.objects.all()
         tags = [x[4:] for x in request.GET.keys() if x.startswith("tag.")]
@@ -28,24 +31,24 @@ class NewsOwnerPage(Page):
         for category in categories:
             if request.GET.get(str(category), ''):
                 query = query | Q(categories=category)
+        news_list = news_list.filter(query).distinct()
+        
+        query = Q()
         for tag in tags:
             query = query | Q(tags__name=tag)
         news_list = news_list.filter(query).distinct()
 
         match request.GET.get('sort', ''):
             case 'sort.new':
-                news_list = news_list.order_by('date')
-            case 'sort.old':
                 news_list = news_list.order_by('-date')
+            case 'sort.old':
+                news_list = news_list.order_by('date')
             case 'sort.titlea':
                 news_list = news_list.order_by('title')
             case 'sort.titlez':
                 news_list = news_list.order_by('-title')
             case _:
-                news_list = news_list.order_by('date')
-
-        if keyword:
-            news_list = news_list.search(keyword)
+                news_list = news_list.order_by('-date')
 
         page = request.GET.get('page', 1)
         paginator = Paginator(news_list, 6)  # if you want more/less items per page (i.e., per load), change the number here to something else
@@ -63,6 +66,10 @@ class NewsOwnerPage(Page):
         return context
     
     max_count = 1
+
+    subpage_types = [
+        'news.IndividualNewsPage'
+    ]
 
     authors_posted_by_text = models.CharField(default="Posted by", help_text="The text which appears prior to the authors names; with 'posted by', the text displays as 'posted by [author]'.")
     authors_posted_on_text = models.CharField(default="on", help_text="The text which appears prior to the date; with 'on', it would display as 'on [date]'.")
@@ -180,8 +187,9 @@ class IndividualNewsPage(Page):
     search_fields = Page.search_fields + [
         index.SearchField('title'),
         index.SearchField('intro'),
-        index.FilterField('newscategory_id'),  # the console warns you about this but if you don't have this then category search doesn't work
-        index.FilterField('name'),
+        # index.FilterField('newscategory_id'),  # the console warns you about this but if you don't have this then category search doesn't work
+        # index.FilterField('name'),
+        index.SearchField('search_description'),
     ]
 
     content_panels = Page.content_panels + [

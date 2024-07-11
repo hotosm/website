@@ -200,3 +200,7 @@
 .bold-override b {
     font-weight: inherit;
 }
+
+.black-image-redifier {
+    filter: invert(23%) sepia(93%) saturate(1690%) hue-rotate(340deg) brightness(110%) contrast(81%);
+}

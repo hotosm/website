@@ -10,6 +10,11 @@
         <h1 class="text-h2 font-bold mb-8">
             {{ text }}
         </h1>
+        {% if description %}
+            <div class="my-6">
+                {{description|safe}}
+            </div>
+        {% endif %}
         <a href="{{ url }}">
             {% include "components/branded_elements/button.html" with text=buttontext %}
         </a>

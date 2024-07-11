@@ -35,7 +35,7 @@
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 py-6">
                 {% for project in projects %}
-                    {% include "ui/components/projects/ProjectPreviewBlockMapHub.html" with project=project showimage="True" %}
+                    {% include "ui/components/projects/ProjectPreviewBlockMapHub.html" with project=project.specific showimage="True" %}
                 {% endfor %}
             </div>
 

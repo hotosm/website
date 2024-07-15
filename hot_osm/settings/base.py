@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "app.tools_and_resources",
     "app.search_page",
     "app.volunteer_opportunities",
+    "app.rfp",
     "search",
     "users",
     "utils",

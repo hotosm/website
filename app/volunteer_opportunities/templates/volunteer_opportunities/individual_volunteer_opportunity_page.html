@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load static %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+{% load compress %}
+{% block body_class %}template-individualvolunteeropportunitypage{% endblock %}
+{% block extra_css %}
+    {% compress css %}
+    {% endcompress css %}
+{% endblock extra_css %}
+
+{% block content %}
+    <div class="max-w-7xl mx-auto">
+        {% comment %} HEADER {% endcomment %}
+        <div class="base-article px-6 md:px-10 py-5">
+            <h1>{{ page.title }}</h1>
+            <p>
+                {{page.get_parent.specific.posted_by_prefix_text}}
+                {% for poster in page.posters %}
+                    <a href="{{poster.value.url}}"><b class="text-black">{{poster.value.title}}</b></a>
+                    {% if not forloop.last %}
+                    ,
+                    {% endif %}
+                {% endfor %}
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 px-6 md:px-10">
+            {% comment %} BODY {% endcomment %}
+            <div class="base-article-m py-5 col-span-2">
+                {% image page.image original class="pb-8" %}
+                <div class="text-intro">
+                    {{ page.intro|safe }}
+                </div>
+                {{ page.article_body }}
+            </div>
+
+            {% comment %} SIDEBAR {% endcomment %}
+            <div class="base-article py-5 sidebar [&>div]:my-12 [&_div:first-child_hr]:hidden [&_hr]:mb-8 md:w-1/2 lg:w-auto">
+                <div class="">
+                    <h1 class="text-h2 font-bold mb-4">
+                        {{ page.get_parent.specific.contact_title }}
+                    </h1>
+                    {{ page.contact_description|safe }}
+                </div>
+                <div>
+                    <hr />
+                    <h1 class="text-h2 font-bold mb-4">
+                        {{ page.get_parent.specific.application_date_title }}
+                    </h1>
+                    {{ page.application_description|safe }}
+                    <p>
+                        {{ page.application_date }}
+                    </p>
+                </div>
+                <div>
+                    <hr />
+                    <h1 class="text-h2 font-bold mb-4">
+                        {{ page.get_parent.specific.location_title }}
+                    </h1>
+                    {{ page.location_text|safe }}
+                </div>
+            </div>
+        </div>
+
+        <div class="px-6 md:px-10">
+            <div class="my-10">
+                {% include "ui/components/sharers/ShareSection.html" %}
+            </div>
+            <p class="mt-10 mb-20 text-intro">
+                {% include "ui/components/BaseLink.html" with linktext=page.get_parent.specific.go_back_text linkurl=page.get_parent.url %}
+            </p>
+        </div>
+    </div>
+{% endblock %}

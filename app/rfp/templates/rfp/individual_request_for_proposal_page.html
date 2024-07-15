@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load static %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+{% load compress %}
+{% block body_class %}template-individualrequestforproposalpage{% endblock %}
+{% block extra_css %}
+    {% compress css %}
+    {% endcompress css %}
+{% endblock extra_css %}
+
+{% block content %}
+    <div class="max-w-7xl mx-auto">
+        {% comment %} HEADER {% endcomment %}
+        <div class="base-article px-6 md:px-10 py-5">
+            <h1>{{ page.title }} </h1>
+            <p>
+                {{page.get_parent.specific.posted_by_prefix_text}}
+                {% for poster in page.posters %}
+                    <a href="{{poster.value.url}}"><b class="text-black">{{poster.value.title}}</b></a>{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+                <span class="text-hot-red"> • </span>{{ page.post_date }}
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 px-6 md:px-10">
+            {% comment %} BODY {% endcomment %}
+            <div class="py-5 col-span-2 base-article-m">
+                <div class="text-intro font-medium mb-4">
+                    {{ page.intro|safe }}
+                </div>
+                {{ page.article_body }}
+            </div>
+
+            {% comment %} SIDEBAR {% endcomment %}
+            <div class="py-5 sidebar [&>div]:my-12 [&_div:first-child_hr]:hidden [&_hr]:mb-8 md:w-1/2 lg:w-auto">
+                <div>
+                    <h1 class="text-h2 font-bold">
+                        {{ page.get_parent.specific.terms_of_reference_title }}
+                    </h1>
+                </div>
+
+                {% include "./components/SidebarSection.html" with title=page.get_parent.specific.role_title text=page.role no_divider=True %}
+                {% include "./components/SidebarSection.html" with title=page.get_parent.specific.application_close_title text=page.application_close_date %}
+                {% include "./components/SidebarSection.html" with title=page.get_parent.specific.project_duration_title text=page.project_duration %}
+                {% include "./components/SidebarSection.html" with title=page.get_parent.specific.work_location_title text=page.work_location %}
+                {% include "./components/SidebarSection.html" with title=page.get_parent.specific.contract_type_title text=page.contract_type %}
+                {% include "./components/SidebarSection.html" with title=page.get_parent.specific.direct_contact_title text=page.direct_contact %}
+
+                <div class="bg-hot-off-white p-6">
+                    <h1 class="text-h2 font-bold mb-6">
+                        {{page.get_parent.specific.cta_title}}
+                    </h1>
+                    <a href="mailto:{{page.submission_email}}">
+                        {% include "components/branded_elements/button.html" with text=page.get_parent.specific.submission_email_button %}
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="px-6 md:px-10mt-10 mb-20">
+            <p class="text-intro">
+                {% include "ui/components/BaseLink.html" with linktext=page.get_parent.specific.go_back_text linkurl=page.get_parent.url %}
+            </p>
+        </div>
+    </div>
+{% endblock %}

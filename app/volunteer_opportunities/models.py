@@ -64,5 +64,5 @@ class IndividualVolunteerOpportunityPage(Page):
             FieldPanel('application_description'),
             FieldPanel('application_date'),
             FieldPanel('location_text'),
-        ], heading="Sidebar")
+        ], heading="Sidebar"),
     ]

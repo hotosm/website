@@ -7,11 +7,51 @@ from wagtail.models import Page
 
 
 class RequestForProposalOwnerPage(Page):
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+
+        rfps = IndividualRequestForProposalPage.objects.live().filter(locale=context['page'].locale)
+        
+        context['rfps'] = rfps
+        return context
+
     subpage_types = [
         'rfp.IndividualRequestForProposalPage'
     ]
 
     max_count = 1
+
+    header_image = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text="Header image"
+    )
+    header_description = RichTextField(blank=True)
+
+    current_rfps_title = models.CharField(default="Current RFPs")
+    rfp_location_text = models.CharField(default="Location")
+    rfp_deadline_text = models.CharField(default="Deadline")
+    no_rfps_title = models.CharField(default="There are no current RFPs.")
+    no_rfps_description = RichTextField(blank=True)
+
+    aside_block_title = models.CharField(default="Still have questions?")
+    aside_block_description = RichTextField(blank=True)
+
+    job_opportunities_image = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text="Job opportunities image"
+    )
+    job_opportunities_title = models.CharField(default="See Our Job Opportunities")
+    job_opportunities_description = RichTextField(blank=True)
+    job_opportunities_button_text = models.CharField(default="See All Job Opportunities")
+    job_opportunities_button_link = models.URLField(blank=True)
 
     posted_by_prefix_text = models.CharField(default="Posted by")
 
@@ -28,19 +68,43 @@ class RequestForProposalOwnerPage(Page):
     go_back_text = models.CharField(default="Go Back to Request for Proposals")
 
     content_panels = Page.content_panels + [
-        FieldPanel('posted_by_prefix_text'),
         MultiFieldPanel([
-            FieldPanel('terms_of_reference_title'),
-            FieldPanel('role_title'),
-            FieldPanel('application_close_title'),
-            FieldPanel('project_duration_title'),
-            FieldPanel('work_location_title'),
-            FieldPanel('contract_type_title'),
-            FieldPanel('direct_contact_title'),
-            FieldPanel('cta_title'),
-            FieldPanel('submission_email_button'),
-        ], heading="Sidebar"),
-        FieldPanel('go_back_text'),
+            FieldPanel('header_image'),
+            FieldPanel('header_description'),
+        ], heading="Header"),
+        MultiFieldPanel([
+            FieldPanel('current_rfps_title'),
+            FieldPanel('rfp_location_text'),
+            FieldPanel('rfp_deadline_text'),
+            FieldPanel('no_rfps_title'),
+            FieldPanel('no_rfps_description'),
+        ], heading="Body"),
+        MultiFieldPanel([
+            FieldPanel('aside_block_title'),
+            FieldPanel('aside_block_description'),
+        ], heading="Aside"),
+        MultiFieldPanel([
+            FieldPanel('job_opportunities_image'),
+            FieldPanel('job_opportunities_title'),
+            FieldPanel('job_opportunities_description'),
+            FieldPanel('job_opportunities_button_text'),
+            FieldPanel('job_opportunities_button_link'),
+        ], heading="Footer banner"),
+        MultiFieldPanel([
+            FieldPanel('posted_by_prefix_text'),
+            MultiFieldPanel([
+                FieldPanel('terms_of_reference_title'),
+                FieldPanel('role_title'),
+                FieldPanel('application_close_title'),
+                FieldPanel('project_duration_title'),
+                FieldPanel('work_location_title'),
+                FieldPanel('contract_type_title'),
+                FieldPanel('direct_contact_title'),
+                FieldPanel('cta_title'),
+                FieldPanel('submission_email_button'),
+            ], heading="Sidebar"),
+            FieldPanel('go_back_text'),
+        ], heading="Individual RFP Page"),
     ]
 
 

@@ -1,0 +1,12 @@
+<div class="bg-hot-off-white p-6">
+    <h1 class="text-h3 font-bold">
+        {{page.aside_block_title}}
+    </h1>
+    <div class="base-article-m my-4">
+        {{page.aside_block_description|safe}}
+    </div>
+    <p class="text-hot-red font-medium">
+        {{page.aside_block_link_text}}
+        <span class="ml-4">{% include "ui/components/icon_svgs/LinkCaret.html" %}</span>
+    </p>
+</div>

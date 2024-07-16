@@ -17,10 +17,7 @@
             <p>
                 {{page.get_parent.specific.authors_posted_by_text}}
                 {% for author in page.authors %}
-                    <a href="{{author.value.url}}"><b class="text-black">{{author.value.title}}</b></a>
-                    {% if not forloop.last %}
-                    ,
-                    {% endif %}
+                    <a href="{{author.value.url}}"><b class="text-black">{{author.value.title}}</b></a>{% if not forloop.last %}, {% endif %}
                 {% endfor %}
                 {{page.get_parent.specific.authors_posted_on_text}} {{ page.date }}
             </p>

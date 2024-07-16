@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% load static %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+{% load compress %}
+{% block body_class %}template-volunteeropportunityownerpage{% endblock %}
+{% block extra_css %}
+    {% compress css %}
+    {% endcompress css %}
+{% endblock extra_css %}
+
+{% block content %}
+    {% include "ui/components/PageHeaderWithBlur.html" with title=page.title subtitle=page.header_description image=page.header_image %}
+    
+    <div class="max-w-7xl mx-auto my-10">
+        <div class="px-6 md:px-10">
+            <div class="lg:grid lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-2">
+                    {% include "ui/components/TitleWithUnderline.html" with title=page.current_rfps_title %}
+                    <div class="grid gap-8 mt-8">
+                        {% for rfp in rfps %}
+                            <div class="bg-hot-off-white w-full p-6">
+                                <div class="flex-grow">
+                                    <a href="{{rfp.url}}">
+                                        <h1 class="text-h3 font-bold">
+                                            {{rfp.title}}
+                                        </h1>
+                                    </a>
+                                    <p class="mt-4">
+                                        <b>{{page.rfp_location_text}}: </b>
+                                        {{rfp.work_location}}
+                                    </p>
+                                    <p class="mt-2">
+                                        <b>{{page.rfp_deadline_text}}: </b>
+                                        {{rfp.application_close_date}}
+                                    </p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        {% if not rfps %}
+                            <div class="bg-hot-off-white p-6">
+                                <h1 class="text-h3 font-bold">
+                                    {{page.no_rfps_title}}
+                                </h1>
+                                <div class="base-article-m [&_a]:font-bold mt-4">
+                                    {{page.no_rfps_description|safe}}
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="hidden lg:block">
+                    {% include "./components/AsideBlockContents.html" %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="mt-20">
+        {% include "ui/components/sections/NavyBackgroundWithImage.html" with image=page.job_opportunities_image title=page.job_opportunities_title description=page.job_opportunities_description button_text=page.job_opportunities_button_text button_link=page.job_opportunities_button_link %}
+    </div>
+
+    <div class="max-w-7xl mx-auto bg-hot-off-white lg:hidden">
+        <div class="px-6 md:px-10">
+            {% include "./components/AsideBlockContents.html" %}
+        </div>
+    </div>
+{% endblock %}

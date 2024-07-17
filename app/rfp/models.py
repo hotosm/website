@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 from wagtail.fields import RichTextField, StreamField
@@ -11,6 +12,7 @@ class RequestForProposalOwnerPage(Page):
         context = super().get_context(request, *args, **kwargs)
 
         rfps = IndividualRequestForProposalPage.objects.live().filter(locale=context['page'].locale)
+        rfps = rfps.filter(application_close_date__gte=timezone.now().date(), is_active=True)
         
         context['rfps'] = rfps
         return context
@@ -113,6 +115,8 @@ class IndividualRequestForProposalPage(Page):
         'rfp.RequestForProposalOwnerPage'
     ]
 
+    is_active = models.BooleanField(default=True)
+
     posters = StreamField([('poster', PageChooserBlock(page_type="members.IndividualMemberPage"))], use_json_field=True, null=True, blank=True)
     post_date = models.DateField(blank=True, null=True)
 
@@ -132,6 +136,7 @@ class IndividualRequestForProposalPage(Page):
     submission_email = models.EmailField(blank=True)
 
     content_panels = Page.content_panels + [
+        FieldPanel('is_active'),
         FieldPanel('posters'),
         FieldPanel('post_date'),
         FieldPanel('intro'),

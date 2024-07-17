@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 from wagtail.fields import RichTextField, StreamField
@@ -11,6 +12,7 @@ class VolunteerOpportunityOwnerPage(Page):
         context = super().get_context(request, *args, **kwargs)
 
         opportunities = IndividualVolunteerOpportunityPage.objects.live().filter(locale=context['page'].locale)
+        opportunities = opportunities.filter(application_date__gte=timezone.now().date(), is_active=True)
         
         context['opportunities'] = opportunities
         return context
@@ -110,6 +112,8 @@ class IndividualVolunteerOpportunityPage(Page):
         'volunteer_opportunities.VolunteerOpportunityOwnerPage'
     ]
 
+    is_active = models.BooleanField(default=True)
+
     posters = StreamField([('poster', PageChooserBlock(page_type="members.IndividualMemberPage"))], use_json_field=True, null=True, blank=True)
 
     intro = RichTextField(blank=True)
@@ -125,6 +129,7 @@ class IndividualVolunteerOpportunityPage(Page):
     location_text = models.CharField(blank=True)
 
     content_panels = Page.content_panels + [
+        FieldPanel('is_active'),
         FieldPanel('posters'),
         FieldPanel('intro'),
         FieldPanel('article_body'),

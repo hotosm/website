@@ -11,7 +11,7 @@
     <h1 class="text-h3 font-bold col-span-3">
         {{ title }}
     </h1>
-    <a href="{{ linkurl }}" class="text-intro font-medium col-span-1 text-left self-center lg:text-right mt-4 lg:mt-0">
+    <a href="{% include 'ui/components/PageOrLinkHrefText.html' %}" class="text-intro font-medium col-span-1 text-left self-center lg:text-right mt-4 lg:mt-0">
         {{ linktext }}
         <span class="ml-4 text-hot-red" style="{%if arrowcolour%}color: {{arrowcolour}}{%endif%}">
             {% include "ui/components/icon_svgs/LinkCaret.html" %}

@@ -13,6 +13,11 @@ def get_home_page(context):
         return None
 
     home_page = current_page.get_ancestors(inclusive=True).type(HomePage).first().specific
+    
+    if not home_page:
+        home_page = HomePage.objects.live().filter(locale=context['page'].locale).first().specific
+    
+    print(home_page)
 
     return home_page
 

@@ -15,7 +15,7 @@
 {% if description %}
     <p class="font-medium mt-2">{{description|safe}}</p>
 {% endif %}
-<a href="{{ linkurl }}" class="mt-auto pt-6">
+<a href="{% include 'ui/components/PageOrLinkHrefText.html' %}" class="mt-auto pt-6">
     <p class="text-h5 font-medium">
         {{ linktext }}
         <span class="ml-2" 

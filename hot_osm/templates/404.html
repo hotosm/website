@@ -1,4 +1,8 @@
 {% extends "base.html" %}
+
+{% load homepage_tags %}
+{% get_home_page as home_page %}
+
 {% block title %}
     Page not found
 {% endblock title %}
@@ -6,6 +10,8 @@
     template-404
 {% endblock body_class %}
 {% block content %}
-    <h1>Page not found</h1>
-    <h2>Sorry, this page could not be found.</h2>
+    <div class="max-7-xl mx-auto px-6 md:px-10 text-center my-40">
+        <h1 class="font-semibold text-hot-red" style="font-size: 4.44rem;">404</h1>
+        {% include "home/components/404Content.html" %}
+    </div>
 {% endblock content %}

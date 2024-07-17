@@ -1,0 +1,11 @@
+{% if linkurl.0 and linkurl.0.value %}
+    {% if linkurl.0.value.page %}
+        {{linkurl.0.value.page.url}}
+    {% elif linkurl.0.value.url %}
+        {{linkurl.0.value.url}}
+    {% endif %}
+{% else %}
+    {% if linkurl %}
+        {{ linkurl }}
+    {% endif %}
+{% endif %}

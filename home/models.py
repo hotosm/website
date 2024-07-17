@@ -80,6 +80,16 @@ class HomePage(Page):
             ('url', URLBlock(required=False))
         ]))
     ], use_json_field=True, null=True, blank=True, help_text="The links which show in the bottom right corner of the footer; Privacy Policy, Terms and Conditions, etc.")
+    
+    # 404 page
+    e404_title = models.CharField(default="Page not found")
+    e404_description = models.CharField(default="We're sorry, the page you requested could not be found.")
+    e404_links = StreamField([
+        ('link', StructBlock([
+            ('text', CharBlock()),
+            ('url', CharBlock(required=False))
+        ]))
+    ], use_json_field=True, null=True, blank=True, help_text="Links to be shown on the 404 page.")
 
     # Hero section
     image = models.ForeignKey(
@@ -206,12 +216,19 @@ class HomePage(Page):
 
     content_panels = Page.content_panels + [
         MultiFieldPanel([
-            FieldPanel('navigation'),
-            FieldPanel('navigation_buttons'),
-            FieldPanel('footer_candid_seal'),
-            FieldPanel('footer_bottom_copyright'),
-            FieldPanel('footer_bottom_links'),
-        ], heading="Navigation"),
+            MultiFieldPanel([
+                FieldPanel('navigation'),
+                FieldPanel('navigation_buttons'),
+                FieldPanel('footer_candid_seal'),
+                FieldPanel('footer_bottom_copyright'),
+                FieldPanel('footer_bottom_links'),
+            ], heading="Navigation"),
+            MultiFieldPanel([
+                FieldPanel('e404_title'),
+                FieldPanel('e404_description'),
+                FieldPanel('e404_links'),
+            ], heading="404 Page"),
+        ], heading="Universal items"),
         MultiFieldPanel([
             FieldPanel("image"),
             FieldPanel("hero_text"),

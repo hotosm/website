@@ -1,6 +1,7 @@
 from django.db import models
 from wagtail.models import Page
-from wagtail.fields import RichTextField
+from wagtail.fields import StreamField
+from wagtail.blocks import CharBlock, StreamBlock, StructBlock, URLBlock, RichTextBlock, PageChooserBlock
 
 from wagtail.snippets.models import register_snippet
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel, InlinePanel
@@ -29,3 +30,11 @@ class Partner(models.Model):
     
     class Meta:
         verbose_name_plural = "Partners"
+
+
+class LinkOrPageBlock(StreamBlock):
+    page = PageChooserBlock()
+    url = URLBlock()
+
+    class Meta:
+        max_num = 1

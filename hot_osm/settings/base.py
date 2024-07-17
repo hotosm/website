@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     "app.search_page",
     "app.volunteer_opportunities",
     "app.rfp",
+    "app.misc",
     "search",
     "users",
     "utils",

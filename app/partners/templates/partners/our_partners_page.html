@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% load static %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+{% load compress %}
+{% block body_class %}template-ourpartnerspage{% endblock %}
+{% block extra_css %}
+    {% compress css %}
+    {% endcompress css %}
+{% endblock extra_css %}
+
+{% block content %}
+    {% include "ui/components/PageHeaderWithBlur.html" with title=page.title subtitle=page.intro image=page.header_image full_length=True %}
+    
+    <div class="max-w-7xl mx-auto my-10" x-data="{ params: new URLSearchParams((new URL(window.location.href)).search) }">
+        <div class="px-6 md:px-10">
+            <form>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {% comment %} TYPES {% endcomment %}
+                    <div class="relative" x-data="{ show: false }" @click.away="show = false">
+                        <div class="w-full h-full flex justify-between py-2 px-3 bg-hot-off-white items-center cursor-pointer" @click="show = !show">
+                            <p class="pointer-events-none">
+                                {{page.filter_by_type_text}}
+                            </p>
+                            {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-90 text-hot-red" %}
+                        </div>
+                        <div class="absolute z-20 bg-hot-off-white p-4 w-full" x-show="show">
+                            <hr class="border-b-2">
+                            {% for p_type in partner_types %}
+                                <div class="mt-4 flex">
+                                    <label for="cat-{{forloop.counter}}">{{p_type.type_name}}</label>
+                                    <input class="ml-auto checked:bg-hot-red checked:hover:bg-hot-red checked:focus:bg-hot-red" id="cat-{{forloop.counter}}" type="checkbox" name="{{p_type.type_name}}" :checked="params.get('{{p_type.type_name}}')">
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="bg-hot-red text-white font-semibold">
+                        <input type="submit" value="{{page.filter_button_text}}" class="bg-transparent w-full h-full cursor-pointer py-2">
+                    </div>
+                </div>
+            </form>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8 mt-10" id="partners-list">
+                {% for partner in partners %}
+                    <div class="flex justify-center">
+                        {% image partner.partner_logo original class="max-h-24 max-w-36 h-auto w-auto" %}
+                    </div>
+                {% endfor %}
+            </div>
+            <p class="text-center mt-10" id="next-partner" class="{% if not partners.has_next %}hidden{% endif %}">
+                {% if partners.has_next %}
+                        {% comment %} <a href="?page={{ projects.next_page_number }}"></a> {% endcomment %}
+                        <button hx-get="?page={{ partners.next_page_number }}"
+                            hx-trigger="click"
+                            hx-select="#partners-list, #next-partner"
+                            hx-swap="beforeend"
+                            hx-select-oob="#partners-list:beforeend, #next-partner:outerHTML"
+                        >
+                            <span class="border-b-hot-red border-b-2 pb-1 font-medium mr-4 text-intro">
+                                {{page.load_more_partners_text}}
+                            </span>
+                            {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-90 text-hot-red" %}
+                        </button>
+                {% endif %}
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-white my-20">
+                <div>
+                    {% include "ui/components/dogear_boxes/DogearRed.html" with title=page.red_box_title linktext=page.red_box_link_text linkurl=page.red_box_link_url %}
+                </div>
+                <div>
+                    {% include "ui/components/dogear_boxes/DogearBlack.html" with title=page.black_box_title linktext=page.black_box_link_text linkurl=page.black_box_link_url %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

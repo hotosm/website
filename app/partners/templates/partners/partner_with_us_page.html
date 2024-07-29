@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load static %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+{% load compress %}
+{% block body_class %}template-partnerwithuspage{% endblock %}
+{% block extra_css %}
+    {% compress css %}
+    {% endcompress css %}
+{% endblock extra_css %}
+
+{% block content %}
+    {% include "ui/components/PageHeaderWithBlur.html" with title=page.title subtitle=page.header_description image=page.header_image full_length=True %}
+    
+    <div class="max-w-7xl mx-auto my-10">
+        <div class="px-6 md:px-10">
+            <div class="lg:grid lg:grid-cols-6 mb-10">
+                <div class="col-span-5 text-intro font-medium">
+                    {{page.intro|safe}}
+                </div>
+            </div>
+
+            {% include "ui/components/SectionHeadingWithUnderline.html" with title=page.partnership_types_title %}
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-6 mb-20">
+                {% for block in page.partnership_types %}
+                    <div class="p-6 bg-hot-off-white">
+                        {% image block.value.icon original class="h-8 w-8 mt-2" %}
+                        <h1 class="text-h4 font-semibold mt-4">
+                            {{block.value.title}}
+                        </h1>
+                        <div class="base-article-m">
+                            {{block.value.description}}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            {% include "ui/components/FlexTitleWithLink.html" with title=page.meet_our_partners_title linktext=page.view_all_partners_text linkurl=page.view_all_partners_link underline=True %}
+            <div class="mt-6">
+                {% include "ui/components/partners/PartnerViewBlock.html" %}
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-white my-20">
+                <div>
+                    {% include "ui/components/dogear_boxes/DogearRed.html" with title=page.red_box_title linktext=page.red_box_link_text linkurl=page.red_box_link_url %}
+                </div>
+                <div>
+                    {% include "ui/components/dogear_boxes/DogearBlack.html" with title=page.black_box_title linktext=page.black_box_link_text linkurl="mailto:"|add:page.black_box_link_email %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

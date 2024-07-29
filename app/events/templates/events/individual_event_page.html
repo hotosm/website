@@ -36,10 +36,39 @@
                 <h1>
                     {{page.get_parent.specific.event_location_title}}
                 </h1>
-                <p class="my-2">
-                    {{page.event_location}}
-                </p>
+                {% if page.event_host_type %}
+                    <p class="my-2">
+                        {{page.event_host_type}}
+                    </p>
+                {% endif %}
+                {% if page.event_location %}
+                    <p class="my-2">
+                        {{page.event_location}}
+                    </p>
+                {% endif %}
                 <hr class="my-6" />
+
+                {% if page.event_region_hub %}
+                    <h1>
+                        {{page.get_parent.specific.event_region_hub_title}}
+                    </h1>
+                    <p class="my-2">
+                        {{page.event_region_hub.title}}
+                    </p>
+                    <hr class="my-6" />
+                {% endif %}
+
+                {% if page.event_categories %}
+                    <h1>
+                        {{page.get_parent.specific.event_categories_title}}
+                    </h1>
+                    <p class="my-2">
+                        {% for category in page.event_categories.all %}
+                            <a href="{{page.get_parent.url}}?{{category}}=on">{{category}}</a>{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </p>
+                    <hr class="my-6" />
+                {% endif %}
 
                 {% if page.rsvp_description or page.rsvp_link %}
                     <div class="bg-hot-off-white p-8 my-8">

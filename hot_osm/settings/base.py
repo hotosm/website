@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     "app.volunteer_opportunities",
     "app.rfp",
     "app.misc",
+    "app.partners",
     "search",
     "users",
     "utils",

@@ -16,8 +16,6 @@ def get_home_page(context):
     
     if not home_page:
         home_page = HomePage.objects.live().filter(locale=context['page'].locale).first().specific
-    
-    print(home_page)
 
     return home_page
 

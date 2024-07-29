@@ -21,6 +21,63 @@
                         {% include "ui/components/icon_svgs/SearchIcon.html" with class="text-hot-red mx-3" %}
                     </div>
 
+                    {% comment %} HOST TYPE {% endcomment %}
+                    <div class="relative" x-data="{ show: false }" @click.away="show = false">
+                        <div class="w-full h-full flex justify-between py-2 px-3 bg-hot-off-white items-center cursor-pointer" @click="show = !show">
+                            <p class="pointer-events-none">
+                                {{page.host_type_select}}
+                            </p>
+                            {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-90 text-hot-red" %}
+                        </div>
+                        <div class="absolute z-20 bg-hot-off-white p-4 w-full" x-show="show">
+                            <hr class="border-b-2">
+                            {% for event_host_type in event_host_types %}
+                                <div class="mt-4 flex">
+                                    <label for="htype-{{forloop.counter}}">{{event_host_type.type_name}}</label>
+                                    <input class="ml-auto checked:bg-hot-red checked:hover:bg-hot-red checked:focus:bg-hot-red" id="htype-{{forloop.counter}}" type="checkbox" name="{{event_host_type.type_name}}" :checked="params.get('{{event_host_type.type_name}}')">
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    {% comment %} CATEGORY {% endcomment %}
+                    <div class="relative" x-data="{ show: false }" @click.away="show = false">
+                        <div class="w-full h-full flex justify-between py-2 px-3 bg-hot-off-white items-center cursor-pointer" @click="show = !show">
+                            <p class="pointer-events-none">
+                                {{page.category_select}}
+                            </p>
+                            {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-90 text-hot-red" %}
+                        </div>
+                        <div class="absolute z-20 bg-hot-off-white p-4 w-full" x-show="show">
+                            <hr class="border-b-2">
+                            {% for category in categories %}
+                                <div class="mt-4 flex">
+                                    <label for="cat-{{forloop.counter}}">{{category.category_name}}</label>
+                                    <input class="ml-auto checked:bg-hot-red checked:hover:bg-hot-red checked:focus:bg-hot-red" id="cat-{{forloop.counter}}" type="checkbox" name="{{category.category_name}}" :checked="params.get('{{category.category_name}}')">
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    {% comment %} HUB {% endcomment %}
+                    <div class="relative" x-data="{ show: false }" @click.away="show = false">
+                        <div class="w-full h-full flex justify-between py-2 px-3 bg-hot-off-white items-center cursor-pointer" @click="show = !show">
+                            <p class="pointer-events-none">
+                                {{page.filter_by_country}}
+                            </p>
+                            {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-90 text-hot-red" %}
+                        </div>
+                        <div class="absolute z-20 bg-hot-off-white p-4 w-full" x-show="show">
+                            <hr class="border-b-2">
+                            {% for hub in hubs %}
+                                <div class="mt-4 flex">
+                                    <label for="hub-{{forloop.counter}}">{{hub.title}}</label>
+                                    <input class="ml-auto checked:bg-hot-red checked:hover:bg-hot-red checked:focus:bg-hot-red" id="hub-{{forloop.counter}}" type="checkbox" name="{{hub.title}}" :checked="params.get('{{hub.title}}')">
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
                     {% comment %} SORT {% endcomment %}
                     <div class="relative" x-data="{ show: false, setSortType(text) {$refs.sorttype.innerText = text} }" @click.away="show = false">
                         <div class="w-full h-full flex justify-between py-2 px-3 bg-hot-off-white items-center cursor-pointer" @click="show = !show">

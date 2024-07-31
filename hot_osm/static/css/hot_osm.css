@@ -115,6 +115,36 @@
     border-left: 0.2rem solid var(--hot-light-grey);
 }
 
+.base-article ul,
+.base-article-m ul {
+    list-style-type: disc;
+}
+
+.base-article ol,
+.base-article-m ol {
+    list-style-type: decimal;
+}
+
+.base-article ul,
+.base-article-m ul,
+.base-article ol,
+.base-article-m ol {
+    margin-left: 2rem;
+    display: grid;
+    gap: 0.45rem;
+}
+
+.base-article li,
+.base-article-m li {
+    padding-left: 1rem;
+}
+
+.base-article li::marker,
+.base-article-m li::marker {
+    color: var(--hot-red);
+    font-weight: bold;
+}
+
 .base-article-m h1 {
     margin-top: 2.2rem;
     margin-bottom: 0.8rem;

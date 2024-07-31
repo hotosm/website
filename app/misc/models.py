@@ -93,3 +93,55 @@ class WorkingGroupsPage(Page):
         FieldPanel('intro'),
         FieldPanel('working_groups'),
     ]
+
+
+class DataPrinciplesPage(Page):
+    max_count = 1
+
+    header_image = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text="Header image"
+    )
+
+    intro = RichTextField(blank=True)
+
+    body_image = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text="Body image"
+    )
+    body_text = RichTextField(blank=True)
+
+    info_blocks = StreamField([
+        ('blocks', StructBlock([
+            ('icon', ImageChooserBlock()),
+            ('title', CharBlock()),
+            ('description', RichTextBlock())
+        ]))
+    ], use_json_field=True, null=True, blank=True)
+
+    footer_text = RichTextField(blank=True)
+    footer_button_text = models.CharField(default="View the Principles as a Presentation")
+    footer_button_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
+
+    content_panels = Page.content_panels + [
+        FieldPanel('header_image'),
+        MultiFieldPanel([
+            FieldPanel('intro'),
+            FieldPanel('body_image'),
+            FieldPanel('body_text'),
+            FieldPanel('info_blocks'),
+        ], heading="Body"),
+        MultiFieldPanel([
+            FieldPanel('footer_text'),
+            FieldPanel('footer_button_text'),
+            FieldPanel('footer_button_link'),
+        ], heading="Footer"),
+    ]

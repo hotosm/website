@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     "app.rfp",
     "app.misc",
     "app.partners",
+    "app.tech",
     "search",
     "users",
     "utils",

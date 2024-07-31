@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load static %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+{% load compress %}
+{% block body_class %}template-dataprinciplespage{% endblock %}
+{% block extra_css %}
+    {% compress css %}
+    {% endcompress css %}
+{% endblock extra_css %}
+
+{% block content %}
+    {% include "ui/components/PageHeaderWithBlur.html" with title=page.title image=page.header_image endinlarge=True full_length=True %}
+    
+    <div class="max-w-7xl mx-auto my-10">
+        <div class="px-6 md:px-10">
+            <div class="lg:grid lg:grid-cols-6 mb-10">
+                <div class="col-span-5 text-intro font-medium">
+                    {{page.intro|safe}}
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="base-article-m">
+                    {{page.body_text|safe}}
+                </div>
+                <div class="base-article-m">
+                    {% image page.body_image original %}
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 my-10">
+                {% for block in page.info_blocks %}
+                    <div class="bg-hot-off-white p-8">
+                        <h1 class="flex items-center gap-8 text-h3 font-bold pb-4">
+                            {% image block.value.icon original class="inline" %}
+                            <span>
+                                {{block.value.title}}
+                            </span>
+                        </h1>
+                        <div class="base-article-m [&_p]:mb-4">
+                            {{block.value.description}}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="lg:grid lg:grid-cols-6 my-20">
+                <div class="col-span-5">
+                    {{page.footer_text|safe}}
+                    
+                    <div class="mt-8">
+                        <a href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=page.footer_button_link%}">
+                            {% include "components/branded_elements/button.html" with text=page.footer_button_text %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

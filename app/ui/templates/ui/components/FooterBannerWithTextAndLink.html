@@ -15,7 +15,7 @@
                 {{description|safe}}
             </div>
         {% endif %}
-        <a href="{{ url }}">
+        <a href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=url%}">
             {% include "components/branded_elements/button.html" with text=buttontext %}
         </a>
     </div>

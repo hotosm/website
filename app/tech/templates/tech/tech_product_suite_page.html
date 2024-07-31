@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load static %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+{% load compress %}
+{% block body_class %}template-techproductsuitepage{% endblock %}
+{% block extra_css %}
+    {% compress css %}
+    {% endcompress css %}
+{% endblock extra_css %}
+
+{% block content %}
+    {% include "ui/components/PageHeaderWithBlur.html" with title=page.title image=page.header_image endinlarge=True full_length=True %}
+    
+    <div class="max-w-7xl mx-auto my-10">
+        <div class="px-6 md:px-10">
+            <div class="lg:grid lg:grid-cols-6 mb-10">
+                <div class="col-span-5 text-intro font-medium">
+                    {{page.intro|safe}}
+                </div>
+            </div>
+
+            {% include "ui/components/TitleWithUnderline.html" with title=page.tech_principles_title %}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-8 mb-10">
+                {% for principle in page.tech_principle_blocks %}
+                    <div class="bg-hot-off-white p-8">
+                        <h1 class="text-h5 font-bold">
+                            {{principle.value.title}}
+                        </h1>
+                        <div class="">
+                            {{principle.value.description|safe}}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            {% include "ui/components/TitleWithUnderline.html" with title=page.product_suite_title %}
+            <div class="mt-8 mb-20 grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {% for child in page.get_children %}
+                    {% include "ui/components/misc_panels/LinkBlockWithImage.html" with title=child.title description=child.specific.intro image=child.specific.header_image linktext=page.product_suite_learn_more_text|add:" "|add:child.title linkurl=child.url %}
+                {% endfor %}
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-white mt-10 mb-20">
+                <div>
+                    {% include "ui/components/dogear_boxes/DogearRed.html" with title=page.red_box_title linktext=page.red_box_link_text linkurl=page.red_box_link_url %}
+                </div>
+                <div>
+                    {% include "ui/components/dogear_boxes/DogearBlack.html" with title=page.black_box_title linktext=page.black_box_link_text linkurl=page.black_box_link_url %}
+                </div>
+            </div>
+
+            <p class="my-20 text-intro">
+                {% include "ui/components/BaseLink.html" with linktext=page.go_back_text linkurl=page.go_back_link %}
+            </p>
+        </div>
+    </div>
+{% endblock %}

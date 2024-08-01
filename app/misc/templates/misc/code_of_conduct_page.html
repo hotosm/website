@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load static %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+{% load compress %}
+{% block body_class %}template-dataprinciplespage{% endblock %}
+{% block extra_css %}
+    {% compress css %}
+    {% endcompress css %}
+{% endblock extra_css %}
+
+{% block content %}
+    <div class="max-w-7xl mx-auto my-10">
+        <div class="px-6 md:px-10">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-2">
+                    <h1 class="font-semibold text-h1">
+                        {{page.title}}
+                    </h1>
+                    <div class="text-intro font-medium">
+                        {{page.intro|safe}}
+                    </div>
+
+                    <h2 class="font-bold text-h2 mt-8">
+                        {{page.short_version_title}}
+                    </h2>
+                    <div class="base-article-m">
+                        {{page.short_version_body|safe}}
+                    </div>
+
+                    <h2 class="font-bold text-h2 mt-8">
+                        {{page.full_version_title}}
+                    </h2>
+                    <div class="base-article-m">
+                        {{page.full_version_body|safe}}
+                    </div>
+
+                    <h2 class="font-bold text-h2 mt-8">
+                        {{page.complaint_handling_title}}
+                    </h2>
+                    <div class="base-article-m">
+                        {{page.complaint_handling_body|safe}}
+                    </div>
+                </div>
+
+                <div>
+                    <h1 class="text-h2 font-bold">
+                        {{page.our_policies_title}}
+                    </h1>
+                    <div class="grid gap-4 mt-4">
+                        {% for policy in page.our_policies_links %}
+                            <p>
+                                {% include "ui/components/BaseLink.html" with linktext=policy.value.text linkurl=policy.value.link %}
+                            </p>
+                        {% endfor %}
+                    </div>
+
+                    <div class="bg-hot-off-white p-8 mt-16">
+                        <h1 class="font-bold text-h3 mb-8">
+                            {{page.question_block_title}}
+                        </h1>
+                        <a href="{{page.question_block_button_link}}">
+                            {% include "components/branded_elements/button.html" with text=page.question_block_button_text %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -8,6 +8,94 @@ from wagtail.models import Page
 from app.core.models import LinkOrPageBlock
 
 
+class CodeOfConductPage(Page):
+    max_count = 1
+
+    intro = RichTextField(blank=True)
+
+    short_version_title = models.CharField(default="Short Version")
+    short_version_body = RichTextField(blank=True)
+
+    full_version_title = models.CharField(default="Full Version")
+    full_version_body = RichTextField(blank=True)
+
+    complaint_handling_title = models.CharField(default="Complaint Handling Process")
+    complaint_handling_body = RichTextField(blank=True)
+
+    our_policies_title = models.CharField(default="Our Policies")
+    our_policies_links = StreamField([
+        ('blocks', StructBlock([
+            ('text', CharBlock()),
+            ('link', LinkOrPageBlock())
+        ]))
+    ], use_json_field=True, null=True, blank=True, help_text="Links to be shown under the Our Policies section.")
+
+    question_block_title = models.CharField(default="Have a question about the code of conduct?")
+    question_block_button_text = models.CharField(default="Contact Community Working Group")
+    question_block_button_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
+
+    content_panels = Page.content_panels + [
+        MultiFieldPanel([
+            FieldPanel('intro'),
+            FieldPanel('short_version_title'),
+            FieldPanel('short_version_body'),
+            FieldPanel('full_version_title'),
+            FieldPanel('full_version_body'),
+            FieldPanel('complaint_handling_title'),
+            FieldPanel('complaint_handling_body'),
+        ], heading="Body"),
+        MultiFieldPanel([
+            FieldPanel('our_policies_title'),
+            FieldPanel('our_policies_links'),
+            FieldPanel('question_block_title'),
+            FieldPanel('question_block_button_text'),
+            FieldPanel('question_block_button_link'),
+        ], heading="Sidebar"),
+    ]
+
+
+class PrivacyPolicyPage(Page):
+    max_count = 1
+
+    intro = RichTextField(blank=True)
+    brief_body_text = RichTextField(blank=True)
+    table_of_contents_title = models.CharField(default="This Privacy Policy Contains the Following Sections:")
+    body_sections = StreamField([
+        ('blocks', StructBlock([
+            ('title', CharBlock()),
+            ('body', RichTextBlock())
+        ]))
+    ], use_json_field=True, null=True, blank=True, help_text="Sections to be shown in the body following the table of contents; these sections will automatically populate the table of contents.")
+
+    our_policies_title = models.CharField(default="Our Policies")
+    our_policies_links = StreamField([
+        ('blocks', StructBlock([
+            ('text', CharBlock()),
+            ('link', LinkOrPageBlock())
+        ]))
+    ], use_json_field=True, null=True, blank=True, help_text="Links to be shown under the Our Policies section.")
+
+    question_block_title = models.CharField(default="Have a question about the privacy policy?")
+    question_block_button_text = models.CharField(default="Contact HOT")
+    question_block_button_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
+
+    content_panels = Page.content_panels + [
+        MultiFieldPanel([
+            FieldPanel('intro'),
+            FieldPanel('brief_body_text'),
+            FieldPanel('table_of_contents_title'),
+            FieldPanel('body_sections'),
+        ], heading="Body"),
+        MultiFieldPanel([
+            FieldPanel('our_policies_title'),
+            FieldPanel('our_policies_links'),
+            FieldPanel('question_block_title'),
+            FieldPanel('question_block_button_text'),
+            FieldPanel('question_block_button_link'),
+        ], heading="Sidebar"),
+    ]
+
+
 class JoinOurConversationPage(Page):
     max_count = 1
 

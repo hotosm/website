@@ -3,6 +3,8 @@
         {{linkurl.0.value.page.url}}
     {% elif linkurl.0.value.url %}
         {{linkurl.0.value.url}}
+    {% else %}
+        {{linkurl.0.value}}
     {% endif %}
 {% else %}
     {% if linkurl %}

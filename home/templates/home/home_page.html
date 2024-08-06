@@ -30,7 +30,9 @@
                         <div class="w-128 lg:w-1/2 px-12">
                             <div class="font-semibold text-h2 md:text-center lg:text-left leading-tight md:text-h1">{{ page.hero_text }}</div>
                             <div class="mt-10 md:text-center lg:text-left">
-                                {% include "components/branded_elements/button.html" with link="" text=page.hero_cta %}
+                                <a href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=page.hero_cta_link%}">
+                                    {% include "components/branded_elements/button.html" with text=page.hero_cta %}
+                                </a>
                             </div>
                         </div>
                         <!-- Carousel CTA -->
@@ -74,7 +76,7 @@
                         </div>
                     </div>
                     <div class="col-span-2 lg:text-right text-intro">
-                        {% include "ui/components/BaseLink.html" with linktext=page.view_all_programs_text linkurl=page.view_all_programs_link %}
+                        {% include "ui/components/BaseLink.html" with linktext=page.view_all_programs_text linkurl=page.view_all_programs_url %}
                     </div>
                 </div>
                 <div class="mb-10">
@@ -106,7 +108,7 @@
                     <div class="text-intro my-2">
                         {{page.who_we_are_intro_description|safe}}
                     </div>
-                    <a href="{{page.who_we_are_button_link}}">
+                    <a href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=page.who_we_are_button_url%}">
                         {% include "components/branded_elements/button.html" with text=page.who_we_are_button_text classes="mt-4" %}
                     </a>
                 </div>
@@ -128,7 +130,7 @@
                     <div class="text-intro font-medium my-4">
                         {{page.tools_resources_description|safe}}
                     </div>
-                    <a href="{{page.tools_resources_button_url}}">
+                    <a href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=page.tools_resources_button_link%}">
                         {% include "components/branded_elements/button.html" with text=page.tools_resources_button_text classes="mt-4" %}
                     </a>
                 </div>
@@ -145,7 +147,7 @@
                     {% include "ui/components/SectionHeadingWithUnderline.html" with title=page.news_title %}
                 </div>
                 <div class="text-right text-intro self-center">
-                    {% include "ui/components/BaseLink.html" with linktext=page.view_all_news_text linkurl=page.view_all_news_url %}
+                    {% include "ui/components/BaseLink.html" with linktext=page.view_all_news_text linkurl=page.view_all_news_link %}
                 </div>
             </div>
 

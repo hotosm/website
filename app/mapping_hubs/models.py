@@ -10,11 +10,12 @@ from modelcluster.fields import ParentalKey, ParentalManyToManyField
 
 from app.projects.models import IndividualProjectPage
 from app.ui.models import CarouselBlock
+from app.core.models import LinkOrPageBlock
 
 
 class ContactLinkStructBlock(StructBlock):
     link_text = CharBlock(required=True)
-    link_url = URLBlock(required=False, blank=True)
+    link_url = LinkOrPageBlock(required=False, blank=True)
 
 
 class ContactLinkBlock(StreamBlock):
@@ -23,8 +24,9 @@ class ContactLinkBlock(StreamBlock):
 
 class DogearBoxStructBlock(StructBlock):
     title = CharBlock(required=True)
+    description = RichTextBlock(required=False)
     link_text = CharBlock(required=True)
-    link_url = URLBlock(required=False, blank=True)
+    link_url = LinkOrPageBlock(required=False, blank=True)
 
 
 class DogearBoxBlock(StreamBlock):
@@ -57,20 +59,20 @@ class MappingHubProjectsPage(Page):
 
     red_box_title = models.CharField(default="See all of HOT's projects")
     red_box_link_text = models.CharField(default="Explore projects")
-    red_box_link_url = models.URLField(null=True, blank=True)
+    red_box_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
     black_box_title = models.CharField(default="See the many ways to get involved with HOT and open mapping")
     black_box_link_text = models.CharField(default="Get involved")
-    black_box_link_url = models.URLField(null=True, blank=True)
+    black_box_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
 
     content_panels = Page.content_panels + [
         FieldPanel('load_more_projects_text'),
         FieldPanel('projects_by_hub_title'),
         FieldPanel('red_box_title'),
         FieldPanel('red_box_link_text'),
-        FieldPanel('red_box_link_url'),
+        FieldPanel('red_box_link'),
         FieldPanel('black_box_title'),
         FieldPanel('black_box_link_text'),
-        FieldPanel('black_box_link_url'),
+        FieldPanel('black_box_link'),
     ]
 
 
@@ -93,11 +95,46 @@ class OpenMappingHubsPage(Page):
     hub_text = models.CharField(default="Hub", help_text="The text following a hub's name; i.e., if this field is 'Hub', the title for 'Asia-Pacific' would become 'Asia-Pacific Hub'.")
     learn_more_text = models.CharField(default="Learn More about", help_text="The text preceeding the hub's name in the link text; i.e., if this field is 'Learn More about', the link text for 'Asia-Pacific Hub' would become 'Learn More about Asia-Pacific Hub'.")
 
+    header_hub_text_white = models.CharField(default="Open Mapping")
+    header_hub_text_red = models.CharField(default="Hub")
+    header_project_link_text = models.CharField(default="Projects")
+    header_news_link_text = models.CharField(default="News")
+    header_news_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
+    header_events_link_text = models.CharField(default="Events")
+    header_events_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
+
+    partners_section_title = models.CharField(default="Meet Our Partners")
+    partners_section_link_text = models.CharField(default="View All")
+    partners_section_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
+
+    contact_section_title = models.CharField(default="Contact Us")
+
+    subscribe_box_signup_text = models.CharField(default="Sign Up")
+
+    explore_section_title = models.CharField(default="Explore Other Hubs")
+
     content_panels = Page.content_panels + [
         FieldPanel('header_image'),
         FieldPanel('header_description'),
         FieldPanel('hub_text'),
         FieldPanel('learn_more_text'),
+        MultiFieldPanel([
+            MultiFieldPanel([
+                FieldPanel('header_hub_text_white'),
+                FieldPanel('header_hub_text_red'),
+                FieldPanel('header_project_link_text'),
+                FieldPanel('header_news_link_text'),
+                FieldPanel('header_news_link'),
+                FieldPanel('header_events_link_text'),
+                FieldPanel('header_events_link'),
+            ], heading="Header"),
+            FieldPanel('partners_section_title'),
+            FieldPanel('partners_section_link_text'),
+            FieldPanel('partners_section_link'),
+            FieldPanel('contact_section_title'),
+            FieldPanel('subscribe_box_signup_text'),
+            FieldPanel('explore_section_title'),
+        ], heading="Individual Mapping Hub Page"),
     ]
 
 
@@ -129,6 +166,7 @@ class IndividualMappingHubPage(Page):
         related_name="+",
         help_text="A larger image that represents this hub which may be shown on other pages. This should be in a 2:1 aspect ratio; ideally, at least 400x200 pixels.",
     )
+    external_description_long = RichTextField(blank=True, help_text="A long description of the page to be used in external pages, such as the Open Mapping Hubs page.")
     intro = RichTextField(blank=True)
     main_body_text = RichTextField(blank=True)
     
@@ -140,100 +178,74 @@ class IndividualMappingHubPage(Page):
         related_name="+",
         help_text="Header image",
     )
-    header_hub_text_white = models.CharField(default="Open Mapping")
-    header_hub_text_red = models.CharField(default="Hub")
-    header_project_link_text = models.CharField(default="Projects")
-    header_project_link_url = models.URLField(blank=True)
-    header_news_link_text = models.CharField(default="News")
-    header_news_link_url = models.URLField(blank=True)
-    header_events_link_text = models.CharField(default="Events")
-    header_events_link_url = models.URLField(blank=True)
+    header_project_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
     header_carousel = StreamField(CarouselBlock(max_num=3, min_num=3), blank=True, use_json_field=True, null=True)
 
     project_section_title = models.CharField()
     project_section_link_text = models.CharField(blank=True)
-    project_section_link_url = models.URLField(blank=True)
+    project_section_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
     
     news_section_title = models.CharField()
     news_section_description = RichTextField(blank=True)
     news_section_link_text = models.CharField(blank=True)
-    news_section_link_url = models.URLField(blank=True)
+    news_section_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
 
     events_section_title = models.CharField()
     events_section_description = RichTextField(blank=True)
     events_section_link_text = models.CharField(blank=True)
-    events_section_link_url = models.URLField(blank=True)
+    events_section_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
 
     dogear_boxes = StreamField(DogearBoxBlock(), blank=True, use_json_field=True, help_text="These are, for example, the 'Grants' and 'Map and Chat Hour' boxes in the Asia-Pacific page. Please only add these in pairs of 2!")
 
-    partners_section_title = models.CharField(default="Meet Our Partners")
-    partners_section_link_text = models.CharField(default="View All")
-    partners_section_link_url = models.URLField(blank=True)
     partners = ParentalManyToManyField('core.Partner', blank=True)
 
-    contact_section_title = models.CharField(default="Contact Us")
     contact_section_description = RichTextField(blank=True)
     contact_section_links = StreamField(ContactLinkBlock(), blank=True, use_json_field=True)
 
     subscribe_box_text = models.CharField(blank=True)
-    subscribe_box_signup_text = models.CharField(default="Sign Up")
-    subscribe_box_signup_link = models.URLField(blank=True)
-
-    explore_section_title = models.CharField(default="Explore Other Hubs")
+    subscribe_box_signup_url = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
 
     content_panels = Page.content_panels + [
         MultiFieldPanel([
             FieldPanel('main_colour'),
             FieldPanel('main_icon'),
             FieldPanel('main_external_hub_image'),
+            FieldPanel('external_description_long'),
             FieldPanel('intro'),
             FieldPanel('main_body_text'),
         ], heading="Main"),
         MultiFieldPanel([
             FieldPanel('header_image'),
-            FieldPanel('header_hub_text_white'),
-            FieldPanel('header_hub_text_red'),
-            FieldPanel('header_project_link_text'),
-            FieldPanel('header_project_link_url'),
-            FieldPanel('header_news_link_text'),
-            FieldPanel('header_news_link_url'),
-            FieldPanel('header_events_link_text'),
-            FieldPanel('header_events_link_url'),
+            FieldPanel('header_project_link'),
             FieldPanel('header_carousel'),
         ], heading="Header"),
         MultiFieldPanel([
             FieldPanel('project_section_title'),
             FieldPanel('project_section_link_text'),
-            FieldPanel('project_section_link_url'),
+            FieldPanel('project_section_link'),
         ], heading="Project"),
         MultiFieldPanel([
             FieldPanel('news_section_title'),
             FieldPanel('news_section_description'),
             FieldPanel('news_section_link_text'),
-            FieldPanel('news_section_link_url'),
+            FieldPanel('news_section_link'),
         ], heading="News"),
         MultiFieldPanel([
             FieldPanel('events_section_title'),
             FieldPanel('events_section_description'),
             FieldPanel('events_section_link_text'),
-            FieldPanel('events_section_link_url'),
+            FieldPanel('events_section_link'),
         ], heading="Events"),
         FieldPanel('dogear_boxes'),
         MultiFieldPanel([
-            FieldPanel('partners_section_title'),
-            FieldPanel('partners_section_link_text'),
-            FieldPanel('partners_section_link_url'),
             FieldPanel("partners", widget=forms.CheckboxSelectMultiple),
         ], heading="Partners"),
         MultiFieldPanel([
-            FieldPanel('contact_section_title'),
             FieldPanel('contact_section_description'),
             FieldPanel('contact_section_links'),
         ], heading="Contact"),
         MultiFieldPanel([
             FieldPanel('subscribe_box_text'),
-            FieldPanel('subscribe_box_signup_text'),
-            FieldPanel('subscribe_box_signup_link'),
+            FieldPanel('subscribe_box_signup_url'),
         ], heading="Subscription Box"),
-        FieldPanel('explore_section_title'),
     ]

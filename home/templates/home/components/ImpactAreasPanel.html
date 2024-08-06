@@ -59,7 +59,7 @@
                             {{ area.title }}
                         </h1>
                         <div class="pt-2 mb-6">
-                            {{ area.description|richtext }}
+                            {{ area.description|safe }}
                         </div>
                         <a href="{{ area.url }}" class="text-hot-red">
                             <p>

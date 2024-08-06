@@ -19,7 +19,7 @@
                     </h1>
                     <div class="font-medium text-intro">
                         {% if subtitle %}
-                            {{ subtitle|richtext }}
+                            {{ subtitle|safe }}
                         {% endif %}
                     </div>
                 </div>

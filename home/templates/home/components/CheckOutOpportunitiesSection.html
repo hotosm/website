@@ -15,10 +15,10 @@
                 {{home_page.opportunities_description|safe}}
             </div>
             <div class="flex gap-4">
-                <a href="{{home_page.get_involved_button_link}}">
+                <a href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=home_page.get_involved_button_url%}">
                     {% include "components/branded_elements/button.html" with text=home_page.get_involved_button_text classes="mt-4" %}
                 </a>
-                <a href="{{home_page.partner_with_us_button_link}}">
+                <a href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=home_page.partner_with_us_button_url%}">
                     {% include "components/branded_elements/button_bordered.html" with text=home_page.partner_with_us_button_text classes="mt-4" %}
                 </a>
             </div>

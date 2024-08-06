@@ -17,9 +17,9 @@
             <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
                 <div class="lg:col-span-2">
                     <div class="base-article-m">
-                        {{ page.intro|safe }}
+                        {{ page.intro|richtext }}
                     </div>
-                    <a href="{{page.learn_more_button_url}}">
+                    <a href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=page.learn_more_button_url%}">
                         {% include "components/branded_elements/button.html" with text=page.learn_more_button_text classes="mt-4" %}
                     </a>
                 </div>
@@ -30,7 +30,7 @@
                             {% image block.value.image original class="h-10 w-auto" %}
                             <div class="flex-grow">
                                 <h1 class="text-h5 font-bold">{{block.value.title}}</h1>
-                                {{block.value.description|safe}}
+                                {{block.value.description|richtext}}
                             </div>
                         </div>
                     {% endfor %}

@@ -17,10 +17,10 @@
             {% comment %} MAIN BODY PART {% endcomment %}
             <div class="grid grid-cols-1 lg:grid-cols-3 mt-8 gap-8">
                 <div class="text-h5 font-bold">
-                    {{ page.intro|safe }}
+                    {{ page.intro|richtext }}
                 </div>
                 <div class="col-span-2 base-article-m [&_p:first-child]:mt-0">
-                    {{ page.main_body_text|safe }}
+                    {{ page.main_body_text|richtext }}
                 </div>
             </div>
 
@@ -30,7 +30,7 @@
                     {% include "ui/components/SectionHeadingWithUnderline.html" with title=page.project_section_title %}
                 </div>
                 <div class="text-left lg:text-right text-intro mt-4 lg:mt-0 self-center">
-                    {% include "ui/components/BaseLink.html" with linktext=page.project_section_link_text linkurl=page.project_section_link_url %}
+                    {% include "ui/components/BaseLink.html" with linktext=page.project_section_link_text linkurl=page.project_section_link %}
                 </div>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 py-6">
@@ -48,10 +48,10 @@
             {% comment %} PARTNERS SECTION {% endcomment %}
             <div class="grid grid-cols-1 md:grid-cols-2 mt-10">
                 <div>
-                    {% include "ui/components/SectionHeadingWithUnderline.html" with title=page.partners_section_title %}
+                    {% include "ui/components/SectionHeadingWithUnderline.html" with title=page.get_parent.specific.partners_section_title %}
                 </div>
                 <div class="text-left md:text-right text-intro mt-4 md:mt-0 self-center">
-                    {% include "ui/components/BaseLink.html" with linktext=page.partners_section_link_text linkurl=page.partners_section_link_url %}
+                    {% include "ui/components/BaseLink.html" with linktext=page.get_parent.specific.partners_section_link_text linkurl=page.get_parent.specific.partners_section_link %}
                 </div>
             </div>
             {% include "ui/components/partners/PartnerViewBlock.html" with partners=page.partners.all %}
@@ -68,11 +68,11 @@
             {% comment %} CONTACT US SECTION {% endcomment %}
             <div class="max-w-5xl mx-auto my-20">
                 <h1 class="font-bold text-h2 border-b-hot-light-grey border-b-2 pb-4 mb-6">
-                    {{ page.contact_section_title }}
+                    {{ page.get_parent.specific.contact_section_title }}
                 </h1>
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     <div class="text-intro font-medium">
-                        {{ page.contact_section_description|safe }}
+                        {{ page.contact_section_description|richtext }}
                     </div>
                     <div class="text-intro font-medium">
                         {% for link in page.contact_section_links %}
@@ -85,11 +85,11 @@
             </div>
 
             {% comment %} SUBSCRIBE DOGEAR BOX SECTION {% endcomment %}
-            {% include "ui/components/dogear_boxes/DogearAnyColourLong.html" with colour=page.main_colour title=page.subscribe_box_text linktext=page.subscribe_box_signup_text linkurl=page.subscribe_box_signup_link %}
+            {% include "ui/components/dogear_boxes/DogearAnyColourLong.html" with colour=page.main_colour title=page.subscribe_box_text linktext=page.get_parent.specific.subscribe_box_signup_text linkurl=page.subscribe_box_signup_url %}
 
             {% comment %} EXPLORE OTHER HUBS SECTION {% endcomment %}
             <h1 class="text-h2 font-bold mt-20 mb-10">
-                {{ page.explore_section_title }}
+                {{ page.get_parent.specific.explore_section_title }}
             </h1>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {% for hub in other_hubs %}

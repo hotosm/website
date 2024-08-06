@@ -10,7 +10,7 @@
 {% endblock extra_css %}
 
 {% block content %}
-    {% include "ui/components/PageHeaderWithBlur.html" with title=page.title subtitle=page.header_text image=page.header_image full_length=True %}
+    {% include "ui/components/PageHeaderWithBlur.html" with title=page.title subtitle=page.header_text image=page.header_image full_length=True endinlarge=True %}
 
     <div class="max-w-7xl mx-auto mb-20">
         <div class="px-8 my-10">
@@ -18,18 +18,17 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-10">
                 <div class="base-article-m [&_p:first-child]:mt-0 lg:order-2">
                     <div class="text-intro font-medium">
-                        {{ page.intro|safe }}
+                        {{ page.description|richtext }}
                     </div>
-                    {{ page.description|safe }}
                 </div>
-                {% image page.intro_image original class="pb-8 lg:order-1" %}
+                {% image page.intro_image original class="pb-8 lg:order-1 w-full h-auto" %}
             </div>
 
             {% comment %} USE CASES {% endcomment %}
             {% include "ui/components/SectionHeadingWithUnderline.html" with title=page.get_parent.specific.use_cases_title %}
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 my-10">
                 {% for case in page.use_cases %}
-                    {% include "./components/UseCaseBox.html" with number=forloop.counter body=case.value.description linktext=case.value.link_text linkurl=case.value.link_url %}
+                    {% include "./components/UseCaseBox.html" with number=forloop.counter body=case.value.description linktext=case.value.link_text linkurl=case.value.link %}
                 {% endfor %}
             </div>
 

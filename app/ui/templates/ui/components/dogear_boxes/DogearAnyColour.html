@@ -10,7 +10,7 @@
     <h1 class="font-bold text-h2 my-0">
         {{ title }}
     </h1>
-    <a href="{{ linkurl }}" class="mt-auto pt-6">
+    <a href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=linkurl%}" class="mt-auto pt-6">
         <p class="text-intro font-medium">
             {{ linktext }}
             <span class="ml-2 text-hot-red">

@@ -5,7 +5,7 @@
     <div class="my-2">
         {{ body }}
     </div>
-    <a href={{ linkurl }} class="text-hot-red mt-auto font-medium py-2">
+    <a href="{%include 'ui/components/PageOrLinkHrefText.html'%}" class="text-hot-red mt-auto font-medium py-2">
         <p>
             {{ linktext }}
             {% include "ui/components/icon_svgs/LinkCaret.html" %}

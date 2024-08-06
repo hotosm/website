@@ -13,26 +13,26 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 md:px-8 pt-10">
                 <div class="[&_a]:text-intro [&_a]:font-medium [&_a_p]:mt-2 [&_svg]:text-hot-red px-8 md:px-0">
                     <p class="font-bold text-h5">
-                        {{ page.header_hub_text_white }} <span class="text-hot-red">{{ page.header_hub_text_red }}</span>
+                        {{ page.get_parent.specific.header_hub_text_white }} <span class="text-hot-red">{{ page.get_parent.specific.header_hub_text_red }}</span>
                     </p>
                     <h1 class="text-h1 font-semibold mb-4">
                         {{ page.title }}
                     </h1>
-                    <a href="{{ page.header_project_link_url }}">
+                    <a href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=page.header_project_link%}">
                         <p>
-                            {{ page.header_project_link_text }}
+                            {{ page.get_parent.specific.header_project_link_text }}
                             {% include "ui/components/icon_svgs/LinkCaret.html" %}
                         </p>
                     </a>
-                    <a href="{{ page.header_news_link_url }}">
+                    <a href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=page.get_parent.specific.header_news_link%}">
                         <p>
-                            {{ page.header_news_link_text }}
+                            {{ page.get_parent.specific.header_news_link_text }}
                             {% include "ui/components/icon_svgs/LinkCaret.html" %}
                         </p>
                     </a>
-                    <a href="{{ page.header_events_link_url }}">
+                    <a href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=page.get_parent.specific.header_events_link%}">
                         <p>
-                            {{ page.header_events_link_text }}
+                            {{ page.get_parent.specific.header_events_link_text }}
                             {% include "ui/components/icon_svgs/LinkCaret.html" %}
                         </p>
                     </a>

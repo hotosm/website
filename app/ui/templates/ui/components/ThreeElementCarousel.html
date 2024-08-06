@@ -16,7 +16,7 @@ If you'd like, refer to app.ui.models to see the specifics of what makes up a ca
             class="mt-20 lg:w-96 lg:mt-0 backdrop-blur-md p-8 shadow-md h-80 flex flex-col bg-hot-red md:bg-transparent">
             <div class="text-h4 font-bold h-fit">{{ block.value.header }}</div>
             <div class="text-lg font-regular h-fit my-2">{{ block.value.body }}</div>
-            <a href="{{ block.value.action_button.link }}" class="mt-auto">
+            <a href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=block.value.action_button.link%}" class="mt-auto">
                 <div class="text-intro font-medium inline-flex space-x-5 items-center">
                     <span>{{ block.value.action_button.text }}</span>
                     

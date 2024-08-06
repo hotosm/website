@@ -6,11 +6,12 @@ from wagtail.models import Page
 
 from app.impact_areas.models import IndividualImpactAreaPage
 from app.mapping_hubs.models import IndividualMappingHubPage
+from app.core.models import LinkOrPageBlock
 
 
 class ActionButtonBlock(StructBlock):
     text = CharBlock(required=True, help_text="Text to display on the button")
-    link = URLBlock(required=False, blank=True, help_text="URL to link to")
+    link = LinkOrPageBlock(required=False, blank=True, help_text="URL to link to")
 
 
 class SlideBlock(StructBlock):
@@ -77,7 +78,7 @@ class HomePage(Page):
     footer_bottom_links = StreamField([
         ('link', StructBlock([
             ('text', CharBlock()),
-            ('url', URLBlock(required=False))
+            ('link', LinkOrPageBlock(required=False))
         ]))
     ], use_json_field=True, null=True, blank=True, help_text="The links which show in the bottom right corner of the footer; Privacy Policy, Terms and Conditions, etc.")
     
@@ -87,7 +88,7 @@ class HomePage(Page):
     e404_links = StreamField([
         ('link', StructBlock([
             ('text', CharBlock()),
-            ('url', CharBlock(required=False))
+            ('link', CharBlock(required=False))
         ]))
     ], use_json_field=True, null=True, blank=True, help_text="Links to be shown on the 404 page.")
 
@@ -135,7 +136,7 @@ class HomePage(Page):
     our_work_title = models.CharField(default="Our Work")
     highlighted_programs_title = models.CharField(default="Highlighted Programs")
     view_all_programs_text = models.CharField(default="View all programs")
-    view_all_programs_link = models.URLField(blank=True)
+    view_all_programs_url = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
     highlighted_programs_description = RichTextField(blank=True)
     highlighted_programs = StreamField([('program', PageChooserBlock(page_type="programs.IndividualProgramPage"))], use_json_field=True, null=True, blank=True)
     impact_areas_title = models.CharField(default="Impact Areas")
@@ -145,7 +146,7 @@ class HomePage(Page):
     who_we_are_intro_title = RichTextField(blank=True, help_text="Any text written in bold will be displayed as red in this title.", features=['bold'])
     who_we_are_intro_description = RichTextField(blank=True)
     who_we_are_button_text = models.CharField(default="Who We Are")
-    who_we_are_button_link = models.URLField(blank=True)
+    who_we_are_button_url = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
     who_we_are_image = models.ForeignKey(
         "wagtailimages.Image",
         null=True,
@@ -158,7 +159,7 @@ class HomePage(Page):
     mapping_hubs_title = RichTextField(blank=True, help_text="Any text written in bold will be displayed as red in this title.", features=['bold'])
     mapping_hubs_description = RichTextField(blank=True)
     mapping_hubs_link_text = models.CharField(default="Check out HOT's Open Mapping Hubs")
-    mapping_hubs_link_url = models.URLField(blank=True)
+    mapping_hubs_link_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
     mapping_hubs_hub_learn_more = models.CharField(default="Learn More")
     mapping_hubs_background = models.ForeignKey(
         "wagtailimages.Image",
@@ -180,7 +181,7 @@ class HomePage(Page):
     tools_resources_title = RichTextField(blank=True, help_text="Any text written in bold will be displayed as red in this title.", features=['bold'])
     tools_resources_description = RichTextField(blank=True)
     tools_resources_button_text = models.CharField(default="Tools & Resources")
-    tools_resources_button_url = models.URLField(blank=True)
+    tools_resources_button_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
 
     opportunities_image = models.ForeignKey(
         "wagtailimages.Image",
@@ -193,13 +194,13 @@ class HomePage(Page):
     opportunities_title = RichTextField(blank=True, help_text="Any text written in bold will be displayed as red in this title.", features=['bold'])
     opportunities_description = RichTextField(blank=True)
     get_involved_button_text = models.CharField(default="Get Involved")
-    get_involved_button_link = models.URLField(blank=True)
+    get_involved_button_url = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
     partner_with_us_button_text = models.CharField(default="Partner With Us")
-    partner_with_us_button_link = models.URLField(blank=True)
+    partner_with_us_button_url = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
 
     news_title = models.CharField(default="News")
     view_all_news_text = models.CharField(default="View all news")
-    view_all_news_url = models.URLField(blank=True)
+    view_all_news_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
     displayed_news = StreamField([
         ('news_page', PageChooserBlock(page_type="news.IndividualNewsPage"))
     ], use_json_field=True, null=True, blank=True, min_num=3, max_num=3)
@@ -243,7 +244,7 @@ class HomePage(Page):
             FieldPanel('highlighted_programs_description'),
             FieldPanel('highlighted_programs'),
             FieldPanel('view_all_programs_text'),
-            FieldPanel('view_all_programs_link'),
+            FieldPanel('view_all_programs_url'),
             FieldPanel('impact_areas_title'),
             FieldPanel('impact_areas_description'),
         ], heading="Our Work"),
@@ -251,14 +252,14 @@ class HomePage(Page):
             FieldPanel('who_we_are_intro_title'),
             FieldPanel('who_we_are_intro_description'),
             FieldPanel('who_we_are_button_text'),
-            FieldPanel('who_we_are_button_link'),
+            FieldPanel('who_we_are_button_url'),
             FieldPanel('who_we_are_image'),
         ], heading="Who We Are"),
         MultiFieldPanel([
             FieldPanel('mapping_hubs_title'),
             FieldPanel('mapping_hubs_description'),
             FieldPanel('mapping_hubs_link_text'),
-            FieldPanel('mapping_hubs_link_url'),
+            FieldPanel('mapping_hubs_link_link'),
             FieldPanel('mapping_hubs_hub_learn_more'),
             FieldPanel('mapping_hubs_background'),
         ], heading="Mapping Hubs"),
@@ -267,21 +268,21 @@ class HomePage(Page):
             FieldPanel('tools_resources_title'),
             FieldPanel('tools_resources_description'),
             FieldPanel('tools_resources_button_text'),
-            FieldPanel('tools_resources_button_url'),
+            FieldPanel('tools_resources_button_link'),
         ], heading="Tools & Resources"),
         MultiFieldPanel([
             FieldPanel('opportunities_image'),
             FieldPanel('opportunities_title'),
             FieldPanel('opportunities_description'),
             FieldPanel('get_involved_button_text'),
-            FieldPanel('get_involved_button_link'),
+            FieldPanel('get_involved_button_url'),
             FieldPanel('partner_with_us_button_text'),
-            FieldPanel('partner_with_us_button_link'),
+            FieldPanel('partner_with_us_button_url'),
         ], heading="Opportunities"),
         MultiFieldPanel([
             FieldPanel('news_title'),
             FieldPanel('view_all_news_text'),
-            FieldPanel('view_all_news_url'),
+            FieldPanel('view_all_news_link'),
             FieldPanel('displayed_news'),
         ], heading="News"),
         MultiFieldPanel([

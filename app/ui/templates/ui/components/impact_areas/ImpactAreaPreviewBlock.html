@@ -5,7 +5,7 @@
 {% load wagtailimages_tags %}
 
 {% image ia.header_image original as image_p %}
-<div class="mx-4 my-8 lg:my-4">
+<div class="">
     <div class="bg-gradient-to-t from-black/70 to-transparent to-30%">
         <img class="w-full h-72 object-cover -z-10 relative" src="{{ image_p.url }}" />
     </div>
@@ -16,7 +16,7 @@
     </h2>
 
     <div class="text-base py-1">
-        {{ ia.intro|safe }}
+        {{ ia.intro|richtext }}
     </div>
 
     <p class="text-intro font-medium py-1">

@@ -12,11 +12,9 @@ No parameters; it grabs directly from the home page (for the correct locale).
             <ul class="flex text-base-18 p-0 flex-row py-0 gap-x-4 " aria-label="main">
                 {% comment %} NAVBAR ITEMS THAT AREN'T BUTTONS {% endcomment %}
                 {% for item in navigation %}
-                    <div class="hidden lg:block {%if forloop.last%}[&_.nav-grandchild]:left-auto [&_.nav-grandchild]:right-full lg:[&_.caret-arrow]:rotate-180{%endif%}">
-                        <li>
-                            {% include "ui/components/navigation/HeaderNavbarItem.html" with item=item.value %}
-                        </li>
-                    </div>
+                    <li class="hidden lg:block {%if forloop.last%}[&_.nav-grandchild]:left-auto [&_.nav-grandchild]:right-full lg:[&_.caret-arrow]:rotate-180{%endif%}">
+                        {% include "ui/components/navigation/HeaderNavbarItem.html" with item=item.value %}
+                    </li>
                 {% endfor %}
 
                 {% comment %} NAVBAR ITEM BUTTONS {% endcomment %}
@@ -27,7 +25,7 @@ No parameters; it grabs directly from the home page (for the correct locale).
                 {% endfor %}
 
                 {% comment %} MOBILE BURGER/X BUTTON FOR OPENING/CLOSING THE NAV MENU {% endcomment %}
-                <div class="lg:hidden" @click="expanded = !expanded">
+                <li class="lg:hidden" @click="expanded = !expanded">
                     <svg x-show="!expanded"
                         class="h-6 w-6"
                         fill="none"
@@ -46,7 +44,7 @@ No parameters; it grabs directly from the home page (for the correct locale).
                         aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                     </svg>
-                </div>
+                </li>
             </ul>
         </nav>
     </div>

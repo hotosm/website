@@ -9,12 +9,13 @@ from wagtail.images.blocks import ImageChooserBlock
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 
 from app.projects.models import IndividualProjectPage
+from app.core.models import LinkOrPageBlock
 
 
 class UseCaseStructBlock(StructBlock):
     description = RichTextBlock()
     link_text = CharBlock()
-    link_url = URLBlock(blank=True, null=True)
+    link = LinkOrPageBlock(blank=True, null=True)
 
 
 class UseCaseBlock(StreamBlock):
@@ -64,6 +65,8 @@ class IndividualImpactAreaPage(Page):
         related_name="+",
         help_text="The icon representing this page which is shown for previews of this page on other pages. This should be a purely black image which is ideally as wide as it is tall."
     )
+    intro = RichTextField(blank=True, help_text="This text will not be shown on the page itself, and will instead be shown as the short description for the page for instances such as the Search page or the Impact Areas page.")
+    
     intro_image = models.ForeignKey(
         "wagtailimages.Image",
         null=True,
@@ -72,7 +75,6 @@ class IndividualImpactAreaPage(Page):
         related_name="+",
         help_text="Intro image"
     )
-    intro = RichTextField(blank=True)
     description = RichTextField(blank=True)
 
     use_cases = StreamField(UseCaseBlock(), use_json_field=True, blank=True, null=True)
@@ -84,8 +86,10 @@ class IndividualImpactAreaPage(Page):
         ], heading="Header"),
         MultiFieldPanel([
             FieldPanel('external_icon'),
-            FieldPanel('intro_image'),
             FieldPanel('intro'),
+        ], heading="External"),
+        MultiFieldPanel([
+            FieldPanel('intro_image'),
             FieldPanel('description'),
         ], heading="Body"),
         MultiFieldPanel([
@@ -94,25 +98,12 @@ class IndividualImpactAreaPage(Page):
     ]
 
 
-class ImpactAreaStructBlock(StructBlock):
-    image = ImageChooserBlock()
-    title = CharBlock()
-    description = RichTextBlock()
-    link = URLBlock(required=False)
-
-
-class ImpactAreaBlock(StreamBlock):
-    impact_area_block = ImpactAreaStructBlock()
-
-
 class ImpactAreasPage(Page):
     max_count = 1
     
     subpage_types = [
         'impact_areas.IndividualImpactAreaPage'
     ]
-    
-    intro = RichTextField(blank=True)
 
     image = models.ForeignKey(
         "wagtailimages.Image",
@@ -122,8 +113,10 @@ class ImpactAreasPage(Page):
         related_name="+",
         help_text="Header image"
     )
-
-    impact_area_blocks = StreamField(ImpactAreaBlock(), use_json_field=True, null=True)
+    header_text = RichTextField(blank=True)
+    
+    intro = RichTextField(blank=True)
+    description = RichTextField(blank=True)
 
     # > IMPACT AREA SHARED FIELDS
     use_cases_title = models.CharField(default="Use Cases")
@@ -146,9 +139,10 @@ class ImpactAreasPage(Page):
     content_panels = Page.content_panels + [
         MultiFieldPanel([
             FieldPanel('image'),
-            FieldPanel('intro')
+            FieldPanel('header_text'),
         ], heading="Header section"),
-        FieldPanel('impact_area_blocks'),
+        FieldPanel('intro'),
+        FieldPanel('description'),
         MultiFieldPanel([
             MultiFieldPanel([
                 FieldPanel('use_cases_title'),

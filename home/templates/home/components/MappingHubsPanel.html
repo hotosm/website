@@ -18,7 +18,7 @@
                     {{ page.mapping_hubs_description|safe }}
                 </div>
                 
-                <a href="{{page.mapping_hubs_link_url}}" class="font-medium text-intro mt-4">
+                <a href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=page.mapping_hubs_link_link%}" class="font-medium text-intro mt-4">
                     <p class="text-hot-red">
                         <span class="text-white mr-2">{{ page.mapping_hubs_link_text }}</span>
                         {% include "ui/components/icon_svgs/LinkCaret.html" with class="" %}

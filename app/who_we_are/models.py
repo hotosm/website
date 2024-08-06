@@ -8,6 +8,8 @@ from wagtail.blocks import CharBlock, StreamBlock, StructBlock, URLBlock, RichTe
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
 from wagtail.images.blocks import ImageChooserBlock
 
+from app.core.models import LinkOrPageBlock
+
 
 class IntroInfoBlock(StructBlock):
     image = ImageChooserBlock()
@@ -17,7 +19,7 @@ class IntroInfoBlock(StructBlock):
 
 class TextAndLinkBlock(StructBlock):
     text = CharBlock()
-    link = URLBlock(blank=True, required=False)
+    link = LinkOrPageBlock(blank=True, required=False)
 
 
 class OtherPagePreviewBlock(StructBlock):
@@ -38,7 +40,7 @@ class WhoWeArePage(Page):
     )
     intro = RichTextField(blank=True)
     learn_more_button_text = models.CharField(default="Learn More About Our Living Strategy")
-    learn_more_button_url = models.URLField(blank=True)
+    learn_more_button_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
     intro_info_blocks = StreamField([('info_block', IntroInfoBlock())], use_json_field=True, null=True, blank=True)
 
     our_approach_image = models.ForeignKey(
@@ -51,7 +53,7 @@ class WhoWeArePage(Page):
     )
     our_approach_title = models.CharField(default="Our Approach")
     our_approach_description = models.CharField(blank=True)
-    our_approach_button_url = models.URLField(blank=True)
+    our_approach_button_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
     our_approach_button_text = models.CharField(default="Our Approach")
 
     our_people_title = models.CharField(default="Our People")
@@ -62,7 +64,7 @@ class WhoWeArePage(Page):
 
     partners_title = models.CharField(default="Meet Our Partners")
     partners_view_all_text = models.CharField(default="View All Partners")
-    partners_view_all_url = models.URLField(blank=True)
+    partners_view_all_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
     partners = ParentalManyToManyField('core.Partner', blank=True)
 
     work_hot_image = models.ForeignKey(
@@ -76,7 +78,7 @@ class WhoWeArePage(Page):
     work_hot_title = models.CharField(default="Work for HOT")
     work_hot_description = RichTextField(blank=True)
     work_hot_button_text = models.CharField(default="View all Job Opportunities")
-    work_hot_button_link = models.URLField(blank=True)
+    work_hot_button_url = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
 
     our_policies_title = models.CharField(default="Our Policies")
     our_policies_description = RichTextField(blank=True)
@@ -85,25 +87,25 @@ class WhoWeArePage(Page):
     red_box_title = models.CharField(default="Annual Reports")
     red_box_description = RichTextField(default="Access our annual report archive.")
     red_box_link_text = models.CharField(default="Check all Annual Reports")
-    red_box_link_url = models.URLField(null=True, blank=True)
+    red_box_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
     black_box_title = models.CharField(default="Our Financial Reports")
     black_box_description = RichTextField(default="Access older financial reports and organization bylaws in our archive.")
     black_box_link_text = models.CharField(default="Check all Financial Reports")
-    black_box_link_url = models.URLField(null=True, blank=True)
+    black_box_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
 
     content_panels = Page.content_panels + [
         MultiFieldPanel([
             FieldPanel('header_image'),
             FieldPanel('intro'),
             FieldPanel('learn_more_button_text'),
-            FieldPanel('learn_more_button_url'),
+            FieldPanel('learn_more_button_link'),
             FieldPanel('intro_info_blocks'),
         ], heading="Introduction"),
         MultiFieldPanel([
             FieldPanel('our_approach_image'),
             FieldPanel('our_approach_title'),
             FieldPanel('our_approach_description'),
-            FieldPanel('our_approach_button_url'),
+            FieldPanel('our_approach_button_link'),
             FieldPanel('our_approach_button_text'),
         ], heading="Our Approach"),
         MultiFieldPanel([
@@ -115,7 +117,7 @@ class WhoWeArePage(Page):
         MultiFieldPanel([
             FieldPanel('partners_title'),
             FieldPanel('partners_view_all_text'),
-            FieldPanel('partners_view_all_url'),
+            FieldPanel('partners_view_all_link'),
             FieldPanel('partners', widget=forms.CheckboxSelectMultiple),
         ], heading="Partners"),
         MultiFieldPanel([
@@ -123,7 +125,7 @@ class WhoWeArePage(Page):
             FieldPanel('work_hot_title'),
             FieldPanel('work_hot_description'),
             FieldPanel('work_hot_button_text'),
-            FieldPanel('work_hot_button_link'),
+            FieldPanel('work_hot_button_url'),
         ], heading="Work for HOT"),
         MultiFieldPanel([
             FieldPanel('our_policies_title'),
@@ -134,10 +136,10 @@ class WhoWeArePage(Page):
             FieldPanel('red_box_title'),
             FieldPanel('red_box_description'),
             FieldPanel('red_box_link_text'),
-            FieldPanel('red_box_link_url'),
+            FieldPanel('red_box_link'),
             FieldPanel('black_box_title'),
             FieldPanel('black_box_description'),
             FieldPanel('black_box_link_text'),
-            FieldPanel('black_box_link_url'),
+            FieldPanel('black_box_link'),
         ], heading="Dogear Boxes"),
     ]

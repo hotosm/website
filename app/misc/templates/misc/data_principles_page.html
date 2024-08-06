@@ -16,13 +16,13 @@
         <div class="px-6 md:px-10">
             <div class="lg:grid lg:grid-cols-6 mb-10">
                 <div class="col-span-5 text-intro font-medium">
-                    {{page.intro|safe}}
+                    {{page.intro|richtext}}
                 </div>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div class="base-article-m">
-                    {{page.body_text|safe}}
+                    {{page.body_text|richtext}}
                 </div>
                 <div class="base-article-m">
                     {% image page.body_image original %}
@@ -47,7 +47,7 @@
 
             <div class="lg:grid lg:grid-cols-6 my-20">
                 <div class="col-span-5">
-                    {{page.footer_text|safe}}
+                    {{page.footer_text|richtext}}
                     
                     <div class="mt-8">
                         <a href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=page.footer_button_link%}">

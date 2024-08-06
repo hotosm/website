@@ -59,9 +59,9 @@
                             {{ area.title }}
                         </h1>
                         <div class="pt-2 mb-6">
-                            {{ area.intro|safe }}
+                            {{ area.description|safe }}
                         </div>
-                        <a href="{{ area.url }}" class="text-hot-red">
+                        <a href="{{ area.url }}" class="text-hot-red font-medium">
                             <p>
                                 <span class="mr-2">{{ page.impact_areas_learn_more }}</span>
                                 {% include "ui/components/icon_svgs/LinkCaret.html" %}

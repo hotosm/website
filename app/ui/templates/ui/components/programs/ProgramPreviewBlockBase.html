@@ -3,6 +3,7 @@
 - program: An IndividualProgramPage object; the program page to be previewed
 {% endcomment %}
 
+{% load wagtailcore_tags %}
 {% load wagtailimages_tags %}
 
 {% image program.header_image original as image_p %}
@@ -13,7 +14,7 @@
                 <h1 class="text-h5 font-bold mb-2">
                     {{ program.title }}
                 </h1>
-                {{ program.subtitle|safe }}
+                {{ program.subtitle|richtext }}
             </div>
         </div>
     </div>

@@ -10,15 +10,14 @@ from wagtail.models import Page
 from app.core.models import LinkOrPageBlock, Partner, PartnerType
 
 
-# The "partners" snippet is in the core app's models.
+# The "partners" and "partner types" snippets are in the core app's models.
 
 class PartnerWithUsPage(Page):
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
-
-        partners = Partner.objects.all()
         
-        context['partners'] = partners
+        context['partners'] = Partner.objects.all()
+        context['partner_types'] = PartnerType.objects.all()
         return context
     
     max_count = 1
@@ -36,13 +35,6 @@ class PartnerWithUsPage(Page):
     intro = RichTextField(blank=True)
 
     partnership_types_title = models.CharField(default="Types of Partnerships")
-    partnership_types = StreamField([
-        ('blocks', StructBlock([
-            ('icon', ImageChooserBlock()),
-            ('title', CharBlock()),
-            ('description', RichTextBlock())
-        ]))
-    ], use_json_field=True, null=True, blank=True, help_text="Blocks to be shown under the Types of Partnerships section.")
 
     meet_our_partners_title = models.CharField(default="Meet Our Partners")
     view_all_partners_text = models.CharField(default="View All Partners")
@@ -63,7 +55,6 @@ class PartnerWithUsPage(Page):
         FieldPanel('intro'),
         MultiFieldPanel([
             FieldPanel('partnership_types_title'),
-            FieldPanel('partnership_types'),
         ], heading="Types of Partnerships"),
         MultiFieldPanel([
             FieldPanel('meet_our_partners_title'),

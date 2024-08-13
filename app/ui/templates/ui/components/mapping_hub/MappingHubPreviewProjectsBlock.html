@@ -1,0 +1,9 @@
+{% comment %}
+==> PARAMETERS
+- hub: An IndividualMappingHubPage object; the mapping hub page to be previewed
+{% endcomment %}
+{% load wagtailimages_tags %}
+
+<a href="{{ hub_project.url }}">
+    {% include "./MappingHubPreviewBlockBase.html" with hub=hub_project.get_parent.specific %}
+</a>

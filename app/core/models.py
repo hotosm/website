@@ -2,7 +2,7 @@ from django import forms
 from django.db import models
 
 from wagtail.models import Page
-from wagtail.fields import StreamField
+from wagtail.fields import StreamField, RichTextField
 from wagtail.blocks import CharBlock, StreamBlock, StructBlock, URLBlock, RichTextBlock, PageChooserBlock
 from wagtail.snippets.models import register_snippet
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel, InlinePanel
@@ -11,9 +11,21 @@ from wagtail.admin.panels import FieldPanel, MultiFieldPanel, InlinePanel
 @register_snippet
 class PartnerType(models.Model):
     type_name = models.CharField()
+    type_icon = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text="Icon for the partner type"
+    )
+    type_description = RichTextField(blank=True)
 
     panels = [
-        FieldPanel("type_name")
+        FieldPanel("type_name"),
+        MultiFieldPanel([
+            FieldPanel('type_icon'),
+            FieldPanel('type_description'),
+        ], heading="These will show in the Partner With Us page - an info block is automatically created for each partner type.")
     ]
 
     def __str__(self):

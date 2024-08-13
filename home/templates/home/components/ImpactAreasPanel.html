@@ -1,3 +1,4 @@
+{% load wagtailcore_tags %}
 {% load wagtailimages_tags %}
 <div x-data="{ selIndex: 0, carIndex: 0, 
                getRelCar(x) {return (x + this.carIndex) % {{ impact_areas|length }}}, 
@@ -59,7 +60,7 @@
                             {{ area.title }}
                         </h1>
                         <div class="pt-2 mb-6">
-                            {{ area.description|safe }}
+                            {{ area.description|richtext }}
                         </div>
                         <a href="{{ area.url }}" class="text-hot-red font-medium">
                             <p>

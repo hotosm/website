@@ -1,0 +1,10 @@
+{% load wagtailimages_tags %}
+
+<a href="{{ area.url }}{{ link_addendum }}" class="rounded-2xl shadow-md">
+    <div class="bg-hot-off-white p-6 text-center font-medium text-intro h-full">
+        {% image area.external_icon fill-200x200 class="px-10" %}
+        <p>
+            {{ area.title }}
+        </p>
+    </div>
+</a>

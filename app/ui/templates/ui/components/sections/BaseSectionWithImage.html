@@ -15,6 +15,7 @@
 - imageright: if truthy, the image will always be on the right on desktop size
 - imagenotwide: if truthy, the image will not stretch to the edge of the screen in tablet/mobile sizes
 {% endcomment %}
+{% load wagtailcore_tags %}
 {% load wagtailimages_tags %}
 
 <div class="mx-auto max-w-7xl grid lg:grid-cols-5">
@@ -22,13 +23,13 @@
     <div class="min-h-[20rem] bg-cover bg-no-repeat lg:col-span-2 {%if imageright%}lg:order-2{%else%}lg:order-1{%endif%} {%if imagebottom%}order-2{%endif%} {%if imagenotwide%}mx-6 md:mx-10 lg:ml-0{%endif%}" style="background-image: url('{{image_p.url}}')"></div>
     <div class="px-6 md:px-10 py-10 flex flex-col justify-center lg:col-span-3 {%if imageright%}lg:order-1{%else%}lg:order-2{%endif%}">
         <div class="text-h2 [&_b]:text-hot-red bold-override font-bold lg:font-semibold">
-            {{title|safe}}
+            {{title|richtext}}
         </div>
         {% if title_underline %}
             <hr class="border-hot-red w-20 border-b-2" />
         {% endif %}
         <div class="{%if bigdescription%}text-intro{%endif%} font-medium my-4 base-article-m">
-            {{description|safe}}
+            {{description|richtext}}
         </div>
         <div class="flex gap-4">
             {% if button2_text %}

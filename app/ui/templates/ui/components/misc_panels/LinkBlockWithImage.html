@@ -5,13 +5,14 @@
 - linktext: string; the text to show for the link
 - linkurl: string; the desired url
 {% endcomment %}
+{% load wagtailcore_tags %}
 {% load wagtailimages_tags %}
 
 <div>
     {% image image original class="aspect-[2/1] object-cover" %}
     <h1 class="my-2 text-h3 font-bold">{{title}}</h1>
     <div class="my-2">
-        {{description|safe}}
+        {{description|richtext}}
     </div>
     <p class="font-medium text-intro mt-2">
         {% include "ui/components/BaseLink.html" %}

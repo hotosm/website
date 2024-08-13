@@ -4,6 +4,7 @@ No parameters; it grabs directly from the home page (for the correct locale).
 {% load homepage_tags %}
 {% get_home_page as home_page %}
 {% get_navigation as navigation %}
+{% load wagtailcore_tags %}
 {% load wagtailimages_tags %}
 
 <div class="bg-hot-barely-not-white py-10">
@@ -48,7 +49,7 @@ No parameters; it grabs directly from the home page (for the correct locale).
                 {% endfor %}
             </div>
             <div class="lg:order-1 col-span-2 [&_a]:text-hot-red [&_a]:font-bold mt-4 lg:mt-0">
-                {{home_page.footer_bottom_copyright|safe}}
+                {{home_page.footer_bottom_copyright|richtext}}
             </div>
         </div>
     </div>

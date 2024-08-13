@@ -2,6 +2,7 @@
 ==> PARAMETERS
 - hub: An IndividualMappingHubPage object; the mapping hub page to be previewed
 {% endcomment %}
+{% load wagtailcore_tags %}
 {% load wagtailimages_tags %}
 
 <div>
@@ -17,7 +18,7 @@
         </h1>
     </div>
     <div class="base-article my-4">
-        {{hub.external_description_long|safe}}
+        {{hub.external_description_long|richtext}}
     </div>
     <p class="text-intro">
         {% include "ui/components/BaseLink.html" with linktext=learn_more_text|add:" "|add:hub.title|add:" "|add:hub_text linkurl=hub.url %}

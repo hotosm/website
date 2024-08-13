@@ -2,6 +2,7 @@
 ==> PARAMETERS
 - event: an IndividualEventPage object; should be passed directly here
 {% endcomment %}
+{% load wagtailcore_tags %}
 {% load wagtailimages_tags %}
 
 {% image event.image original as image_p %}
@@ -35,7 +36,7 @@
     <hr class="border-b-2 my-2" />
 
     <p class="text-h5 font-bold mt-4">{{event.title}}</p>
-    <div class="my-2 [&_p]:text-small">{{event.intro|safe}}</div>
+    <div class="my-2 [&_p]:text-small">{{event.intro|richtext}}</div>
 
     <div class="flex gap-4 mt-4">
         <p class="text-hot-red">

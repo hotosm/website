@@ -8,12 +8,13 @@
     - it's just using css styling, so you can use anything that a css style color would use
       (including variables, so you should probably use the colours from the hot_osm.css!)
 {% endcomment %}
+{% load wagtailcore_tags %}
 
 <h1 class="font-bold text-h2 my-0">
     {{ title }}
 </h1>
 {% if description %}
-    <p class="font-medium mt-2">{{description|safe}}</p>
+    <p class="font-medium mt-2">{{description|richtext}}</p>
 {% endif %}
 <a href="{% include 'ui/components/PageOrLinkHrefText.html' %}" class="mt-auto pt-6">
     <p class="text-h5 font-medium">

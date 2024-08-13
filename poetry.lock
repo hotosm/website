@@ -1512,6 +1512,23 @@ docs = ["Sphinx (>=6.0)", "myst_parser (>=0.18.1,<1.0)", "pyenchant (>=3.1.1,<4)
 testing = ["dj-database-url (>=2.0.0)", "pre-commit (<3.0)"]
 
 [[package]]
+name = "wagtailgeowidget"
+version = "8.1.1"
+description = "Wagtail-Geo-Widget is the complete map solution for your Wagtail site."
+optional = false
+python-versions = "*"
+files = [
+    {file = "wagtailgeowidget-8.1.1-py3-none-any.whl", hash = "sha256:30379aaf773762c36d139ababdf239ce77aa6514a1d80cbffcbdb5a495626b0e"},
+    {file = "wagtailgeowidget-8.1.1.tar.gz", hash = "sha256:3fbf83da821c787a3dae03885861e96a89e0cf0dd680b0ac158a4d8a55c5e7ec"},
+]
+
+[package.dependencies]
+Wagtail = ">=4.1"
+
+[package.extras]
+test = ["factory-boy", "pytest", "pytest-django"]
+
+[[package]]
 name = "wagtailmenus"
 version = "4.0"
 description = "An app to help you manage menus in your Wagtail projects more consistently."
@@ -1599,4 +1616,4 @@ testing = ["Pillow (>=9.1.0,<11.0.0)", "Wand (>=0.6,<1.0)", "black (==22.3.0)", 
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "285a20e6be8789e4fb1192672ffcb57b45e91a88394630a1817c22f69d03bb95"
+content-hash = "776b17be304318286f118cf6e4220cb1a41020338da110842179e2af7256b31d"

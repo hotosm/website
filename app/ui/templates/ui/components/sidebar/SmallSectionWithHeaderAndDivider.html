@@ -3,11 +3,12 @@
 - header: The text for the header; a string
 - text: The text for the body; an element. Should be a <p> element
 {% endcomment %}
+{% load wagtailcore_tags %}
 
 <div class="text-intro">
     <p class="font-bold mb-2">{{ header }}</p>
     <p>
-        {{ text|safe }}
+        {{ text|richtext }}
     </p>
 
     <hr class="border-black my-6" />

@@ -1,0 +1,4 @@
+<div class="flex items-center w-fit h-fit" @click="hit()" x-data="{ status: 'status{{status_id}}' }">
+    <input class="checked:bg-hot-red checked:hover:bg-hot-red checked:focus:bg-hot-red" type="radio" name="status" :id="status" :value="status" :checked="(params.get('status') == status || (!params.get('status')) && status == 'statusnone') ? 'on' : ''">
+    <label class="pl-2" :for="status">{{status_by}}</label>
+</div>

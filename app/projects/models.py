@@ -8,6 +8,10 @@ from wagtail.fields import RichTextField, StreamField
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel, PageChooserPanel
 from wagtail.blocks import CharBlock, StreamBlock, StructBlock, URLBlock, RichTextBlock, PageChooserBlock
 from wagtail.search import index
+from wagtail.snippets.models import register_snippet
+
+from wagtailgeowidget.panels import LeafletPanel
+
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
 
 
@@ -54,6 +58,7 @@ class ProjectOwnerPage(Page):
     duration_title = models.CharField(default="Duration")
     partners_title = models.CharField(default="Partners")
     tools_title = models.CharField(default="Tools")
+    types_title = models.CharField(default="Project Type")
     contact_title = models.CharField(default="Contact")
 
     related_news_title = models.CharField(default="Related News")
@@ -82,6 +87,7 @@ class ProjectOwnerPage(Page):
                 FieldPanel('duration_title'),
                 FieldPanel('partners_title'),
                 FieldPanel('tools_title'),
+                FieldPanel('types_title'),
                 FieldPanel('contact_title'),
                 MultiFieldPanel([
                     FieldPanel('related_news_title'),
@@ -102,6 +108,33 @@ class ProjectOwnerPage(Page):
             ], heading="Footer"),
         ], heading="Individual Project Page"),
     ]
+
+
+@register_snippet
+class ProjectType(models.Model):
+    type_name = models.CharField()
+
+    panels = [
+        FieldPanel("type_name")
+    ]
+
+    def __str__(self):
+        return self.type_name
+
+
+@register_snippet
+class ProjectStatus(models.Model):
+    status_name = models.CharField()
+
+    panels = [
+        FieldPanel("status_name")
+    ]
+
+    def __str__(self):
+        return self.status_name
+    
+    class Meta:
+        verbose_name_plural = "Project statuses"
 
 
 """
@@ -146,27 +179,28 @@ class IndividualProjectPage(Page):
     call_to_action_link_url = models.URLField(null=True, blank=True)
 
     # > SIDE BAR
+    project_status = models.ForeignKey(
+        "projects.ProjectStatus",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL
+    )
     impact_area_list = StreamField([('impact_area', PageChooserBlock(page_type="impact_areas.IndividualImpactAreaPage"))], use_json_field=True, null=True, blank=True)
-    
     region_hub_list = StreamField([('region_hub', PageChooserBlock(page_type="mapping_hubs.IndividualMappingHubPage"))], use_json_field=True, null=True, blank=True)
-
     duration = models.CharField(default="Ongoing", blank=True)
-    
     partners_list = ParentalManyToManyField('core.Partner', blank=True)
-    
     tools = RichTextField(null=True, blank=True)  # Will need to reference tools when they are added
-    
     contact = RichTextField(null=True, blank=True)
-
+    types = ParentalManyToManyField('projects.ProjectType', blank=True)
     related_news = StreamField([
         ('news_page', PageChooserBlock(page_type="news.IndividualNewsPage"))
     ], use_json_field=True, null=True, blank=True)
-
     related_events = StreamField([
         ('event_page', PageChooserBlock(page_type="events.IndividualEventPage"))
     ], use_json_field=True, null=True, blank=True)
 
     project_contributors = StreamField([('contributor', PageChooserBlock(page_type="members.IndividualMemberPage"))], use_json_field=True, null=True, blank=True)
+    location_coordinates = models.CharField(max_length=250, blank=True, null=True)
 
     search_fields = Page.search_fields + [
         index.SearchField('title'),
@@ -191,12 +225,14 @@ class IndividualProjectPage(Page):
             ], heading="Call to Action"),
         ], heading="Body"),
         MultiFieldPanel([
+            FieldPanel('project_status', widget=forms.RadioSelect),
             FieldPanel('impact_area_list'),
             FieldPanel('region_hub_list'),
             FieldPanel('duration'),
             FieldPanel('partners_list', widget=forms.CheckboxSelectMultiple),
             FieldPanel('tools'),
             FieldPanel('contact'),
+            FieldPanel('types', widget=forms.CheckboxSelectMultiple),
             MultiFieldPanel([
                 FieldPanel('related_news'),
                 FieldPanel('related_events'),
@@ -204,5 +240,6 @@ class IndividualProjectPage(Page):
         ], heading="Sidebar"),
         MultiFieldPanel([
             FieldPanel('project_contributors'),
+            LeafletPanel('location_coordinates'),
         ], heading="Extras")
     ]

@@ -1,0 +1,15 @@
+{% load homepage_tags %}
+{% get_mapbox_key as mapbox_key %}
+
+<script>
+        mapboxgl.accessToken = "{{mapbox_key}}";
+
+        const regex = /\(([^\)]+)\)/g;
+
+        const map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v12',
+            center: [0, 0],
+            zoom: 2
+        });
+</script>

@@ -1,0 +1,4 @@
+<div class="mt-4 flex items-center w-fit h-fit" @click="hit()" x-data="{ sort: '{{sort_id}}', hit() {setSortType('{{sort_by}}')} }" x-init="if(sort == params.get('sort')) hit()">
+    <input class="checked:bg-hot-red checked:hover:bg-hot-red checked:focus:bg-hot-red" type="radio" name="sort" :id="sort" :value="sort" :checked="(params.get('sort') == sort || (!params.get('sort')) && sort == 'sort.titlea') ? 'on' : ''">
+    <label class="pl-2" :for="sort">{{sort_by}}</label>
+</div>

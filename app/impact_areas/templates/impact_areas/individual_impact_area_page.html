@@ -33,15 +33,8 @@
             </div>
 
             {% comment %} PROJECTS {% endcomment %}
-            <div class="my-20">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-y-4">
-                    <div>
-                        {% include "ui/components/SectionHeadingWithUnderline.html" with title=page.get_parent.specific.projects_title %}
-                    </div>
-                    <p class="md:text-right">
-                        {% include "ui/components/BaseLink.html" with linktext=page.get_parent.specific.view_all_projects_text linkurl=page.view_all_projects_link %}
-                    </p>
-                </div>
+            <div class="my-20" id="projects-section">
+                {% include "ui/components/FlexTitleWithLink.html" with title=page.get_parent.specific.projects_title linktext=page.get_parent.specific.view_all_projects_text linkurl=page.view_all_projects_link titleclass="text-h2" %}
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-10" id="projects-list">
                     {% for project in projects %}
                         {% include "ui/components/projects/ProjectPreviewBlockNews.html" with project=project showimage=True %}
@@ -73,14 +66,7 @@
                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mt-10">
                     {% for area in other_impact_areas %}
                         {% if area != page %}
-                            <a href="{{ area.url }}" class="rounded-2xl shadow-md">
-                                <div class="bg-hot-off-white p-6 text-center font-medium text-intro h-full">
-                                    {% image area.external_icon fill-200x200 class="px-10" %}
-                                    <p>
-                                        {{ area.title }}
-                                    </p>
-                                </div>
-                            </a>
+                            {% include "ui/components/impact_areas/ImpactAreaPreviewBlockMini.html" %}
                         {% endif %}
                     {% endfor %}
                 </div>

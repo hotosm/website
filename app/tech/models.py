@@ -9,6 +9,10 @@ from app.core.models import LinkOrPageBlock
 
 
 class IndividualTechStackPage(Page):
+    parent_page_types = [
+        'tech.TechProductSuitePage'
+    ]
+
     header_image = models.ForeignKey(
         "wagtailimages.Image",
         null=True,
@@ -64,6 +68,10 @@ class IndividualTechStackPage(Page):
 
 
 class TechProductSuitePage(Page):
+    subpage_types = [
+        'tech.IndividualTechStackPage'
+    ]
+
     max_count = 1
 
     header_image = models.ForeignKey(

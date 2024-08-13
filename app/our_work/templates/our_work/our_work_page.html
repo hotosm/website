@@ -1,0 +1,274 @@
+{% extends "base.html" %}
+{% load static %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+{% load compress %}
+
+{% block body_class %}template-ourworkpage{% endblock %}
+{% block extra_css %}
+    {% compress css %}
+    {% endcompress css %}
+{% endblock extra_css %}
+
+{% block extra_head %}
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css' rel='stylesheet' />
+{% endblock %}
+
+{% block content %}
+    {% include "ui/components/PageHeaderWithBlur.html" with title=page.title image=page.header_image endinlarge=True full_length=True %}
+    
+    <div class="max-w-7xl mx-auto my-10" x-data="{ params: new URLSearchParams((new URL(window.location.href)).search) }">
+        <div class="px-6 md:px-10">
+            <div class="grid grid-cols-1 lg:grid-cols-5 mt-10 mb-5 gap-4">
+                <div class="col-span-3">
+                    <h2 class="text-h2 font-bold">
+                        {{ page.programs_title }}
+                    </h2>
+                    <div class="text-intro mt-2">
+                        {{ page.programs_description|richtext }}
+                    </div>
+                </div>
+                <div class="col-span-2 lg:text-right text-intro">
+                    {% include "ui/components/BaseLink.html" with linktext=page.view_all_programs_text linkurl=page.view_all_programs_url %}
+                </div>
+            </div>
+            <div class="mb-10">
+                {% include "ui/components/programs/ProgramCarouselBlock.html" with programs=page.highlighted_programs %}
+            </div>
+
+            {% comment %} FILTERS {% endcomment %}
+            <div class="mt-20" x-data="{ mapView: params.get('mapView') ? params.get('mapView') : false, showFilters: params.get('showFilters') ? params.get('showFilters') : false }" id="projects-section">
+                <h1 class="text-h2 font-bold">
+                    {{ page.projects_title }}
+                </h1>
+                <form class="mt-8" action="#projects-section">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-10 gap-8">
+                        {% comment %} KEYWORD SEARCH {% endcomment %}
+                        <div class="bg-hot-off-white flex items-center lg:col-span-3">
+                            <input class="w-full bg-transparent border-none" placeholder="{{page.search_keyword_text}}" type="text" name="keyword" :value="params.get('keyword')">
+                            {% include "ui/components/icon_svgs/SearchIcon.html" with class="text-hot-red mx-3" %}
+                        </div>
+
+                        {% comment %} SORT {% endcomment %}
+                        <div class="relative lg:col-span-3" x-data="{ show: false, setSortType(text) {$refs.sorttype.innerText = text} }" @click.away="show = false">
+                            <div class="w-full h-full flex justify-between py-2 px-3 bg-hot-off-white items-center cursor-pointer" @click="show = !show">
+                                <p class="pointer-events-none overflow-hidden text-nowrap" x-ref="sorttype">
+                                    {{page.sort_titlea_text}}
+                                </p>
+                            {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-90 text-hot-red" %}
+                            </div>
+                            <div class="absolute z-20 bg-hot-off-white p-4 w-full" x-show="show">
+                                <hr class="border-b-2">
+                                {% include "./components/ProjectSortOption.html" with sort_by=page.sort_titlea_text sort_id="sort.titlea" %}
+                                {% include "./components/ProjectSortOption.html" with sort_by=page.sort_titlez_text sort_id="sort.titlez" %}
+                            </div>
+                        </div>
+
+                        <input class="hidden" id="showFilters" type="checkbox" name="showFilters" :checked="showFilters">
+                        <input class="hidden" id="mapView" type="checkbox" name="mapView" :checked="mapView">
+                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 md:col-span-2 lg:col-span-4">
+                            <div class="cursor-pointer lg:col-span-1 relative after:absolute after:h-10 after:w-full after:bg-hot-off-white after:hidden" :class="showFilters ? 'bg-hot-off-white md:after:block' : 'bg-hot-red text-white'" @click="showFilters = !showFilters">
+                                <p class="font-medium py-2 px-3 flex">
+                                    {{page.filters_text}}
+                                    <span class="ml-auto">{% include "ui/components/icon_svgs/FilterIcon.html" %}</span>
+                                </p>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 lg:col-span-2">
+                                <div class="py-2 px-3 cursor-pointer" :class="mapView ? 'bg-hot-off-white' : 'bg-hot-red text-white'" @click="mapView = false">
+                                    <p class="font-medium flex items-center">
+                                        <span class="mr-2">{% include "ui/components/icon_svgs/ViewGridIcon.html" %}</span>
+                                        {{page.view_grid_text}}
+                                    </p>
+                                </div>
+                                <div class="py-2 px-3 cursor-pointer" :class="!mapView ? 'bg-hot-off-white' : 'bg-hot-red text-white'" @click="mapView = true">
+                                    <p class="font-medium flex items-center">
+                                        <span class="mr-2">{% include "ui/components/icon_svgs/MapIcon.html" %}</span>
+                                        {{page.view_map_text}}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% comment %} MAP AND FILTER CONTAINER {% endcomment %}
+                    <div class="grid mt-4" x-show="mapView || showFilters" x-data="{ selectedProject: undefined }">
+                        <div class="md:col-start-1 md:row-start-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 min-h-[30rem]" :class="mapView ? '' : 'invisible hidden md:block'">
+                            {% comment %} MAP {% endcomment %}
+                            <div class="lg:col-span-2 md:order-2 min-h-[30rem] [&_.mapboxgl-marker_path]:fill-hot-red" id="map"></div>
+                            {% comment %} PROJECTS {% endcomment %}
+                            <div class="md:order-1 bg-hot-off-white min-h-[30rem] md:min-h-full overflow-y-scroll max-h-full h-0">
+                                <div class="">
+                                    <div class="grid px-4 pt-4" id="projects-list-map">
+                                        {% for project in projects %}
+                                            <div class="p-4 pl-0" x-ref="project{{project.id}}">
+                                                <div class="pl-3 border-l-4 transition-all" :class="selectedProject == 'project{{project.id}}' ? 'border-l-hot-red' : 'border-l-transparent'">
+                                                    {% include "ui/components/projects/ProjectPreviewBlockNews.html" with project=project.specific showimage=True %}
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                        {% if not projects %}
+                                            <p class="text-intro font-medium md:col-span-2 lg:col-span-4">
+                                                {{page.no_projects_found}}
+                                            </p>
+                                        {% endif %}
+                                    </div>
+                                    <p class="text-center mt-4 mb-8" id="next-project-map" class="{% if not projects.has_next %}hidden{% endif %}">
+                                        {% if projects.has_next %}
+                                                {% comment %} <a href="?page={{ projects.next_page_number }}"></a> {% endcomment %}
+                                                <button
+                                                    x-data="{ params: new URLSearchParams((new URL(window.location.href)).search), init() {this.params.set('page', '{{projects.next_page_number}}')} }"
+                                                    :hx-get="`?${params.toString()}`"
+                                                    hx-trigger="click"
+                                                    hx-select="#projects-list-map, #next-project-map, #projects-list, #next-project"
+                                                    hx-swap="beforeend"
+                                                    hx-select-oob="#projects-list-map:beforeend, #next-project-map:outerHTML, #projects-list:beforeend, #next-project:outerHTML"
+                                                >
+                                                    <span class="border-b-hot-red border-b-2 pb-1 font-medium mr-4 text-intro">
+                                                        {{page.load_more_projects_text}}
+                                                    </span>
+                                                    {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-90 text-hot-red" %}
+                                                </button>
+                                        {% endif %}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        {% comment %} FILTERS {% endcomment %}
+                        <div class="md:col-start-1 md:row-start-1 min-h-[30rem] bg-hot-off-white z-10 px-12 py-10" :class="showFilters ? '' : 'invisible hidden md:block'">
+                            <div class="grid lg:grid-cols-3 gap-8">
+                                {% include "./components/FilterCategoryPage.html" with pages=impact_areas denoter="ia" title=page.f_impact_areas_text %}
+                                {% include "./components/FilterCategoryPage.html" with pages=hubs denoter="hub" title=page.f_open_mapping_hubs_text %}
+                                {% include "./components/FilterCategoryPage.html" with pages=programs denoter="pg" title=page.f_projects_by_programme_text %}
+                                {% include "./components/FilterCategorySnippet.html" with snippets=types denoter="pt" title=page.f_projects_by_type_text %}
+
+                                <div class="">
+                                    <p class="px-1 pb-2 font-medium text-intro">
+                                        {{page.f_project_status_text}}
+                                    </p>
+                                    <div class="bg-hot-off-white w-full">
+                                        <hr class="border-b-2">
+                                        <div class="px-1 mt-4 flex gap-x-8 gap-y-4">
+                                            {% include "./components/ProjectStatusOption.html" with status_by="---" status_id="none" %}
+                                            {% for status in statuses %}
+                                                {% include "./components/ProjectStatusOption.html" with status_by=status status_id=status.id %}
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr class="border-b-2 my-8">
+                            <div class="flex justify-end gap-8 items-center">
+                                <div class="text-white text-intro font-medium font-archivo py-1 bg-hot-red border-2 border-hot-red text-hot-white px-hot-3 hover:bg-hot-off-white hover:text-hot-red focus:bg-transparent focus:text-hot-red focus:ring-2 focus:ring-hot-red focus:ring-inset">
+                                    <input type="submit" value="{{page.f_apply_filter_text}}" class="bg-transparent w-full h-full cursor-pointer">
+                                </div>
+                                <a href="{{page.url}}#projects-section">
+                                    <p class="cursor-pointer inline-block text-intro font-medium">
+                                        <span class="border-b-hot-red border-b-2 pb-1">
+                                            {{page.f_reset_filters_text}}
+                                        </span>
+                                        {% include "ui/components/icon_svgs/RefreshIcon.html" with class="ml-4" %}
+                                    </p>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                {% comment %} PROJECTS LIST GRID VIEW {% endcomment %}
+                <div class="mt-10" x-show="!mapView">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" id="projects-list">
+                        {% for project in projects %}
+                            {% include "ui/components/projects/ProjectPreviewBlockNews.html" with project=project.specific showimage=True %}
+                        {% endfor %}
+                        {% if not projects %}
+                            <p class="text-intro font-medium md:col-span-2 lg:col-span-4">
+                                {{page.no_projects_found}}
+                            </p>
+                        {% endif %}
+                    </div>
+                    <p class="text-center mt-10" id="next-project" class="{% if not projects.has_next %}hidden{% endif %}" x-init="$store.pageNum = {{projects.number}}; callMapUpdate();">
+                        {% if projects.has_next %}
+                                <button
+                                    x-data="{ params: new URLSearchParams((new URL(window.location.href)).search), init() {this.params.set('page', '{{projects.next_page_number}}')} }"
+                                    :hx-get="`?${params.toString()}`"
+                                    hx-trigger="click"
+                                    hx-select="#projects-list-map, #next-project-map, #projects-list, #next-project"
+                                    hx-swap="beforeend"
+                                    hx-select-oob="#projects-list-map:beforeend, #next-project-map:outerHTML, #projects-list:beforeend, #next-project:outerHTML"
+                                >
+                                    <span class="border-b-hot-red border-b-2 pb-1 font-medium mr-4 text-intro">
+                                        {{page.load_more_projects_text}}
+                                    </span>
+                                    {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-90 text-hot-red" %}
+                                </button>
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+
+            <div class="mt-20 mb-10">
+                <h1 class="text-h2 font-bold mb-8">
+                    {{page.impact_area_title}}
+                </h1>
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
+                    {% for area in impact_areas %}
+                        {% include "ui/components/impact_areas/ImpactAreaPreviewBlockMini.html" with link_addendum="#projects-section" %}
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="my-20">
+                <h1 class="text-h2 font-bold mb-8">
+                    {{page.open_mapping_hub_title}}
+                </h1>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    {% for hub_project in hubs_projects %}
+                        {% include "ui/components/mapping_hub/MappingHubPreviewProjectsBlock.html" %}
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-white my-20">
+                <div>
+                    {% include "ui/components/dogear_boxes/DogearRed.html" with title=page.red_box_title linktext=page.red_box_link_text linkurl=page.red_box_link %}
+                </div>
+                <div>
+                    {% include "ui/components/dogear_boxes/DogearBlack.html" with title=page.black_box_title linktext=page.black_box_link_text linkurl=black_box_link %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    {% include "./components/MapboxScript.html" %}
+    <script>
+        const callMapUpdate = async () => {
+            const params = new URLSearchParams((new URL(window.location.href)).search);
+            params.set('page', Alpine.store('pageNum'));
+            params.set('projects', true);
+            const apiUrl = '?' + params.toString();
+            fetch(apiUrl).then(response => {
+                if (response.ok)
+                    return response.json();
+                throw new Error("Failed to fetch projects.");
+            }).then(data => {
+                geojson = data;
+                
+                for (const feature of geojson.features) {
+                    const element = `
+                        <div class="" @click="$refs['project${feature.properties.id}'].scrollIntoView({block: 'nearest', behavior: 'smooth'}); selectedProject = 'project${feature.properties.id}';">
+                            {% include './components/MapboxMarker.html' %}
+                        </div>
+                    `;
+                    const el = document.createElement('div');
+                    el.innerHTML = element;
+                    new mapboxgl.Marker(el).setLngLat(feature.geometry.coordinates).addTo(map);
+                }
+            })
+        }
+        
+        
+    </script>
+{% endblock %}

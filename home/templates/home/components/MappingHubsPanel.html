@@ -1,3 +1,4 @@
+{% load wagtailcore_tags %}
 {% load wagtailimages_tags %}
 
 {% image page.mapping_hubs_background original as image_p %}
@@ -10,12 +11,12 @@
             <div class="row-start-1 col-start-1 bg-no-repeat bg-cover" style="background-image: url('{{image_p.url}}')"></div>
             <div class="row-start-1 col-start-1 bg-gradient-to-b from-black/80 to-transparent p-10">
                 <div class="text-h2 [&_b]:text-hot-red bold-override font-bold lg:font-semibold">
-                    {{ page.mapping_hubs_title|safe }}
+                    {{ page.mapping_hubs_title|richtext }}
                 </div>
                 <hr class="border-hot-red w-20 border-b-2" />
 
                 <div class="text-intro my-6">
-                    {{ page.mapping_hubs_description|safe }}
+                    {{ page.mapping_hubs_description|richtext }}
                 </div>
                 
                 <a href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=page.mapping_hubs_link_link%}" class="font-medium text-intro mt-4">
@@ -43,7 +44,7 @@
                         </div>
                         <div>
                             <div class="text-h4 lg:text-h2 [&_b]:text-hot-red bold-override font-bold lg:font-semibold">
-                                {{ page.mapping_hubs_title|safe }}
+                                {{ page.mapping_hubs_title|richtext }}
                             </div>
                             <p class="text-h5">
                                 {{ hub.title }}
@@ -52,7 +53,7 @@
                     </div>
 
                     <div class="my-4 text-intro">
-                        {{ hub.intro|safe }}
+                        {{ hub.intro|richtext }}
                     </div>
                     
                     <a href="{{ hub.url }}">
@@ -96,7 +97,7 @@
                         </div>
                         <div class="md:hidden px-2" :class="selIndex == {{forloop.counter}} ? '' : 'hidden'">
                             <div class="my-4">
-                                {{ hub.intro|safe }}
+                                {{ hub.intro|richtext }}
                             </div>
                             <a href="{{ hub.url }}">
                                 <p class="text-intro font-medium my-4">

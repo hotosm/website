@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     "app.misc",
     "app.partners",
     "app.tech",
+    "app.our_work",
     "search",
     "users",
     "utils",
@@ -81,6 +82,7 @@ INSTALLED_APPS = [
     "wagtail_localize.locales",
     "wagtail_modeladmin",
     "storages",
+    "wagtailgeowidget",
 ]
 
 MIDDLEWARE = [
@@ -261,4 +263,11 @@ PATTERN_LIBRARY = {
     # Any template in BASE_TEMPLATE_NAMES or any template that extends a template in
     # BASE_TEMPLATE_NAMES is a "page" and will be rendered as-is without being wrapped.
     "BASE_TEMPLATE_NAMES": ["patterns/base_page.html"],
+}
+
+MAPBOX_ACCESS_TOKEN = os.getenv("MAPBOX_ACCESS_TOKEN")
+GEO_WIDGET_LEAFLET_TILE_LAYER = "https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=" + MAPBOX_ACCESS_TOKEN
+
+GEO_WIDGET_LEAFLET_TILE_LAYER_OPTIONS = {
+    "attribution": '© <a href="https://www.mapbox.com/feedback/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
 }

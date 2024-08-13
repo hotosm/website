@@ -6,6 +6,7 @@
 - full_length: If falsey/null, the content will not be entirely full length in the header; otherwise, it will be full length
 {% endcomment %}
 
+{% load wagtailcore_tags %}
 {% load wagtailimages_tags %}
 
 {% image image original as image_p %}
@@ -19,7 +20,7 @@
                     </h1>
                     <div class="font-medium text-intro">
                         {% if subtitle %}
-                            {{ subtitle|safe }}
+                            {{ subtitle|richtext }}
                         {% endif %}
                     </div>
                 </div>

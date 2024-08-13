@@ -2,6 +2,7 @@ from wagtail.models import Page
 from django import template
 from django.utils.translation import get_language
 from home.models import HomePage
+from django.conf import settings
 
 register = template.Library()
 
@@ -30,3 +31,8 @@ def get_navigation(context):
     navigation = current_page.get_ancestors(inclusive=True).type(HomePage).first().specific.navigation
 
     return navigation
+
+
+@register.simple_tag
+def get_mapbox_key():
+    return settings.MAPBOX_ACCESS_TOKEN

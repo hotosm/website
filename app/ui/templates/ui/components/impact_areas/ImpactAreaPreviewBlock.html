@@ -2,6 +2,7 @@
 ==> PARAMETERS
 - ia: an IndividualImpactAreaPage; should be passed directly here
 {% endcomment %}
+{% load wagtailcore_tags %}
 {% load wagtailimages_tags %}
 
 {% image ia.header_image original as image_p %}
@@ -16,7 +17,7 @@
     </h2>
 
     <div class="text-base py-1">
-        {{ ia.intro|safe }}
+        {{ ia.intro|richtext }}
     </div>
 
     <p class="text-intro font-medium py-1">

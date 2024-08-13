@@ -5,6 +5,7 @@
 - colour: a string; the colour that the box's accents should be 
           (can be hex code or any other CSS compatible colour thing)
 {% endcomment %}
+{% load wagtailcore_tags %}
 
 <div class="p-6 flex flex-col border-b-8" 
      style="border-color: {{ colour }}; background: linear-gradient(45deg, var(--hot-off-white) 0%, var(--hot-off-white) 92.4%, {{ colour }} 92.5%, {{ colour }} 100%);">
@@ -12,7 +13,7 @@
         {{ title }}
     </h1>
     <div class="my-4">
-        {{ description|safe }}
+        {{ description|richtext }}
     </div>
     <div class="mt-auto">
         {% include "ui/components/BaseLink.html" %}

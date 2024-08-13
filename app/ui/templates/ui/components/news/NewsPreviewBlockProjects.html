@@ -3,6 +3,7 @@
 - news: an IndividualNewsPage object; the news page to be previewed
 - showimage: optional; if Truthy, the article's image will show up in the preview
 {% endcomment %}
+{% load wagtailcore_tags %}
 {% load wagtailimages_tags %}
 
 {% image news.image original as image_p %}
@@ -26,7 +27,7 @@
         </p>
 
         <div class="[&_p]:max-h-20 [&_p]:text-ellipsis [&_p]:overflow-hidden [&_p]:text-small">
-            {{ news.intro|safe }}
+            {{ news.intro|richtext }}
         </div>
 
         <p class="my-2">

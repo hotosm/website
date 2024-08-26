@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load static %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+{% load compress %}
+{% block body_class %}template-documentcollectionpage{% endblock %}
+{% block extra_css %}
+    {% compress css %}
+    {% endcompress css %}
+{% endblock extra_css %}
+
+{% block content %}
+    {% include "ui/components/PageHeaderWithBlur.html" with title=page.title image=page.header_image subtitle=page.header_description endinlarge=True full_length=True %}
+    
+    <div class="max-w-7xl mx-auto my-10">
+        <div class="px-6 md:px-10">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-2 grid gap-8">
+                    {% for doc in documents %}
+                        <div class="grid lg:grid-cols-4 gap-8">
+                            {% image doc.value.icon original class="w-full h-auto hidden lg:block" %}
+                            <div class="{%if not doc.value.icon%}lg:col-span-4{%else%}lg:col-span-3{%endif%}">
+                                <h1 class="text-h2 font-bold">
+                                    {{doc.value.document.title}}
+                                </h1>
+                                <div class="my-4">
+                                    {{doc.value.description}}
+                                </div>
+                                <p class="text-intro mt-2">
+                                    {% include "ui/components/BaseLink.html" with linktext=page.document_access_prefix_text|add:" "|add:doc.value.document.title linkurl=doc.value.document.url %}
+                                </p>
+                            </div>
+                        </div>
+
+                        <hr class="border-b-2">
+                    {% endfor %}
+                    <div>
+                        {% include "ui/components/utilities/PaginatorNavigation.html" with paginator=paginator %}
+                    </div>
+                </div>
+                <div>
+                    <div class="bg-hot-off-white flex justify-between p-6 gap-4 flex-wrap">
+                        <h1 class="text-h3 font-bold">
+                            {{page.sidebar_box_title}}
+                        </h1>
+                        <a href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=page.sidebar_box_button_link%}">
+                            {% include "components/branded_elements/button.html" with text=page.sidebar_box_button_text %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -22,14 +22,16 @@
 
             {% include "ui/components/SectionHeadingWithUnderline.html" with title=page.partnership_types_title %}
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-6 mb-20">
-                {% for ptype in partner_types %}
+                {% for ptype in page.get_children %}
                     <div class="p-6 bg-hot-off-white">
-                        {% image ptype.type_icon original class="h-8 w-8 mt-2" %}
-                        <h1 class="text-h4 font-semibold mt-4">
-                            {{ptype.type_name}}
-                        </h1>
+                        {% image ptype.specific.external_icon original class="h-8 w-8 mt-2" %}
+                        <a href="{{ptype.url}}">
+                            <h1 class="text-h4 font-semibold mt-4">
+                                {{ptype.specific.title}}
+                            </h1>
+                        </a>
                         <div class="base-article-m">
-                            {{ptype.type_description|richtext}}
+                            {{ptype.specific.intro|richtext}}
                         </div>
                     </div>
                 {% endfor %}

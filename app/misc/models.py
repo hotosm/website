@@ -1,10 +1,13 @@
 from django.db import models
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 from wagtail.fields import RichTextField, StreamField
 from wagtail.blocks import CharBlock, StreamBlock, StructBlock, URLBlock, RichTextBlock, PageChooserBlock
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.models import Page
+from wagtail.documents.blocks import DocumentChooserBlock
+
 from app.core.models import LinkOrPageBlock
 
 
@@ -232,4 +235,62 @@ class DataPrinciplesPage(Page):
             FieldPanel('footer_button_text'),
             FieldPanel('footer_button_link'),
         ], heading="Footer"),
+    ]
+
+
+class DocumentCollectionPage(Page):
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+
+        documents = context['page'].documents
+        page = request.GET.get('page', 1)
+        paginator = Paginator(documents, 6)  # if you want more/less items per page (i.e., per load), change the number here to something else
+        try:
+            documents = paginator.page(page)
+        except PageNotAnInteger:
+            documents = paginator.page(1)
+        except EmptyPage:
+            documents = paginator.page(paginator.num_pages)
+        
+        context['documents'] = documents
+        context['paginator'] = paginator
+        return context
+
+    header_image = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text="Header image"
+    )
+    header_description = RichTextField(blank=True)
+
+    document_access_prefix_text = models.CharField(default="Access", help_text="Text to prefix the name of the document in the link to the document; if the document's title is 'Cool Doc', and this field is 'Access', the link for the document would show as 'Access Cool Doc'.")
+    documents = StreamField([
+        ('block', StructBlock([
+            ('icon', ImageChooserBlock(blank=True, null=True, required=False)),
+            ('document', DocumentChooserBlock()),
+            ('description', RichTextBlock(blank=True, null=True, required=False))
+        ]))
+    ], use_json_field=True, null=True, blank=True)
+
+    sidebar_box_title = models.CharField(blank=True)
+    sidebar_box_button_text = models.CharField(blank=True)
+    sidebar_box_button_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
+
+    content_panels = Page.content_panels + [
+        MultiFieldPanel([
+            FieldPanel('header_image'),
+            FieldPanel('header_description'),
+        ], heading="Header"),
+        MultiFieldPanel([
+            FieldPanel('document_access_prefix_text'),
+            FieldPanel('documents'),
+        ], heading="Documents"),
+        MultiFieldPanel([
+            FieldPanel('sidebar_box_title'),
+            FieldPanel('sidebar_box_button_text'),
+            FieldPanel('sidebar_box_button_link'),
+        ], heading="Sidebar"),
     ]

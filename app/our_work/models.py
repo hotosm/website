@@ -55,7 +55,6 @@ class OurWorkPage(Page):
         query = Q()
         for area in impact_areas:
             if request.GET.get(f"ia{area.id}", ''):
-                print(area.id, area)
                 query = query | Q(impact_area_list__contains=[{'type': 'impact_area', 'value': area.id }])
         projects_list = projects_list.filter(query).distinct()
 

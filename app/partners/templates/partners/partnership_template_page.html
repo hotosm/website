@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load static %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+{% load compress %}
+{% block body_class %}template-partnershiptemplatepage{% endblock %}
+{% block extra_css %}
+    {% compress css %}
+    {% endcompress css %}
+{% endblock extra_css %}
+
+{% block content %}
+    {% include "ui/components/PageHeaderWithBlur.html" with title=page.title subtitle=page.header_text image=page.header_image full_length=True %}
+
+    <div class="max-w-7xl mx-auto my-10">
+        <div class="px-6 md:px-10">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-2 [&_h2]:mt-6 [&_h2]:mb-4 [&_h3]:mt-6 [&_h3]:mb-4">
+                    <div class="text-intro font-medium">
+                        {{page.intro|richtext}}
+                    </div>
+                    <div class="base-article-m">
+                        {{page.body|richtext}}
+                    </div>
+                </div>
+
+                <div>
+                    <div class="grid gap-8">
+                    {% if page.related_projects %}
+                        <div>
+                            <h1 class="text-h2 font-bold mb-4">
+                                {{page.get_parent.specific.related_projects_title}}
+                            </h1>
+                            <div class="grid gap-8 md:gap-4 lg:gap-8 md:grid-cols-2 lg:grid-cols-1">
+                                {% for project in page.related_projects %}
+                                    {% include "ui/components/projects/ProjectPreviewBlockNews.html" with project=project.value %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if page.related_projects and page.related_news %}<hr class="border-b-2">{% endif %}
+
+                    {% if page.related_news %}
+                        <div>
+                            <h1 class="text-h2 font-bold mb-4">
+                                {{page.get_parent.specific.related_news_title}}
+                            </h1>
+                            <div class="grid gap-8 md:gap-4 lg:gap-8 md:grid-cols-2 lg:grid-cols-1">
+                                {% for news in page.related_news %}
+                                    {% include "ui/components/news/NewsPreviewBlockNews.html" with news=news.value %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="my-20">
+                {% include "ui/components/FlexTitleWithLink.html" with class="mb-8" title=page.get_parent.specific.meet_partners_title linktext=page.get_parent.specific.view_partners_text linkurl=page.get_parent.specific.view_partners_link underline=True %}
+                {% include "ui/components/partners/PartnerViewBlock.html" with partners=page.featured_partners.all %}
+            </div>
+
+            <div class="my-20">
+                {% include "ui/components/FooterBannerWithTextAndLink.html" with text=page.get_parent.specific.call_to_action_title description=page.get_parent.specific.call_to_action_description buttontext=page.get_parent.specific.call_to_action_link_text linkurl=page.get_parent.specific.call_to_action_link_url %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

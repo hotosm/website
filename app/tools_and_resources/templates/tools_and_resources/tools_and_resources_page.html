@@ -38,7 +38,7 @@
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 my-20">
                 {% for panel in page.large_panels %}
-                    {% include "ui/components/misc_panels/LinkBlockWithImage.html" with title=panel.value.title image=panel.value.image description=panel.value.description linktext=panel.value.link_text linkurl=panel.value.link_url %}
+                    {% include "ui/components/misc_panels/LinkBlockWithImage.html" with title=panel.value.title image=panel.value.image description=panel.value.description linktext=panel.value.link_text linkurl=panel.value.link %}
                 {% endfor %}
             </div>
         </div>

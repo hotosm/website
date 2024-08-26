@@ -28,8 +28,8 @@
                             <hr class="border-b-2">
                             {% for p_type in partner_types %}
                                 <div class="mt-4 flex">
-                                    <label for="cat-{{forloop.counter}}">{{p_type.type_name}}</label>
-                                    <input class="ml-auto checked:bg-hot-red checked:hover:bg-hot-red checked:focus:bg-hot-red" id="cat-{{forloop.counter}}" type="checkbox" name="{{p_type.type_name}}" :checked="params.get('{{p_type.type_name}}')">
+                                    <label for="cat-{{forloop.counter}}">{{p_type.title}}</label>
+                                    <input class="ml-auto checked:bg-hot-red checked:hover:bg-hot-red checked:focus:bg-hot-red" id="cat-{{forloop.counter}}" type="checkbox" name="pt{{p_type.id}}" :checked="params.get('pt{{p_type.id}}')">
                                 </div>
                             {% endfor %}
                         </div>

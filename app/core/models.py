@@ -4,12 +4,13 @@ from django.db import models
 from wagtail.models import Page
 from wagtail.fields import StreamField, RichTextField
 from wagtail.blocks import CharBlock, StreamBlock, StructBlock, URLBlock, RichTextBlock, PageChooserBlock
+from wagtail.documents.blocks import DocumentChooserBlock
 from wagtail.snippets.models import register_snippet
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel, InlinePanel
 
 
 class ErrorPage(Page):
-    pass
+    max_count = 1
 
 
 @register_snippet
@@ -42,6 +43,7 @@ class Partner(models.Model):
 class LinkOrPageBlock(StreamBlock):
     page = PageChooserBlock()
     url = URLBlock()
+    document = DocumentChooserBlock()
 
     class Meta:
         max_num = 1

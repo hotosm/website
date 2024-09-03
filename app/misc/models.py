@@ -473,3 +473,34 @@ class WorkForHotPage(Page):
             FieldPanel('opportunities_button_link'),
         ], heading="Opportunities"),
     ]
+
+
+class LivingStrategyPage(Page):
+    max_count = 1
+
+    desktop_size_non_full_body_width = models.BooleanField()
+
+    banner_image = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text="Header image"
+    )
+
+    download_title = models.CharField(default="Download our Living Strategy Summary")
+    downloads = StreamField([('block', StructBlock([
+        ('text', CharBlock()),
+        ('link', LinkOrPageBlock(required=False)),
+    ]))], use_json_field=True, blank=True)
+
+    description = RichTextField(blank=True)
+
+    content_panels = Page.content_panels + [
+        FieldPanel('desktop_size_non_full_body_width'),
+        FieldPanel('banner_image'),
+        FieldPanel('download_title'),
+        FieldPanel('downloads'),
+        FieldPanel('description'),
+    ]

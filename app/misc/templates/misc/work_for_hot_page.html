@@ -33,12 +33,12 @@
             {% comment %} WORK CULTURE & BENEFITS {% endcomment %}
             <div class="grid lg:grid-cols-2 gap-8 my-20">
                 {% if page.work_culture_youtube_url %}
-                    <div>
+                    <div class="order-2 lg:order-1">
                         <iframe class="w-full aspect-video" src="{{page.work_culture_youtube_url}}" title="Work Culture video" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                         <p class="mt-2 text-hot-dark-grey">{{page.work_culture_youtube_subtitle}}</p>
                     </div>
                 {% endif %}
-                <div>
+                <div class="order-1 lg:order-2">
                     {% include "ui/components/SectionHeadingWithUnderline.html" with title=page.work_culture_title %}
                     <div class="base-article-m">
                         {{ page.work_culture_description|richtext }}

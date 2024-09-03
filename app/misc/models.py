@@ -3,7 +3,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 from wagtail.fields import RichTextField, StreamField
-from wagtail.blocks import CharBlock, StreamBlock, StructBlock, URLBlock, RichTextBlock, PageChooserBlock
+from wagtail.blocks import CharBlock, StreamBlock, StructBlock, URLBlock, RichTextBlock, PageChooserBlock, EmailBlock
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.models import Page
 from wagtail.documents.blocks import DocumentChooserBlock
@@ -293,4 +293,183 @@ class DocumentCollectionPage(Page):
             FieldPanel('sidebar_box_button_text'),
             FieldPanel('sidebar_box_button_link'),
         ], heading="Sidebar"),
+    ]
+
+
+class ContactUsPage(Page):
+    max_count = 1
+
+    header_image = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text="Header image"
+    )
+
+    global_office_title = models.CharField(default="Global Office")
+    global_office_text = RichTextField(blank=True)
+
+    send_message_title = models.CharField(default="Send us a message!")
+
+    first_name_text = models.CharField(default="First Name")
+    last_name_text = models.CharField(default="Last Name")
+    email_text = models.CharField(default="Email Address")
+    subject_text = models.CharField(default="Subject")
+    message_text = models.CharField(default="Message")
+
+    first_name_field_text = models.CharField(default="Enter your first name...")
+    last_name_field_text = models.CharField(default="Enter your last name...")
+    email_field_text = models.CharField(default="Enter your email address...")
+    subject_field_placeholder = models.CharField(default="Select")
+    subject_field_options = StreamField([
+        ('block', StructBlock([
+            ('subject', CharBlock(blank=True, null=True, required=False)),
+        ]))
+    ], use_json_field=True, null=True, blank=True)
+    message_field_text = models.CharField(default="Enter your message...")
+
+    submit_button_text = models.CharField(default="Submit")
+
+    inquiries_title = models.CharField(default="Inquiries")
+    inquiries_blocks = StreamField([
+        ('block', StructBlock([
+            ('title', CharBlock(blank=True, null=True, required=False)),
+            ('email', EmailBlock(blank=True, null=True, required=False)),
+        ]))
+    ], use_json_field=True, null=True, blank=True)
+
+    office_locations_title = models.CharField(default="Office Locations")
+    office_locations_visit_page_text = models.CharField(default="Visit Page")
+    office_locations = StreamField([
+        ('block', StructBlock([
+            ('title', CharBlock(blank=True, null=True, required=False)),
+            ('link', LinkOrPageBlock(blank=True, null=True, required=False)),
+            ('description', RichTextBlock(blank=True, null=True, required=False)),
+        ]))
+    ], use_json_field=True, null=True, blank=True)
+
+    dogear_box_title = models.CharField(default="We want to know what you think about HOT and our work.")
+    dogear_box_link_text = models.CharField(default="Send us your feedback")
+    dogear_box_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
+    
+    content_panels = Page.content_panels + [
+        FieldPanel('header_image'),
+        MultiFieldPanel([
+            FieldPanel('global_office_title'),
+            FieldPanel('global_office_text'),
+        ], heading="Global Office"),
+        MultiFieldPanel([
+            FieldPanel('send_message_title'),
+            FieldPanel('submit_button_text'),
+            MultiFieldPanel([
+                FieldPanel('first_name_text'),
+                FieldPanel('last_name_text'),
+                FieldPanel('email_text'),
+                FieldPanel('subject_text'),
+                FieldPanel('message_text'),
+            ], heading="Form Headers"),
+            MultiFieldPanel([
+                FieldPanel('first_name_field_text'),
+                FieldPanel('last_name_field_text'),
+                FieldPanel('email_field_text'),
+                FieldPanel('subject_field_placeholder'),
+                FieldPanel('subject_field_options'),
+                FieldPanel('message_field_text'),
+            ], heading="Form Placeholders"),
+        ], heading="Form"),
+        MultiFieldPanel([
+            FieldPanel('inquiries_title'),
+            FieldPanel('inquiries_blocks'),
+        ], heading="Inquiries"),
+        MultiFieldPanel([
+            FieldPanel('office_locations_title'),
+            FieldPanel('office_locations_visit_page_text'),
+            FieldPanel('office_locations'),
+        ], heading="Office Locations"),
+        MultiFieldPanel([
+            FieldPanel('dogear_box_title'),
+            FieldPanel('dogear_box_link_text'),
+            FieldPanel('dogear_box_link'),
+        ], heading="Dogear Box"),
+    ]
+
+
+class WorkForHotPage(Page):
+    max_count = 1
+
+    header_image = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text="Header image"
+    )
+    header_text = RichTextField(blank=True)
+
+    our_values_title = models.CharField(default="Our Values")
+    our_values_text = RichTextField(blank=True)
+    our_values_youtube_url = models.URLField(blank=True, help_text="The YouTube link provided should be in the following format: 'https://www.youtube.com/embed/[slug]'. You can get this by right-clicking on the YouTube video player and pressing 'Copy embed code'; this will give you a full embed code, which you will need to take the embed URL from.")
+    our_values_youtube_subtitle = models.CharField(blank=True)
+
+    work_culture_title = models.CharField(default="Work Culture & Benefits")
+    work_culture_description = RichTextField(blank=True)
+    work_culture_youtube_url = models.URLField(blank=True)
+    work_culture_youtube_subtitle = models.CharField(blank=True, help_text="The YouTube link provided should be in the following format: 'https://www.youtube.com/embed/[slug]'. You can get this by right-clicking on the YouTube video player and pressing 'Copy embed code'; this will give you a full embed code, which you will need to take the embed URL from.")
+
+    testimonials_title = models.CharField(default="What Our Staff Say")
+    testimonials = StreamField([
+        ('block', StructBlock([
+            ('description', RichTextBlock(blank=True, null=True, required=False)),
+            ('member', PageChooserBlock(page_type="members.IndividualMemberPage", required=False)),
+            ('image_override', ImageChooserBlock(required=False)),
+            ('name_override', CharBlock(required=False)),
+            ('title_override', CharBlock(required=False)),
+            ('hub_override', PageChooserBlock(page_type="mapping_hubs.IndividualMappingHubPage", required=False))
+        ]))
+    ], use_json_field=True, null=True, blank=True, help_text="For any given testimonial, you can choose a member to be displayed, or you can alternatively manually provide the member's details; if both are provided, the manually-entered details will override any details fetched from the member's page.")
+
+    opportunities_image = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text="Opportunities image"
+    )
+    opportunities_title = models.CharField(default="See Our Job Opportunities")
+    opportunities_description = RichTextField(blank=True)
+    opportunities_button_text = models.CharField(default="See all job opportunities")
+    opportunities_button_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
+
+    content_panels = Page.content_panels + [
+        MultiFieldPanel([
+            FieldPanel('header_image'),
+            FieldPanel('header_text'),
+        ], heading="Header"),
+        MultiFieldPanel([
+            FieldPanel('our_values_title'),
+            FieldPanel('our_values_text'),
+            FieldPanel('our_values_youtube_url'),
+            FieldPanel('our_values_youtube_subtitle'),
+        ], heading="Our Values"),
+        MultiFieldPanel([
+            FieldPanel('work_culture_title'),
+            FieldPanel('work_culture_description'),
+            FieldPanel('work_culture_youtube_url'),
+            FieldPanel('work_culture_youtube_subtitle'),
+        ], heading="Work Culture"),
+        MultiFieldPanel([
+            FieldPanel('testimonials_title'),
+            FieldPanel('testimonials'),
+        ], heading="Testimonials"),
+        MultiFieldPanel([
+            FieldPanel('opportunities_image'),
+            FieldPanel('opportunities_title'),
+            FieldPanel('opportunities_description'),
+            FieldPanel('opportunities_button_text'),
+            FieldPanel('opportunities_button_link'),
+        ], heading="Opportunities"),
     ]

@@ -22,6 +22,8 @@
     font-family: var(--font-archivo);
 
     /* Font Size */
+    --font-size-hxl: 3.11rem;
+    --font-size-h1: 2.55rem;
     --font-size-h1: 2.55rem;
     --font-size-h2: 2.11rem;
     --font-size-h3: 1.77rem;

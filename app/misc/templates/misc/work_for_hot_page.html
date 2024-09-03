@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load static %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+{% load compress %}
+{% block body_class %}template-workforhotpage{% endblock %}
+{% block extra_css %}
+    {% compress css %}
+    {% endcompress css %}
+{% endblock extra_css %}
+
+{% block content %}
+    {% include "ui/components/PageHeaderWithBlur.html" with title=page.title subtitle=page.header_text image=page.header_image full_length=True %}
+    
+    <div class="max-w-7xl mx-auto my-10">
+        <div class="px-6 md:px-10">
+            {% comment %} OUR VALUES {% endcomment %}
+            <div class="grid lg:grid-cols-2 gap-8">
+                <div>
+                    {% include "ui/components/SectionHeadingWithUnderline.html" with title=page.our_values_title %}
+                    <div class="base-article-m">
+                        {{ page.our_values_text|richtext }}
+                    </div>
+                </div>
+                {% if page.our_values_youtube_url %}
+                    <div>
+                        <iframe class="w-full aspect-video" src="{{page.our_values_youtube_url}}" title="Our Values video" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                        <p class="mt-2 text-hot-dark-grey">{{page.our_values_youtube_subtitle}}</p>
+                    </div>
+                {% endif %}
+            </div>
+
+            {% comment %} WORK CULTURE & BENEFITS {% endcomment %}
+            <div class="grid lg:grid-cols-2 gap-8 my-20">
+                {% if page.work_culture_youtube_url %}
+                    <div>
+                        <iframe class="w-full aspect-video" src="{{page.work_culture_youtube_url}}" title="Work Culture video" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                        <p class="mt-2 text-hot-dark-grey">{{page.work_culture_youtube_subtitle}}</p>
+                    </div>
+                {% endif %}
+                <div>
+                    {% include "ui/components/SectionHeadingWithUnderline.html" with title=page.work_culture_title %}
+                    <div class="base-article-m">
+                        {{ page.work_culture_description|richtext }}
+                    </div>
+                </div>
+            </div>
+
+            {% comment %} STAFF TESTIMONIALS {% endcomment %}
+            <div>
+                {% include "ui/components/carousel/CarouselStaffTestimonial.html" with title=page.testimonials_title items=page.testimonials %}
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-20">
+        {% include "ui/components/sections/NavyBackgroundWithImage.html" with image=page.opportunities_image title=page.opportunities_title description=page.opportunities_description button_text=page.opportunities_button_text button_link=page.opportunities_button_link imageright=True %}
+    </div>
+{% endblock %}

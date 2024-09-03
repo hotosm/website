@@ -8,6 +8,10 @@ from wagtail.snippets.models import register_snippet
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel, InlinePanel
 
 
+class ErrorPage(Page):
+    pass
+
+
 @register_snippet
 class Partner(models.Model):
     partner_name = models.CharField()

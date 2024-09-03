@@ -6,7 +6,7 @@
 <div class="flex flex-col md:flex-row gap-8 items-center justify-center mt-10">
     {% for link in home_page.e404_links %}
         <p class="text-intro">
-            {% include "ui/components/BaseLink.html" with linktext=link.value.text linkurl=link.value.url %}
+            {% include "ui/components/BaseLink.html" with linktext=link.value.text linkurl=link.value.link %}
         </p>
     {% endfor %}
 </div>

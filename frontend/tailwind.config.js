@@ -31,6 +31,7 @@ module.exports = {
         archivo: "var(--font-archivo)",
       },
       fontSize: {
+        hxl: "var(--font-size-hxl)",
         h1: "var(--font-size-h1)", // 56pt
         h2: "var(--font-size-h2)", // 48pt
         h3: "var(--font-size-h3)", // 38pt

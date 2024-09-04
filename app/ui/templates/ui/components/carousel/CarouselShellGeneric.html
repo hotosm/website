@@ -1,0 +1,55 @@
+{% load wagtailimages_tags %}
+<div x-data="{ partnerIndex: 0, fixedIndex(x) {return ({{items|length}} + x + this.partnerIndex) % {{items|length}}}, moveIndex(x) {this.partnerIndex = this.fixedIndex(x)} }" 
+     class="grid {{class}}">
+    <div class="flex justify-between gap-8 items-center">
+        {% if title %}
+        <div>
+            {% include "ui/components/SectionHeadingWithUnderline.html" %}
+        </div>
+        {% endif %}
+        <div class="text-right hidden md:block"
+             :class="{ 'md:hidden': {{items|length}} <= 1,
+                    'lg:hidden': {{items|length}} == 3
+            }"
+        >
+            <div x-on:click="moveIndex(1)" class="pr-4 text-hot-red inline-flex flex-col justify-center">
+                <div class="border-hot-red border-2 rounded-full h-8 w-8 text-center">
+                    {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-180" %}
+                </div>
+            </div>
+            <div x-on:click="moveIndex(-1)" class="text-hot-red inline-flex flex-col justify-center">
+                <div class="border-hot-red border-2 rounded-full h-8 w-8 text-center">
+                    {% include "ui/components/icon_svgs/LinkCaret.html" %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
+        {% for item in items %}
+            <div :class="{ 'hidden lg:block': fixedIndex({{forloop.counter0}}) > 0 && fixedIndex({{forloop.counter0}}) <= 2,
+                           'hidden': fixedIndex({{forloop.counter0}}) > 2,
+                        }"
+                 :style="`order: ${fixedIndex({{forloop.counter0}}) + 1}`"
+            >
+                {% block individual_item %}
+                {% endblock %}
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="text-center mb-4 block md:hidden mt-4"
+         :class="{ 'hidden': {{items|length}} == 1 }"
+    >
+        <div x-on:click="moveIndex(1)" class="pr-4 text-hot-red inline-flex flex-col justify-center">
+            <div class="border-hot-red border-2 rounded-full h-8 w-8 text-center">
+                {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-180" %}
+            </div>
+        </div>
+        <div x-on:click="moveIndex(-1)" class="text-hot-red inline-flex flex-col justify-center">
+            <div class="border-hot-red border-2 rounded-full h-8 w-8 text-center">
+                {% include "ui/components/icon_svgs/LinkCaret.html" %}
+            </div>
+        </div>
+    </div>
+</div>

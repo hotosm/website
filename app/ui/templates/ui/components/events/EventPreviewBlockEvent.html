@@ -40,10 +40,7 @@
 
     <div class="flex gap-4 mt-4">
         <p class="text-hot-red">
-            <a href="{{event.url}}" class="font-medium">
-                {{event.get_parent.specific.event_read_more_text}}
-                {% include "ui/components/icon_svgs/LinkCaret.html" with class="ml-2" %}
-            </a>
+            {% include "ui/components/BaseLinkNoUnderline.html" with linktext=event.get_parent.specific.event_read_more_text linkurl=event.url %}
         </p>
 
         {% if event.rsvp_link %}

@@ -88,7 +88,7 @@ class HomePage(Page):
     e404_links = StreamField([
         ('link', StructBlock([
             ('text', CharBlock()),
-            ('link', CharBlock(required=False))
+            ('link', LinkOrPageBlock(required=False))
         ]))
     ], use_json_field=True, null=True, blank=True, help_text="Links to be shown on the 404 page.")
 

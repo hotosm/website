@@ -9,8 +9,6 @@
 {% block content %}
     <div class="max-7-xl mx-auto px-6 md:px-10 text-center my-40">
         <h1 class="font-semibold text-hot-red" style="font-size: 4.44rem;">404</h1>
+        {% include "home/components/404Content.html" %}
     </div>
-    <script>
-        window.location.replace("/404");
-    </script>
 {% endblock content %}

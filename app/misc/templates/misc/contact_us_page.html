@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% load static %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+{% load compress %}
+{% block body_class %}template-contactuspage{% endblock %}
+{% block extra_css %}
+    {% compress css %}
+    {% endcompress css %}
+{% endblock extra_css %}
+
+{% block content %}
+    {% include "ui/components/BasePageHeader.html" with title=page.title image=page.header_image endinlarge=True full_length=True %}
+    
+    <div class="max-w-7xl mx-auto my-10">
+        <div class="px-6 md:px-10">
+            <div class="grid lg:grid-cols-3 gap-8">
+                <div>
+                    {% include "ui/components/SectionHeadingWithUnderline.html" with title=page.global_office_title %}
+                    <div class="font-medium text-intro mt-4">
+                        {{page.global_office_text|richtext}}
+                    </div>
+                </div>
+                <div class="lg:col-span-2">
+                    <h1 class="text-h2 font-bold">
+                        {{page.send_message_title}}
+                    </h1>
+
+                    <form class="mt-4 grid gap-8 [&_label]:font-medium">
+                        <div class="grid md:grid-cols-2 gap-8">
+                            <div>
+                                <label for="firstname">{{page.first_name_text}}</label>
+                                <input class="mt-2 w-full bg-hot-off-white border-none px-4" placeholder="{{page.first_name_field_text}}" type="text" name="firstname" required>
+                            </div>
+                            <div>
+                                <label for="lastname">{{page.last_name_text}}</label>
+                                <input class="mt-2 w-full bg-hot-off-white border-none px-4" placeholder="{{page.last_name_field_text}}" type="text" name="lastname" required>
+                            </div>
+                            <div>
+                                <label for="email">{{page.email_text}}</label>
+                                <input class="mt-2 w-full bg-hot-off-white border-none px-4" placeholder="{{page.email_field_text}}" type="email" name="email" required>
+                            </div>
+                            <div class="relative" x-data="{ show: false, setSubject(text) {$refs.subjectfield.value = text} }" @click.away="show = false">
+                                <label for="subject">{{page.subject_text}}</label>
+                                <div class="mt-2 cursor-pointer flex w-full bg-hot-off-white items-center" @click="show = !show">
+                                    <input class="w-full bg-transparent border-none px-4 pointer-events-none flex-grow" placeholder="{{page.subject_field_placeholder}}" type="text" name="subject" x-ref="subjectfield" required>
+                                    {% include "ui/components/icon_svgs/LinkCaret.html" with class="mr-4 text-hot-red rotate-90" %}
+                                </div>
+                                <div class="absolute z-20 bg-hot-off-white p-4 pt-2 w-full grid gap-4" x-show="show">
+                                    <hr class="border-b-2">
+                                    {% for subject in page.subject_field_options %}
+                                        <p class="cursor-pointer" @click="setSubject('{{subject.value.subject}}')">
+                                            {{subject.value.subject}}
+                                        </p>
+                                    {% endfor  %}
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="message">{{page.message_text}}</label>
+                            <textarea class="mt-2 w-full bg-hot-off-white border-none px-4 min-h-48 resize-none" placeholder="{{page.message_field_text}}" type="text" name="message" required></textarea>
+                        </div>
+                        <div class="flex">
+                            <input type="submit" value="{{page.submit_button_text}}" class="bg-hot-red border-2 border-hot-red text-white cursor-pointer py-1 px-6 font-medium text-intro hover:bg-hot-off-white hover:text-hot-red">
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="grid lg:grid-cols-3 gap-8 my-20">
+                <div>
+                    {% include "ui/components/SectionHeadingWithUnderline.html" with title=page.inquiries_title %}
+                    <div class="grid gap-8 mt-4">
+                        {% for block in page.inquiries_blocks %}
+                            <div>
+                                <p class="font-medium text-intro">{{block.value.title}}</p>
+                                <p>{{block.value.email}}</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="lg:col-span-2">
+                    {% include "ui/components/SectionHeadingWithUnderline.html" with title=page.office_locations_title %}
+                    <div class="mt-4 grid lg:grid-cols-2 gap-8">
+                        {% for location in page.office_locations %}
+                            <div>
+                                <p class="font-medium text-intro">{{location.value.title}}</p>
+                                <p>{% include "ui/components/BaseLinkNoUnderline.html" with linktext=page.office_locations_visit_page_text linkurl=location.value.link %}</p>
+                                <p>{{location.value.description}}</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

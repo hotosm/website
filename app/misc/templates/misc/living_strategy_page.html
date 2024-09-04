@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load static %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+{% load compress %}
+{% block body_class %}template-livingstrategypage{% endblock %}
+{% block extra_css %}
+    {% compress css %}
+    {% endcompress css %}
+{% endblock extra_css %}
+
+{% block content %}
+    <div class="max-w-7xl mx-auto mt-10 mb-20">
+        <div class="px-6 md:px-10">
+            <div class="{%if page.desktop_size_non_full_body_width%}lg:w-2/3{%endif%}">
+                <h1 class="text-h1 font-bold mb-8">{{page.title}}</h1>
+                {% image page.banner_image original %}
+
+                <h2 class="text-h2 font-bold mt-10 mb-4">{{page.download_title}}</h2>
+                <div class="text-intro flex flex-wrap gap-x-16 gap-y-4 mb-10">
+                    {% for download in page.downloads %}
+                        {% include "ui/components/BaseLink.html" with linktext=download.value.text linkurl=download.value.link %}
+                    {% endfor %}
+                </div>
+                <div class="base-article-m">
+                    {{page.description|richtext}}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

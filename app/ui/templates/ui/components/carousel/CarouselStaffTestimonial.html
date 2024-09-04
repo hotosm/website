@@ -1,0 +1,72 @@
+{% extends "ui/components/carousel/CarouselShellGeneric.html" %}
+{% load wagtailimages_tags %}
+
+{% block individual_item %}
+    <div class="bg-hot-off-white px-6 py-8 h-full flex flex-col">
+        <h1 class="text-hot-red font-semibold font-barlow text-hxl leading-8">“</h1>
+        <div>{{item.value.description}}</div>
+        <div class="mt-auto pt-12 flex gap-4 items-center">
+            {% if item.value.image_override %}
+                {% image item.value.image_override original class="rounded-full aspect-square object-cover w-12 h-12" %}
+            {% else  %}
+                {% if item.value.member %}
+                    {% image item.value.member.image original class="rounded-full aspect-square object-cover w-12 h-12" %}
+                {% endif %}
+            {% endif %}
+            <div class="flex-grow">
+                <p class="text-[0]">
+                    <span class="font-bold text-base">{% if item.value.name_override %}{{item.value.name_override}}{% else %}{% if item.value.member %}{{item.value.member.title}}{% endif %}{% endif %}</span>
+                    <span class="lg:hidden text-base">
+                        {% comment %} it's times like these that you really wish django let you use brackets in if statements. but alas {% endcomment %}
+                        {% if item.value.title_override or item.value.hub_override %}
+                        ,
+                        {% else %}
+                            {% if item.value.member %}
+                                {% if item.value.member.location_hub or item.value.member.position %}
+                                ,
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+
+                        {% if item.value.title_override %}
+                            {{item.value.title_override}}
+                            {% if item.value.hub_override or item.value.member and item.value.member.position %}-{% endif %}
+                        {% else %}
+                            {% if item.value.member and item.value.member.position %}
+                                {{item.value.member.position}}
+                                {% if item.value.hub_override or item.value.member and item.value.member.position %}-{% endif %}
+                            {% endif %}
+                        {% endif %}
+
+                        {% if item.value.hub_override %}
+                            {{item.value.hub_override.title}}
+                        {% else %}
+                            {% if item.value.member and item.value.member.location_hub %}
+                                {{item.value.member.location_hub.title}}
+                            {% endif %}
+                        {% endif %}
+                    </span>
+                </p>
+                <p class="hidden lg:block">
+                    {% if item.value.title_override %}
+                        {{item.value.title_override}}
+                        {% if item.value.hub_override or item.value.member and item.value.member.position %}-{% endif %}
+                    {% else %}
+                        {% if item.value.member and item.value.member.position %}
+                            {{item.value.member.position}}
+                            {% if item.value.hub_override or item.value.member and item.value.member.position %}-{% endif %}
+                        {% endif %}
+                    {% endif %}
+
+                    {% if item.value.hub_override %}
+                        {{item.value.hub_override.title}}
+                    {% else %}
+                        {% if item.value.member and item.value.member.location_hub %}
+                            {{item.value.member.location_hub.title}}
+                        {% endif %}
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

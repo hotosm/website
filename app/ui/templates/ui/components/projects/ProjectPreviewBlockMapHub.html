@@ -8,7 +8,7 @@
 
 {% image project.header_image original as image_p %}
 <div class="font-medium {{class}}">
-    <a href="{{ project.url }}">
+    <a href="{{ project.url }}" class="[&:hover_.project-preview-title]:underline">
         <div>
             {% if showimage %}
                 <div class="w-full min-h-[9rem] mb-3 content-end bg-no-repeat bg-cover image-overshadow-gradient" style="background-image: url('{{ image_p.url }}')">
@@ -23,7 +23,7 @@
                 </span>
             </p>
             
-            <p class="my-1">
+            <p class="my-1 project-preview-title">
                 {{ project.title }}
             </p>
         </div>
@@ -31,7 +31,7 @@
 
     <p class="text-mini">
         {% for hub in project.region_hub_list %}
-            <a class="text-hot-red text-mini" href="{{ hub.value.url }}">{{ hub.value.title }}</a>{% if not forloop.last %},{% endif %}
+            <a class="text-hot-red text-mini hover:underline" href="{{ hub.value.url }}">{{ hub.value.title }}</a>{% if not forloop.last %},{% endif %}
         {% endfor %}
     </p>
 </div>

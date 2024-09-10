@@ -3,7 +3,7 @@
 {% load wagtailcore_tags %}
 {% load wagtailimages_tags %}
 {% load compress %}
-{% block body_class %}template-individualprojectpage{% endblock %}
+{% block body_class %}template-individualprogrampage{% endblock %}
 {% block extra_css %}
     {% compress css %}
     {% endcompress css %}
@@ -12,8 +12,8 @@
 {% block content %}
     {% include "ui/components/PageHeaderWithBlur.html" with title=page.title subtitle=page.subtitle image=page.header_image %}
 
-    <div class="max-w-7xl mx-auto">
-        <div class="grid grid-cols-1 lg:grid-cols-2 p-10 gap-x-10">
+    <div class="max-w-7xl mx-auto my-10 px-6 md:px-10">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-10">
             <div class="base-article-m [&_p:first-child]:mt-0 lg:order-2">
                 <div class="text-intro font-medium">
                     {{ page.intro|safe }}
@@ -23,10 +23,10 @@
             {% image page.intro_image original class="pb-8 lg:order-1" %}
         </div>
 
-        <h1 class="text-h2 px-10 font-bold">
+        <h1 class="text-h2 font-bold">
             {{ page.get_parent.specific.stats_title }}
         </h1>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 px-10 py-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 py-6">
             {% for stat in page.stats %}
                 <div class="bg-hot-off-white p-8">
                     <h1 class="text-h4 font-bold">
@@ -40,13 +40,13 @@
             {% endfor %}
         </div>
 
-        <div class="px-10 py-6">
+        <div class="py-6">
             <h1 class="text-h2 font-bold">
                 {{ page.get_parent.specific.goals_title }}
             </h1>
             <hr class="border-hot-red w-16 border-b-2" />
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 px-10 py-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 py-6">
             {% for goal in page.goals %}
                 <div class="[&_ul]:list-disc [&_li]:py-1 [&_ul]:p-4 [&_li::marker]:text-hot-red">
                     <h1 class="text-h4 font-bold">
@@ -58,7 +58,7 @@
             {% endfor %}
         </div>
 
-        <div class="px-10 py-6">
+        <div class="py-6">
             <h1 class="text-h2 font-bold">
                 {{ page.get_parent.specific.projects_title }}
             </h1>
@@ -71,7 +71,7 @@
             </div>
         </div>
 
-        <div class="px-10 py-6">
+        <div class="py-6">
             <div class="grid grid-cols-1 md:grid-cols-2">
                 <div>
                     <h1 class="text-h2 font-bold">
@@ -80,22 +80,21 @@
                     <hr class="border-hot-red w-16 border-b-2" />
                 </div>
 
-                <div class="text-right self-center">
+                <div class="text-right self-center text-intro">
                     {% include "ui/components/BaseLink.html" with linkurl=page.get_parent.specific.view_all_partners_link linktext=page.get_parent.specific.view_all_partners_title %}
                 </div>
             </div>
             
             {% include "ui/components/partners/PartnerViewBlock.html" with partners=page.partners.all %}
-            
         </div>
 
-        <div class="px-10 py-6">
+        <div class="py-6">
             <div class="grid grid-cols-1 md:grid-cols-2">
                 <h1 class="text-h2 font-bold">
                     {{ page.get_parent.specific.more_programs_title }}
                 </h1>
 
-                <div class="text-right self-center">
+                <div class="text-right self-center text-intro">
                     {% include "ui/components/BaseLink.html" with linkurl=page.get_parent.specific.view_all_programs_link linktext=page.get_parent.specific.view_all_programs_title %}
                 </div>
             </div>
@@ -106,5 +105,6 @@
             </div>
         </div>
     </div>
+
     {% include "ui/components/FooterBannerWithTextAndLink.html" with text=page.get_parent.specific.bottom_banner_text buttontext=page.get_parent.specific.bottom_banner_url_text url=page.get_parent.specific.bottom_banner_url %}
 {% endblock %}

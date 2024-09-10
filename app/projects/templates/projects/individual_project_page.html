@@ -16,7 +16,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-3">
             {% comment %} BODY {% endcomment %}
             <div class="p-10 col-span-2">
-                <div class="base-article-m">
+                <div class="base-article-m mb-20">
                     <div class="text-intro">
                         {{ page.intro|safe }}
                     </div>
@@ -29,59 +29,65 @@
             <div class="p-10 col-span-1">
                 {% comment %} NOTE TO SELF: the "safe" thing is only needed temporarily until everything is put in {% endcomment %}
                 <div class="project-sidebar">
-                    {% if page.impact_area_list %}
-                        <div>
-                            <p>{{page.get_parent.specific.impact_areas_title}}</p>
-                            {% for area in page.impact_area_list %}
-                                <p><a href="{{area.value.url}}">{{area.value.title}}</a></p>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
+                    <div class="project-sidebar [&_div:last-child]:border-b-0 [&_a:hover]:underline" style="padding-bottom: 0;">
+                        {% if page.impact_area_list %}
+                            <div>
+                                <p>{{page.get_parent.specific.impact_areas_title}}</p>
+                                {% for area in page.impact_area_list %}
+                                    <p><a href="{{area.value.url}}">{{area.value.title}}</a></p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
 
-                    {% if page.region_hub_list %}
-                        <div>
-                            <p>{{page.get_parent.specific.region_hub_title}}</p>
-                            {% for hub in page.region_hub_list %}
-                                <p><a href="{{hub.value.url}}">{{hub.value.title}}</a></p>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
+                        {% if page.region_hub_list %}
+                            <div>
+                                <p>{{page.get_parent.specific.region_hub_title}}</p>
+                                {% for hub in page.region_hub_list %}
+                                    <p><a href="{{hub.value.url}}">{{hub.value.title}}</a></p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
 
-                    <div>
-                        <p>{{page.get_parent.specific.duration_title}}</p>
-                        <p>{{page.duration}}</p>
-                        {%if page.project_status%}<p>{{page.project_status}}</p>{%endif%}
+                        <div>
+                            <p>{{page.get_parent.specific.duration_title}}</p>
+                            <p>{{page.duration}}</p>
+                            {%if page.project_status%}<p>{{page.project_status}}</p>{%endif%}
+                        </div>
+
+                        {% if page.partners_list.all %}
+                            <div>
+                                <p>{{page.get_parent.specific.partners_title}}</p>
+                                {% for partner in page.partners_list.all %}
+                                    <p><a href="{{partner.partner_url}}">{{partner.partner_name}}</a></p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        {% if page.tools_list %}
+                            <div>
+                                <p>{{page.get_parent.specific.tools_title}}</p>
+                                {% for tool in page.tools_list %}
+                                    <p><a href="{{tool.value.url}}">{{tool.value.title}}</a></p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        {% if page.types.all %}
+                            <div>
+                                <p>{{page.get_parent.specific.types_title}}</p>
+                                {% for t in page.types.all %}
+                                    <p>{{t.type_name}}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        {% if page.contact %}
+                            <div>
+                                <p>{{page.get_parent.specific.contact_title}}</p>
+                                <p>{{page.contact|safe}}</p>
+                            </div>
+                        {% endif %}
                     </div>
-
-                    {% if page.partners_list.all %}
-                        <div>
-                            <p>{{page.get_parent.specific.partners_title}}</p>
-                            {% for partner in page.partners_list.all %}
-                                <p><a href="{{partner.partner_url}}">{{partner.partner_name}}</a></p>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-
-                    <div>
-                        <p>{{page.get_parent.specific.tools_title}}</p>
-                        <p>{{page.tools|safe}}</p>
-                    </div>
-
-                    {% if page.types.all %}
-                        <div>
-                            <p>{{page.get_parent.specific.types_title}}</p>
-                            {% for t in page.types.all %}
-                                <p>{{t.type_name}}</p>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-
-                    {% if page.contact %}
-                        <div>
-                            <p>{{page.get_parent.specific.contact_title}}</p>
-                            <p>{{page.contact|safe}}</p>
-                        </div>
-                    {% endif %}
                 </div>
 
                 {% comment %} RELATED NEWS {% endcomment %}

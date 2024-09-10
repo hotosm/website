@@ -6,14 +6,10 @@
 <div x-data="{ partnerIndex: 0, fixedIndex(x) {return ({{programs|length}} + x + this.partnerIndex) % {{programs|length}}}, moveIndex(x) {this.partnerIndex = this.fixedIndex(x)} }" class="{{class}}">
     <div class="text-right mb-4">
         <div x-on:click="moveIndex(1)" class="pr-4 text-hot-red inline-flex flex-col justify-center">
-            <div class="border-hot-red border-2 rounded-full h-8 w-8 text-center">
-                {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-180" %}
-            </div>
+            {% include "ui/components/icon_svgs/LinkCaretCircle.html" with outerclass="rotate-180" styledhover=True %}
         </div>
         <div x-on:click="moveIndex(-1)" class="text-hot-red inline-flex flex-col justify-center">
-            <div class="border-hot-red border-2 rounded-full h-8 w-8 text-center">
-                {% include "ui/components/icon_svgs/LinkCaret.html" %}
-            </div>
+            {% include "ui/components/icon_svgs/LinkCaretCircle.html" with styledhover=True %}
         </div>
     </div>
     

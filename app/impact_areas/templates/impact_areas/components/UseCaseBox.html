@@ -2,13 +2,10 @@
     <h1 class="text-hot-red text-h4 font-bold">
         {{ number }}.
     </h1>
-    <div class="my-2">
+    <div class="mt-2 mb-4">
         {{ body }}
     </div>
-    <a href="{%include 'ui/components/PageOrLinkHrefText.html'%}" class="text-hot-red mt-auto font-medium py-2">
-        <p>
-            {{ linktext }}
-            {% include "ui/components/icon_svgs/LinkCaret.html" %}
-        </p>
-    </a>
+    <div class="mt-auto mb-2">
+        {% include "ui/components/BaseLinkNoUnderline.html" %}
+    </div>
 </div>

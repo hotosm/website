@@ -7,7 +7,7 @@
 {% endcomment %}
 
 <a href="{% include 'ui/components/PageOrLinkHrefText.html' %}">
-    <span class="border-b-hot-red border-b-2 pb-1 font-medium" {% if colour %}style="border-color: {{ colour }}"{% endif %}>{{ linktext }}</span>
+    <span class="border-b-hot-red border-b-2 pb-1 font-medium {%if not colour%}hover:text-hot-red{%else%}link-hover-colourer{%endif%} transition duration-75" {% if colour %}style="border-color: {{ colour }}; --link-hover-colourer-colour: {{ colour }}"{% endif %}>{{ linktext }}</span>
     
     <svg class="inline ml-4" {% if colour %}style="color: {{ colour }}"{% else %}style="color: var(--hot-red)"{% endif %} xmlns="http://www.w3.org/2000/svg" width="10.808" height="16.817" viewBox="0 0 10.808 16.817">
         <path id="Path_13007" data-name="Path 13007" d="M0,8.4,7,0l7,8.4" transform="translate(9.808 1.408) rotate(90)" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>

@@ -10,9 +10,9 @@
 {% endblock extra_css %}
 
 {% block content %}
-    <div class="max-w-7xl mx-auto px-6 md:px-10 my-10">
+    <div class="max-w-7xl mx-auto px-6 md:px-10 mt-10 mb-20">
         {% comment %} BODY SECTION {% endcomment %}
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 [&_a:hover]:underline">
             <div class="w-full">
                 {% if page.image %}
                     {% image page.image original class="md:w-full h-auto w-auto max-h-[24rem] object-contain" %}

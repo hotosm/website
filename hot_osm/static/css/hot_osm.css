@@ -5,6 +5,7 @@
 :root {
     /* Colors */
     --hot-red: #D73F3F;
+    --hot-burgundy: #6D2021;
     --hot-navy: #20365B;
     --hot-navy-grey: #2C3038;
     --hot-dark-grey: #68707F;
@@ -100,10 +101,19 @@
     color: var(--hot-red);
 }
 
-.base-article-m p,
+.base-article a:hover,
+.base-article-m a:hover {
+    text-decoration: underline;
+}
+
+.base-article-m p {
+    margin-top: 0.7rem;
+    margin-bottom: 0.7rem;
+}
+
 .base-article-m img {
-    margin-top: 0.45rem;
-    margin-bottom: 0.45rem;
+    margin-top: 1.2rem;
+    margin-bottom: 1.2rem;
 }
 
 .base-article p,
@@ -149,22 +159,22 @@
 
 .base-article-m h1 {
     margin-top: 2.2rem;
-    margin-bottom: 0.8rem;
+    margin-bottom: 1rem;
 }
 
 .base-article-m h2 {
-    margin-top: 0.8rem;
-    margin-bottom: 0.6rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
 }
 
 .base-article-m h3 {
-    margin-top: 0.8rem;
-    margin-bottom: 0.6rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
 }
 
 .base-article-m h4 {
-    margin-top: 0.7rem;
-    margin-bottom: 0.5rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
 }
 
 .base-article-m blockquote {
@@ -185,7 +195,7 @@
     font-size: var(--font-size-intro);
 }
 
-.project-sidebar div {
+.project-sidebar>div {
     padding: 1.5em 0;
     border-bottom: 0.1em solid black;
 }
@@ -235,4 +245,8 @@
 
 .black-image-redifier {
     filter: invert(23%) sepia(93%) saturate(1690%) hue-rotate(340deg) brightness(110%) contrast(81%);
+}
+
+.link-hover-colourer:hover {
+    color: var(--link-hover-colourer-colour);
 }

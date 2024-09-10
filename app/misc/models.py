@@ -308,6 +308,15 @@ class ContactUsPage(Page):
         help_text="Header image"
     )
 
+    body_background_image = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text="Shows behind the entire body"
+    )
+
     global_office_title = models.CharField(default="Global Office")
     global_office_text = RichTextField(blank=True)
 
@@ -356,6 +365,7 @@ class ContactUsPage(Page):
     
     content_panels = Page.content_panels + [
         FieldPanel('header_image'),
+        FieldPanel('body_background_image'),
         MultiFieldPanel([
             FieldPanel('global_office_title'),
             FieldPanel('global_office_text'),

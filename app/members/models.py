@@ -72,7 +72,7 @@ class MemberGroupPage(Page):
         keyword = request.GET.get('keyword', '')
 
         if keyword:
-            members = members.search(keyword).get_queryset()
+            members = members.search(keyword, fields=["title"]).get_queryset()
         
         hubs = IndividualMappingHubPage.objects.live().filter(locale=context['page'].locale)
         query = Q()
@@ -209,6 +209,7 @@ class IndividualMemberPage(Page):
         index.SearchField('title'),
         index.SearchField('search_description'),
         index.SearchField('intro'),
+        index.FilterField('member_groups'),
     ]
 
     content_panels = Page.content_panels + [

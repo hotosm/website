@@ -10,7 +10,7 @@
 {% endblock extra_css %}
 
 {% block content %}
-    {% include "ui/components/PageHeaderWithBlur.html" with title=page.title subtitle=page.header_text image=page.header_image full_length=True %}
+    {% include "ui/components/PageHeaderWithBlur.html" with title=page.title subtitle=page.header_text image=page.header_image full_length=True smaller=True %}
     
     <div class="max-w-7xl mx-auto my-10">
         <div class="px-6 md:px-10">
@@ -18,7 +18,7 @@
             <div class="grid lg:grid-cols-2 gap-8">
                 <div>
                     {% include "ui/components/SectionHeadingWithUnderline.html" with title=page.our_values_title %}
-                    <div class="base-article-m">
+                    <div class="base-article-m mt-8">
                         {{ page.our_values_text|richtext }}
                     </div>
                 </div>
@@ -40,7 +40,7 @@
                 {% endif %}
                 <div class="order-1 lg:order-2">
                     {% include "ui/components/SectionHeadingWithUnderline.html" with title=page.work_culture_title %}
-                    <div class="base-article-m">
+                    <div class="base-article-m mt-8">
                         {{ page.work_culture_description|richtext }}
                     </div>
                 </div>

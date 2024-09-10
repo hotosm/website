@@ -9,9 +9,7 @@
 <div x-data="{ partnerIndex: 0, fixedIndex(x) {return ({{partners|length}} + x + this.partnerIndex) % {{partners|length}}}, moveIndex(x) {this.partnerIndex = this.fixedIndex(x)} }">
     <div class="flex justify-between">
         <div x-on:click="moveIndex(1)" class="p-4 order-first rotate-180 text-hot-red flex flex-col justify-center">
-            <div class="inline border-hot-red border-2 rounded-full h-8 w-8 text-center">
-                {% include "ui/components/icon_svgs/LinkCaret.html" %}
-            </div>
+            {% include "ui/components/icon_svgs/LinkCaretCircle.html" with styledhover=True %}
         </div>
         {% for partner in partners %}
             <div :class="{ 'hidden md:block': fixedIndex({{forloop.counter0}}) > 0 && fixedIndex({{forloop.counter0}}) <= 2, 
@@ -21,13 +19,11 @@
                  :style="`order: ${fixedIndex({{forloop.counter0}}) + 1}`"
                  class="p-4"
             >
-                {% image partner.partner_logo original class="max-h-16 max-w-24 h-auto w-auto" %}
+                {% image partner.partner_logo original class="max-h-16 max-w-full h-full w-auto" %}
             </div>
         {% endfor %}
         <div x-on:click="moveIndex(-1)" class="p-4 order-last text-hot-red flex flex-col justify-center">
-            <div class="inline border-hot-red border-2 rounded-full h-8 w-8 text-center">
-                {% include "ui/components/icon_svgs/LinkCaret.html" %}
-            </div>
+            {% include "ui/components/icon_svgs/LinkCaretCircle.html" with styledhover=True %}
         </div>
     </div>
 </div>

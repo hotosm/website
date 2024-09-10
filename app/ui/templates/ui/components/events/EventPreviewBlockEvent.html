@@ -45,10 +45,7 @@
 
         {% if event.rsvp_link %}
             <p class="text-hot-red">
-                <a href="{{event.rsvp_link}}" class="font-medium">
-                    {{event.get_parent.specific.rsvp_button_text}}
-                    {% include "ui/components/icon_svgs/LinkCaret.html" with class="ml-2" %}
-                </a>
+                {% include "ui/components/BaseLinkNoUnderline.html" with linkurl=event.rsvp_link linktext=event.get_parent.specific.rsvp_button_text %}
             </p>
         {% endif %}
     </div>

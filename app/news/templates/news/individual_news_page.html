@@ -32,11 +32,13 @@
                 </div>
                 {{ page.article_body }}
 
-                {% include "ui/components/sharers/ShareSection.html" %}
+                <div class="mt-20">
+                    {% include "ui/components/sharers/ShareSection.html" %}
+                </div>
             </div>
 
             {% comment %} SIDEBAR {% endcomment %}
-            <div class="base-article px-10 py-5 sidebar [&>div]:my-12 [&_div:first-child_hr]:hidden [&_hr]:mb-8">
+            <div class="px-10 py-5 sidebar [&>div]:my-12 [&_div:first-child_hr]:hidden [&_hr]:mb-8">
                 {% if page.related_projects%}
                     <div>
                         <hr />
@@ -81,7 +83,7 @@
                         <p>
                             {% with categories=page.categories.all %}
                                 {% for category in categories %}
-                                    <a href="#" class="text-hot-red">{{ category.category_name }}</a>{% if not forloop.last %}, {% endif %}
+                                    <a href="#" class="text-hot-red hover:underline">{{ category.category_name }}</a>{% if not forloop.last %}, {% endif %}
                                 {% endfor %}
                             {% endwith %}
                         </p>
@@ -97,7 +99,7 @@
                         <p>
                             {% with tags=page.tags.all %}
                                 {% for tag in tags %}
-                                    <a href="#" class="text-hot-red">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
+                                    <a href="#" class="text-hot-red hover:underline">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
                                 {% endfor %}
                             {% endwith %}
                         </p>

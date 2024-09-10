@@ -189,7 +189,7 @@ class IndividualProjectPage(Page):
     region_hub_list = StreamField([('region_hub', PageChooserBlock(page_type="mapping_hubs.IndividualMappingHubPage"))], use_json_field=True, null=True, blank=True)
     duration = models.CharField(default="Ongoing", blank=True)
     partners_list = ParentalManyToManyField('core.Partner', blank=True)
-    tools = RichTextField(null=True, blank=True)  # Will need to reference tools when they are added
+    tools_list = StreamField([('tool', PageChooserBlock(page_type="tech.IndividualTechStackPage"))], use_json_field=True, null=True, blank=True)
     contact = RichTextField(null=True, blank=True)
     types = ParentalManyToManyField('projects.ProjectType', blank=True)
     related_news = StreamField([
@@ -199,8 +199,8 @@ class IndividualProjectPage(Page):
         ('event_page', PageChooserBlock(page_type="events.IndividualEventPage"))
     ], use_json_field=True, null=True, blank=True)
 
-    project_contributors = StreamField([('contributor', PageChooserBlock(page_type="members.IndividualMemberPage"))], use_json_field=True, null=True, blank=True)
-    location_coordinates = models.CharField(max_length=250, blank=True, null=True)
+    project_contributors = StreamField([('contributor', PageChooserBlock(page_type="members.IndividualMemberPage"))], use_json_field=True, null=True, blank=True, help_text="If a member is listed as a contributor to a project, that project will appear on the given member's page.")
+    location_coordinates = models.CharField(max_length=250, blank=True, null=True, help_text="Used to show where on the map the project takes place; used on the Our Work page.")
 
     search_fields = Page.search_fields + [
         index.SearchField('title'),
@@ -230,7 +230,7 @@ class IndividualProjectPage(Page):
             FieldPanel('region_hub_list'),
             FieldPanel('duration'),
             FieldPanel('partners_list', widget=forms.CheckboxSelectMultiple),
-            FieldPanel('tools'),
+            FieldPanel('tools_list'),
             FieldPanel('contact'),
             FieldPanel('types', widget=forms.CheckboxSelectMultiple),
             MultiFieldPanel([

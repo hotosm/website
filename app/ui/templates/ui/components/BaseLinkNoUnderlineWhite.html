@@ -1,0 +1,6 @@
+<a href="{%include 'ui/components/PageOrLinkHrefText.html'%}" class="font-medium text-white [&:hover_span]:underline [&:hover_span]:decoration-2">
+    <span>{{linktext}}</span>
+    <span class="{%if whitearrow%}text-white{%else%}text-hot-red{%endif%}">
+        {% include "ui/components/icon_svgs/LinkCaret.html" with class="ml-2" %}
+    </span>
+</a>

@@ -19,16 +19,11 @@
         {{ news.intro|safe }}
     </div>
 
-    <p class="mt-6 font-medium">
-        <a href="{{ news.url }}" class="text-hot-red">
-            <span class="pr-2">
-                {% if readmoretext %}
-                    {{ readmoretext }}
-                {% else %}
-                    Read More
-                {% endif %}
-            </span>
-            {% include "ui/components/icon_svgs/LinkCaret.html" %}
-        </a>
+    <p class="mt-4 font-medium">
+        {% if readmoretext %}
+            {% include "ui/components/BaseLinkNoUnderline.html" with linkurl=news.url linktext=readmoretext %}
+        {% else %}
+            {% include "ui/components/BaseLinkNoUnderline.html" with linkurl=news.url linktext="Read More" %}
+        {% endif %}
     </p>
 </div>

@@ -6,16 +6,6 @@
 - colour: a string; the colour that the box should be (can be hex code or any other CSS compatible colour thing)
 {% endcomment %}
 
-<div class="p-6 flex flex-col text-white" style="background: linear-gradient(45deg, {{ colour }} 0%, {{ colour }} 95%, transparent 95%, transparent 100%);">
-    <h1 class="font-bold text-h2 my-0">
-        {{ title }}
-    </h1>
-    <a href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=linkurl%}" class="mt-auto pt-6">
-        <p class="text-intro font-medium">
-            {{ linktext }}
-            <span class="ml-2 text-hot-red">
-                {% include "ui/components/icon_svgs/LinkCaret.html" %}
-            </span>
-        </p>
-    </a>
+<div class="px-6 py-8 flex flex-col text-white" style="background: linear-gradient(45deg, {{ colour }} 0%, {{ colour }} 95%, transparent 95%, transparent 100%);">
+    {% include "./DogearContent.html" with color="var(--hot-red)" %}
 </div>

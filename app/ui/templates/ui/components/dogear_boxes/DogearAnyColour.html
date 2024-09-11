@@ -6,6 +6,6 @@
 - colour: a string; the colour that the box should be (can be hex code or any other CSS compatible colour thing)
 {% endcomment %}
 
-<div class="px-6 py-8 flex flex-col text-white" style="background: linear-gradient(45deg, {{ colour }} 0%, {{ colour }} 95%, transparent 95%, transparent 100%);">
+<div class="text-white" style="background: linear-gradient(45deg, {{ colour }} 0%, {{ colour }} 95%, transparent 95%, transparent 100%);">
     {% include "./DogearContent.html" with color="var(--hot-red)" %}
 </div>

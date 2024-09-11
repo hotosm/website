@@ -1,13 +1,13 @@
 {% if linkurl.0 and linkurl.0.value %}
     {% if linkurl.0.value.page %}
-        {{linkurl.0.value.page.url}}
+        {{linkurl.0.value.page.url}}{{linkappendage}}
     {% elif linkurl.0.value.url %}
-        {{linkurl.0.value.url}}
+        {{linkurl.0.value.url}}{{linkappendage}}
     {% else %}
-        {{linkurl.0.value}}
+        {{linkurl.0.value}}{{linkappendage}}
     {% endif %}
 {% else %}
     {% if linkurl %}
-        {{ linkurl }}
+        {{ linkurl }}{{linkappendage}}
     {% endif %}
 {% endif %}

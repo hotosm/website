@@ -12,15 +12,17 @@
             {% include "ui/components/icon_svgs/LinkCaretCircle.html" with styledhover=True %}
         </div>
         {% for partner in partners %}
-            <div :class="{ 'hidden md:block': fixedIndex({{forloop.counter0}}) > 0 && fixedIndex({{forloop.counter0}}) <= 2, 
-                           'hidden lg:block': fixedIndex({{forloop.counter0}}) == 3,
-                           'hidden': fixedIndex({{forloop.counter0}}) > 3,
-                        }"
-                 :style="`order: ${fixedIndex({{forloop.counter0}}) + 1}`"
-                 class="p-4"
-            >
-                {% image partner.partner_logo original class="max-h-16 max-w-full h-full w-auto" %}
-            </div>
+            <a href="{{partner.partner_url}}" aria-label="{{partner.partner_name}}">
+                <div :class="{ 'hidden md:block': fixedIndex({{forloop.counter0}}) > 0 && fixedIndex({{forloop.counter0}}) <= 2, 
+                            'hidden lg:block': fixedIndex({{forloop.counter0}}) == 3,
+                            'hidden': fixedIndex({{forloop.counter0}}) > 3,
+                            }"
+                    :style="`order: ${fixedIndex({{forloop.counter0}}) + 1}`"
+                    class="p-4"
+                >
+                    {% image partner.partner_logo original class="max-h-16 max-w-full h-full w-auto" %}
+                </div>
+            </a>
         {% endfor %}
         <div x-on:click="moveIndex(-1)" class="p-4 order-last text-hot-red flex flex-col justify-center">
             {% include "ui/components/icon_svgs/LinkCaretCircle.html" with styledhover=True %}

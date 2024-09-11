@@ -12,12 +12,16 @@
             {{ text }}
         </h1>
         {% if description %}
-            <div class="my-6 font-medium text-intro">
+            <div class="mt-6 mb-2 font-medium text-intro [&_a]:text-hot-red [&_a:hover]:underline">
                 {{description|richtext}}
             </div>
         {% endif %}
-        <a href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=url%}">
-            {% include "components/branded_elements/button.html" with text=buttontext %}
-        </a>
+        {% if buttontext %}
+            <div class="mt-6">
+                <a href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=url%}">
+                    {% include "components/branded_elements/button.html" with text=buttontext %}
+                </a>
+            </div>
+        {% endif %}
     </div>
 </div>

@@ -3,6 +3,9 @@ PARAMETERS:
 => paginator: a paginator object
 => current_page: an integer, the current page
 {% endcomment %}
+{% load homepage_tags %}
+{% get_home_page as home_page %}
+
 <div x-data="{ params: new URLSearchParams((new URL(window.location.href)).search) }" id="paginator-navigation">
     <div class="w-full flex justify-center items-center" 
             x-data="{
@@ -20,8 +23,8 @@ PARAMETERS:
             {% if current_page == 1 %}disabled{% endif %}
             aria-label="Previous Page"
         >
-            <p class="cursor-pointer {%if current_page == 1%}text-hot-slate-grey{%else%}text-hot-red{%endif%}">
-                {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-180" %}
+            <p class="cursor-pointer mr-2 {%if current_page == 1%}text-hot-slate-grey{%else%}text-hot-red{%endif%}">
+                {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-180" %} <span class="ml-2">{{home_page.paginator_previous}}</span>
             </p>
         </button>
         <div class="flex gap-2 mx-4">
@@ -59,8 +62,8 @@ PARAMETERS:
                 hx-select-oob="#items-list:outerHTML, #paginator-navigation:outerHTML"
                 aria-label="Next Page"
         >
-            <p class="cursor-pointer {%if current_page == paginator.num_pages%}text-hot-slate-grey{%else%}text-hot-red{%endif%}">
-                {% include "ui/components/icon_svgs/LinkCaret.html" %}
+            <p class="cursor-pointer ml-2 {%if current_page == paginator.num_pages%}text-hot-slate-grey{%else%}text-hot-red{%endif%}">
+                <span class="mr-2">{{home_page.paginator_next}}</span> {% include "ui/components/icon_svgs/LinkCaret.html" %}
             </p>
         </button>
     </div>

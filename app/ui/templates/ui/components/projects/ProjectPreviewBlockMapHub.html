@@ -11,9 +11,8 @@
     <a href="{{ project.url }}" class="[&:hover_.project-preview-title]:underline">
         <div>
             {% if showimage %}
-                <div class="w-full min-h-[9rem] mb-3 content-end bg-no-repeat bg-cover image-overshadow-gradient" style="background-image: url('{{ image_p.url }}')">
-                    <div>
-                    </div>
+                <div class="w-full min-h-[9rem] mb-3 image-overshadow-gradient">
+                    {% image project.header_image original class="aspect-[3/2] object-cover object-center" %}
                 </div>
             {% endif %}
 

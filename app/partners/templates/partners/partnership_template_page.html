@@ -10,7 +10,7 @@
 {% endblock extra_css %}
 
 {% block content %}
-    {% include "ui/components/PageHeaderWithBlur.html" with title=page.title subtitle=page.header_text image=page.header_image full_length=True %}
+    {% include "ui/components/PageHeaderWithBlur.html" with title=page.title subtitle=page.header_text image=page.header_image full_length=True smaller=True %}
 
     <div class="max-w-7xl mx-auto my-10">
         <div class="px-6 md:px-10">
@@ -58,12 +58,14 @@
             </div>
 
             <div class="my-20">
-                {% include "ui/components/FlexTitleWithLink.html" with class="mb-8" title=page.get_parent.specific.meet_partners_title linktext=page.get_parent.specific.view_partners_text linkurl=page.get_parent.specific.view_partners_link underline=True %}
+                {% with page.id|stringformat:"s" as id %}
+                    {% include "ui/components/FlexTitleWithLink.html" with class="mb-8" title=page.get_parent.specific.meet_partners_title linktext=page.get_parent.specific.view_partners_text linkurl=page.get_parent.specific.view_partners_link linkappendage="?pt"|add:id|add:"=on" underline=True %}
+                {% endwith %}
                 {% include "ui/components/partners/PartnerViewBlock.html" with partners=page.featured_partners.all %}
             </div>
 
             <div class="my-20">
-                {% include "ui/components/FooterBannerWithTextAndLink.html" with text=page.get_parent.specific.call_to_action_title description=page.get_parent.specific.call_to_action_description buttontext=page.get_parent.specific.call_to_action_link_text linkurl=page.get_parent.specific.call_to_action_link_url %}
+                {% include "ui/components/FooterBannerWithTextAndLink.html" with text=page.get_parent.specific.call_to_action_title description=page.get_parent.specific.call_to_action_description %}
             </div>
         </div>
     </div>

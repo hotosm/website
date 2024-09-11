@@ -254,6 +254,7 @@ class DocumentCollectionPage(Page):
         
         context['documents'] = documents
         context['paginator'] = paginator
+        context['current_page'] = int(page)
         return context
 
     header_image = models.ForeignKey(

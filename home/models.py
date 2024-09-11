@@ -92,6 +92,9 @@ class HomePage(Page):
         ]))
     ], use_json_field=True, null=True, blank=True, help_text="Links to be shown on the 404 page.")
 
+    paginator_previous = models.CharField(default="Previous")
+    paginator_next = models.CharField(default="Next")
+
     # Hero section
     image = models.ForeignKey(
         "wagtailimages.Image",
@@ -229,6 +232,10 @@ class HomePage(Page):
                 FieldPanel('e404_description'),
                 FieldPanel('e404_links'),
             ], heading="404 Page"),
+            MultiFieldPanel([
+                FieldPanel('paginator_previous'),
+                FieldPanel('paginator_next'),
+            ], heading="Paginator", help_text="This is used in instances where there's a previous/next button; i.e., the news page when flipping through pages.")
         ], heading="Universal items"),
         MultiFieldPanel([
             FieldPanel("image"),

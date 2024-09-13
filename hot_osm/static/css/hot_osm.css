@@ -89,10 +89,14 @@
 .base-article h2,
 .base-article h3,
 .base-article h4,
+.base-article h5,
+.base-article a,
 .base-article-m h1,
 .base-article-m h2,
 .base-article-m h3,
-.base-article-m h4 {
+.base-article-m h4,
+.base-article-m h5,
+.base-article-m a {
     font-weight: bold;
 }
 

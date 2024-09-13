@@ -10,7 +10,7 @@
 {% endblock extra_css %}
 
 {% block content %}
-    {% include "ui/components/PageHeaderWithBlur.html" with title=page.title subtitle=page.intro image=page.header_image full_length=True %}
+    {% include "ui/components/PageHeaderWithBlur.html" with title=page.title subtitle=page.intro image=page.header_image full_length=True smaller=True %}
     
     <div class="max-w-7xl mx-auto my-10" x-data="{ params: new URLSearchParams((new URL(window.location.href)).search) }">
         <div class="px-6 md:px-10">
@@ -44,7 +44,7 @@
             <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8 mt-10" id="partners-list">
                 {% for partner in partners %}
                     <div class="flex justify-center">
-                        {% image partner.partner_logo original class="max-h-24 max-w-36 h-auto w-auto" %}
+                        {% image partner.partner_logo original class="max-h-24 max-w-full h-full w-auto" %}
                     </div>
                 {% endfor %}
             </div>

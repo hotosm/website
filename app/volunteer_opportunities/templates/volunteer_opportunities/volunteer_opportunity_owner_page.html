@@ -17,10 +17,10 @@
             <div class="lg:grid lg:grid-cols-3 gap-8">
                 <div class="lg:col-span-2">
                     <div class="text-intro font-bold mb-4">
-                        {{page.intro|safe}}
+                        {{page.intro|richtext}}
                     </div>
                     <div class="base-article-m [&_a]:font-bold mb-10">
-                        {{page.body_description|safe}}
+                        {{page.body_description|richtext}}
                     </div>
 
                     {% include "ui/components/TitleWithUnderline.html" with title=page.open_opportunities_title %}
@@ -53,7 +53,7 @@
                                     {{page.no_opportunities_title}}
                                 </h1>
                                 <div class="base-article-m [&_a]:font-bold mt-4">
-                                    {{page.no_opportunities_description|safe}}
+                                    {{page.no_opportunities_description|richtext}}
                                 </div>
                             </div>
                         {% endif %}
@@ -66,10 +66,10 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-white my-20">
                 <div>
-                    {% include "ui/components/dogear_boxes/DogearRed.html" with title=page.red_box_title linktext=page.red_box_link_text linkurl=page.red_box_link_url %}
+                    {% include "ui/components/dogear_boxes/DogearRed.html" with title=page.red_box_title linktext=page.red_box_link_text linkurl=page.red_box_link %}
                 </div>
                 <div>
-                    {% include "ui/components/dogear_boxes/DogearBlack.html" with title=page.black_box_title linktext=page.black_box_link_text linkurl=page.black_box_link_url %}
+                    {% include "ui/components/dogear_boxes/DogearBlack.html" with title=page.black_box_title linktext=page.black_box_link_text linkurl=page.black_box_link %}
                 </div>
             </div>
         </div>

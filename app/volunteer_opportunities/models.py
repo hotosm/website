@@ -6,6 +6,8 @@ from wagtail.fields import RichTextField, StreamField
 from wagtail.blocks import CharBlock, StreamBlock, StructBlock, URLBlock, RichTextBlock, PageChooserBlock
 from wagtail.models import Page
 
+from app.core.models import LinkOrPageBlock
+
 
 class VolunteerOpportunityOwnerPage(Page):
     def get_context(self, request, *args, **kwargs):
@@ -45,14 +47,14 @@ class VolunteerOpportunityOwnerPage(Page):
     aside_block_title = models.CharField(default="Didn't find the volunteer opportunity you were looking for?")
     aside_block_description = RichTextField(blank=True)
     aside_block_link_text = models.CharField(default="Contact us")
-    aside_block_link_url = models.URLField(blank=True)
+    aside_block_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
 
     red_box_title = models.CharField(default="Join our Slack channel and find more opportunities")
     red_box_link_text = models.CharField(default="Join our conversation")
-    red_box_link_url = models.URLField(null=True, blank=True)
+    red_box_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
     black_box_title = models.CharField(default="Check out upcoming events")
     black_box_link_text = models.CharField(default="See our events")
-    black_box_link_url = models.URLField(null=True, blank=True)
+    black_box_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
 
     posted_by_prefix_text = models.CharField(default="Posted by")
     
@@ -82,15 +84,15 @@ class VolunteerOpportunityOwnerPage(Page):
             FieldPanel('aside_block_title'),
             FieldPanel('aside_block_description'),
             FieldPanel('aside_block_link_text'),
-            FieldPanel('aside_block_link_url'),
+            FieldPanel('aside_block_link'),
         ], heading="Aside block"),
         MultiFieldPanel([
             FieldPanel('red_box_title'),
             FieldPanel('red_box_link_text'),
-            FieldPanel('red_box_link_url'),
+            FieldPanel('red_box_link'),
             FieldPanel('black_box_title'),
             FieldPanel('black_box_link_text'),
-            FieldPanel('black_box_link_url'),
+            FieldPanel('black_box_link'),
         ], heading="Dogear boxes"),
         MultiFieldPanel([
             FieldPanel('posted_by_prefix_text'),

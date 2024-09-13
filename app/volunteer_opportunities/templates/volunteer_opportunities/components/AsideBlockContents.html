@@ -6,7 +6,6 @@
         {{page.aside_block_description|safe}}
     </div>
     <p class="text-hot-red font-medium">
-        {{page.aside_block_link_text}}
-        <span class="ml-4">{% include "ui/components/icon_svgs/LinkCaret.html" %}</span>
+        {% include "ui/components/BaseLinkNoUnderline.html" with linkurl=page.aside_block_link linktext=page.aside_block_link_text %}
     </p>
 </div>

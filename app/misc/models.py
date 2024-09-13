@@ -271,7 +271,8 @@ class DocumentCollectionPage(Page):
     documents = StreamField([
         ('block', StructBlock([
             ('icon', ImageChooserBlock(blank=True, null=True, required=False)),
-            ('document', DocumentChooserBlock()),
+            ('title', CharBlock()),
+            ('link', LinkOrPageBlock()),
             ('description', RichTextBlock(blank=True, null=True, required=False))
         ]))
     ], use_json_field=True, null=True, blank=True)
@@ -423,12 +424,28 @@ class WorkForHotPage(Page):
     our_values_title = models.CharField(default="Our Values")
     our_values_text = RichTextField(blank=True)
     our_values_youtube_url = models.URLField(blank=True, help_text="The YouTube link provided should be in the following format: 'https://www.youtube.com/embed/[slug]'. You can get this by right-clicking on the YouTube video player and pressing 'Copy embed code'; this will give you a full embed code, which you will need to take the embed URL from.")
-    our_values_youtube_subtitle = models.CharField(blank=True)
+    our_values_image = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text="If a YouTube URL is provided, the video will be prioritised over this image; if there is no URL provided, this image will show."
+    )
+    our_values_subtitle = models.CharField(blank=True)
 
     work_culture_title = models.CharField(default="Work Culture & Benefits")
     work_culture_description = RichTextField(blank=True)
-    work_culture_youtube_url = models.URLField(blank=True)
-    work_culture_youtube_subtitle = models.CharField(blank=True, help_text="The YouTube link provided should be in the following format: 'https://www.youtube.com/embed/[slug]'. You can get this by right-clicking on the YouTube video player and pressing 'Copy embed code'; this will give you a full embed code, which you will need to take the embed URL from.")
+    work_culture_youtube_url = models.URLField(blank=True, help_text="The YouTube link provided should be in the following format: 'https://www.youtube.com/embed/[slug]'. You can get this by right-clicking on the YouTube video player and pressing 'Copy embed code'; this will give you a full embed code, which you will need to take the embed URL from.")
+    work_culture_image = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text="If a YouTube URL is provided, the video will be prioritised over this image; if there is no URL provided, this image will show."
+    )
+    work_culture_subtitle = models.CharField(blank=True)
 
     testimonials_title = models.CharField(default="What Our Staff Say")
     testimonials = StreamField([
@@ -464,13 +481,15 @@ class WorkForHotPage(Page):
             FieldPanel('our_values_title'),
             FieldPanel('our_values_text'),
             FieldPanel('our_values_youtube_url'),
-            FieldPanel('our_values_youtube_subtitle'),
+            FieldPanel('our_values_image'),
+            FieldPanel('our_values_subtitle'),
         ], heading="Our Values"),
         MultiFieldPanel([
             FieldPanel('work_culture_title'),
             FieldPanel('work_culture_description'),
             FieldPanel('work_culture_youtube_url'),
-            FieldPanel('work_culture_youtube_subtitle'),
+            FieldPanel('work_culture_image'),
+            FieldPanel('work_culture_subtitle'),
         ], heading="Work Culture"),
         MultiFieldPanel([
             FieldPanel('testimonials_title'),

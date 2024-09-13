@@ -17,7 +17,7 @@
                 {% if not external_style %}
                     {% include "ui/components/BaseLink.html" with linktext=link.value.text linkurl=link.value.link %}
                 {% else %}
-                    <a href="{{link.value.link}}">
+                    <a href="{{link.value.link}}" class="hover:text-hot-red transition duration-100">
                         <span class="border-b-hot-red border-b-2 pb-1 font-medium">{{link.value.text}}</span> 
                         <span class="ml-4 text-hot-red">{% include "ui/components/icon_svgs/ExternalLinkIcon.html" with class="mb-1" %}</span>
                     </a>

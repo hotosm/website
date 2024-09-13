@@ -10,21 +10,19 @@
 {% endblock extra_css %}
 
 {% block content %}
-    {% include "ui/components/PageHeaderWithBlur.html" with title=page.title image=page.header_image endinlarge=True full_length=True %}
+    {% include "ui/components/PageHeaderWithBlur.html" with title=page.title image=page.header_image endinlarge=True full_length=True smaller=True %}
     
     <div class="max-w-7xl mx-auto my-10">
         <div class="px-6 md:px-10">
-            <div class="lg:grid lg:grid-cols-6 mb-10">
-                <div class="col-span-5 text-intro font-medium">
-                    {{page.intro|richtext}}
-                </div>
+            <div class="max-w-5xl mb-10 text-intro font-medium base-article-m">
+                {{page.intro|richtext}}
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div class="base-article-m">
+                <div class="base-article-m [&>*:first-child]:mt-0">
                     {{page.body_text|richtext}}
                 </div>
-                <div class="base-article-m">
+                <div class="">
                     {% image page.body_image original %}
                 </div>
             </div>
@@ -45,15 +43,13 @@
                 {% endfor %}
             </div>
 
-            <div class="lg:grid lg:grid-cols-6 my-20">
-                <div class="col-span-5">
-                    {{page.footer_text|richtext}}
-                    
-                    <div class="mt-8">
-                        <a href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=page.footer_button_link%}">
-                            {% include "components/branded_elements/button.html" with text=page.footer_button_text %}
-                        </a>
-                    </div>
+            <div class="max-w-5xl my-20">
+                {{page.footer_text|richtext}}
+                
+                <div class="mt-8">
+                    <a href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=page.footer_button_link%}">
+                        {% include "components/branded_elements/button.html" with text=page.footer_button_text %}
+                    </a>
                 </div>
             </div>
         </div>

@@ -271,3 +271,5 @@ GEO_WIDGET_LEAFLET_TILE_LAYER = "https://api.mapbox.com/styles/v1/mapbox/streets
 GEO_WIDGET_LEAFLET_TILE_LAYER_OPTIONS = {
     "attribution": '© <a href="https://www.mapbox.com/feedback/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
 }
+
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 2000

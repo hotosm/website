@@ -14,10 +14,12 @@ from app.projects.models import IndividualProjectPage
 
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
 
+from app.core.models import LinkOrPageBlock
+
 
 class IndividualStatBlock(StructBlock):
     title = CharBlock()
-    description = RichTextBlock()
+    description = CharBlock()
 
 
 class ProgramStatBlock(StreamBlock):
@@ -47,14 +49,14 @@ class ProgramOwnerPage(Page):
 
     partners_title = models.CharField(default="Meet Our Partners")
     view_all_partners_title = models.CharField(default="View All Partners")
-    view_all_partners_link = models.CharField(blank=True)
+    view_all_partners_link_url = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
 
     more_programs_title = models.CharField(default="More Programs")
     view_all_programs_title = models.CharField(default="View All Programs")
-    view_all_programs_link = models.URLField(blank=True)
+    view_all_programs_link_url = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
 
     bottom_banner_text = models.CharField(default="Check out the many opportunities to get involved with HOT!")
-    bottom_banner_url = models.URLField(blank=True)
+    bottom_banner_link_url = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
     bottom_banner_url_text = models.CharField(default="Get Involved with HOT")
 
     content_panels = Page.content_panels + [
@@ -66,16 +68,16 @@ class ProgramOwnerPage(Page):
         MultiFieldPanel([
             FieldPanel("partners_title"),
             FieldPanel("view_all_partners_title"),
-            FieldPanel("view_all_partners_link"),
+            FieldPanel("view_all_partners_link_url"),
         ], heading="Partners"),
         MultiFieldPanel([
             FieldPanel("more_programs_title"),
             FieldPanel("view_all_programs_title"),
-            FieldPanel("view_all_programs_link"),
+            FieldPanel("view_all_programs_link_url"),
         ], heading="Programs"),
         MultiFieldPanel([
             FieldPanel('bottom_banner_text'),
-            FieldPanel('bottom_banner_url'),
+            FieldPanel('bottom_banner_link_url'),
             FieldPanel('bottom_banner_url_text'),
         ]),
     ]

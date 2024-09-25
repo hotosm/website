@@ -10,7 +10,7 @@
 {% endblock extra_css %}
 
 {% block content %}
-    {% include "ui/components/PageHeaderWithBlur.html" with title=page.title subtitle=page.intro image=page.header_image %}
+    {% include "ui/components/PageHeaderWithBlur.html" with title=page.title subtitle=page.intro image=page.header_image smaller=True %}
 
     <div class="max-w-7xl mx-auto px-6 md:px-10 my-10" x-data="{ params: new URLSearchParams((new URL(window.location.href)).search), activeParams: {} }">
         <div class="max-w-3xl">

@@ -54,7 +54,7 @@
                     {% include "ui/components/BaseLink.html" with linktext=page.get_parent.specific.partners_section_link_text linkurl=page.get_parent.specific.partners_section_link %}
                 </div>
             </div>
-            {% include "ui/components/partners/PartnerViewBlock.html" with partners=page.partners.all %}
+            {% include "ui/components/partners/PartnerViewBlock.html" with partners=page.partner_list %}
 
             {% comment %} DOGEAR BOXES SECTION (OPTIONAL) {% endcomment %}
             {% if page.dogear_boxes %}

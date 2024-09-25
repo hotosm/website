@@ -12,6 +12,7 @@ from wagtail.search import index
 from wagtail.snippets.models import register_snippet
 
 from app.members.models import IndividualMappingHubPage
+from app.core.models import LinkOrPageBlock
 
 
 class EventOwnerPage(Page):
@@ -88,7 +89,7 @@ class EventOwnerPage(Page):
     rsvp_button_text = models.CharField(default="RSVP")
     more_events_title = models.CharField(default="More Events")
     view_all_events_text = models.CharField(default="View all Events")
-    view_all_events_url = models.URLField(blank=True)
+    view_all_events_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
     event_read_more_text = models.CharField(default="Read more")
 
     keyword_search_hint = models.CharField(default="Search by keyword")
@@ -123,7 +124,7 @@ class EventOwnerPage(Page):
             FieldPanel('rsvp_button_text'),
             FieldPanel('more_events_title'),
             FieldPanel('view_all_events_text'),
-            FieldPanel('view_all_events_url'),
+            FieldPanel('view_all_events_link'),
             FieldPanel('event_read_more_text'),
         ], heading="Individual Event Page"),
     ]
@@ -159,13 +160,13 @@ class EventCategory(models.Model):
         verbose_name_plural = "Event Categories"
 
 
-class IndividualEventPage(Page):
+class IndividualEventPage(Page):    
     parent_page_types = [
         'events.EventOwnerPage'
     ]
 
-    start_date_time = models.DateTimeField()
-    end_date_time = models.DateTimeField()
+    start_date_time = models.DateTimeField(help_text="This datetime is in UTC.")
+    end_date_time = models.DateTimeField(help_text="This datetime is in UTC.")
 
     image = models.ForeignKey(
         "wagtailimages.Image",

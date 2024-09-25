@@ -14,6 +14,8 @@ from wagtail.blocks import CharBlock, StreamBlock, StructBlock, URLBlock, RichTe
 from wagtail.snippets.models import register_snippet
 from wagtail.search import index
 
+from app.core.models import LinkOrPageBlock
+
 
 class NewsOwnerPage(Page):
     def get_context(self, request, *args, **kwargs):
@@ -76,7 +78,7 @@ class NewsOwnerPage(Page):
     related_projects_title = models.CharField(default="Related Projects")
     related_news_title = models.CharField(default="Related News")
     view_all_news_text = models.CharField(default="View all News")
-    view_all_news_url = models.URLField(blank=True)
+    view_all_news_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
     news_read_more_text = models.CharField(default="Read More")
     categories_title = models.CharField(default="Categories")
     tags_title = models.CharField(default="Tags")
@@ -114,12 +116,12 @@ class NewsOwnerPage(Page):
                 FieldPanel('related_projects_title'),
                 FieldPanel('related_news_title'),
                 FieldPanel('view_all_news_text'),
-                FieldPanel('view_all_news_url'),
+                FieldPanel('view_all_news_link'),
                 FieldPanel('news_read_more_text'),
                 FieldPanel('categories_title'),
                 FieldPanel('tags_title'),
             ], heading="Sidebar"),
-        ], heading="Individual Project Page"),
+        ], heading="Individual News Page"),
     ]
 
 

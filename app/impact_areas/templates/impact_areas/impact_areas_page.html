@@ -25,7 +25,7 @@
     
     <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 px-6 md:px-10 mt-6 mb-10">
         {% for child in page.get_children %}
-            {% include "ui/components/impact_areas/ImpactAreaPreviewBlock.html" with ia=child.specific %}
+            {% include "ui/components/impact_areas/ImpactAreaPreviewBlock.html" with ia=child.specific learn_more_text=page.learn_more_text %}
         {% endfor %}
     </div>
 {% endblock %}

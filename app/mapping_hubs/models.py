@@ -5,12 +5,13 @@ from django.db.models import Q
 from wagtail.models import Page
 from wagtail.fields import RichTextField, StreamField
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel, PageChooserPanel
+from wagtail.snippets.blocks import SnippetChooserBlock
 from wagtail.blocks import CharBlock, StreamBlock, StructBlock, URLBlock, RichTextBlock, PageChooserBlock
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
 
 from app.projects.models import IndividualProjectPage
 from app.ui.models import CarouselBlock
-from app.core.models import LinkOrPageBlock
+from app.core.models import LinkOrPageBlock, Partner
 
 
 class ContactLinkStructBlock(StructBlock):
@@ -197,7 +198,7 @@ class IndividualMappingHubPage(Page):
 
     dogear_boxes = StreamField(DogearBoxBlock(), blank=True, use_json_field=True, help_text="These are, for example, the 'Grants' and 'Map and Chat Hour' boxes in the Asia-Pacific page. Please only add these in pairs of 2!")
 
-    partners = ParentalManyToManyField('core.Partner', blank=True)
+    partner_list = StreamField([('partner', SnippetChooserBlock(Partner))], use_json_field=True, null=True, blank=True)
 
     contact_section_description = RichTextField(blank=True)
     contact_section_links = StreamField(ContactLinkBlock(), blank=True, use_json_field=True)
@@ -238,7 +239,7 @@ class IndividualMappingHubPage(Page):
         ], heading="Events"),
         FieldPanel('dogear_boxes'),
         MultiFieldPanel([
-            FieldPanel("partners", widget=forms.CheckboxSelectMultiple),
+            FieldPanel("partner_list"),
         ], heading="Partners"),
         MultiFieldPanel([
             FieldPanel('contact_section_description'),

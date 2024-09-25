@@ -1,6 +1,7 @@
 from django.db import models
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 from wagtail.blocks import CharBlock, StreamBlock, StructBlock, URLBlock, PageChooserBlock, ListBlock, BooleanBlock
+from wagtail.images.blocks import ImageChooserBlock
 from wagtail.fields import RichTextField, StreamField
 from wagtail.models import Page
 
@@ -64,8 +65,30 @@ class HomePage(Page):
     templates = "home/home_page.html"
 
     # Navigation
+    top_navigation_socials = StreamField([
+        ('social', StructBlock([
+            ('service', CharBlock()),
+            ('icon', ImageChooserBlock()),
+            ('link', LinkOrPageBlock(required=False)),
+        ]))
+    ], use_json_field=True, null=True, blank=True, help_text="Social media links to be shown in the topmost navigation bar.")
+    top_navigation_links = StreamField([
+        ('link', StructBlock([
+            ('text', CharBlock()),
+            ('link', LinkOrPageBlock(required=False))
+        ]))
+    ], use_json_field=True, null=True, blank=True, help_text="Links to be shown in the topmost navigation bar.")
+    top_navigation_donate_text = models.CharField(default="Donate")
+    top_navigation_donate_url = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
     navigation = StreamField(NavigationBlock(), use_json_field=True, null=True, blank=True, help_text="The items of the navigation; this is shown on all pages.")
     navigation_buttons = StreamField([('button', ThirdNavigationStructBlock())], use_json_field=True, null=True, blank=True, help_text="The buttons of the navigation; these show up last in the navbar, and, unlike regular navigation items, show up at all times on medium screens.")
+    footer_certifications =  StreamField([
+        ('certification', StructBlock([
+            ('name', CharBlock()),
+            ('icon', ImageChooserBlock()),
+            ('link', LinkOrPageBlock(required=False)),
+        ]))
+    ], use_json_field=True, null=True, blank=True, help_text="Certifications to be shown in the footer.")
     footer_candid_seal = models.ForeignKey(
         "wagtailimages.Image",
         null=True,
@@ -94,6 +117,13 @@ class HomePage(Page):
 
     paginator_previous = models.CharField(default="Previous")
     paginator_next = models.CharField(default="Next")
+
+    social_share_links = StreamField([
+        ('social', StructBlock([
+            ('icon', ImageChooserBlock()),
+            ('link', URLBlock(required=False)),
+        ]))
+    ], use_json_field=True, null=True, blank=True, help_text="These links will be shown in pages which have a sharing widget; link URLs should be the respective social media site's share link, with the place share message's content being replaced with {}. For example, Twitter's share link would be 'https://twitter.com/intent/tweet?text={}'.")
 
     # Hero section
     image = models.ForeignKey(
@@ -221,9 +251,13 @@ class HomePage(Page):
     content_panels = Page.content_panels + [
         MultiFieldPanel([
             MultiFieldPanel([
+                FieldPanel('top_navigation_socials'),
+                FieldPanel('top_navigation_links'),
+                FieldPanel('top_navigation_donate_text'),
+                FieldPanel('top_navigation_donate_url'),
                 FieldPanel('navigation'),
                 FieldPanel('navigation_buttons'),
-                FieldPanel('footer_candid_seal'),
+                FieldPanel('footer_certifications'),
                 FieldPanel('footer_bottom_copyright'),
                 FieldPanel('footer_bottom_links'),
             ], heading="Navigation"),
@@ -235,7 +269,10 @@ class HomePage(Page):
             MultiFieldPanel([
                 FieldPanel('paginator_previous'),
                 FieldPanel('paginator_next'),
-            ], heading="Paginator", help_text="This is used in instances where there's a previous/next button; i.e., the news page when flipping through pages.")
+            ], heading="Paginator", help_text="This is used in instances where there's a previous/next button; i.e., the news page when flipping through pages."),
+            MultiFieldPanel([
+                FieldPanel('social_share_links'),
+            ], heading="Misc")
         ], heading="Universal items"),
         MultiFieldPanel([
             FieldPanel("image"),

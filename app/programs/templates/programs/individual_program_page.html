@@ -20,7 +20,7 @@
                 </div>
                 {{ page.description|safe }}
             </div>
-            {% image page.intro_image original class="pb-8 lg:order-1 aspect-[3/2]" %}
+            {% image page.intro_image original class="pb-8 lg:order-1 aspect-[3/2] object-cover object-center" %}
         </div>
 
         <h1 class="text-h2 font-bold">
@@ -77,11 +77,13 @@
                 </div>
 
                 <div class="text-right self-center text-intro">
-                    {% include "ui/components/BaseLink.html" with linkurl=page.get_parent.specific.view_all_partners_link_url linktext=page.get_parent.specific.view_all_partners_title %}
+                    {% with page.id|stringformat:"s" as id %}
+                        {% include "ui/components/BaseLink.html" with linkurl=page.get_parent.specific.view_all_partners_link_url linktext=page.get_parent.specific.view_all_partners_title linkappendage="?prg"|add:id|add:"=on" %}
+                    {% endwith %}
                 </div>
             </div>
             
-            {% include "ui/components/partners/PartnerViewBlock.html" with partners=page.partners.all %}
+            {% include "ui/components/partners/PartnerViewBlock.html" with partners=page.partner_list %}
         </div>
 
         <div class="py-6">

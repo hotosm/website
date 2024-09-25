@@ -254,3 +254,90 @@
 .link-hover-colourer:hover {
     color: var(--link-hover-colourer-colour);
 }
+
+.salary-framework-table th,
+.salary-framework-table td {
+    padding: 0.25em;
+    border: 1px solid black;
+}
+
+.salary-framework-table th {
+    text-align: center;
+}
+
+.salary-framework-table caption {
+    margin-bottom: 0.5em;
+    font-weight: bold;
+}
+
+.salary-framework-table table {
+    border-collapse: collapse;
+    margin: 2em 0;
+}
+
+.salary-framework-table th:nth-child(n+3),
+.salary-framework-table td:nth-child(n+3) {
+    color: var(--hot-red);
+    background-color: var(--hot-off-white);
+}
+
+.salary-framework-table th:nth-child(n+2),
+.salary-framework-table td:nth-child(n+2) {
+    padding-left: 1em;
+    padding-right: 1em;
+    text-align: center;
+}
+
+.salary-framework-table td:nth-child(2) {
+    font-weight: bold;
+}
+
+#BambooHR-ATS {
+    color: black;
+}
+
+#BambooHR-ATS>.BambooHR-ATS-board>h2 {
+    display: none;
+}
+
+#BambooHR-ATS .blankState {
+    padding: 1.5rem 1.5rem 2rem 1.5rem;
+    background-color: var(--hot-off-white);
+    line-height: 2.2;
+}
+
+#BambooHR-ATS .blankState strong {
+    font-size: var(--font-size-h3);
+}
+
+#BambooHR-Footer {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.BambooHR-ATS-Department-List {
+    display: grid;
+    gap: 2rem;
+}
+
+.BambooHR-ATS-Department-List .BambooHR-ATS-Department-Item {
+    padding: 1.5rem;
+    background-color: var(--hot-off-white);
+}
+
+.BambooHR-ATS-Department-List .BambooHR-ATS-Department-Item .BambooHR-ATS-Jobs-Item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+}
+
+.BambooHR-ATS-Department-List .BambooHR-ATS-Department-Item .BambooHR-ATS-Jobs-Item a {
+    font-size: var(--font-size-h3);
+    font-weight: bold;
+}
+
+.BambooHR-ATS-Department-List .BambooHR-ATS-Department-Item .BambooHR-ATS-Jobs-Item a:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+}

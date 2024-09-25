@@ -48,7 +48,7 @@
     </head>
     <body class="min-h-screen {% block body_class %}{% endblock body_class %}">
         <div x-data="{ isMenuOpen: false, isSearchClicked: false, isLandingPage: false, setIsLandingPage(x) {this.isLandingPage = x} }">
-            {% include "components/nav/secondary_desktop_nav.html" %}
+            {% include "ui/components/navigation/UpperHeaderNavbar.html" %}
             <div class="relative">
                 {% comment %} {% include "components/header/header.html" %} {% endcomment %}
                 {% include "ui/components/navigation/SearchModal.html" %}

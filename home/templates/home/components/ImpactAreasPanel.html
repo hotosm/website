@@ -62,9 +62,7 @@
                             {% include "ui/components/BaseLinkNoUnderline.html" with linktext=page.impact_areas_learn_more linkurl=area.url %}
                         </p>
                     </div>
-                    {% image area.intro_image original as area_image %}
-                    <div class="col-span-2 bg-cover bg-no-repeat h-40" style="background-image: url('{{area_image.url}}')" >
-                    </div>
+                    {% image area.intro_image original class="col-span-2 w-full aspect-[2/1] object-cover object-center" %}
                 </div>
             </div>
         {% endfor %}

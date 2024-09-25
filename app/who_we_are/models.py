@@ -24,6 +24,7 @@ class TextAndLinkBlock(StructBlock):
 
 class OtherPagePreviewBlock(StructBlock):
     image = ImageChooserBlock()
+    description = RichTextBlock(required=False)
     page = PageChooserBlock()
 
 
@@ -61,6 +62,7 @@ class WhoWeArePage(Page):
     our_people_links = StreamField([('link_block', TextAndLinkBlock())], use_json_field=True, null=True, blank=True)
 
     other_page_preview_blocks = StreamField([('other_page_preview', OtherPagePreviewBlock())], use_json_field=True, null=True, blank=True)
+    preview_learn_more_text = models.CharField(default="Learn more")
 
     partners_title = models.CharField(default="Meet Our Partners")
     partners_view_all_text = models.CharField(default="View All Partners")
@@ -114,6 +116,7 @@ class WhoWeArePage(Page):
             FieldPanel('our_people_links'),
         ], heading="Our People"),
         FieldPanel('other_page_preview_blocks'),
+        FieldPanel('preview_learn_more_text'),
         MultiFieldPanel([
             FieldPanel('partners_title'),
             FieldPanel('partners_view_all_text'),

@@ -5,16 +5,15 @@ from django.core.exceptions import ValidationError
 from wagtail.models import Page
 from wagtail.fields import RichTextField, StreamField
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel
+from wagtail.snippets.blocks import SnippetChooserBlock
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.blocks import CharBlock, StreamBlock, StructBlock, URLBlock, RichTextBlock, PageChooserBlock
 from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
 from wagtail.search import index
-
-from app.projects.models import IndividualProjectPage
-
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
 
-from app.core.models import LinkOrPageBlock
+from app.projects.models import IndividualProjectPage
+from app.core.models import LinkOrPageBlock, Partner
 
 
 class IndividualStatBlock(StructBlock):
@@ -119,7 +118,7 @@ class IndividualProgramPage(Page):
 
     goals = StreamField(ProgramGoalBlock(), use_json_field=True, null=True, blank=True)
 
-    partners = ParentalManyToManyField('core.Partner', blank=True)
+    partner_list = StreamField([('partner', SnippetChooserBlock(Partner))], use_json_field=True, null=True, blank=True)
 
     more_programs = StreamField([
         ('program_page', PageChooserBlock(page_type="programs.IndividualProgramPage"))
@@ -148,7 +147,7 @@ class IndividualProgramPage(Page):
             FieldPanel("goals"),
         ], heading="Goals"),
         MultiFieldPanel([
-            FieldPanel("partners", widget=forms.CheckboxSelectMultiple),
+            FieldPanel("partner_list"),
         ], heading="Partners"),
         MultiFieldPanel([
             FieldPanel("more_programs"),

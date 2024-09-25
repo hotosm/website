@@ -4,14 +4,14 @@
 <div x-data="{language: '{{ LANGUAGE_CODE }}'}">
     <form action="{% url "set_language" %}" method="post">
         {% csrf_token %}
-        <input name="next" type="hidden" value="{{ redirect_to }}">
+        <input name="next" type="hidden" value="{{ redirect_to }}" class="text-small">
         <!-- The select element with custom styling for language selection -->
         <select name="language"
                 aria-label="Language Select"
                 x-model="language"
                 @change="$event.target.form.submit()"
                 arial-labelledby="language-select-label"
-                class="language-select hover:underline border-none appearance-none focus:outline-none pl-4 cursor-pointer lg:pl-0">
+                class="language-select hover:underline border-none appearance-none focus:outline-none pl-4 cursor-pointer lg:pl-0 text-small">
             {% get_available_languages as LANGUAGES %} {# Fetches a list of available languages as tuples, e.g., ("en", "English") #}
             {% get_language_info_list for LANGUAGES as languages %}
             {% for language in languages %}

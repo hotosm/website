@@ -34,7 +34,18 @@ No parameters; it grabs directly from the home page (for the correct locale).
             </div>
         </div>
 
-        {% image home_page.footer_candid_seal original %}
+        <div class="flex gap-4 flex-wrap">
+            {% for certification in home_page.footer_certifications %}
+                {% if certification.value.link %}
+                    <a href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=certification.value.link%}">
+                {% endif %}
+                    {% image certification.value.icon original class="h-24 w-auto" %}
+                {% if certification.value.link %}
+                    </a>
+                {% endif %}
+            {% endfor %}
+        </div>
+
         <hr class="border-black my-6" />
 
         {% comment %} COPYRIGHT + ASSORTED LINKS {% endcomment %}

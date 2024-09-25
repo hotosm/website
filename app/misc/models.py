@@ -7,6 +7,7 @@ from wagtail.blocks import CharBlock, StreamBlock, StructBlock, URLBlock, RichTe
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.models import Page
 from wagtail.documents.blocks import DocumentChooserBlock
+from wagtail.contrib.table_block.blocks import TableBlock
 
 from app.core.models import LinkOrPageBlock
 
@@ -533,4 +534,34 @@ class LivingStrategyPage(Page):
         FieldPanel('download_title'),
         FieldPanel('downloads'),
         FieldPanel('description'),
+    ]
+
+
+class SalaryFrameworkPage(Page):
+    max_count = 1
+
+    intro = RichTextField(blank=True)
+    body = StreamField([
+        ('text', RichTextBlock()),
+        ('table', TableBlock()),
+    ], use_json_field=True, blank=True)
+    go_back_prefix_text = models.CharField(default="Go Back to", help_text="This text will be a prefix to the parent page of this current page, and the attached link will always go to the parent page; i.e., if this page is a child of the 'Work for HOT' page, and this field is 'Go Back to', the link will read 'Go Back to Work for HOT'.")
+
+    sidebar_block_title = models.CharField(default="HOT's Journey through Salary Transparency")
+    sidebar_block_description = RichTextField(blank=True)
+    sidebar_block_button_text = models.CharField(default="Read More")
+    sidebar_block_button_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
+
+    content_panels = Page.content_panels + [
+        MultiFieldPanel([
+            FieldPanel('intro'),
+            FieldPanel('body'),
+            FieldPanel('go_back_prefix_text'),
+        ]),
+        MultiFieldPanel([
+            FieldPanel('sidebar_block_title'),
+            FieldPanel('sidebar_block_description'),
+            FieldPanel('sidebar_block_button_text'),
+            FieldPanel('sidebar_block_button_link'),
+        ]),
     ]

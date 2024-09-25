@@ -9,13 +9,20 @@
 
 {% image image original as previmg %}
 <a href="{{page.url}}">
-    <div class="bg-gradient-to-t from-black to-transparent to-30% grid">
+    <div class="bg-gradient-to-t from-black to-transparent to-30% grid lg:[&:hover_.hover-show]:pointer-events-auto lg:[&:hover_.hover-show]:opacity-100 w-full aspect-[3/2]">
         <div class="min-h-[16rem] bg-cover bg-no-repeat -z-10 relative row-start-1 col-start-1" style="background-image: url('{{previmg.url}}')">
         </div>
         <div class="row-start-1 col-start-1 flex-col justify-end p-4 hidden lg:flex">
             <h1 class="font-semibold text-h3 text-white">
                 {{page.title}}
             </h1>
+        </div>
+        <div class="hover-show row-start-1 col-start-1 opacity-0 pointer-events-none bg-hot-red text-white justify-center py-4 px-6 flex flex-col transition duration-100">
+            <h2 class="text-h3 font-bold">{{page.title}}</h2>
+            <p class="">{{tablet_description}}</p>
+            <p class="mt-2">
+                {% include "ui/components/BaseLinkNoUnderlineWhite.html" with anchorless=True linktext=read_more_text whitearrow=True %}
+            </p>
         </div>
     </div>
     <div class="lg:hidden">

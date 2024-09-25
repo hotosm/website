@@ -6,6 +6,8 @@ from wagtail.fields import RichTextField, StreamField
 from wagtail.blocks import CharBlock, StreamBlock, StructBlock, URLBlock, RichTextBlock, PageChooserBlock
 from wagtail.models import Page
 
+from app.core.models import LinkOrPageBlock
+
 
 class RequestForProposalOwnerPage(Page):
     def get_context(self, request, *args, **kwargs):
@@ -53,7 +55,7 @@ class RequestForProposalOwnerPage(Page):
     job_opportunities_title = models.CharField(default="See Our Job Opportunities")
     job_opportunities_description = RichTextField(blank=True)
     job_opportunities_button_text = models.CharField(default="See All Job Opportunities")
-    job_opportunities_button_link = models.URLField(blank=True)
+    job_opportunities_button_url = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
 
     posted_by_prefix_text = models.CharField(default="Posted by")
 
@@ -90,7 +92,7 @@ class RequestForProposalOwnerPage(Page):
             FieldPanel('job_opportunities_title'),
             FieldPanel('job_opportunities_description'),
             FieldPanel('job_opportunities_button_text'),
-            FieldPanel('job_opportunities_button_link'),
+            FieldPanel('job_opportunities_button_url'),
         ], heading="Footer banner"),
         MultiFieldPanel([
             FieldPanel('posted_by_prefix_text'),

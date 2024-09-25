@@ -8,27 +8,26 @@
 {% image event.image original as image_p %}
 <div class="{{class}}">
     {% if showimage %}
-        <div class="image-hide-small w-full min-h-[9rem] mb-3 content-end bg-no-repeat bg-cover image-overshadow-gradient" style="background-image: url('{{ image_p.url }}')">
-            <div>
-            </div>
+        <div class="w-full min-h-[9rem] mb-3 image-overshadow-gradient">
+            {% image event.image original class="aspect-[8/5] object-cover object-center" %}
         </div>
     {% endif %}
 
-    <div class="flex w-full [&_p]:text-hot-dark-grey [&_p]:text-small justify-between flex-wrap">
+    <div class="flex w-full [&_p]:text-hot-dark-grey [&_p]:text-small justify-between flex-wrap gap-1">
         {% if event.start_date_time.date == event.end_date_time.date %}
             <p>
                 {{ event.start_date_time.date }}
             </p>
             <p>
-                {{event.start_date_time.time}} &#x2013; {{ event.end_date_time.time }}
+                {{event.start_date_time.time}} {{event.start_date_time.tzinfo}} &#x2013; {{ event.end_date_time.time }} {{event.end_date_time.tzinfo}}
             </p>
         {% else %}
             <p>
-                {{event.start_date_time}} 
+                {{event.start_date_time}} {{event.start_date_time.tzinfo}}
             </p>
             <p> &#x2013; </p>
             <p>
-                {{event.end_date_time}}
+                {{event.end_date_time}} {{event.end_date_time.tzinfo}}
             </p>
         {% endif %}
     </div>

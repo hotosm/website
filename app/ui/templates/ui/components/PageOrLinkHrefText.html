@@ -8,6 +8,10 @@
     {% endif %}
 {% else %}
     {% if linkurl %}
-        {{ linkurl }}{{linkappendage}}
+        {% if linkurl.url %}
+            {{ linkurl.url }}{{linkappendage}}
+        {% else %}
+            {{ linkurl }}{{linkappendage}}
+        {% endif %}
     {% endif %}
 {% endif %}

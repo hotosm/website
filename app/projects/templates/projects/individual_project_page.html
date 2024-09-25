@@ -22,7 +22,7 @@
                     </div>
                     {{ page.description }}
                 </div>
-                {% include "ui/components/CTABodyPanelBase.html" with title=page.call_to_action_title text=page.call_to_action_description linktext=page.call_to_action_link_text linkurl=page.call_to_action_link_url %}
+                {% include "ui/components/CTABodyPanelBase.html" with title=page.call_to_action_title text=page.call_to_action_description linktext=page.call_to_action_link_text linkurl=page.call_to_action_link %}
             </div>
 
             {% comment %} SIDEBAR {% endcomment %}
@@ -54,11 +54,11 @@
                             {%if page.project_status%}<p>{{page.project_status}}</p>{%endif%}
                         </div>
 
-                        {% if page.partners_list.all %}
+                        {% if page.partner_list %}
                             <div>
                                 <p>{{page.get_parent.specific.partners_title}}</p>
-                                {% for partner in page.partners_list.all %}
-                                    <p><a href="{{partner.partner_url}}">{{partner.partner_name}}</a></p>
+                                {% for partner in page.partner_list %}
+                                    <p><a href="{{partner.value.partner_url}}">{{partner.value.partner_name}}</a></p>
                                 {% endfor %}
                             </div>
                         {% endif %}
@@ -97,7 +97,7 @@
                             {{ page.get_parent.specific.related_news_title }}
                         </h1>
                         <div class="[&_span]:text-black text-intro">
-                            {% include "ui/components/BaseLink.html" with linkurl=page.get_parent.specific.view_all_news_url linktext=page.get_parent.specific.view_all_news_text %}
+                            {% include "ui/components/BaseLink.html" with linkurl=page.get_parent.specific.view_all_news_link linktext=page.get_parent.specific.view_all_news_text %}
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-4 mt-8">
                             {% with allnews=page.related_news %}
@@ -116,7 +116,7 @@
                             {{ page.get_parent.specific.related_events_title }}
                         </h1>
                         <div class="[&_span]:text-black text-intro">
-                            {% include "ui/components/BaseLink.html" with linkurl=page.get_parent.specific.view_all_events_url linktext=page.get_parent.specific.view_all_events_text %}
+                            {% include "ui/components/BaseLink.html" with linkurl=page.get_parent.specific.view_all_events_link linktext=page.get_parent.specific.view_all_events_text %}
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-12 mt-10">
                             {% for event in page.related_events %}
@@ -131,10 +131,10 @@
         {% comment %} BOTTOM AREA {% endcomment %}
         <div class="grid grid-cols-1 md:grid-cols-2 text-white my-10 mx-5">
             <div class="mx-5 mb-10 md:mb-0">
-                {% include "ui/components/dogear_boxes/DogearRed.html" with title=page.get_parent.specific.red_box_title linktext=page.get_parent.specific.red_box_link_text linkurl=page.get_parent.specific.red_box_link_url %}
+                {% include "ui/components/dogear_boxes/DogearRed.html" with title=page.get_parent.specific.red_box_title linktext=page.get_parent.specific.red_box_link_text linkurl=page.get_parent.specific.red_box_link %}
             </div>
             <div class="mx-5">
-                {% include "ui/components/dogear_boxes/DogearBlack.html" with title=page.get_parent.specific.black_box_title linktext=page.get_parent.specific.black_box_link_text linkurl=page.get_parent.specific.black_box_link_url %}
+                {% include "ui/components/dogear_boxes/DogearBlack.html" with title=page.get_parent.specific.black_box_title linktext=page.get_parent.specific.black_box_link_text linkurl=page.get_parent.specific.black_box_link %}
             </div>
         </div>
     </div>

@@ -7,12 +7,15 @@ from wagtail.models import Page
 from wagtail.fields import RichTextField, StreamField
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel, PageChooserPanel
 from wagtail.blocks import CharBlock, StreamBlock, StructBlock, URLBlock, RichTextBlock, PageChooserBlock
+from wagtail.snippets.blocks import SnippetChooserBlock
 from wagtail.search import index
 from wagtail.snippets.models import register_snippet
 
 from wagtailgeowidget.panels import LeafletPanel
 
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
+
+from app.core.models import LinkOrPageBlock, Partner
 
 
 """
@@ -63,17 +66,17 @@ class ProjectOwnerPage(Page):
 
     related_news_title = models.CharField(default="Related News")
     view_all_news_text = models.CharField(default="View all News")
-    view_all_news_url = models.URLField(blank=True)
+    view_all_news_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
     related_events_title = models.CharField(default="Related Events")
     view_all_events_text = models.CharField(default="View all Events")
-    view_all_events_url = models.URLField(blank=True)
+    view_all_events_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
 
     red_box_title = models.CharField(default="Chat with Our Community")
     red_box_link_text = models.CharField(default="Get connected now")
-    red_box_link_url = models.URLField(null=True, blank=True)
+    red_box_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
     black_box_title = models.CharField(default="Our Work")
     black_box_link_text = models.CharField(default="View Our Work")
-    black_box_link_url = models.URLField(null=True, blank=True)
+    black_box_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
 
     content_panels = Page.content_panels + [
         MultiFieldPanel([
@@ -92,19 +95,19 @@ class ProjectOwnerPage(Page):
                 MultiFieldPanel([
                     FieldPanel('related_news_title'),
                     FieldPanel('view_all_news_text'),
-                    FieldPanel('view_all_news_url'),
+                    FieldPanel('view_all_news_link'),
                     FieldPanel('related_events_title'),
                     FieldPanel('view_all_events_text'),
-                    FieldPanel('view_all_events_url'),
+                    FieldPanel('view_all_events_link'),
                 ], heading="Related Pages"),
             ], heading="Sidebar"),
             MultiFieldPanel([
                 FieldPanel('red_box_title'),
                 FieldPanel('red_box_link_text'),
-                FieldPanel('red_box_link_url'),
+                FieldPanel('red_box_link'),
                 FieldPanel('black_box_title'),
                 FieldPanel('black_box_link_text'),
-                FieldPanel('black_box_link_url'),
+                FieldPanel('black_box_link'),
             ], heading="Footer"),
         ], heading="Individual Project Page"),
     ]
@@ -176,7 +179,7 @@ class IndividualProjectPage(Page):
     call_to_action_title = models.CharField(default="Call to Action")
     call_to_action_description = RichTextField(null=True, blank=True)
     call_to_action_link_text = models.CharField(default="Call to Action Link")
-    call_to_action_link_url = models.URLField(null=True, blank=True)
+    call_to_action_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
 
     # > SIDE BAR
     project_status = models.ForeignKey(
@@ -188,7 +191,7 @@ class IndividualProjectPage(Page):
     impact_area_list = StreamField([('impact_area', PageChooserBlock(page_type="impact_areas.IndividualImpactAreaPage"))], use_json_field=True, null=True, blank=True)
     region_hub_list = StreamField([('region_hub', PageChooserBlock(page_type="mapping_hubs.IndividualMappingHubPage"))], use_json_field=True, null=True, blank=True)
     duration = models.CharField(default="Ongoing", blank=True)
-    partners_list = ParentalManyToManyField('core.Partner', blank=True)
+    partner_list = StreamField([('partner', SnippetChooserBlock(Partner))], use_json_field=True, null=True, blank=True)
     tools_list = StreamField([('tool', PageChooserBlock(page_type="tech.IndividualTechStackPage"))], use_json_field=True, null=True, blank=True)
     contact = RichTextField(null=True, blank=True)
     types = ParentalManyToManyField('projects.ProjectType', blank=True)
@@ -221,7 +224,7 @@ class IndividualProjectPage(Page):
                 FieldPanel('call_to_action_title'),
                 FieldPanel('call_to_action_description'),
                 FieldPanel('call_to_action_link_text'),
-                FieldPanel('call_to_action_link_url'),
+                FieldPanel('call_to_action_link'),
             ], heading="Call to Action"),
         ], heading="Body"),
         MultiFieldPanel([
@@ -229,7 +232,7 @@ class IndividualProjectPage(Page):
             FieldPanel('impact_area_list'),
             FieldPanel('region_hub_list'),
             FieldPanel('duration'),
-            FieldPanel('partners_list', widget=forms.CheckboxSelectMultiple),
+            FieldPanel('partner_list'),
             FieldPanel('tools_list'),
             FieldPanel('contact'),
             FieldPanel('types', widget=forms.CheckboxSelectMultiple),

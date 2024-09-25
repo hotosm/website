@@ -10,11 +10,22 @@
 {% endblock extra_css %}
 
 {% block content %}
-    {% include "ui/components/PageHeaderWithBlur.html" with title=page.title subtitle=page.intro image=page.header_image full_length=True smaller=True %}
+    {% include "ui/components/PageHeaderWithBlur.html" with title=page.title image=page.header_image full_length=True smaller=True endinlarge=True %}
     
-    <div class="max-w-7xl mx-auto my-10" x-data="{ params: new URLSearchParams((new URL(window.location.href)).search) }">
+    <div class="max-w-7xl mx-auto my-10" x-data="{ params: new URLSearchParams((new URL(window.location.href)).search), activeParams: {} }">
         <div class="px-6 md:px-10">
-            <form>
+            <div class="max-w-5xl text-intro font-medium mb-20">
+                {{ page.intro|richtext }}
+            </div>
+
+            <form hx-get="{{page.url}}"
+                hx-trigger="submit"
+                hx-target="#partners-list, #next-partner"
+                hx-select="#partners-list, #next-partner"
+                hx-swap="innerHTML"
+                hx-select-oob="#partners-list:outerHTML, #next-partner:innerHTML"
+                @submit="activeParams = new FormData($el);"
+            >
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {% comment %} TYPES {% endcomment %}
                     <div class="relative" x-data="{ show: false }" @click.away="show = false">
@@ -35,6 +46,44 @@
                         </div>
                     </div>
 
+                    {% comment %} HUB {% endcomment %}
+                    <div class="relative" x-data="{ show: false }" @click.away="show = false">
+                        <div class="w-full h-full flex justify-between py-2 px-3 bg-hot-off-white items-center cursor-pointer" @click="show = !show">
+                            <p class="pointer-events-none">
+                                {{page.filter_by_hub}}
+                            </p>
+                            {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-90 text-hot-red" %}
+                        </div>
+                        <div class="absolute z-20 bg-hot-off-white p-4 w-full" x-show="show">
+                            <hr class="border-b-2">
+                            {% for hub in hubs %}
+                                <div class="mt-4 flex">
+                                    <label for="hub-{{forloop.counter}}">{{hub.title}}</label>
+                                    <input class="ml-auto checked:bg-hot-red checked:hover:bg-hot-red checked:focus:bg-hot-red" id="hub-{{forloop.counter}}" type="checkbox" name="hub{{hub.id}}" :checked="params.get('hub{{hub.id}}')">
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    {% comment %} PROGRAM {% endcomment %}
+                    <div class="relative" x-data="{ show: false }" @click.away="show = false">
+                        <div class="w-full h-full flex justify-between py-2 px-3 bg-hot-off-white items-center cursor-pointer" @click="show = !show">
+                            <p class="pointer-events-none">
+                                {{page.filter_by_program}}
+                            </p>
+                            {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-90 text-hot-red" %}
+                        </div>
+                        <div class="absolute z-20 bg-hot-off-white p-4 w-full" x-show="show">
+                            <hr class="border-b-2">
+                            {% for program in programs %}
+                                <div class="mt-4 flex">
+                                    <label for="program-{{forloop.counter}}">{{program.title}}</label>
+                                    <input class="ml-auto checked:bg-hot-red checked:hover:bg-hot-red checked:focus:bg-hot-red" id="program-{{forloop.counter}}" type="checkbox" name="prg{{program.id}}" :checked="params.get('prg{{program.id}}')">
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
                     <div class="bg-hot-red text-white font-semibold">
                         <input type="submit" value="{{page.filter_button_text}}" class="bg-transparent w-full h-full cursor-pointer py-2">
                     </div>
@@ -43,15 +92,17 @@
 
             <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8 mt-10" id="partners-list">
                 {% for partner in partners %}
-                    <div class="flex justify-center">
-                        {% image partner.partner_logo original class="max-h-24 max-w-full h-full w-auto" %}
-                    </div>
+                    <a href="{{partner.partner_url}}">
+                        <div class="flex justify-center">
+                            {% image partner.partner_logo original class="max-h-24 max-w-full h-full w-auto" %}
+                        </div>
+                    </a>
                 {% endfor %}
             </div>
             <p class="text-center mt-10" id="next-partner" class="{% if not partners.has_next %}hidden{% endif %}">
                 {% if partners.has_next %}
                         {% comment %} <a href="?page={{ projects.next_page_number }}"></a> {% endcomment %}
-                        <button hx-get="?page={{ partners.next_page_number }}"
+                        <button :hx-get="'?page={{ partners.next_page_number }}&' + `${(new URLSearchParams(activeParams)).toString()}`"
                             hx-trigger="click"
                             hx-select="#partners-list, #next-partner"
                             hx-swap="beforeend"

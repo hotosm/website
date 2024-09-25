@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load static %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+{% load compress %}
+{% block body_class %}template-jobopportunitiespage{% endblock %}
+{% block extra_css %}
+    {% compress css %}
+    {% endcompress css %}
+{% endblock extra_css %}
+
+{% block content %}
+    {% include "ui/components/PageHeaderWithBlur.html" with title=page.title subtitle=page.header_text image=page.header_image full_length=True smaller=True %}
+    
+    <div class="max-w-7xl mx-auto my-10">
+        <div class="px-6 md:px-10">
+            <div class="lg:grid lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-2">
+                    <div class="text-intro font-bold mb-4">
+                        {{page.intro|richtext}}
+                    </div>
+                    <div class="base-article-m [&_a]:font-bold mb-10">
+                        {{page.description|richtext}}
+                    </div>
+
+                    {% include "ui/components/TitleWithUnderline.html" with title=page.positions_title %}
+                    <div class="grid gap-8 mt-8" id="BambooHR-ATS"></div>
+                </div>
+                <div class="hidden lg:block">
+                    {% include "./components/AsideBlock.html" %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-10">
+        {% include "ui/components/sections/NavyBackgroundWithImage.html" with image=page.rfp_banner_image title=page.rfp_banner_title description=page.rfp_banner_description button_text=page.rfp_banner_button_text button_link=page.rfp_banner_button_link imageright=True %}
+    </div>
+
+    <div class="max-w-7xl mx-auto my-10">
+        <div class="px-6 md:px-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-white my-20">
+                <div>
+                    {% include "ui/components/dogear_boxes/DogearRed.html" with title=page.red_box_title description=page.red_box_description linktext=page.red_box_link_text linkurl=page.red_box_link_url %}
+                </div>
+                <div>
+                    {% include "ui/components/dogear_boxes/DogearBlack.html" with title=page.black_box_title description=page.black_box_description linktext=page.black_box_link_text linkurl=page.black_box_link_url %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-hot-off-white lg:hidden">
+        <div class="max-w-7xl mx-auto my-10">
+            {% include "./components/AsideBlock.html" %}
+        </div>
+    </div>
+
+    {% include "./components/BambooHRScript.html" %}
+{% endblock %}

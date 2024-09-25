@@ -10,7 +10,7 @@
 {% endblock extra_css %}
 
 {% block content %}
-    {% include "ui/components/PageHeaderWithBlur.html" with title=page.title subtitle=page.header_description image=page.header_image %}
+    {% include "ui/components/PageHeaderWithBlur.html" with title=page.title subtitle=page.header_description image=page.header_image full_length=True %}
     
     <div class="max-w-7xl mx-auto my-10">
         <div class="px-6 md:px-10">
@@ -57,7 +57,7 @@
     </div>
     
     <div class="mt-20">
-        {% include "ui/components/sections/NavyBackgroundWithImage.html" with image=page.job_opportunities_image title=page.job_opportunities_title description=page.job_opportunities_description button_text=page.job_opportunities_button_text button_link=page.job_opportunities_button_link imageright=True %}
+        {% include "ui/components/sections/NavyBackgroundWithImage.html" with image=page.job_opportunities_image title=page.job_opportunities_title description=page.job_opportunities_description button_text=page.job_opportunities_button_text button_link=page.job_opportunities_button_url imageright=True %}
     </div>
 
     <div class="max-w-7xl mx-auto bg-hot-off-white lg:hidden">

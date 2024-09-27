@@ -33,7 +33,7 @@ class RequestForProposalOwnerPage(Page):
         related_name="+",
         help_text="Header image"
     )
-    header_description = RichTextField(blank=True)
+    intro = RichTextField(blank=True)
 
     current_rfps_title = models.CharField(default="Current RFPs")
     rfp_location_text = models.CharField(default="Location")
@@ -74,7 +74,7 @@ class RequestForProposalOwnerPage(Page):
     content_panels = Page.content_panels + [
         MultiFieldPanel([
             FieldPanel('header_image'),
-            FieldPanel('header_description'),
+            FieldPanel('intro'),
         ], heading="Header"),
         MultiFieldPanel([
             FieldPanel('current_rfps_title'),

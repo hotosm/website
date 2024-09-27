@@ -11,6 +11,8 @@ from app.news.models import IndividualNewsPage
 from app.mapping_hubs.models import IndividualMappingHubPage
 from wagtail.search import index
 
+from app.core.models import LinkOrPageBlock
+
 class WebLinkStructBlock(StructBlock):
     link_text = CharBlock(required=True)
     link_url = URLBlock(required=False, blank=True)
@@ -40,7 +42,7 @@ class MemberGroupOwnerPage(Page):
     footer_box_title = models.CharField(default="Work for HOT")
     footer_box_description = RichTextField(blank=True)
     footer_box_button_text = models.CharField(default="Check our Job Opportunities")
-    footer_box_button_link = models.URLField(blank=True)
+    footer_box_button_url = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
 
     content_panels = Page.content_panels + [
         MultiFieldPanel([
@@ -56,7 +58,7 @@ class MemberGroupOwnerPage(Page):
             FieldPanel('footer_box_title'),
             FieldPanel('footer_box_description'),
             FieldPanel('footer_box_button_text'),
-            FieldPanel('footer_box_button_link'),
+            FieldPanel('footer_box_button_url'),
         ], heading="Footer box"),
     ]
 

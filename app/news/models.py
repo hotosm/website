@@ -31,7 +31,7 @@ class NewsOwnerPage(Page):
         tags = [x[4:] for x in request.GET.keys() if x.startswith("tag.")]
         query = Q()
         for category in categories:
-            if request.GET.get(str(category), ''):
+            if request.GET.get("cat" + str(category.id), ''):
                 query = query | Q(categories=category)
         news_list = news_list.filter(query).distinct()
         

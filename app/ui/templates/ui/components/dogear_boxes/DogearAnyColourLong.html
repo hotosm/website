@@ -11,7 +11,7 @@
     <h1 class="text-h3 font-bold col-span-3">
         {{ title }}
     </h1>
-    <p class="[&_span]:text-black self-center text-intro text-right">
+    <p class="{%if textcolor%}{{textcolor}}{%else%}[&_span]:text-black{%endif%} self-center text-intro text-right">
         {% include "ui/components/BaseLinkNoUnderline.html" %}
     </p>
 </div>

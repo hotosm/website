@@ -16,19 +16,9 @@ If you'd like, refer to app.ui.models to see the specifics of what makes up a ca
             class="mt-20 lg:w-96 lg:mt-0 backdrop-blur-md p-8 shadow-md h-80 flex flex-col bg-hot-red md:bg-transparent">
             <div class="text-h4 font-bold h-fit">{{ block.value.header }}</div>
             <div class="text-lg font-regular h-fit my-2">{{ block.value.body }}</div>
-            <a href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=block.value.action_button.link%}" class="mt-auto">
-                <div class="text-intro font-medium inline-flex space-x-5 items-center">
-                    <span>{{ block.value.action_button.text }}</span>
-                    
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                        width="10.689"
-                        height="16.819"
-                        class="text-white md:text-hot-red"
-                        viewBox="0 0 10.689 16.819">
-                        <path id="Path_4671" data-name="Path 4671" d="M0,8.28,7,0l7,8.28" transform="translate(9.689 1.409) rotate(90)" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
-                    </svg>
-                </div>
-            </a>
+            <p class="mt-auto text-intro">
+                {% include "ui/components/BaseLinkNoUnderlineWhite.html" with linktext=block.value.action_button.text linkurl=block.value.action_button.link %}
+            </p>
         </div>
     {% endfor %}
     <div class="flex flex-row lg:flex-col justify-center lg:justify-normal bg-white md:bg-inherit [&_button]:text-hot-red [&_.selected]:text-white md:[&_button]:text-inherit">

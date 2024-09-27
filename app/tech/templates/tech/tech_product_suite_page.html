@@ -46,7 +46,9 @@
                     {% include "ui/components/dogear_boxes/DogearRed.html" with title=page.red_box_title linktext=page.red_box_link_text linkurl=page.red_box_link_url %}
                 </div>
                 <div>
-                    {% include "ui/components/dogear_boxes/DogearBlack.html" with title=page.black_box_title linktext=page.black_box_link_text linkurl=page.black_box_link_url %}
+                    {% with page.category_filter_selector.id|stringformat:"s" as id %}
+                        {% include "ui/components/dogear_boxes/DogearBlack.html" with title=page.black_box_title linktext=page.black_box_link_text linkurl=page.black_box_link_url linkappendage="?cat"|add:id|add:"=on" %}
+                    {% endwith %}
                 </div>
             </div>
 

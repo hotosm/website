@@ -18,15 +18,17 @@ No parameters; it grabs directly from the home page (for the correct locale).
             {% comment %} NAVIGATION ITEMS {% endcomment %}
             <div class="md:col-span-2 lg:col-span-3 md:columns-2 lg:columns-3">
                 {% for item in navigation %}
-                    {% if item.value.show_in_footer%}
+                    {% if item.value.show_in_footer %}
                         <div class="break-inside-avoid p-4">
                             <p class="font-bold text-intro hover:text-hot-red">
-                                <a href="{%if item.link_page%}{{item.link_page.url}}{%elif item.link_url%}{{item.link_url}}{%else%}#{%endif%}">{{item.value.title}}</a>
+                                <a href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=item.value.link%}">{{item.value.title}}</a>
                             </p>
                             {% for child in item.value.children %}
-                                <p class="pt-1 text-small hover:text-hot-red">
-                                    <a href="{%if child.value.link_page%}{{child.value.link_page.url}}{%elif child.value.link_url%}{{child.value.link_url}}{%else%}#{%endif%}">{{child.value.title}}</a>
-                                </p>
+                                {% if child.value.link %}
+                                    <p class="pt-1 text-small hover:text-hot-red">
+                                        <a href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=child.value.link%}">{{child.value.title}}</a>
+                                    </p>
+                                {% endif %}
                             {% endfor %}
                         </div>
                     {% endif %}

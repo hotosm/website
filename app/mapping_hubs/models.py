@@ -94,7 +94,7 @@ class OpenMappingHubsPage(Page):
     )
     header_description = RichTextField(blank=True)
     hub_text = models.CharField(default="Hub", help_text="The text following a hub's name; i.e., if this field is 'Hub', the title for 'Asia-Pacific' would become 'Asia-Pacific Hub'.")
-    learn_more_text = models.CharField(default="Learn More about", help_text="The text preceeding the hub's name in the link text; i.e., if this field is 'Learn More about', the link text for 'Asia-Pacific Hub' would become 'Learn More about Asia-Pacific Hub'.")
+    learn_more_text = models.CharField(default="Learn More")
 
     header_hub_text_white = models.CharField(default="Open Mapping")
     header_hub_text_red = models.CharField(default="Hub")

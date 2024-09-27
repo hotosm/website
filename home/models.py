@@ -27,21 +27,18 @@ class CarouselBlock(StreamBlock):
 
 class ThirdNavigationStructBlock(StructBlock):
     title = CharBlock()
-    link_url = URLBlock(required=False, help_text="A link URL or page must be provided; if both are present, the link will default to the page.")
-    link_page = PageChooserBlock(required=False, help_text="A link URL or page must be provided; if both are present, the link will default to the page.")
+    link = LinkOrPageBlock(required=False)
 
 
 class SecondNavigationStructBlock(StructBlock):
     title = CharBlock()
-    link_url = URLBlock(required=False, help_text="A link URL or page must be provided; if both are present, the link will default to the page.")
-    link_page = PageChooserBlock(required=False, help_text="A link URL or page must be provided; if both are present, the link will default to the page.")
+    link = LinkOrPageBlock(required=False)
     children = StreamBlock([('nav_item',ThirdNavigationStructBlock())], use_json_field=True, null=True, blank=True, required=False)
 
 
 class NavigationStructBlock(StructBlock):
     title = CharBlock()
-    link_url = URLBlock(required=False, help_text="A link URL or page must be provided; if both are present, the link will default to the page.")
-    link_page = PageChooserBlock(required=False, help_text="A link URL or page must be provided; if both are present, the link will default to the page.")
+    link = LinkOrPageBlock(required=False)
     show_in_footer = BooleanBlock(required=False, help_text="If checked, this item (and its children) will show in the footer's navigation; otherwise, it will not show up.")
     children = StreamBlock([('nav_item',SecondNavigationStructBlock())], use_json_field=True, null=True, blank=True, required=False)
 

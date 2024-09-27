@@ -2,9 +2,11 @@
     <a href="{%include 'ui/components/PageOrLinkHrefText.html'%}" class="font-medium text-white [&:hover_span]:underline [&:hover_span]:decoration-2">
 {% endif %}
     <span>{{linktext}}</span>
-    <span class="{%if whitearrow%}text-white{%else%}text-hot-red{%endif%}">
-        {% include "ui/components/icon_svgs/LinkCaret.html" with class="ml-2" %}
-    </span>
+    {% if whitearrow %}
+        {% include "ui/components/icon_svgs/LinkCaret.html" with class="ml-2 text-white" %}
+        {% else %}
+            {% include "ui/components/icon_svgs/LinkCaret.html" with class="ml-2 text-hot-red" %}
+    {% endif %}
 {% if not anchorless %}
     </a>
 {% endif %}

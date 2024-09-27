@@ -1,3 +1,4 @@
+from django import forms
 from django.db import models
 
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel
@@ -101,6 +102,14 @@ class TechProductSuitePage(Page):
     black_box_title = models.CharField(default="Tech News")
     black_box_link_text = models.CharField(default="View tech news")
     black_box_link_url = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
+    category_filter_selector = models.ForeignKey(
+        "news.NewsCategory",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text="The 'Tech News' link will be appended with a filter for this category. The selected category should be the Tech category."
+    )
 
     go_back_text = models.CharField(default="Go Back to Tools & Resources")
     go_back_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
@@ -126,6 +135,7 @@ class TechProductSuitePage(Page):
             FieldPanel('black_box_title'),
             FieldPanel('black_box_link_text'),
             FieldPanel('black_box_link_url'),
+            FieldPanel('category_filter_selector', widget=forms.RadioSelect),
         ], heading="Dogear Boxes"),
         MultiFieldPanel([
             FieldPanel('go_back_text'),

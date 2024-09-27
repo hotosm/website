@@ -41,8 +41,8 @@
 
             {% comment %} NEWS AND EVENTS SECTIONS {% endcomment %}
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-10 mb-20">
-                {% include "ui/components/dogear_boxes/SpecialDogearLinkBox.html" with colour=page.main_colour title=page.news_section_title description=page.news_section_description linktext=page.news_section_link_text linkurl=page.news_section_link_url %}
-                {% include "ui/components/dogear_boxes/SpecialDogearLinkBox.html" with colour=page.main_colour title=page.events_section_title description=page.events_section_description linktext=page.events_section_link_text linkurl=page.events_section_link_url %}
+                {% include "ui/components/dogear_boxes/SpecialDogearLinkBox.html" with colour=page.main_colour title=page.news_section_title description=page.news_section_description linktext=page.news_section_link_text linkurl=page.news_section_link %}
+                {% include "ui/components/dogear_boxes/SpecialDogearLinkBox.html" with colour=page.main_colour title=page.events_section_title description=page.events_section_description linktext=page.events_section_link_text linkurl=page.events_section_link %}
             </div>
 
             {% comment %} PARTNERS SECTION {% endcomment %}
@@ -85,7 +85,9 @@
             </div>
 
             {% comment %} SUBSCRIBE DOGEAR BOX SECTION {% endcomment %}
-            {% include "ui/components/dogear_boxes/DogearAnyColourLong.html" with colour=page.main_colour title=page.subscribe_box_text linktext=page.get_parent.specific.subscribe_box_signup_text linkurl=page.subscribe_box_signup_url %}
+            {% if page.subscribe_box_text %}
+                {% include "ui/components/dogear_boxes/DogearAnyColourLong.html" with colour=page.main_colour textcolor="[&_span]:text-white" title=page.subscribe_box_text linktext=page.get_parent.specific.subscribe_box_signup_text linkurl=page.subscribe_box_signup_url %}
+            {% endif %}
 
             {% comment %} EXPLORE OTHER HUBS SECTION {% endcomment %}
             <h1 class="text-h2 font-bold mt-20 mb-10">

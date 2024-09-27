@@ -44,7 +44,9 @@
     <div class="max-w-7xl mx-auto">
         <div class="px-6 md:px-10">
             <div class="my-20">
-                {% include "ui/components/dogear_boxes/DogearAnyColourLong.html" with title=page.dogear_tech_news_title linktext=page.dogear_tech_news_link_text linkurl=page.dogear_tech_news_link textcolour="black" colour="var(--hot-off-white)" arrowcolour="black" %}
+                {% with page.category_filter_selector.id|stringformat:"s" as id %}
+                    {% include "ui/components/dogear_boxes/DogearAnyColourLong.html" with title=page.dogear_tech_news_title linktext=page.dogear_tech_news_link_text linkurl=page.dogear_tech_news_link linkappendage="?cat"|add:id|add:"=on" textcolour="black" colour="var(--hot-off-white)" arrowcolour="black" %}
+                {% endwith %}
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-white my-10">

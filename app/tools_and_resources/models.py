@@ -1,3 +1,4 @@
+from django import forms
 from django.db import models
 
 from wagtail.models import Page
@@ -62,6 +63,14 @@ class ToolsAndResourcesPage(Page):
     dogear_tech_news_title = models.CharField(blank=True)
     dogear_tech_news_link_text = models.CharField(default="View our Tech News")
     dogear_tech_news_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
+    category_filter_selector = models.ForeignKey(
+        "news.NewsCategory",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text="The 'Tech News' link will be appended with a filter for this category. The selected category should be the Tech category."
+    )
 
     red_box_title = models.CharField(default="Start Mapping")
     red_box_link_text = models.CharField(default="Start Mapping")
@@ -92,6 +101,7 @@ class ToolsAndResourcesPage(Page):
             FieldPanel('dogear_tech_news_title'),
             FieldPanel('dogear_tech_news_link_text'),
             FieldPanel('dogear_tech_news_link'),
+            FieldPanel('category_filter_selector', widget=forms.RadioSelect),
             FieldPanel('red_box_title'),
             FieldPanel('red_box_link_text'),
             FieldPanel('red_box_link'),

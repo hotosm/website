@@ -11,7 +11,7 @@ Only one of either intro or subtitle should be present; you probably would not w
 {% load wagtailimages_tags %}
 
 {% image image original as image_p %}
-<div class="w-full {%if smaller%}min-h-[20rem]{%else%}min-h-[24rem]{%endif%} content-end bg-no-repeat bg-cover bg-center" style="background-image: url('{{ image_p.url }}')">
+<div class="w-full min-h-[20rem] content-end bg-no-repeat bg-cover bg-center" style="background-image: url('{{ image_p.url }}')">
     <div class="bg-gradient-to-t from-black/70 to-transparent w-full">
         <div class="h-fit w-full py-10 text-white max-w-7xl mx-auto">
             <div class="grid grid-cols-1 lg:grid-cols-3">

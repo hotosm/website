@@ -19,7 +19,7 @@
                     <div class="base-article-m">
                         {{ page.intro|richtext }}
                     </div>
-                    <a href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=page.learn_more_button_url%}">
+                    <a href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=page.learn_more_button_link%}">
                         {% include "components/branded_elements/button.html" with text=page.learn_more_button_text classes="mt-4" %}
                     </a>
                 </div>

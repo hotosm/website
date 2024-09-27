@@ -5,7 +5,7 @@
 {% endcomment %}
 <div x-data="{ opened: false }" class="text-small font-medium p-2 [&>p]:hover:text-hot-red [&_p:hover]:text-hot-red text-left">
     <p class="cursor-pointer" @click="opened = !opened">
-        <a href="{%if item.link_page%}{{item.link_page.url}}{%elif item.link_url%}{{item.link_url}}{%else%}#{%endif%}">
+        <a href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=item.link%}">
             <span class="{%if item.children%}pr-2{%endif%}">{{item.title}}</span>
         </a>
         {% if item.children %}
@@ -19,7 +19,7 @@
             {% for child in item.children %}
                 <div class="px-6 py-2" x-data="{ gcOpened: false }">
                     <p class="cursor-pointer" @click="gcOpened = !gcOpened">
-                        <a class="hover:text-hot-red" href="{%if child.value.link_page%}{{child.value.link_page.url}}{%elif child.value.link_url%}{{child.value.link_url}}{%else%}#{%endif%}">
+                        <a class="hover:text-hot-red" href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=child.value.link%}">
                             {{child.value.title}}
                         </a>
                         {% if child.value.children %}
@@ -32,7 +32,7 @@
                         <div class="show-at-large nav-grandchild lg:absolute lg:-mt-8 lg:left-full bg-hot-off-white px-6 lg:py-4 lg:w-fit" x-show="gcOpened">
                             {% for gchild in child.value.children %}
                                 <p class="py-2 lg:w-fit">
-                                    <a href="{%if gchild.value.link_page%}{{gchild.value.link_page.url}}{%elif gchild.value.link_url%}{{gchild.value.link_url}}{%else%}#{%endif%}">
+                                    <a href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=gchild.value.link%}">
                                         {{gchild.value.title}}
                                     </a>
                                 </p>

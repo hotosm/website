@@ -42,7 +42,7 @@
                             {% for category in categories %}
                                 <div class="mt-4 flex">
                                     <label for="cat-{{forloop.counter}}">{{category.category_name}}</label>
-                                    <input class="ml-auto checked:bg-hot-red checked:hover:bg-hot-red checked:focus:bg-hot-red" id="cat-{{forloop.counter}}" type="checkbox" name="{{category.category_name}}" :checked="params.get('{{category.category_name}}')">
+                                    <input class="ml-auto checked:bg-hot-red checked:hover:bg-hot-red checked:focus:bg-hot-red" id="cat-{{forloop.counter}}" type="checkbox" name="cat{{category.id}}" :checked="params.get('cat{{category.id}}')">
                                 </div>
                             {% endfor %}
                         </div>

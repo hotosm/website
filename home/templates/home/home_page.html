@@ -39,11 +39,18 @@
                         {% include "home/components/HomeSpecificCarousel.html" %}
                     </div>
                     <!--CTA Statistics, TODO: Use HTMX to query endpoint for stats once the endpoint exists  -->
-                    <div class="grid grid-cols-2 md:grid-cols-4 h-full md:pt-16 bg-hot-red md:bg-transparent gap-8 max-w-5xl mx-auto md:px-4">
-                        {% include "./components/StatBlock.html" with number="468K" stat="Total Mappers ⓘ" %}
-                        {% include "./components/StatBlock.html" with number="246.7M" stat="Total Map Edits ⓘ" %}
-                        {% include "./components/StatBlock.html" with number="147.5M" stat="Buildings Mapped ⓘ" %}
-                        {% include "./components/StatBlock.html" with number="2.7M" stat="Roads Mapped(KM) ⓘ" %}
+                    <div class="grid grid-cols-2 md:grid-cols-4 h-full md:pt-16 bg-hot-red md:bg-transparent gap-8 max-w-5xl mx-auto md:px-4 [&_.stat-block:nth-child(odd)_.show-at-hover]:left-0 [&_.stat-block:nth-child(even)_.show-at-hover]:right-0 md:[&_.stat-block:nth-child(-n+2)_.show-at-hover]:left-0 md:[&_.stat-block:nth-child(n+1)_.show-at-hover]:right-0">
+                        {% for stat in api_responses %}
+                            {% if stat.value.api %}
+                                {% include "./components/StatBlock.html" with number=stat.value.api stat=stat.value.statistic tooltiptext=stat.value.tooltip %}
+                                {% else %}
+                                    {% include "./components/StatBlock.html" with number=stat.value.fallback_number stat=stat.value.statistic tooltiptext=stat.value.tooltip %}
+                            {% endif %}
+                        {% endfor %}
+                        {% comment %} {% include "./components/StatBlock.html" with number=tm_json.totalMappers stat="Total Mappers" %}
+                        {% include "./components/StatBlock.html" with number="246.7M" stat="Total Map Edits" %}
+                        {% include "./components/StatBlock.html" with number="147.5M" stat="Buildings Mapped" %}
+                        {% include "./components/StatBlock.html" with number="2.7M" stat="Roads Mapped(KM)" %} {% endcomment %}
                     </div>
                 </div>
             </div>

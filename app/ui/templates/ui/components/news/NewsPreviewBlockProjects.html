@@ -17,7 +17,9 @@
         {% endif %}
 
         <p class="text-hot-red text-small font-semibold">
-            Blog
+            {% for category in news.categories.all %}
+                {{category.category_name}}{% if not forloop.last %}, {% endif %}
+            {% endfor %}
         </p>
 
         <hr class="my-2" />

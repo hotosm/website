@@ -565,3 +565,36 @@ class SalaryFrameworkPage(Page):
             FieldPanel('sidebar_block_button_link'),
         ]),
     ]
+
+
+class DonatePage(Page):
+    max_count = 1
+
+    banner_image = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text="Header image"
+    )
+    banner_description = RichTextField(blank=True)
+
+    intro = RichTextField(blank=True)
+
+    other_ways_to_donate_title = models.CharField(default="Other Ways to Donate")
+    other_ways_to_donate = StreamField([
+        ('block', StructBlock([
+            ('icon', ImageChooserBlock()),
+            ('title', CharBlock()),
+            ('text', RichTextBlock()),
+        ]))
+    ], use_json_field=True, blank=True)
+
+    content_panels = Page.content_panels + [
+        FieldPanel('banner_image'),
+        FieldPanel('banner_description'),
+        FieldPanel('intro'),
+        FieldPanel('other_ways_to_donate_title'),
+        FieldPanel('other_ways_to_donate'),
+    ]

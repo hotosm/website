@@ -9,6 +9,9 @@ from app.impact_areas.models import IndividualImpactAreaPage
 from app.mapping_hubs.models import IndividualMappingHubPage
 from app.core.models import LinkOrPageBlock
 
+import requests
+from django.core.cache import cache
+
 
 class ActionButtonBlock(StructBlock):
     text = CharBlock(required=True, help_text="Text to display on the button")
@@ -47,6 +50,53 @@ class NavigationBlock(StreamBlock):
     blocks = NavigationStructBlock()
 
 
+def get_apis(stats):
+    responses = cache.get('home_page_stats')
+
+    if not responses:
+        responses = stats.raw_data
+
+        for stat in responses:
+            if stat['value']['api']:
+                api = stat['value']['api'][0]['value']
+                try:
+                    res = requests.get(str(api['endpoint'])).json()
+                    for key in api['key_path']:
+                        res = res[str(key['value'])]
+                    stat['value']['api'] = res
+                except:
+                    stat['value']['api'] = None
+        
+        # the "timeout" here controls how long the api calls are cached for (in seconds).
+        # additionally, updating the home page will immediately clear the cache; 
+        # this is controlled in the wagtail_hooks.py file in this directory.
+        cache.set('home_page_stats', responses, timeout=3600)
+
+    return responses
+
+
+class APIBlock(StreamBlock):
+    api = StructBlock([
+        ('name', CharBlock(help_text="This name will be used for caching the result of this API, and as such, should be unique.")),
+        ('endpoint', CharBlock(help_text="This is the URL that will be called; should return a JSON object.")),
+        ('key_path', StreamBlock([
+            ('key', CharBlock())
+        ], help_text="This should lead to the value that should be displayed for this API; i.e., if the result of calling the endpoint is a JSON object { 'result': {'stat': 10 } }, this field should have 'result' and 'stat' as keys, in that order, so as to navigate to ['result']['stat']."))
+    ])
+
+    class Meta:
+        max_num = 1
+
+
+class StatBlock(StreamBlock):
+    stat = StructBlock([
+        ('fallback_number', CharBlock(help_text="Displays if no API is given, or if the API call fails. This is a string so for numbers you'll want to format it (i.e., 1300 should be typed as 1.3K).")),
+        ('statistic', CharBlock(help_text="Displays as the description of the statistic.")),
+        ('tooltip', CharBlock(required=False, help_text="If this field is filled, an info 'i' will appear in this stat block, which will show this text when hovered.")),
+        ('api', APIBlock(required=False, help_text="Do not touch this field unless you know what you are doing."))
+    ])
+
+
 class HomePage(Page):
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
@@ -55,6 +105,11 @@ class HomePage(Page):
         context['impact_areas'] = impact_areas
         mapping_hubs = IndividualMappingHubPage.objects.live().filter(locale=context['page'].locale)
         context['mapping_hubs'] = mapping_hubs
+
+        responses = get_apis(context['page'].specific.home_stats)
+
+        context['api_responses'] = responses
+
         return context
     
     max_count = 1
@@ -154,6 +209,7 @@ class HomePage(Page):
         blank=True,
         use_json_field=True,
     )
+    home_stats = StreamField(StatBlock(), use_json_field=True, blank=True)
 
     our_work_background = models.ForeignKey(
         "wagtailimages.Image",
@@ -277,6 +333,7 @@ class HomePage(Page):
             FieldPanel("hero_cta"),
             FieldPanel("hero_cta_link"),
             FieldPanel("carousel"),
+            FieldPanel('home_stats'),
         ], heading="Banner"),
         MultiFieldPanel([
             FieldPanel('our_work_background'),

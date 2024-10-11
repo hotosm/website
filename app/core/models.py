@@ -44,6 +44,7 @@ class LinkOrPageBlock(StreamBlock):
     page = PageChooserBlock()
     url = URLBlock()
     document = DocumentChooserBlock()
+    other = CharBlock(help_text="Only use this option as a last resort. The other fields are preferred. In cases like email 'mailto' links, however, this field can be used. Ensure that your provided link will function as intended prior to publishing live.")
 
     class Meta:
         max_num = 1

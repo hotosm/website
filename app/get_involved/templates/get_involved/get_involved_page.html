@@ -45,7 +45,7 @@
 
             <div class="mt-8 mb-20 grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {% for panel in page.join_us_panels %}
-                    {% include "ui/components/misc_panels/PagePreviewWithTabletDescription.html" with image=panel.value.image page=panel.value.page tablet_description=panel.value.page.specific.intro read_more_text=page.join_us_panel_read_more %}
+                    {% include "ui/components/misc_panels/PagePreviewWithTabletDescription.html" with image=panel.value.image page=panel.value.page tablet_description=panel.value.page.specific.intro read_more_text=page.join_us_panel_read_more hoverless=True %}
                 {% endfor %}
             </div>
 

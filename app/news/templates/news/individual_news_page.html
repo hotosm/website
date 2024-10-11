@@ -10,11 +10,11 @@
 {% endblock extra_css %}
 
 {% block content %}
-    <div class="max-w-7xl mx-auto">
+    <div class="max-w-7xl mx-auto my-10">
         {% comment %} HEADER {% endcomment %}
-        <div class="px-6 md:px-10 py-5">
+        <div class="px-6 md:px-10">
             <h1 class="font-bold text-h2">{{ page.title }}</h1>
-            <p>
+            <p class="mt-2">
                 {% if page.authors %}
                     {{page.get_parent.specific.authors_posted_by_text}}
                     {% for author in page.authors %}
@@ -30,7 +30,7 @@
                 <div class="col-span-2">
                     <div class="base-article-m">
                         <div class="[&_img]:mt-0">
-                            {% image page.image original class="pb-8" %}
+                            {% image page.image original class="mb-8 aspect-[8/5] object-cover" %}
                         </div>
 
                         <div class="text-intro">
@@ -39,7 +39,7 @@
                         {{ page.article_body }}
                     </div>
 
-                    <div class="mt-20">
+                    <div class="my-20">
                         {% include "ui/components/sharers/ShareSection.html" %}
                     </div>
                 </div>

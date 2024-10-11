@@ -29,6 +29,25 @@
                         {% include "ui/components/icon_svgs/SearchIcon.html" with class="text-hot-red mx-3" %}
                     </div>
 
+                    {% comment %} HUB {% endcomment %}
+                    <div class="relative" x-data="{ show: false }" @click.away="show = false">
+                        <div class="w-full h-full flex justify-between py-2 px-3 bg-hot-off-white items-center cursor-pointer" @click="show = !show">
+                            <p class="pointer-events-none">
+                                {{page.filter_by_hub}}
+                            </p>
+                            {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-90 text-hot-red" %}
+                        </div>
+                        <div class="absolute z-20 bg-hot-off-white p-4 w-full" x-show="show">
+                            <hr class="border-b-2">
+                            {% for hub in hubs %}
+                                <div class="mt-4 flex">
+                                    <label for="hub-{{forloop.counter}}">{{hub.title}}</label>
+                                    <input class="ml-auto checked:bg-hot-red checked:hover:bg-hot-red checked:focus:bg-hot-red" id="hub-{{forloop.counter}}" type="checkbox" name="hub{{hub.id}}" :checked="params.get('hub{{hub.id}}')">
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
                     {% comment %} CATEGORY {% endcomment %}
                     <div class="relative" x-data="{ show: false }" @click.away="show = false">
                         <div class="w-full h-full flex justify-between py-2 px-3 bg-hot-off-white items-center cursor-pointer" @click="show = !show">

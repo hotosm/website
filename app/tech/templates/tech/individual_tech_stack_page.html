@@ -71,7 +71,7 @@
 
             {% include "ui/components/FooterBannerWithTextAndLink.html" with text=page.get_parent.specific.tech_stack_cta_title description=page.get_parent.specific.tech_stack_cta_description buttontext=page.get_parent.specific.tech_stack_cta_button_link_text url=page.get_parent.specific.tech_stack_cta_button_link_url %}
 
-            <p class="my-20">
+            <p class="my-20 text-intro">
                 {% include "ui/components/BaseLink.html" with linktext=page.get_parent.specific.tech_stack_go_back_text|add:' '|add:page.get_parent.title linkurl=page.get_parent.url %}
             </p>
         </div>

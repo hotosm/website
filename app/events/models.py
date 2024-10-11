@@ -43,7 +43,7 @@ class EventOwnerPage(Page):
         hubs = IndividualMappingHubPage.objects.live().filter(locale=context['page'].locale)
         query = Q()
         for hub in hubs:
-            if request.GET.get(str(hub), ''):
+            if request.GET.get("hub" + str(hub.id), ''):
                 query = query | Q(event_region_hub=hub)
         events_list = events_list.filter(query).distinct()
         
@@ -101,6 +101,7 @@ class EventOwnerPage(Page):
     sort_by_titlea = models.CharField(default="Sort by Title Alphabetical")
     sort_by_titlez = models.CharField(default="Sort by Title Reverse Alphabetical")
     search_button_text = models.CharField(default="Search")
+    remove_filters_text = models.CharField(default="Remove All Filters")
     results_text = models.CharField(default="Results")
 
     content_panels = Page.content_panels + [
@@ -114,6 +115,7 @@ class EventOwnerPage(Page):
             FieldPanel('sort_by_titlea'),
             FieldPanel('sort_by_titlez'),
             FieldPanel('search_button_text'),
+            FieldPanel('remove_filters_text'),
             FieldPanel('results_text'),
         ], heading="Event Search Page"),
         MultiFieldPanel([

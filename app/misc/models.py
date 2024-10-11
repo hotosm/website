@@ -598,3 +598,82 @@ class DonatePage(Page):
         FieldPanel('other_ways_to_donate_title'),
         FieldPanel('other_ways_to_donate'),
     ]
+
+
+class MultimediaPage(Page):
+    max_count = 1
+
+    banner_image = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text="Header image"
+    )
+    intro = RichTextField(blank=True)
+
+    map_title = models.CharField(default="Map Gallery")
+    map_view_all_text = models.CharField(default="View all maps")
+    map_view_all_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
+
+    video_title = models.CharField(default="Videos")
+    video_view_all_text = models.CharField(default="View more videos on YouTube")
+    video_view_all_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
+    video_overlay_icon = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text="This icon will show on top of the video previews in this section; this should either be a play button, or nothing at all."
+    )
+    video_previews = StreamField([
+        ('preview', StructBlock([
+            ('link', URLBlock(help_text="This link should be in the format of 'https://www.youtube.com/watch?v=[code]', as opposed to a share link.")),
+            ('short_desc', CharBlock(required=False, help_text="This will show beneath the image.")),
+        ], min_num=8, max_num=8))
+    ], use_json_field=True, blank=True)
+
+    image_title = models.CharField(default="Images")
+    image_view_all_text = models.CharField(default="View more images on Flickr")
+    image_view_all_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
+    image_previews = StreamField([
+        ('preview', StructBlock([
+            ('link', URLBlock(required=False, help_text="The link to the image source (if known).")),
+            ('image', ImageChooserBlock()),
+            ('short_desc', CharBlock(required=False, help_text="This will show beneath the image.")),
+        ], min_num=8, max_num=8))
+    ], use_json_field=True, blank=True)
+
+    license_title = models.CharField(default="License and Attributions")
+    license_block = RichTextField(blank=True)
+
+    content_panels = Page.content_panels + [
+        MultiFieldPanel([
+            FieldPanel('banner_image'),
+            FieldPanel('intro'),
+        ], heading="Header"),
+        MultiFieldPanel([
+            FieldPanel('map_title'),
+            FieldPanel('map_view_all_text'),
+            FieldPanel('map_view_all_link'),
+        ], heading="Map"),
+        MultiFieldPanel([
+            FieldPanel('video_title'),
+            FieldPanel('video_view_all_text'),
+            FieldPanel('video_view_all_link'),
+            FieldPanel('video_overlay_icon'),
+            FieldPanel('video_previews'),
+        ], heading="Video"),
+        MultiFieldPanel([
+            FieldPanel('image_title'),
+            FieldPanel('image_view_all_text'),
+            FieldPanel('image_view_all_link'),
+            FieldPanel('image_previews'),
+        ], heading="Image"),
+        MultiFieldPanel([
+            FieldPanel('license_title'),
+            FieldPanel('license_block'),
+        ], heading="License"),
+    ]

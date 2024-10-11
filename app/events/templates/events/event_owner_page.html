@@ -80,7 +80,7 @@
                             {% for hub in hubs %}
                                 <div class="mt-4 flex">
                                     <label for="hub-{{forloop.counter}}">{{hub.title}}</label>
-                                    <input class="ml-auto checked:bg-hot-red checked:hover:bg-hot-red checked:focus:bg-hot-red" id="hub-{{forloop.counter}}" type="checkbox" name="{{hub.title}}" :checked="params.get('{{hub.title}}')">
+                                    <input class="ml-auto checked:bg-hot-red checked:hover:bg-hot-red checked:focus:bg-hot-red" id="hub-{{forloop.counter}}" type="checkbox" name="hub{{hub.id}}" :checked="params.get('hub{{hub.id}}')">
                                 </div>
                             {% endfor %}
                         </div>
@@ -109,10 +109,17 @@
                 </div>
             </form>
 
+            <a href="{{page.url}}">
+                <p class="cursor-pointer inline-block">
+                    {{page.remove_filters_text}}
+                    {% include "ui/components/icon_svgs/RefreshIcon.html" with class="ml-4" %}
+                </p>
+            </a>
+
             {% comment %} EVENT ITEMS {% endcomment %}
             <div id="items-list">
                 <h2 class="text-h2 font-bold my-8">{{events_paginator.count}} {{page.results_text}}</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-10">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 mb-10 gap-y-16 md:gap-y-12">
                     {% for event in events %}
                         {% include "ui/components/events/EventPreviewBlockEvent.html" with event=event showimage=True %}
                     {% endfor %}

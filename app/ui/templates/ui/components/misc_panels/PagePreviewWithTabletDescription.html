@@ -18,13 +18,15 @@
                 {{page.title}}
             </h1>
         </div>
-        <div class="hover-show row-start-1 col-start-1 opacity-0 pointer-events-none bg-hot-red text-white justify-center py-4 px-6 flex flex-col transition duration-100">
-            <h2 class="text-h3 font-bold">{{page.title}}</h2>
-            <div class="w-full aspect-[3/1] overflow-hidden">{{tablet_description|richtext}}</div>
-            <p class="mt-4">
-                {% include "ui/components/BaseLinkNoUnderlineWhite.html" with anchorless=True linktext=read_more_text whitearrow=True %}
-            </p>
-        </div>
+        {% if not hoverless %}
+            <div class="hover-show row-start-1 col-start-1 opacity-0 pointer-events-none bg-hot-red text-white justify-center py-4 px-6 flex flex-col transition duration-100">
+                <h2 class="text-h3 font-bold">{{page.title}}</h2>
+                <div class="w-full aspect-[3/1] overflow-hidden">{{tablet_description|richtext}}</div>
+                <p class="mt-4">
+                    {% include "ui/components/BaseLinkNoUnderlineWhite.html" with anchorless=True linktext=read_more_text whitearrow=True %}
+                </p>
+            </div>
+        {% endif %}
     </div>
     <div class="lg:hidden">
         <h1 class="font-bold text-h3 my-2">{{page.title}}</h1>

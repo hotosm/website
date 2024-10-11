@@ -94,7 +94,7 @@ class TechProductSuitePage(Page):
     ], use_json_field=True, null=True, blank=True, help_text="Blocks to be shown under the Tech Principles section.")
 
     product_suite_title = models.CharField(default="Product Suite")
-    product_suite_learn_more_text = models.CharField(default="Learn more about", help_text="Prefix text to be shown in page previews for the product suite section; if the page being previewed is named 'Tasking Manager', and this field is 'Learn more about', they would combine to be 'Learn more about Tasking Manager'.")
+    product_suite_learn_more_text = models.CharField(default="Learn more")
 
     red_box_title = models.CharField(default="HOT GitHub")
     red_box_link_text = models.CharField(default="View HOT's GitHub")

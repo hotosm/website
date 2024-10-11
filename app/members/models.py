@@ -34,6 +34,7 @@ class MemberGroupOwnerPage(Page):
     sort_by_titlea = models.CharField(default="Sort by Name Alphabetical")
     sort_by_titlez = models.CharField(default="Sort by Name Reverse Alphabetical")
     search_button_text = models.CharField(default="Search")
+    remove_filters_text = models.CharField(default="Remove All Filters")
 
     load_more_text = models.CharField(default="Load more", help_text="This will be a prefix to the title of the page; i.e., if the page title is 'Voting members', and this field is 'Load more', this will end up appearing as 'Load more Voting members'.")
 
@@ -51,6 +52,7 @@ class MemberGroupOwnerPage(Page):
             FieldPanel('sort_by_titlea'),
             FieldPanel('sort_by_titlez'),
             FieldPanel('search_button_text'),
+            FieldPanel('remove_filters_text'),
         ], heading="Search options"),
         FieldPanel('load_more_text'),
         FieldPanel('view_all_text'),

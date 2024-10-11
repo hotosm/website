@@ -7,10 +7,10 @@
 {% load wagtailimages_tags %}
 
 {% image news.image original as image_p %}
-<div class=" {{class}}">
+<div class="{{class}} [&:hover_.hover-title]:text-hot-red">
     <a href="{{ news.url }}">
         {% if showimage %}
-            <div class="image-hide-small w-full min-h-[9rem] mb-3 content-end bg-no-repeat bg-cover image-overshadow-gradient" style="background-image: url('{{ image_p.url }}')">
+            <div class="image-hide-small w-full min-h-[9rem] mb-3 content-end bg-no-repeat bg-cover bg-center image-overshadow-gradient aspect-[5/3]" style="background-image: url('{{ image_p.url }}')">
                 <div>
                 </div>
             </div>
@@ -24,7 +24,7 @@
 
         <hr class="my-2" />
 
-        <p class="text-h5 font-bold my-2">
+        <p class="text-h5 font-bold my-2 hover-title">
             {{ news.title }}
         </p>
 

@@ -320,21 +320,30 @@
     gap: 2rem;
 }
 
-.BambooHR-ATS-Department-List .BambooHR-ATS-Department-Item {
-    padding: 1.5rem;
-    background-color: var(--hot-off-white);
+.BambooHR-ATS-Department-List .BambooHR-ATS-Department-Header {
+    font-size: var(--font-size-h5);
+    font-weight: 500;
+    margin-bottom: 1rem;
+    margin-left: 1rem;
+}
+
+.BambooHR-ATS-Department-List .BambooHR-ATS-Department-Item .BambooHR-ATS-Jobs-List {
+    display: grid;
+    gap: 0.75rem;
 }
 
 .BambooHR-ATS-Department-List .BambooHR-ATS-Department-Item .BambooHR-ATS-Jobs-Item {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
-    margin-top: 0.75rem;
+    padding: 1.5rem;
+    background-color: var(--hot-off-white);
 }
 
 .BambooHR-ATS-Department-List .BambooHR-ATS-Department-Item .BambooHR-ATS-Jobs-Item a {
     font-size: var(--font-size-h3);
     font-weight: bold;
+    margin-top: 0.75rem;
 }
 
 .BambooHR-ATS-Department-List .BambooHR-ATS-Department-Item .BambooHR-ATS-Jobs-Item a:hover {

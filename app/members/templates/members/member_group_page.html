@@ -78,10 +78,17 @@
                     </div>
                 </div>
             </form>
+
+            <a href="{{page.url}}">
+                <p class="cursor-pointer inline-block">
+                    {{page.get_parent.specific.remove_filters_text}}
+                    {% include "ui/components/icon_svgs/RefreshIcon.html" with class="ml-4" %}
+                </p>
+            </a>
         {% endif %}
 
         {% comment %} MEMBERS LIST {% endcomment %}
-        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-{{page.desktop_size_items_per_row}} gap-8 lg:gap-y-16 mb-10" id="members-list">
+        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-{{page.desktop_size_items_per_row}} gap-8 lg:gap-y-16 my-10" id="members-list">
             {% for member in members %}
                 {% include "ui/components/members/MemberPreviewBlock.html" with member=member position_shown=page.position_shown hub_shown=page.hub_shown %}
             {% endfor %}
@@ -104,7 +111,7 @@
         </p>
 
         {% comment %} BOTTOM AREA {% endcomment %}
-        <div class="grid grid-cols-1 md:grid-cols-2 text-white gap-8 mt-20">
+        <div class="grid grid-cols-1 md:grid-cols-2 text-white gap-8 mt-32">
             {% for group in groups %}
                 {% if forloop.counter0|divisibleby:2 %}
                     <div>

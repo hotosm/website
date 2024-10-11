@@ -37,7 +37,7 @@
             {% include "ui/components/TitleWithUnderline.html" with title=page.product_suite_title %}
             <div class="mt-8 mb-20 grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {% for child in page.get_children %}
-                    {% include "ui/components/misc_panels/LinkBlockWithImage.html" with title=child.title description=child.specific.intro image=child.specific.header_image linktext=page.product_suite_learn_more_text|add:" "|add:child.title linkurl=child.url %}
+                    {% include "ui/components/misc_panels/LinkBlockWithImage.html" with title=child.title description=child.specific.intro image=child.specific.header_image linktext=page.product_suite_learn_more_text linkurl=child.url %}
                 {% endfor %}
             </div>
 

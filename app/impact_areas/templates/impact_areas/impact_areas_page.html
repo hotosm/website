@@ -12,8 +12,8 @@
 {% block content %}
     {% include "ui/components/BasePageHeader.html" with title=page.title intro=page.header_text image=page.image %}
 
-    <div class="max-w-7xl mx-auto my-10 lg:grid lg:grid-cols-6">
-        <div class="px-6 md:px-10 col-span-5">
+    <div class="max-w-7xl mx-auto my-10">
+        <div class="px-6 md:px-10 max-w-5xl">
             <div class="text-intro font-semibold">
                 {{page.intro|richtext}}
             </div>
@@ -23,7 +23,7 @@
         </div>
     </div>
     
-    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 px-6 md:px-10 mt-6 mb-10">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-x-8 gap-y-12 px-6 md:px-10 mt-6 mb-20">
         {% for child in page.get_children %}
             {% include "ui/components/impact_areas/ImpactAreaPreviewBlock.html" with ia=child.specific learn_more_text=page.learn_more_text %}
         {% endfor %}

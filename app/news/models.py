@@ -15,6 +15,7 @@ from wagtail.snippets.models import register_snippet
 from wagtail.search import index
 
 from app.core.models import LinkOrPageBlock
+from app.mapping_hubs.models import IndividualMappingHubPage
 
 
 class NewsOwnerPage(Page):
@@ -38,6 +39,13 @@ class NewsOwnerPage(Page):
         query = Q()
         for tag in tags:
             query = query | Q(tags__name=tag)
+        news_list = news_list.filter(query).distinct()
+
+        hubs = IndividualMappingHubPage.objects.live().filter(locale=context['page'].locale)
+        query = Q()
+        for hub in hubs:
+            if request.GET.get(f"hub{hub.id}", ''):
+                query = query | Q(associated_hubs__contains=[{'type': 'region_hub', 'value': hub.id }])
         news_list = news_list.filter(query).distinct()
 
         match request.GET.get('sort', ''):
@@ -65,6 +73,7 @@ class NewsOwnerPage(Page):
         context['news_paginator'] = paginator
         context['current_page'] = int(page)
         context['categories'] = categories
+        context['hubs'] = hubs
         return context
     
     max_count = 1
@@ -82,8 +91,10 @@ class NewsOwnerPage(Page):
     news_read_more_text = models.CharField(default="Read More")
     categories_title = models.CharField(default="Categories")
     tags_title = models.CharField(default="Tags")
+    hubs_title = models.CharField(default="Associated Hubs")
 
     keyword_search_hint = models.CharField(default="Search by keyword")
+    filter_by_hub = models.CharField(default="Filter by Hub")
     category_select = models.CharField(default="Select Categories")
     sort_by_new = models.CharField(default="Sort by New")
     sort_by_old = models.CharField(default="Sort by Old")
@@ -97,6 +108,7 @@ class NewsOwnerPage(Page):
     content_panels = Page.content_panels + [
         MultiFieldPanel([
             FieldPanel('keyword_search_hint'),
+            FieldPanel('filter_by_hub'),
             FieldPanel('category_select'),
             FieldPanel('sort_by_new'),
             FieldPanel('sort_by_old'),
@@ -186,6 +198,8 @@ class IndividualNewsPage(Page):
 
     tags = ClusterTaggableManager(through=NewsTag, blank=True)
 
+    associated_hubs = StreamField([('region_hub', PageChooserBlock(page_type="mapping_hubs.IndividualMappingHubPage"))], use_json_field=True, null=True, blank=True)
+
     search_fields = Page.search_fields + [
         index.SearchField('title'),
         index.SearchField('intro'),
@@ -207,8 +221,6 @@ class IndividualNewsPage(Page):
             FieldPanel('related_news'),
             FieldPanel('categories', widget=forms.CheckboxSelectMultiple),
             FieldPanel('tags'),
+            FieldPanel('associated_hubs'),
         ], heading="Sidebar"),
     ]
-
-
-

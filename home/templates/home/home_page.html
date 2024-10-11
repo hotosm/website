@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% load compress %}
+{% load wagtailcore_tags %}
 {% load wagtailimages_tags %}
 {% block body_class %}
     template-homepage
@@ -67,7 +68,7 @@
                             {{ page.highlighted_programs_title }}
                         </h2>
                         <div class="text-intro">
-                            {{ page.highlighted_programs_description|safe }}
+                            {{ page.highlighted_programs_description|richtext }}
                         </div>
                     </div>
                     <div class="col-span-2 lg:text-right text-intro">
@@ -84,7 +85,7 @@
                         {{ page.impact_areas_title }}
                     </h2>
                     <div class="text-intro">
-                        {{ page.impact_areas_description|safe }}
+                        {{ page.impact_areas_description|richtext }}
                     </div>
                 </div>
                 {% include "home/components/ImpactAreasPanel.html" %}
@@ -98,10 +99,10 @@
                 {% image page.who_we_are_image original class="order-1 lg:order-2" %}
                 <div class="order-2 lg:order-1">
                     <div class="text-h2 [&_b]:text-hot-red bold-override font-bold lg:font-semibold">
-                        {{page.who_we_are_intro_title|safe}}
+                        {{page.who_we_are_intro_title|richtext}}
                     </div>
                     <div class="text-intro my-2">
-                        {{page.who_we_are_intro_description|safe}}
+                        {{page.who_we_are_intro_description|richtext}}
                     </div>
                     <a href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=page.who_we_are_button_url%}">
                         {% include "components/branded_elements/button.html" with text=page.who_we_are_button_text classes="mt-4" %}
@@ -120,10 +121,10 @@
                 <div class="min-h-[20rem] bg-cover bg-no-repeat" style="background-image: url('{{tr_image.url}}')"></div>
                 <div class="flex flex-col justify-center lg:px-8 py-8 py:8">
                     <div class="text-h2 [&_b]:text-hot-red bold-override font-bold lg:font-semibold">
-                        {{page.tools_resources_title|safe}}
+                        {{page.tools_resources_title|richtext}}
                     </div>
                     <div class="text-intro font-medium my-4">
-                        {{page.tools_resources_description|safe}}
+                        {{page.tools_resources_description|richtext}}
                     </div>
                     <a href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=page.tools_resources_button_link%}">
                         {% include "components/branded_elements/button.html" with text=page.tools_resources_button_text classes="mt-4" %}
@@ -157,54 +158,7 @@
             {% comment %} SUBSCRIBE {% endcomment %}
             <div class="rounded-2xl shadow-md">
                 <div class="bg-hot-off-white py-6 md:py-8 px-8 md:px-16 my-20">
-                    <h1 class="text-h4 md:text-h2 font-bold">
-                        {{ page.subscribe_title }}
-                    </h1>
-                    <form class=" mt-4 [&_label]:block 
-                                [&_input]:border-none
-                    ">
-                        <div class="flex gap-4">
-                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 grow">
-                                <div>
-                                    <label for="firstname" class="font-medium mb-2">{{ page.subscribe_first_name_text }}</label>
-                                    <div class="rounded-2xl shadow-md">
-                                        <input name="firstname" id="firstname" type="text" placeholder="{{page.subscribe_first_name_field_hint}}" class="w-full" required>
-                                    </div>
-                                </div>
-                                <div>
-                                    <label for="lastname" class="font-medium mb-2">{{ page.subscribe_last_name_text }}</label>
-                                    <div class="rounded-2xl shadow-md">
-                                        <input name="lastname" id="lastname" type="text" placeholder="{{page.subscribe_last_name_field_hint}}" class="w-full" required>
-                                    </div>
-                                </div>
-                                <div class="md:col-span-2 lg:col-span-1 flex gap-4">
-                                    <div class="grow">
-                                        <label for="email" class="font-medium mb-2">{{ page.subscribe_email_text }}</label>
-                                        <div class="rounded-2xl shadow-md">
-                                            <input name="email" id="email" type="text" placeholder="{{page.subscribe_email_field_hint}}" class="w-full" required>
-                                        </div>
-                                    </div>
-                                    <div class="cursor-pointer hidden md:block lg:hidden self-end">
-                                        {% include "components/branded_elements/button.html" with text=page.subscribe_submit_button_text %}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="cursor-pointer hidden lg:block self-end">
-                                {% include "components/branded_elements/button.html" with text=page.subscribe_submit_button_text %}
-                            </div>
-                        </div>
-                        
-                        <div class="flex items-center mt-4 mb-4 md:mb-0">
-                            <input type="checkbox" id="agreecheckmark" name="agreecheckmark" value="Agree" class="rounded shadow-md" required>
-                            <label for="agreecheckmark" class="ml-2 [&_a]:font-medium">
-                                {{page.subscribe_checkbox_text|safe}}
-                            </label>
-                        </div>
-
-                        <div class="cursor-pointer md:hidden">
-                            {% include "components/branded_elements/button.html" with text=page.subscribe_submit_button_text %}
-                        </div>
-                    </form>
+                    {% include "./components/SubscribeForm.html" %}
                 </div>
             </div>
         </div>

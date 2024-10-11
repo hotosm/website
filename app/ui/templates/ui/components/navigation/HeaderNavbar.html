@@ -20,8 +20,11 @@ No parameters; it grabs directly from the home page (for the correct locale).
 
                 {% comment %} NAVBAR ITEM BUTTONS {% endcomment %}
                 {% for item in home_page.navigation_buttons %}
-                    <li class="hidden md:block">
-                        {% include "ui/components/navigation/HeaderNavbarButton.html" with item=item.value %}
+                    <li class="hidden md:flex items-center text-small font-medium">
+                        {% comment %} {% include "ui/components/navigation/HeaderNavbarButton.html" with item=item.value %} {% endcomment %}
+                        <a class="hover:underline decoration-2 text-black" href="{%if item.value.link_page%}{{item.value.link_page.url}}{%elif item.value.link_url%}{{item.value.link_url}}{%else%}#{%endif%}">
+                            <span class="text-hot-red">{{item.value.title}}</span>
+                        </a>
                     </li>
                 {% endfor %}
 

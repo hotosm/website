@@ -8,7 +8,6 @@ from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 from wagtail.snippets.blocks import SnippetChooserBlock
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.blocks import CharBlock, StreamBlock, StructBlock, URLBlock, RichTextBlock, PageChooserBlock
-from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
 from wagtail.search import index
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
 

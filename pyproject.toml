@@ -23,7 +23,7 @@ authors = ["Kat Olaguer <katherine.olaguer@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.11"
-wagtail = "^5.2"
+wagtail = "^6.2.2"
 psycopg2 = "^2.9.9"
 python-dotenv = "^1.0.0"
 docker = "^6.1.3"

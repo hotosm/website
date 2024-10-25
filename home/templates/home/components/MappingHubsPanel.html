@@ -26,7 +26,7 @@
         </div>
         {% for hub in mapping_hubs %}
             <div :class="selIndex == {{forloop.counter}} ? '' : 'invisible'" class="row-start-1 col-start-1 text-white lg:grid lg:grid-cols-3 md:block hidden" style="background-color: {{hub.main_colour}}">
-                {% image hub.header_image original as hub_image %}
+                {% image hub.hub_portrait_image original as hub_image %}
                 <div class="hidden lg:block bg-no-repeat bg-cover bg-center" style="background-image: url('{{hub_image.url}}')">
                 </div>
                 <div class="col-span-2 p-10 flex flex-col h-full">

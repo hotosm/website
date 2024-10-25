@@ -44,21 +44,24 @@ class OurWorkPage(Page):
                     break
             projects_list = projects_list.filter(query).distinct()
         
-        hubs = IndividualMappingHubPage.objects.live().filter(locale=context['page'].locale)
+        base_locale = context['page'].get_translation(1).locale
+        print(base_locale)
+        
+        hubs = IndividualMappingHubPage.objects.live().filter(locale=base_locale)
         query = Q()
         for hub in hubs:
             if request.GET.get(f"hub{hub.id}", ''):
                 query = query | Q(region_hub_list__contains=[{'type': 'region_hub', 'value': hub.id }])
         projects_list = projects_list.filter(query).distinct()
         
-        impact_areas = IndividualImpactAreaPage.objects.live().filter(locale=context['page'].locale)
+        impact_areas = IndividualImpactAreaPage.objects.live().filter(locale=base_locale)
         query = Q()
         for area in impact_areas:
             if request.GET.get(f"ia{area.id}", ''):
                 query = query | Q(impact_area_list__contains=[{'type': 'impact_area', 'value': area.id }])
         projects_list = projects_list.filter(query).distinct()
 
-        programs = IndividualProgramPage.objects.live().filter(locale=context['page'].locale)
+        programs = IndividualProgramPage.objects.live().filter(locale=base_locale)
         query = Q()
         for program in programs:
             if request.GET.get(f"pg{program.id}", ''):
@@ -88,13 +91,14 @@ class OurWorkPage(Page):
         context = super().get_context(request, *args, **kwargs)
 
         paginator, projects = self.get_project_paginator(request, context)
+        base_locale = context['page'].get_translation(1).locale
         
         context['projects'] = projects
         context['paginator'] = paginator
-        context['impact_areas'] = IndividualImpactAreaPage.objects.live().filter(locale=context['page'].locale)
-        context['hubs'] = IndividualMappingHubPage.objects.live().filter(locale=context['page'].locale)
-        context['hubs_projects'] = MappingHubProjectsPage.objects.live().filter(locale=context['page'].locale)
-        context['programs'] = IndividualProgramPage.objects.live().filter(locale=context['page'].locale)
+        context['impact_areas'] = IndividualImpactAreaPage.objects.live().filter(locale=base_locale)
+        context['hubs'] = IndividualMappingHubPage.objects.live().filter(locale=base_locale)
+        context['hubs_projects'] = MappingHubProjectsPage.objects.live().filter(locale=base_locale)
+        context['programs'] = IndividualProgramPage.objects.live().filter(locale=base_locale)
         context['types'] = ProjectType.objects.all()
         context['statuses'] = ProjectStatus.objects.all()
         return context

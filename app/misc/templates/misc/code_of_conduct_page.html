@@ -45,15 +45,11 @@
 
                 <div>
                     <h1 class="text-h2 font-bold">
-                        {{page.our_policies_title}}
+                        {{page.get_parent.specific.our_policies_title}}
                     </h1>
-                    <div class="grid gap-4 mt-4">
-                        {% for policy in page.our_policies_links %}
-                            <p>
-                                {% include "ui/components/BaseLink.html" with linktext=policy.value.text linkurl=policy.value.link %}
-                            </p>
-                        {% endfor %}
-                    </div>
+                    <ul class="grid gap-4 mt-4">
+                        {% include "./components/PolicyLinks.html" %}
+                    </ul>
 
                     <div class="bg-hot-off-white p-8 mt-16">
                         <h1 class="font-bold text-h3 mb-8">

@@ -27,7 +27,7 @@ class IndividualImpactAreaPage(Page):
         context = super().get_context(request, *args, **kwargs)
 
         projects_list = IndividualProjectPage.objects.live().filter(
-            Q(impact_area_list__contains=[{'type': 'impact_area', 'value': context['page'].id}])
+            Q(impact_area_list__contains=[{'type': 'impact_area', 'value': context['page'].get_translation(1).id}])
         ).filter(locale=context['page'].locale)
         page = request.GET.get('page', 1)
         paginator = Paginator(projects_list, 8)  # if you want more/less items per page (i.e., per load), change the number here to something else

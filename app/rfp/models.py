@@ -125,7 +125,7 @@ class IndividualRequestForProposalPage(Page):
     intro = RichTextField(blank=True)
     article_body = StreamField([
         ('text_block', RichTextBlock(features=[
-        'h1', 'h2', 'h3', 'h4', 'bold', 'italic', 'link', 'ol', 'ul', 'hr', 'document-link', 'image', 'embed', 'code', 'blockquote'
+        'h2', 'h3', 'h4', 'bold', 'italic', 'link', 'ol', 'ul', 'hr', 'document-link', 'image', 'embed', 'code', 'blockquote'
         ]))
     ], use_json_field=True, null=True, blank=True)
 

@@ -42,8 +42,12 @@ class ToolsAndResourcesPage(Page):
     intro_header = models.CharField(blank=True)
     intro = RichTextField(blank=True)
     description = RichTextField(blank=True)
-    learn_more_data_principles_text = models.CharField(default="Learn about our Data & Principles")
-    learn_more_data_principles_url = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
+    description_links = StreamField([
+        ('link', StructBlock([
+            ('linktext', CharBlock()),
+            ('linkurl', LinkOrPageBlock(required=False)),
+        ]))
+    ], use_json_field=True, blank=True)
 
     large_panels = StreamField([('panel', LargePanel())], use_json_field=True, null=True, blank=True)
 
@@ -57,8 +61,12 @@ class ToolsAndResourcesPage(Page):
     )
     resource_learning_title = models.CharField(default="Resource and Learning Centre")
     resource_learning_description = RichTextField(blank=True)
-    get_connected_button_text = models.CharField(default="Get connected now")
-    get_connected_button_url = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
+    resource_learning_links = StreamField([
+        ('link', StructBlock([
+            ('linktext', CharBlock()),
+            ('linkurl', LinkOrPageBlock(required=False)),
+        ]))
+    ], use_json_field=True, blank=True)
 
     dogear_tech_news_title = models.CharField(blank=True)
     dogear_tech_news_link_text = models.CharField(default="View our Tech News")
@@ -86,16 +94,14 @@ class ToolsAndResourcesPage(Page):
             FieldPanel('intro_header'),
             FieldPanel('intro'),
             FieldPanel('description'),
-            FieldPanel('learn_more_data_principles_text'),
-            FieldPanel('learn_more_data_principles_url'),
+            FieldPanel('description_links'),
         ], heading="Intro"),
         FieldPanel('large_panels'),
         MultiFieldPanel([
             FieldPanel('resource_learning_image'),
             FieldPanel('resource_learning_title'),
             FieldPanel('resource_learning_description'),
-            FieldPanel('get_connected_button_text'),
-            FieldPanel('get_connected_button_url'),
+            FieldPanel('resource_learning_links'),
         ], heading="Resource and Learning Centre"),
         MultiFieldPanel([
             FieldPanel('dogear_tech_news_title'),
@@ -139,6 +145,7 @@ class ResourceAndLearningPage(Page):
 
 
 class OpenMappingSolutionIndividualItemBlock(StructBlock):
+    icon = ImageChooserBlock(required=False)
     title = CharBlock()
     description = RichTextBlock()
     links = StreamBlock([

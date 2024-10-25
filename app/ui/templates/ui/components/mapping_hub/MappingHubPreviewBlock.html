@@ -4,6 +4,6 @@
 {% endcomment %}
 {% load wagtailimages_tags %}
 
-<a href="{{ hub.url }}" class="hover:underline">
+<a href="{% include 'ui/components/PageOrLinkHrefText.html' with linkurl=hub %}" class="hover:underline">
     {% include "./MappingHubPreviewBlockBase.html" %}
 </a>

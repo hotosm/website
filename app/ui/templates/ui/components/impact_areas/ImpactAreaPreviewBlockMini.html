@@ -1,10 +1,12 @@
 {% load wagtailimages_tags %}
 
-<a href="{{ area.url }}{{ link_addendum }}" class="rounded-2xl shadow-md hover:underline">
-    <div class="bg-hot-off-white p-6 text-center font-medium text-intro h-full flex flex-col justify-center items-center">
-        {% image area.external_icon original class="w-32 h-32" %}
-        <p>
-            {{ area.title }}
-        </p>
-    </div>
-</a>
+{% with area.localized as area %}
+    <a href="{{ area.url }}{{ link_addendum }}" class="rounded-2xl shadow-md hover:underline">
+        <div class="bg-hot-off-white p-6 text-center font-medium text-intro h-full flex flex-col justify-center items-center">
+            {% image area.external_icon original class="w-32 h-32" %}
+            <p>
+                {{ area.title }}
+            </p>
+        </div>
+    </a>
+{% endwith %}

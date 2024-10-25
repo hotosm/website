@@ -1,4 +1,8 @@
-<a href="{%include 'ui/components/PageOrLinkHrefText.html'%}" class="font-medium text-hot-red [&:hover_span]:underline [&:hover_span]:decoration-2">
+<a href="{%include 'ui/components/PageOrLinkHrefText.html'%}" class="font-medium text-hot-red [&:hover_span]:underline [&:hover_span]:decoration-2 flex items-center">
     <span>{{linktext}}</span>
-    {% include "ui/components/icon_svgs/LinkCaret.html" with class="ml-2" %}
+    {% if not variableicon %}
+            {% include "ui/components/icon_svgs/LinkCaret.html" with class="ml-2" %}
+        {% else %}
+            {% include "ui/components/icon_svgs/VariableLinkIcon.html" with class="ml-2" %}
+    {% endif %}
 </a>

@@ -48,6 +48,15 @@
                     </a>
                 {% endif %}
             {% endif %}
+            {% if linklist %}
+                <div class="flex flex-wrap gap-4 gap-x-8 mt-4">
+                    {% for link in linklist %}
+                        <p class="text-intro">
+                            {% include "ui/components/BaseLink.html" with linkurl=link.value.linkurl linktext=link.value.linktext %}
+                        </p>
+                    {% endfor %}
+                </div>
+            {% endif %}
         </div>
     </div>
 </div>

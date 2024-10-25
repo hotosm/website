@@ -67,22 +67,22 @@
 
 .base-article h1,
 .base-article-m h1 {
-    font-size: var(--font-size-h2);
+    font-size: var(--font-size-h1);
 }
 
 .base-article h2,
 .base-article-m h2 {
-    font-size: var(--font-size-h3);
+    font-size: var(--font-size-h2);
 }
 
 .base-article h3,
 .base-article-m h3 {
-    font-size: var(--font-size-h4);
+    font-size: var(--font-size-h3);
 }
 
 .base-article h4,
 .base-article-m h4 {
-    font-size: var(--font-size-h5);
+    font-size: var(--font-size-h4);
 }
 
 .base-article h1,

@@ -42,8 +42,8 @@
             {% comment %} NEWS AND EVENTS SECTIONS {% endcomment %}
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-10 mb-20">
                 {% with page.id|stringformat:"s" as id %}
-                    {% include "ui/components/dogear_boxes/SpecialDogearLinkBox.html" with colour=page.main_colour title=page.news_section_title description=page.news_section_description linktext=page.news_section_link_text linkurl=page.news_section_link linkappendage="?hub"|add:id|add:"=on" %}
-                    {% include "ui/components/dogear_boxes/SpecialDogearLinkBox.html" with colour=page.main_colour title=page.events_section_title description=page.events_section_description linktext=page.events_section_link_text linkurl=page.events_section_link linkappendage="?hub"|add:id|add:"=on" %}
+                    {% include "ui/components/dogear_boxes/SpecialDogearLinkBox.html" with colour=page.main_colour title=page.news_section_title description=page.news_section_description linktext=page.news_section_link_text linkurl=page.news_section_link linkappendage="?hub"|add:original_id|add:"=on" %}
+                    {% include "ui/components/dogear_boxes/SpecialDogearLinkBox.html" with colour=page.main_colour title=page.events_section_title description=page.events_section_description linktext=page.events_section_link_text linkurl=page.events_section_link linkappendage="?hub"|add:original_id|add:"=on" %}
                 {% endwith %}
             </div>
 
@@ -54,7 +54,7 @@
                 </div>
                 <div class="text-left md:text-right text-intro mt-4 md:mt-0 self-center">
                     {% with page.id|stringformat:"s" as id %}
-                        {% include "ui/components/BaseLink.html" with linktext=page.get_parent.specific.partners_section_link_text linkurl=page.get_parent.specific.partners_section_link linkappendage="?hub"|add:id|add:"=on" %}
+                        {% include "ui/components/BaseLink.html" with linktext=page.get_parent.specific.partners_section_link_text linkurl=page.get_parent.specific.partners_section_link linkappendage="?hub"|add:original_id|add:"=on" %}
                     {% endwith %}
                 </div>
             </div>

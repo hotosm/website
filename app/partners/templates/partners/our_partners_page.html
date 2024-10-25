@@ -12,7 +12,7 @@
 {% block content %}
     {% include "ui/components/PageHeaderWithBlur.html" with title=page.title image=page.header_image full_length=True smaller=True endinlarge=True %}
     
-    <div class="max-w-7xl mx-auto my-10" x-data="{ params: new URLSearchParams((new URL(window.location.href)).search), activeParams: {} }">
+    <div class="max-w-7xl mx-auto my-10" x-data="{ params: new URLSearchParams((new URL(window.location.href)).search), activeParams: new URLSearchParams((new URL(window.location.href)).search), {% include 'ui/components/utilities/FormGetActiveXData.js' %}, }">
         <div class="px-6 md:px-10">
             <div class="max-w-5xl text-intro font-medium mb-20">
                 {{ page.intro|richtext }}
@@ -31,7 +31,7 @@
                     <div class="relative" x-data="{ show: false }" @click.away="show = false">
                         <div class="w-full h-full flex justify-between py-2 px-3 bg-hot-off-white items-center cursor-pointer" @click="show = !show">
                             <p class="pointer-events-none">
-                                {{page.filter_by_type_text}}
+                                {{page.filter_by_type_text}} {% include "ui/components/utilities/FormAppliedSuffix.html" with key="pt" applied_text=page.applied_text %}
                             </p>
                             {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-90 text-hot-red" %}
                         </div>
@@ -50,7 +50,7 @@
                     <div class="relative" x-data="{ show: false }" @click.away="show = false">
                         <div class="w-full h-full flex justify-between py-2 px-3 bg-hot-off-white items-center cursor-pointer" @click="show = !show">
                             <p class="pointer-events-none">
-                                {{page.filter_by_hub}}
+                                {{page.filter_by_hub}} {% include "ui/components/utilities/FormAppliedSuffix.html" with key="hub" applied_text=page.applied_text %}
                             </p>
                             {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-90 text-hot-red" %}
                         </div>
@@ -69,7 +69,7 @@
                     <div class="relative" x-data="{ show: false }" @click.away="show = false">
                         <div class="w-full h-full flex justify-between py-2 px-3 bg-hot-off-white items-center cursor-pointer" @click="show = !show">
                             <p class="pointer-events-none">
-                                {{page.filter_by_program}}
+                                {{page.filter_by_program}} {% include "ui/components/utilities/FormAppliedSuffix.html" with key="prg" applied_text=page.applied_text %}
                             </p>
                             {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-90 text-hot-red" %}
                         </div>

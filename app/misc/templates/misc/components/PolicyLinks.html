@@ -1,0 +1,15 @@
+{% load policy_tags %}
+{% get_internal_policy_links as internal_policy_links %}
+
+{% for policy in internal_policy_links %}
+    {% if policy.id != page.id %}
+        <li>
+            {% include "ui/components/BaseLink.html" with linktext=policy.title linkurl=policy.url %}
+        </li>
+    {% endif %}
+{% endfor %}
+{% for policy in page.get_parent.specific.our_policies_links %}
+    <li>
+        {% include "ui/components/BaseLink.html" with linktext=policy.value.text linkurl=policy.value.link %}
+    </li>
+{% endfor %}

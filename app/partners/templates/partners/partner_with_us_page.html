@@ -21,7 +21,7 @@
             </div>
 
             {% include "ui/components/SectionHeadingWithUnderline.html" with title=page.partnership_types_title %}
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-6 mb-20">
+            <div class="grid md:grid-cols-2 gap-8 mt-6 mb-20">
                 {% for ptype in page.get_children %}
                     <div class="p-6 bg-hot-off-white">
                         {% image ptype.specific.external_icon original class="h-12 w-auto mt-2" %}

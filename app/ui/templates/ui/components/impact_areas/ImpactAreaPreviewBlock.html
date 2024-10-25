@@ -5,22 +5,24 @@
 {% load wagtailcore_tags %}
 {% load wagtailimages_tags %}
 
-{% image ia.header_image original as image_p %}
-<div class="">
-    <div class="bg-gradient-to-t from-black/70 to-transparent to-30%">
-        <img class="w-full h-72 object-cover -z-10 relative" src="{{ image_p.url }}" />
-    </div>
-    
-    <h2 class="text-h3 font-bold py-1 my-1">
-        {% image ia.external_icon original class="black-image-redifier h-16 w-auto inline" %}
-        <span class="ml-2">{{ ia.title }}</span>
-    </h2>
+{% with ia.localized as ia %}
+    {% image ia.header_image original as image_p %}
+    <div class="">
+        <div class="bg-gradient-to-t from-black/70 to-transparent to-30%">
+            <img class="w-full h-72 object-cover -z-10 relative" src="{{ image_p.url }}" />
+        </div>
+        
+        <h2 class="text-h3 font-bold py-1 my-1">
+            {% image ia.external_icon original class="black-image-redifier h-16 w-auto inline" %}
+            <span class="ml-2">{{ ia.title }}</span>
+        </h2>
 
-    <div class="text-base py-1">
-        {{ ia.intro|richtext }}
-    </div>
+        <div class="text-base py-1">
+            {{ ia.intro|richtext }}
+        </div>
 
-    <p class="text-intro font-medium py-1">
-        {% include "ui/components/BaseLink.html" with linktext=learn_more_text linkurl=ia.url %}
-    </p>
-</div>
+        <p class="text-intro font-medium py-1">
+            {% include "ui/components/BaseLink.html" with linktext=learn_more_text linkurl=ia.url %}
+        </p>
+    </div>
+{% endwith %}

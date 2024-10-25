@@ -38,11 +38,19 @@
             </div>
 
             {% comment %} FILTERS {% endcomment %}
-            <div class="mt-20" x-data="{ mapView: params.get('mapView') ? params.get('mapView') : false, showFilters: params.get('showFilters') ? params.get('showFilters') : false }" id="projects-section">
+            <div class="mt-20" x-data="{ mapView: params.get('mapView') ? params.get('mapView') : true, showFilters: params.get('showFilters') ? params.get('showFilters') : false }" id="projects-section">
                 <h1 class="text-h2 font-bold">
                     {{ page.projects_title }}
                 </h1>
-                <form class="mt-8" action="#projects-section">
+                <form class="mt-8" action="#projects-section" 
+                    hx-get="{{page.url}}"
+                    hx-trigger="submit"
+                    hx-target="#projects-list, #next-project, #projects-list-map, #next-project-map"
+                    hx-select="#projects-list, #next-project, #projects-list-map, #next-project-map"
+                    hx-swap="innerHTML"
+                    hx-select-oob="#projects-list:outerHTML, #next-project:outerHTML, #projects-list-map:outerHTML, #next-project-map:outerHTML"
+                    @submit="$store.formdata = new FormData($el); refreshWithSearch();"
+                >
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-10 gap-8">
                         {% comment %} KEYWORD SEARCH {% endcomment %}
                         <div class="bg-hot-off-white flex items-center lg:col-span-3">
@@ -90,6 +98,7 @@
                                 </div>
                             </div>
                         </div>
+                        
                     </div>
 
                     {% comment %} MAP AND FILTER CONTAINER {% endcomment %}
@@ -114,12 +123,12 @@
                                             </p>
                                         {% endif %}
                                     </div>
-                                    <p class="text-center mt-4 mb-8" id="next-project-map" class="{% if not projects.has_next %}hidden{% endif %}">
+                                    <p class="text-center mt-4 mb-8 cursor-pointer" id="next-project-map" class="{% if not projects.has_next %}hidden{% endif %}">
                                         {% if projects.has_next %}
                                                 {% comment %} <a href="?page={{ projects.next_page_number }}"></a> {% endcomment %}
-                                                <button
-                                                    x-data="{ params: new URLSearchParams((new URL(window.location.href)).search), init() {this.params.set('page', '{{projects.next_page_number}}')} }"
-                                                    :hx-get="`?${params.toString()}`"
+                                                <span
+                                                    x-data="{ params: new URLSearchParams((new URL(window.location.href)).search) }"
+                                                    :hx-get="'?page={{ projects.next_page_number }}&' + `${(new URLSearchParams($store.formdata)).toString()}`"
                                                     hx-trigger="click"
                                                     hx-select="#projects-list-map, #next-project-map, #projects-list, #next-project"
                                                     hx-swap="beforeend"
@@ -129,7 +138,7 @@
                                                         {{page.load_more_projects_text}}
                                                     </span>
                                                     {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-90 text-hot-red" %}
-                                                </button>
+                                                </span>
                                         {% endif %}
                                     </p>
                                 </div>
@@ -189,11 +198,11 @@
                             </p>
                         {% endif %}
                     </div>
-                    <p class="text-center mt-10" id="next-project" class="{% if not projects.has_next %}hidden{% endif %}" x-init="$store.pageNum = {{projects.number}}; callMapUpdate();">
+                    <p class="text-center mt-10" id="next-project" class="{% if not projects.has_next %}hidden{% endif %}" x-init="$store.pageNum = {{projects.number}}; callMapUpdate(); console.log($store.pageNum)">
                         {% if projects.has_next %}
                                 <button
-                                    x-data="{ params: new URLSearchParams((new URL(window.location.href)).search), init() {this.params.set('page', '{{projects.next_page_number}}')} }"
-                                    :hx-get="`?${params.toString()}`"
+                                    x-data="{ params: new URLSearchParams((new URL(window.location.href)).search) }"
+                                    :hx-get="'?page={{ projects.next_page_number }}&' + `${(new URLSearchParams($store.formdata)).toString()}`"
                                     hx-trigger="click"
                                     hx-select="#projects-list-map, #next-project-map, #projects-list, #next-project"
                                     hx-swap="beforeend"
@@ -243,30 +252,4 @@
     </div>
     
     {% include "./components/MapboxScript.html" %}
-    <script>
-        const callMapUpdate = async () => {
-            const params = new URLSearchParams((new URL(window.location.href)).search);
-            params.set('page', Alpine.store('pageNum'));
-            params.set('projects', true);
-            const apiUrl = '?' + params.toString();
-            fetch(apiUrl).then(response => {
-                if (response.ok)
-                    return response.json();
-                throw new Error("Failed to fetch projects.");
-            }).then(data => {
-                geojson = data;
-                
-                for (const feature of geojson.features) {
-                    const element = `
-                        <div class="" @click="$refs['project${feature.properties.id}'].scrollIntoView({block: 'nearest', behavior: 'smooth'}); selectedProject = 'project${feature.properties.id}';">
-                            {% include './components/MapboxMarker.html' %}
-                        </div>
-                    `;
-                    const el = document.createElement('div');
-                    el.innerHTML = element;
-                    new mapboxgl.Marker(el).setLngLat(feature.geometry.coordinates).addTo(map);
-                }
-            })
-        }
-    </script>
 {% endblock %}

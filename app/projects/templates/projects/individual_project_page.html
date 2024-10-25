@@ -18,7 +18,7 @@
             <div class="p-10 col-span-2">
                 <div class="base-article-m mb-20">
                     <div class="text-intro">
-                        {{ page.intro|safe }}
+                        {{ page.intro|richtext }}
                     </div>
                     {{ page.description }}
                 </div>
@@ -39,12 +39,13 @@
                             </div>
                         {% endif %}
 
-                        {% if page.region_hub_list %}
+                        {% if page.region_hub_list or page.country_text %}
                             <div>
                                 <p>{{page.get_parent.specific.region_hub_title}}</p>
                                 {% for hub in page.region_hub_list %}
                                     <p><a href="{{hub.value.url}}">{{hub.value.title}}</a></p>
                                 {% endfor %}
+                                {{page.country_text|richtext}}
                             </div>
                         {% endif %}
 
@@ -84,7 +85,7 @@
                         {% if page.contact %}
                             <div>
                                 <p>{{page.get_parent.specific.contact_title}}</p>
-                                <p>{{page.contact|safe}}</p>
+                                <p>{{page.contact|richtext}}</p>
                             </div>
                         {% endif %}
                     </div>

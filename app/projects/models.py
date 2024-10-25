@@ -57,7 +57,7 @@ class ProjectOwnerPage(Page):
     load_more_projects_text = models.CharField(default="Load More Projects")
 
     impact_areas_title = models.CharField(default="Impact Areas")
-    region_hub_title = models.CharField(default="Region Hub")
+    region_hub_title = models.CharField(default="Region Hub/Country")
     duration_title = models.CharField(default="Duration")
     partners_title = models.CharField(default="Partners")
     tools_title = models.CharField(default="Tools")
@@ -123,6 +123,9 @@ class ProjectType(models.Model):
 
     def __str__(self):
         return self.type_name
+    
+    class Meta:
+        verbose_name_plural = "Project Types"
 
 
 @register_snippet
@@ -137,7 +140,7 @@ class ProjectStatus(models.Model):
         return self.status_name
     
     class Meta:
-        verbose_name_plural = "Project statuses"
+        verbose_name_plural = "Project Statuses"
 
 
 """
@@ -172,7 +175,7 @@ class IndividualProjectPage(Page):
     intro = RichTextField(blank=True)
     description = StreamField([
         ('text_block', RichTextBlock(features=[
-        'h1', 'h2', 'h3', 'h4', 'bold', 'italic', 'link', 'ol', 'ul', 'hr', 'document-link', 'image', 'embed', 'code', 'blockquote'
+        'h2', 'h3', 'h4', 'bold', 'italic', 'link', 'ol', 'ul', 'hr', 'document-link', 'image', 'embed', 'code', 'blockquote'
         ]))
     ], use_json_field=True, null=True)
 
@@ -190,10 +193,11 @@ class IndividualProjectPage(Page):
     )
     impact_area_list = StreamField([('impact_area', PageChooserBlock(page_type="impact_areas.IndividualImpactAreaPage"))], use_json_field=True, null=True, blank=True)
     region_hub_list = StreamField([('region_hub', PageChooserBlock(page_type="mapping_hubs.IndividualMappingHubPage"))], use_json_field=True, null=True, blank=True)
+    country_text = RichTextField(blank=True, help_text="This field is not required; this field is mostly for projects with no specified region hub. Regardless, if region hub(s) and country are both provided, both fields will appear on the page.")
     duration = models.CharField(default="Ongoing", blank=True)
     partner_list = StreamField([('partner', SnippetChooserBlock(Partner))], use_json_field=True, null=True, blank=True)
     tools_list = StreamField([('tool', PageChooserBlock(page_type="tech.IndividualTechStackPage"))], use_json_field=True, null=True, blank=True)
-    contact = RichTextField(null=True, blank=True)
+    contact = RichTextField(null=True, blank=True, help_text="If you provide an email here, make sure to turn it into an email link. This can be done by highlighting the text containing the email and pressing CTRL + K.")
     types = ParentalManyToManyField('projects.ProjectType', blank=True)
     related_news = StreamField([
         ('news_page', PageChooserBlock(page_type="news.IndividualNewsPage"))
@@ -231,6 +235,7 @@ class IndividualProjectPage(Page):
             FieldPanel('project_status', widget=forms.RadioSelect),
             FieldPanel('impact_area_list'),
             FieldPanel('region_hub_list'),
+            FieldPanel('country_text'),
             FieldPanel('duration'),
             FieldPanel('partner_list'),
             FieldPanel('tools_list'),

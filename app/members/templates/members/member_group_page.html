@@ -12,7 +12,7 @@
 {% block content %}
     {% include "ui/components/PageHeaderWithBlur.html" with title=page.title subtitle=page.intro image=page.header_image smaller=True full_length=True %}
 
-    <div class="max-w-7xl mx-auto px-6 md:px-10 my-10" x-data="{ params: new URLSearchParams((new URL(window.location.href)).search), activeParams: {} }">
+    <div class="max-w-7xl mx-auto px-6 md:px-10 my-10" x-data="{ params: new URLSearchParams((new URL(window.location.href)).search), activeParams: new URLSearchParams((new URL(window.location.href)).search), {% include 'ui/components/utilities/FormGetActiveXData.js' %}, }">
         <div class="max-w-3xl">
             <div class="text-intro font-medium">
                 {{page.body_intro|safe}}
@@ -43,7 +43,7 @@
                     <div class="relative" x-data="{ show: false }" @click.away="show = false">
                         <div class="w-full h-full flex justify-between py-2 px-3 bg-hot-off-white items-center cursor-pointer" @click="show = !show">
                             <p class="pointer-events-none">
-                                {{page.get_parent.specific.filter_by_country}}
+                                {{page.get_parent.specific.filter_by_country}} {% include "ui/components/utilities/FormAppliedSuffix.html" with key="hub" applied_text=page.get_parent.specific.applied_text %}
                             </p>
                             {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-90 text-hot-red" %}
                         </div>
@@ -51,8 +51,8 @@
                             <hr class="border-b-2">
                             {% for hub in hubs %}
                                 <div class="mt-4 flex">
-                                    <label for="cat-{{forloop.counter}}">{{hub.title}}</label>
-                                    <input class="ml-auto checked:bg-hot-red checked:hover:bg-hot-red checked:focus:bg-hot-red" id="cat-{{forloop.counter}}" type="checkbox" name="{{hub.title}}" :checked="params.get('{{hub.title}}')">
+                                    <label for="hub-{{forloop.counter}}">{{hub.localized.title}}</label>
+                                    <input class="ml-auto checked:bg-hot-red checked:hover:bg-hot-red checked:focus:bg-hot-red" id="hub-{{forloop.counter}}" type="checkbox" name="hub{{hub.id}}" :checked="params.get('hub{{hub.id}}')">
                                 </div>
                             {% endfor %}
                         </div>

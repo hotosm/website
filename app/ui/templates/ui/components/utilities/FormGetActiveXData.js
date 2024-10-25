@@ -1,0 +1,1 @@
+getActive(x) { let count = 0; for (const e of this.activeParams) { if(e[0].includes(x) && e[1] == 'on') count++; }; return count; }

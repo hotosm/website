@@ -6,33 +6,35 @@
 
 {% load wagtailimages_tags %}
 
-{% image project.header_image original as image_p %}
-<div class="font-medium {{class}}">
-    <a href="{{ project.url }}" class="[&:hover_.project-preview-title]:underline">
-        <div>
-            {% if showimage %}
-                <div class="w-full min-h-[9rem] mb-3 image-overshadow-gradient">
-                    {% image project.header_image original class="aspect-[5/3] object-cover object-center" %}
-                </div>
-            {% endif %}
+{% with project.localized as project %}
+    {% image project.header_image original as image_p %}
+    <div class="font-medium {{class}}">
+        <a href="{% include 'ui/components/PageOrLinkHrefText.html' with linkurl=project %}" class="[&:hover_.project-preview-title]:underline">
+            <div>
+                {% if showimage %}
+                    <div class="w-full min-h-[9rem] mb-3 image-overshadow-gradient">
+                        {% image project.header_image original class="aspect-[5/3] object-cover object-center" %}
+                    </div>
+                {% endif %}
 
-            <p class="text-mini">
-                <span class="text-hot-dark-grey">
-                    {{ project.location }}
-                </span>
-            </p>
-            
-            <p class="my-1 project-preview-title">
-                {{ project.title }}
-            </p>
+                <p class="text-mini">
+                    <span class="text-hot-dark-grey">
+                        {{ project.location }}
+                    </span>
+                </p>
+                
+                <p class="my-1 project-preview-title">
+                    {{ project.title }}
+                </p>
+            </div>
+        </a>
+
+        <div class="text-mini my-2">
+            {% for area in project.impact_area_list %}
+                <p>
+                    <a class="text-hot-red text-mini hover:underline" href="{{ area.value.localized.url }}">{{ area.value.title }}</a>{% if not forloop.last %},{% endif %}
+                </p>
+            {% endfor %}
         </div>
-    </a>
-
-    <div class="text-mini my-2">
-        {% for area in project.impact_area_list %}
-            <p>
-                <a class="text-hot-red text-mini hover:underline" href="{{ area.value.url }}">{{ area.value.title }}</a>{% if not forloop.last %},{% endif %}
-            </p>
-        {% endfor %}
     </div>
-</div>
+{% endwith%}

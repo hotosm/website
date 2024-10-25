@@ -22,8 +22,10 @@ class NewsOwnerPage(Page):
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
 
+        base_locale = context['page'].get_translation(1).locale
+
         keyword = request.GET.get('keyword', '')
-        news_list = IndividualNewsPage.objects.live().filter(locale=context['page'].locale)
+        news_list = IndividualNewsPage.objects.live().filter(locale=base_locale)
         
         if keyword:
             news_list = news_list.search(keyword).get_queryset()
@@ -41,7 +43,7 @@ class NewsOwnerPage(Page):
             query = query | Q(tags__name=tag)
         news_list = news_list.filter(query).distinct()
 
-        hubs = IndividualMappingHubPage.objects.live().filter(locale=context['page'].locale)
+        hubs = IndividualMappingHubPage.objects.live().filter(locale=base_locale)
         query = Q()
         for hub in hubs:
             if request.GET.get(f"hub{hub.id}", ''):
@@ -93,6 +95,7 @@ class NewsOwnerPage(Page):
     tags_title = models.CharField(default="Tags")
     hubs_title = models.CharField(default="Associated Hubs")
 
+    applied_text = models.CharField(default="applied", help_text="This will be a suffix to a number, used to indicate how many filters are applied currently in some field.")
     keyword_search_hint = models.CharField(default="Search by keyword")
     filter_by_hub = models.CharField(default="Filter by Hub")
     category_select = models.CharField(default="Select Categories")
@@ -107,6 +110,7 @@ class NewsOwnerPage(Page):
 
     content_panels = Page.content_panels + [
         MultiFieldPanel([
+            FieldPanel('applied_text'),
             FieldPanel('keyword_search_hint'),
             FieldPanel('filter_by_hub'),
             FieldPanel('category_select'),
@@ -182,7 +186,7 @@ class IndividualNewsPage(Page):
 
     article_body = StreamField([
         ('text_block', RichTextBlock(features=[
-        'h1', 'h2', 'h3', 'h4', 'bold', 'italic', 'link', 'ol', 'ul', 'hr', 'document-link', 'image', 'embed', 'code', 'blockquote'
+        'h2', 'h3', 'h4', 'bold', 'italic', 'link', 'ol', 'ul', 'hr', 'document-link', 'image', 'embed', 'code', 'blockquote'
         ]))
     ], use_json_field=True, null=True, blank=True)
 

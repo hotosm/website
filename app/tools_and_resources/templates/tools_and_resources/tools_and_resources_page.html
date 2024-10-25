@@ -22,9 +22,13 @@
                         {{page.description|richtext}}
                     </div>
 
-                    <p class="mt-4">
-                        {% include "ui/components/BaseLinkNoUnderline.html" with linkurl=page.learn_more_data_principles_url linktext=page.learn_more_data_principles_text %}
-                    </p>
+                    <div class="flex flex-wrap gap-4 gap-x-8 mt-4">
+                        {% for link in page.description_links %}
+                            <p class="text-intro">
+                                {% include "ui/components/BaseLink.html" with linkurl=link.value.linkurl linktext=link.value.linktext %}
+                            </p>
+                        {% endfor %}
+                    </div>
                 </div>
                 {% image page.intro_image original class="hidden lg:block" %}
             </div>
@@ -38,7 +42,7 @@
     </div>
 
     <div class="my-10">
-        {% include "ui/components/sections/BaseSectionWithImage.html" with title=page.resource_learning_title image=page.resource_learning_image imageright=True red_button=True button_text=page.get_connected_button_text button_link=page.get_connected_button_url description=page.resource_learning_description imagenotwide=True %}
+        {% include "ui/components/sections/BaseSectionWithImage.html" with title=page.resource_learning_title image=page.resource_learning_image imageright=True linklist=page.resource_learning_links description=page.resource_learning_description imagenotwide=True %}
     </div>
 
     <div class="max-w-7xl mx-auto">

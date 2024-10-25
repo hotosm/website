@@ -5,8 +5,8 @@
     <div class="flex justify-center gap-1 flex-wrap">
         <p x-text="`{{stat}}`"></p>
         {% if tooltiptext %}
-            <div class="relative" @click.away="open = false">
-                <p class="cursor-pointer" @click="open = !open">ⓘ</p>
+            <div class="relative" @mouseover.away="open = false">
+                <p class="cursor-pointer" @mouseover="open = !open">ⓘ</p>
                 <div class="absolute show-at-hover" :class="open ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'">
                     <p class="relative bg-white text-black shadow-md p-4 w-48">
                         {{tooltiptext}}

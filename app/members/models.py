@@ -29,6 +29,7 @@ class MemberGroupOwnerPage(Page):
         'members.MemberGroupPage'
     ]
 
+    applied_text = models.CharField(default="applied", help_text="This will be a suffix to a number, used to indicate how many filters are applied currently in some field.")
     search_placeholder = models.CharField(default="Search by name")
     filter_by_country = models.CharField(default="Filter by Country")
     sort_by_titlea = models.CharField(default="Sort by Name Alphabetical")
@@ -47,6 +48,7 @@ class MemberGroupOwnerPage(Page):
 
     content_panels = Page.content_panels + [
         MultiFieldPanel([
+            FieldPanel('applied_text'),
             FieldPanel('search_placeholder'),
             FieldPanel('filter_by_country'),
             FieldPanel('sort_by_titlea'),
@@ -70,7 +72,7 @@ class MemberGroupPage(Page):
         context = super().get_context(request, *args, **kwargs)
 
         members = IndividualMemberPage.objects.live().filter(
-            Q(member_groups__contains=[{'type': 'member_group', 'value': { 'group': context['page'].id }}])
+            Q(member_groups__contains=[{'type': 'member_group', 'value': { 'group': context['page'].get_translation(1).id }}])
         ).filter(locale=context['page'].locale)
 
         keyword = request.GET.get('keyword', '')
@@ -78,10 +80,10 @@ class MemberGroupPage(Page):
         if keyword:
             members = members.search(keyword, fields=["title"]).get_queryset()
         
-        hubs = IndividualMappingHubPage.objects.live().filter(locale=context['page'].locale)
+        hubs = IndividualMappingHubPage.objects.live().filter(locale=context['page'].get_translation(1).locale)
         query = Q()
         for hub in hubs:
-            if request.GET.get(str(hub), ''):
+            if request.GET.get("hub" + str(hub.id), ''):
                 query = query | Q(location_hub=hub)
         members = members.filter(query).distinct()
 

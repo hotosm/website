@@ -47,18 +47,22 @@
                                 <div class="md:col-span-2 lg:col-span-3">
                                     {% for item in solution.value.items %}
                                         <div x-show="selected == {{forloop.counter0}}" x-transition>
-                                            <h2 class="text-h4 font-semibold">
-                                                {{item.value.title}}
-                                            </h2>
+                                            <div class="flex items-center gap-4">
+                                                {% image item.value.icon original class="h-6 w-auto" %}
+                                                <h2 class="text-h4 font-semibold">
+                                                    {{item.value.title}}
+                                                </h2>
+                                            </div>
+                                            
                                             <div class="base-article-m mt-4 text-small">
                                                 {{item.value.description}}
                                             </div>
                                             <div class="flex gap-8 flex-wrap mt-8">
                                                 {% for link in item.value.links %}
                                                     <a href="{% include 'ui/components/PageOrLinkHrefText.html' with linkurl=link.value.linkurl %}">
-                                                        <div class="bg-hot-red font-medium text-intro text-white px-5 flex items-center hover:bg-hot-off-white hover:text-hot-red border-2 border-transparent hover:border-hot-red">
+                                                        <div class="bg-hot-red font-medium text-intro text-white py-1 px-5 flex items-center hover:bg-hot-off-white hover:text-hot-red border-2 border-transparent hover:border-hot-red">
                                                             <p>{{link.value.linktext}}</p>
-                                                            <span class="ml-2 mb-2">
+                                                            <span class="ml-2">
                                                                 {% include "ui/components/icon_svgs/ExternalLinkIcon.html" %}
                                                             </span>
                                                         </div>

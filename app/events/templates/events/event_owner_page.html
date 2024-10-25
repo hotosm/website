@@ -10,7 +10,7 @@
 {% endblock extra_css %}
 
 {% block content %}
-    <div class="max-w-7xl mx-auto my-10" x-data="{ params: new URLSearchParams((new URL(window.location.href)).search), activeParams: {} }">
+    <div class="max-w-7xl mx-auto my-10" x-data="{ params: new URLSearchParams((new URL(window.location.href)).search), activeParams: new URLSearchParams((new URL(window.location.href)).search), {% include 'ui/components/utilities/FormGetActiveXData.js' %}, }">
         <div class="px-6 md:px-10">
             <h1 class="text-h1 font-semibold my-10">{{page.title}}</h1>
             <form class="my-10"
@@ -33,7 +33,7 @@
                     <div class="relative" x-data="{ show: false }" @click.away="show = false">
                         <div class="w-full h-full flex justify-between py-2 px-3 bg-hot-off-white items-center cursor-pointer" @click="show = !show">
                             <p class="pointer-events-none">
-                                {{page.host_type_select}}
+                                {{page.host_type_select}} {% include "ui/components/utilities/FormAppliedSuffix.html" with key="htype" applied_text=page.applied_text %}
                             </p>
                             {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-90 text-hot-red" %}
                         </div>
@@ -42,7 +42,7 @@
                             {% for event_host_type in event_host_types %}
                                 <div class="mt-4 flex">
                                     <label for="htype-{{forloop.counter}}">{{event_host_type.type_name}}</label>
-                                    <input class="ml-auto checked:bg-hot-red checked:hover:bg-hot-red checked:focus:bg-hot-red" id="htype-{{forloop.counter}}" type="checkbox" name="{{event_host_type.type_name}}" :checked="params.get('{{event_host_type.type_name}}')">
+                                    <input class="ml-auto checked:bg-hot-red checked:hover:bg-hot-red checked:focus:bg-hot-red" id="htype-{{forloop.counter}}" type="checkbox" name="htype{{event_host_type.id}}" :checked="params.get('htype{{event_host_type.id}}')">
                                 </div>
                             {% endfor %}
                         </div>
@@ -52,7 +52,7 @@
                     <div class="relative" x-data="{ show: false }" @click.away="show = false">
                         <div class="w-full h-full flex justify-between py-2 px-3 bg-hot-off-white items-center cursor-pointer" @click="show = !show">
                             <p class="pointer-events-none">
-                                {{page.category_select}}
+                                {{page.category_select}} {% include "ui/components/utilities/FormAppliedSuffix.html" with key="cat" applied_text=page.applied_text %}
                             </p>
                             {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-90 text-hot-red" %}
                         </div>
@@ -61,7 +61,7 @@
                             {% for category in categories %}
                                 <div class="mt-4 flex">
                                     <label for="cat-{{forloop.counter}}">{{category.category_name}}</label>
-                                    <input class="ml-auto checked:bg-hot-red checked:hover:bg-hot-red checked:focus:bg-hot-red" id="cat-{{forloop.counter}}" type="checkbox" name="{{category.category_name}}" :checked="params.get('{{category.category_name}}')">
+                                    <input class="ml-auto checked:bg-hot-red checked:hover:bg-hot-red checked:focus:bg-hot-red" id="cat-{{forloop.counter}}" type="checkbox" name="cat{{category.id}}" :checked="params.get('cat{{category.id}}')">
                                 </div>
                             {% endfor %}
                         </div>
@@ -71,7 +71,7 @@
                     <div class="relative" x-data="{ show: false }" @click.away="show = false">
                         <div class="w-full h-full flex justify-between py-2 px-3 bg-hot-off-white items-center cursor-pointer" @click="show = !show">
                             <p class="pointer-events-none">
-                                {{page.filter_by_country}}
+                                {{page.filter_by_country}} {% include "ui/components/utilities/FormAppliedSuffix.html" with key="hub" applied_text=page.applied_text %}
                             </p>
                             {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-90 text-hot-red" %}
                         </div>

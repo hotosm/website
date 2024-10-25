@@ -43,11 +43,13 @@
         <script defer
                 src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
         <script src="https://unpkg.com/htmx.org@1.9.12" integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2" crossorigin="anonymous"></script>
+        {% include "components/global_scripts/ExternalLinkScript.html" %}
         {% block extra_head %}
         {% endblock %}
     </head>
     <body class="min-h-screen {% block body_class %}{% endblock body_class %}">
-        <div x-data="{ isMenuOpen: false, isSearchClicked: false, isLandingPage: false, setIsLandingPage(x) {this.isLandingPage = x} }">
+        <div x-data="{ isMenuOpen: false, isSearchClicked: false, searchkeyword: '', isLandingPage: false, setIsLandingPage(x) {this.isLandingPage = x}, test: false }" :style="test ? '--font-size-intro: 1.33rem;' : ''">
+            <p class="cursor-pointer" @click="test = !test">im the testing button for intro size</p>
             {% include "ui/components/navigation/UpperHeaderNavbar.html" %}
             <div class="relative">
                 {% comment %} {% include "components/header/header.html" %} {% endcomment %}

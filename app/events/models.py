@@ -28,7 +28,7 @@ class EventOwnerPage(Page):
         categories = EventCategory.objects.all()
         query = Q()
         for category in categories:
-            if request.GET.get(str(category), ''):
+            if request.GET.get("cat" + str(category), ''):
                 query = query | Q(event_categories=category)
         events_list = events_list.filter(query)
 
@@ -36,7 +36,7 @@ class EventOwnerPage(Page):
         event_host_types = EventHostType.objects.all()
         query = Q()
         for host_type in event_host_types:
-            if request.GET.get(str(host_type), ''):
+            if request.GET.get("htype" + str(host_type.id), ''):
                 query = query | Q(event_host_type=host_type)
         events_list = events_list.filter(query)
 
@@ -92,6 +92,7 @@ class EventOwnerPage(Page):
     view_all_events_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
     event_read_more_text = models.CharField(default="Read more")
 
+    applied_text = models.CharField(default="applied", help_text="This will be a suffix to a number, used to indicate how many filters are applied currently in some field.")
     keyword_search_hint = models.CharField(default="Search by keyword")
     filter_by_country = models.CharField(default="Filter by Country")
     host_type_select = models.CharField(default="Filter by Host Type")
@@ -106,6 +107,7 @@ class EventOwnerPage(Page):
 
     content_panels = Page.content_panels + [
         MultiFieldPanel([
+            FieldPanel('applied_text'),
             FieldPanel('keyword_search_hint'),
             FieldPanel('filter_by_country'),
             FieldPanel('host_type_select'),
@@ -181,7 +183,7 @@ class IndividualEventPage(Page):
     intro = RichTextField(blank=True)
     extended_description = StreamField([
         ('text_block', RichTextBlock(features=[
-        'h1', 'h2', 'h3', 'h4', 'bold', 'italic', 'link', 'ol', 'ul', 'hr', 'document-link', 'image', 'embed', 'code', 'blockquote'
+        'h2', 'h3', 'h4', 'bold', 'italic', 'link', 'ol', 'ul', 'hr', 'document-link', 'image', 'embed', 'code', 'blockquote'
         ]))
     ], use_json_field=True, null=True)
 

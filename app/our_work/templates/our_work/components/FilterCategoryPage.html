@@ -6,7 +6,7 @@
         <hr class="border-b-2">
         {% for p in pages %}
             <div class="px-1 mt-4 flex">
-                <label for="{{denoter}}-{{forloop.counter}}">{{p.title}}</label>
+                <label for="{{denoter}}-{{forloop.counter}}">{{p.localized.title}}</label>
                 <input class="ml-auto checked:bg-hot-red checked:hover:bg-hot-red checked:focus:bg-hot-red" id="{{denoter}}-{{forloop.counter}}" type="checkbox" name="{{denoter}}{{p.id}}" :checked="params.get('{{denoter}}{{p.id}}')">
             </div>
         {% endfor %}

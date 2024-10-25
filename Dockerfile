@@ -23,7 +23,7 @@ LABEL org.hotosm.fmtm.app-name="backend" \
 RUN set -ex \
     && apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install \
-    -y --no-install-recommends "locales" "ca-certificates" "gettext" \
+    -y --no-install-recommends "locales" "ca-certificates" "gettext" "libmagickwand-dev" \
     && DEBIAN_FRONTEND=noninteractive apt-get upgrade -y \
     && rm -rf /var/lib/apt/lists/* \
     && update-ca-certificates
@@ -61,6 +61,7 @@ RUN set -ex \
         "libwebp-dev" \
         "nodejs" \
         "npm" \
+        "libmagickwand-dev" \
     && rm -rf /var/lib/apt/lists/*
 COPY --from=extract-deps \
     /opt/python/requirements.txt /opt/python/
@@ -94,6 +95,7 @@ RUN set -ex \
         "libwebp-dev" \
         "nodejs" \
         "npm" \
+        "libmagickwand-dev" \
     && rm -rf /var/lib/apt/lists/*
 # Copy the entrypoint script into the Docker image
 COPY --chown=wagtail:wagtail container-entrypoint.sh /

@@ -40,8 +40,10 @@ class MappingHubProjectsPage(Page):
 
         parent_hub = context['page'].get_parent()
 
+        base_id = parent_hub.get_translation(1).id
+
         projects = IndividualProjectPage.objects.live().filter(
-            Q(region_hub_list__contains=[{'type': 'region_hub', 'value': parent_hub.id}])
+            Q(region_hub_list__contains=[{'type': 'region_hub', 'value': base_id}])
         ).filter(locale=context['page'].locale)
 
         other_hubs_projects = MappingHubProjectsPage.objects.live().filter(locale=context['page'].locale)
@@ -142,12 +144,16 @@ class OpenMappingHubsPage(Page):
 class IndividualMappingHubPage(Page):
     def get_context(self, request):
         context = super().get_context(request)
+        original_id = context['page'].get_translation(1).id
+        context['original_id'] = str(original_id)
+
         projects = IndividualProjectPage.objects.live().filter(
-            Q(region_hub_list__contains=[{'type': 'region_hub', 'value': context['page'].id}])
+            Q(region_hub_list__contains=[{'type': 'region_hub', 'value': original_id}])
         ).filter(locale=context['page'].locale)
         context['projects'] = projects
         other_hubs = IndividualMappingHubPage.objects.live().filter(locale=context['page'].locale)
         context['other_hubs'] = other_hubs
+
         return context
 
     main_colour = models.CharField(default="#FFFFFF", help_text="The main colour for this mapping hub. This should be a hex code (though any type of CSS colour format will work).")
@@ -166,6 +172,14 @@ class IndividualMappingHubPage(Page):
         on_delete=models.SET_NULL,
         related_name="+",
         help_text="A larger image that represents this hub which may be shown on other pages. This should be in a 2:1 aspect ratio; ideally, at least 400x200 pixels.",
+    )
+    hub_portrait_image = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text="The image which shows for this hub on the home page in the 'Open Mapping Hubs' section in large screen sizes. This image should be more of a portrait, centered on what you want to be shown.",
     )
     external_description_long = RichTextField(blank=True, help_text="A long description of the page to be used in external pages, such as the Open Mapping Hubs page.")
     intro = RichTextField(blank=True)
@@ -211,6 +225,7 @@ class IndividualMappingHubPage(Page):
             FieldPanel('main_colour'),
             FieldPanel('main_icon'),
             FieldPanel('main_external_hub_image'),
+            FieldPanel('hub_portrait_image'),
             FieldPanel('external_description_long'),
             FieldPanel('intro'),
             FieldPanel('main_body_text'),

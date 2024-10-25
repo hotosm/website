@@ -90,7 +90,10 @@
                             <p>
                                 {% with categories=page.categories.all %}
                                     {% for category in categories %}
-                                        <a href="#" class="text-hot-red hover:underline">{{ category.category_name }}</a>{% if not forloop.last %}, {% endif %}
+                                        {% comment %} keep in one line so that the commas don't have spaces between them {% endcomment %}
+                                        {% with category.id|stringformat:"s" as id %}
+                                            <a href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=page.get_parent linkappendage='?cat'|add:id|add:'=on'%}" class="text-hot-red hover:underline">{{ category.category_name }}</a>{% if not forloop.last %}, {% endif %}
+                                        {% endwith %}
                                     {% endfor %}
                                 {% endwith %}
                             </p>
@@ -106,7 +109,9 @@
                             <p>
                                 {% with tags=page.tags.all %}
                                     {% for tag in tags %}
-                                        <a href="#" class="text-hot-red hover:underline">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
+                                        {% with tag|stringformat:"s" as tagstring %}
+                                            <a href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=page.get_parent linkappendage='?tag.'|add:tagstring|add:'=on'%}" class="text-hot-red hover:underline">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
+                                        {% endwith %}
                                     {% endfor %}
                                 {% endwith %}
                             </p>

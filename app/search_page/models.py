@@ -1,6 +1,9 @@
+import re
+
 from django.db import models
 from django.db.models import Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.http import JsonResponse
 
 from wagtail.models import Page
 from wagtail.fields import RichTextField, StreamField
@@ -35,6 +38,27 @@ class SearchPage(Page):
         context['current_page'] = int(page)
         context['keyword'] = keyword
         return context
+    
+    def serve(self, request, *args, **kwargs):
+        if request.GET.get('livesearch', False) and request.GET.get('keyword', False):
+            context = super().get_context(request, *args, **kwargs)
+            pages = Page.objects.live().filter(locale=context['page'].locale).autocomplete(request.GET.get('keyword')).get_queryset()
+
+            count = 0
+            results = []
+            for page in pages:
+                count += 1
+                result = {
+                    "title": page.title,
+                    "url": page.url,
+                }
+                results.append(result)
+                if count == 10:
+                    break
+
+            return JsonResponse({"results": results})
+            
+        return super().serve(request, *args, **kwargs)
     
     page_description = "Search results will, by default, attempt to pull from an 'intro' field for the page description; otherwise, it will grab the page's meta search description."
 

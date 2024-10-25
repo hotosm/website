@@ -44,7 +44,7 @@ class PartnershipTemplatePage(Page):
 
     intro = RichTextField(blank=True)
     body = RichTextField(blank=True, features=[
-        'h1', 'h2', 'h3', 'h4', 'bold', 'italic', 'link', 'ol', 'ul', 'hr', 'document-link', 'image', 'embed', 'code', 'blockquote'
+        'h2', 'h3', 'h4', 'bold', 'italic', 'link', 'ol', 'ul', 'hr', 'document-link', 'image', 'embed', 'code', 'blockquote'
     ])
 
     related_projects = StreamField([
@@ -214,6 +214,7 @@ class OurPartnersPage(Page):
     )
     intro = RichTextField(blank=True, help_text="This is shown in the header.")
 
+    applied_text = models.CharField(default="applied", help_text="This will be a suffix to a number, used to indicate how many filters are applied currently in some field.")
     filter_by_type_text = models.CharField(default="Filter by Type")
     filter_by_program = models.CharField(default="Filter by Program")
     filter_by_hub = models.CharField(default="Filter by Hub")
@@ -233,6 +234,7 @@ class OurPartnersPage(Page):
             FieldPanel('header_image'),
             FieldPanel('intro'),
         ], heading="Header"),
+        FieldPanel('applied_text'),
         FieldPanel('filter_by_type_text'),
         FieldPanel('filter_by_program'),
         FieldPanel('filter_by_hub'),

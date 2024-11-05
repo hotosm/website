@@ -1,0 +1,34 @@
+<div class="w-full hidden md:block max-w-5xl">
+    <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="auto" viewBox="0 250 1052 150" class="[&>foreignObject>p]:text-[1.25rem]">
+        <foreignObject width="322px" height="1px" transform="translate(0 332.215)" class="overflow-visible relative flex items-center">
+            <p class="text-center text-intro-svg font-medium">{{page.hot_envisions_items.0.value}}</p>
+        </foreignObject>
+        <foreignObject width="322px" height="1px" transform="translate(364 332.215)" class="overflow-visible relative flex items-center">
+            <p class="text-center text-intro-svg font-medium">{{page.hot_envisions_items.1.value}}</p>
+        </foreignObject>
+        <foreignObject width="322px" height="1px" transform="translate(730 332.215)" class="overflow-visible relative flex items-center">
+            <p class="text-center text-intro-svg font-medium">{{page.hot_envisions_items.2.value}}</p>
+        </foreignObject>
+        <path id="Path_13438" data-name="Path 13438" d="M9479.991,20082.322l-565.975,276.045-91.038,44.4" transform="matrix(0.899, 0.438, -0.438, 0.899, 1173.542, -21916.111)" fill="none" stroke="#c4c4c4" stroke-width="3" stroke-dasharray="5 8"/>
+        <circle id="Ellipse_336" data-name="Ellipse 336" cx="12.5" cy="12.5" r="12.5" transform="translate(148 277.215)" fill="#d43f3f"/>
+        <circle id="Ellipse_337" data-name="Ellipse 337" cx="12.5" cy="12.5" r="12.5" transform="translate(513 277.215)" fill="#d43f3f"/>
+        <circle id="Ellipse_338" data-name="Ellipse 338" cx="12.5" cy="12.5" r="12.5" transform="translate(879 277.215)" fill="#d43f3f"/>
+    </svg>
+</div>
+<div class="w-full md:hidden flex flex-col text-left mt-8">
+    {% for item in page.hot_envisions_items %}
+        <div class="flex flex-row [&:last-child_.oa-list-dotted-side]:min-h-0 [&:last-child_.oa-list-dotted-owner]:hidden">
+            <div class="w-4 min-h-16 oa-list-dotted-side flex flex-col">
+                <div class="bg-hot-red w-4 h-4 rounded-full">&nbsp;</div>
+                <div class="flex flex-col items-center grow oa-list-dotted-owner">
+                    <div class="flex-grow border-l-2 oa-list-dotted w-0 pb-8">&nbsp;</div>
+                </div>
+            </div>
+            <div class="flex-grow">
+                <p class="text-intro font-medium ml-4 -mt-1">
+                    {{item.value}}
+                </p>
+            </div>
+        </div>
+    {% endfor %}
+</div>

@@ -1,0 +1,14 @@
+{% load wagtailimages_tags %}
+
+<div class="oa-wh-topic">
+    <div class="flex gap-4 items-center">
+        <div class="w-16 h-16 aspect-square bg-hot-red rounded-full flex justify-center items-center">
+            {% image topic.icon original class="h-10 w-auto" %}
+        </div>
+        <p class="text-left text-intro font-medium flex-grow">{{topic.text}}</p>
+    </div>
+
+    <div class="flex justify-center text-h2 mt-8 oa-wh-topic-chevron">
+        {% include "ui/components/icon_svgs/DoubleDownChevron.html" with class="text-hot-off-white" %}
+    </div>
+</div>

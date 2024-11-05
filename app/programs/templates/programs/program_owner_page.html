@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% load static %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+{% load compress %}
+{% block body_class %}template-programownerpage{% endblock %}
+{% block extra_css %}
+    {% compress css %}
+    {% endcompress css %}
+{% endblock extra_css %}
+
+{% block content %}
+    {% include "ui/components/PageHeaderWithBlur.html" with title=page.title image=page.header_image full_length=True %}
+
+    <div class="max-w-7xl mx-auto my-10" x-data="{ 
+        params: new URLSearchParams((new URL(window.location.href)).search), 
+        activeParams: new URLSearchParams((new URL(window.location.href)).search), 
+        {% include 'ui/components/utilities/FormGetActiveXData.js' %}, 
+    }">
+        <div class="px-6 md:px-10">
+            <form id="search-form"
+                hx-get="{{page.url}}"
+                hx-trigger="submit"
+                hx-target="#items-list"
+                hx-select="#items-list"
+                hx-swap="innerHTML"
+                hx-select-oob="#items-list:outerHTML"
+                @submit="activeParams = new FormData($el);"
+            >
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {% comment %} KEYWORD SEARCH {% endcomment %}
+                    <div class="bg-hot-off-white flex items-center col-span-1">
+                        <input class="w-full bg-transparent border-none" placeholder="{{page.keyword_search_hint}}" type="text" name="keyword" :value="params.get('keyword')">
+                        {% include "ui/components/icon_svgs/SearchIcon.html" with class="text-hot-red mx-3" %}
+                    </div>
+
+                    {% comment %} SORT {% endcomment %}
+                    <div class="relative col-span-1" x-data="{ show: false, setSortType(text) {$refs.sorttype.innerText = text} }" @click.away="show = false">
+                        <div class="w-full h-full flex justify-between py-2 px-3 bg-hot-off-white items-center cursor-pointer" @click="show = !show">
+                            <p class="pointer-events-none" x-ref="sorttype">
+                                {{page.sort_by_new}}
+                            </p>
+                        {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-90 text-hot-red" %}
+                        </div>
+                        <div class="absolute z-20 bg-hot-off-white p-4 w-full" x-show="show">
+                            <hr class="border-b-2">
+                            {% include "./components/ProgramSortOption.html" with sort_by=page.sort_by_new sort_id="sort.new" %}
+                            {% include "./components/ProgramSortOption.html" with sort_by=page.sort_by_old sort_id="sort.old" %}
+                            {% include "./components/ProgramSortOption.html" with sort_by=page.sort_by_titlea sort_id="sort.titlea" %}
+                            {% include "./components/ProgramSortOption.html" with sort_by=page.sort_by_titlez sort_id="sort.titlez" %}
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 md:col-span-2 lg:col-span-1">
+                        <div class="bg-hot-red text-white font-medium text-intro">
+                            <input type="submit" value="{{page.search_button_text}}" class="bg-transparent w-full h-full cursor-pointer py-2">
+                        </div>
+                        <div class="flex items-center justify-center text-intro font-medium">
+                            <a href="{{page.url}}" class="hover:text-hot-red">
+                                <p class="cursor-pointer inline-block">
+                                    <span class="border-b-2 border-b-hot-red">{{page.remove_filters_text}}</span>
+                                    {% include "ui/components/icon_svgs/RefreshIcon.html" with class="ml-4" %}
+                                </p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            {% comment %} PROGRAM ITEMS {% endcomment %}
+            <div id="items-list" class="mt-10">
+                {% comment %} <h2 class="text-h2 font-bold my-8">{{page.results_text}}</h2> {% endcomment %}
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-10">
+                    {% for program in programs %}
+                        {% include "ui/components/programs/ProgramPreviewBlockBase.html" with program=program %}
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-white my-20">
+                <div>
+                    {% include "ui/components/dogear_boxes/DogearRed.html" with title=page.red_box_title linktext=page.red_box_link_text linkurl=page.red_box_link_url %}
+                </div>
+                <div>
+                    {% include "ui/components/dogear_boxes/DogearBlack.html" with title=page.black_box_title linktext=page.black_box_link_text linkurl=page.black_box_link_url %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

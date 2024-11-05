@@ -728,3 +728,89 @@ class MultimediaPage(Page):
             FieldPanel('license_block'),
         ], heading="License"),
     ]
+
+
+class OurApproachPage(Page):
+    max_count = 1
+
+    banner_image = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text="Header image"
+    )
+    intro = RichTextField(blank=True)
+
+    what_we_do_title = models.CharField(default="What We Do")
+    what_we_do_items = StreamField([
+        ('item', CharBlock(min_num=3, max_num=3))
+    ], use_json_field=True, blank=True)
+
+    our_toolbox_title = models.CharField(default="Our Toolbox")
+    our_toolbox_items = StreamField([
+        ('block', StructBlock([
+            ('icon', ImageChooserBlock()),
+            ('text', CharBlock()),
+        ], min_num=6, max_num=6))
+    ], use_json_field=True, blank=True)
+
+    what_happens_title = models.CharField(default="What Happens Because of Our Work")
+    what_happens_items = StreamField([
+        ('block', StructBlock([
+            ('icon', ImageChooserBlock()),
+            ('text', CharBlock()),
+        ], min_num=4, max_num=4))
+    ], use_json_field=True, blank=True)
+
+    hot_envisions_title = models.CharField(default="HOT Envisions a World in Which...")
+    hot_envisions_bg = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+    )
+    hot_envisions_items = StreamField([
+        ('item', CharBlock(min_num=3, max_num=3))
+    ], use_json_field=True, blank=True)
+
+    red_box_title = models.CharField(default="Check out the many opportunities to get involved with HOT")
+    red_box_link_text = models.CharField(default="Get Involved")
+    red_box_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
+    black_box_title = models.CharField(default="Partner with us to create and use open map data")
+    black_box_link_text = models.CharField(default="Partner With Us")
+    black_box_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
+
+    content_panels = Page.content_panels + [
+        MultiFieldPanel([
+            FieldPanel('banner_image'),
+            FieldPanel('intro'),
+        ], heading="Banner"),
+        MultiFieldPanel([
+            FieldPanel('what_we_do_title'),
+            FieldPanel('what_we_do_items'),
+        ], heading="What We Do"),
+        MultiFieldPanel([
+            FieldPanel('our_toolbox_title'),
+            FieldPanel('our_toolbox_items'),
+        ], heading="Our Toolbox"),
+        MultiFieldPanel([
+            FieldPanel('what_happens_title'),
+            FieldPanel('what_happens_items'),
+        ], heading="What Happens"),
+        MultiFieldPanel([
+            FieldPanel('hot_envisions_title'),
+            FieldPanel('hot_envisions_bg'),
+            FieldPanel('hot_envisions_items'),
+        ], heading="HOT Envisions"),
+        MultiFieldPanel([
+            FieldPanel('red_box_title'),
+            FieldPanel('red_box_link_text'),
+            FieldPanel('red_box_link'),
+            FieldPanel('black_box_title'),
+            FieldPanel('black_box_link_text'),
+            FieldPanel('black_box_link'),
+        ], heading="Dogear Boxes"),
+    ]

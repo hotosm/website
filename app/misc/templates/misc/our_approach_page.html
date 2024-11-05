@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load static %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+{% load compress %}
+{% block body_class %}template-ourapproachpage{% endblock %}
+{% block extra_css %}
+    {% compress css %}
+    {% endcompress css %}
+{% endblock extra_css %}
+
+{% block content %}
+    {% include "ui/components/PageHeaderWithBlur.html" with title=page.title image=page.banner_image subtitle=page.intro %}
+
+    <div class="max-w-7xl mx-auto">
+        <div class="px-6 md:px-10">
+            <div class="mt-10 mb-20 max-w-5xl mx-auto">
+                {% include "./components/OurApproachWhatWeDo.html" %}
+                {% include "./components/OurApproachWhatWeDoMobile.html" %}
+            </div>
+
+            <div class="my-20">
+                <h2 class="text-h2 font-bold text-center">{{page.our_toolbox_title}}</h2>
+                <div class="mt-8 grid md:grid-cols-3 lg:grid-cols-6 oa-wave-grid-items">
+                    {% for item in page.our_toolbox_items %}
+                        <div class="oa-wave-grid-item flex flex-col items-center w-full text-center gap-4 p-6">
+                            {% image item.value.icon original class="w-auto h-12" %}
+                            <p class="text-intro font-medium">{{item.value.text}}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="my-20 max-w-5xl mx-auto">
+                {% include "./components/OurApproachWhatHappens.html" %}
+                {% include "./components/OurApproachWhatHappensMobile.html" %}
+            </div>
+
+            <div class="my-20 bg-hot-off-white grid">
+                {% image page.hot_envisions_bg original as hot_envisions_bg %}
+                <div class="col-start-1 row-start-1 bg-no-repeat bg-cover px-8 py-16 flex flex-col items-center text-center" style="background-image: url('{{hot_envisions_bg.url}}')">
+                    <p class="text-h2 font-bold">
+                        {{page.hot_envisions_title}}
+                    </p>
+                    {% include "./components/OurApproachHotEnvisions.html" %}
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-white mt-10 mb-20">
+                <div>
+                    {% include "ui/components/dogear_boxes/DogearRed.html" with title=page.red_box_title linktext=page.red_box_link_text linkurl=page.red_box_link %}
+                </div>
+                <div>
+                    {% include "ui/components/dogear_boxes/DogearBlack.html" with title=page.black_box_title linktext=page.black_box_link_text linkurl=page.black_box_link %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    {% include "./components/OurApproachScript.html" %}
+{% endblock %}

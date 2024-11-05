@@ -1,0 +1,15 @@
+<script defer>
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('oa-make-visible');
+            }
+        });
+    });
+
+    const elements = document.getElementsByClassName('oa-wh-topic');
+    console.log(elements)
+    for(const element of elements) {
+        observer.observe(element)
+    }
+</script>

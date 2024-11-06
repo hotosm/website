@@ -94,6 +94,7 @@ class ProgramOwnerPage(Page):
     black_box_link_url = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
 
     # v individual program page stuff v
+    about_program_title = models.CharField(default="About the Program")
     stats_title = models.CharField(default="Stats")
     goals_title = models.CharField(default="Goals")
     projects_title = models.CharField(default="Projects")
@@ -131,6 +132,7 @@ class ProgramOwnerPage(Page):
         ], heading="Dogear Boxes"),
         MultiFieldPanel([
             MultiFieldPanel([
+                FieldPanel("about_program_title"),
                 FieldPanel("stats_title"),
                 FieldPanel("goals_title"),
                 FieldPanel("projects_title"),
@@ -164,8 +166,7 @@ class IndividualProgramPage(Page):
     parent_page_type = [
         'programs.ProgramOwnerPage'
     ]
-
-    subtitle = RichTextField(blank=True)
+    
     header_image = models.ForeignKey(
         "wagtailimages.Image",
         null=True,
@@ -175,6 +176,7 @@ class IndividualProgramPage(Page):
         help_text="Header image"
     )
 
+    subtitle = RichTextField(blank=True)
     intro = RichTextField(blank=True)
     description = RichTextField(blank=True)
     intro_image = models.ForeignKey(
@@ -187,6 +189,13 @@ class IndividualProgramPage(Page):
     )
 
     stats = StreamField(ProgramStatBlock(), use_json_field=True, null=True, blank=True)
+    stat_section_image = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+"
+    )
 
     goals = StreamField(ProgramGoalBlock(), use_json_field=True, null=True, blank=True)
 
@@ -206,16 +215,17 @@ class IndividualProgramPage(Page):
 
     content_panels = Page.content_panels + [
         MultiFieldPanel([
-            FieldPanel("subtitle"),
             FieldPanel("header_image"),
         ], heading="Header"),
         MultiFieldPanel([
+            FieldPanel("subtitle"),
             FieldPanel("intro"),
             FieldPanel("description"),
             FieldPanel("intro_image"),
         ], heading="Intro"),
         MultiFieldPanel([
             FieldPanel("stats"),
+            FieldPanel("stat_section_image"),
         ], heading="Stats"),
         MultiFieldPanel([
             FieldPanel("goals"),

@@ -3,7 +3,7 @@
         {{page.aside_block_title}}
     </h1>
     <div class="base-article-m my-4">
-        {{page.aside_block_description|safe}}
+        {{page.aside_block_description|richtext}}
     </div>
     <p class="text-hot-red font-medium">
         {% include "ui/components/BaseLinkNoUnderline.html" with linkurl=page.aside_block_link linktext=page.aside_block_link_text %}

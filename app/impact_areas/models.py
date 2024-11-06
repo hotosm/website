@@ -13,6 +13,7 @@ from app.core.models import LinkOrPageBlock
 
 
 class UseCaseStructBlock(StructBlock):
+    title = CharBlock()
     description = RichTextBlock()
     link_text = CharBlock()
     link = LinkOrPageBlock(blank=True, null=True)
@@ -63,19 +64,20 @@ class IndividualImpactAreaPage(Page):
         blank=True,
         on_delete=models.SET_NULL,
         related_name="+",
-        help_text="The icon representing this page which is shown for previews of this page on other pages. This should be a purely black image which is ideally as wide as it is tall."
+        help_text="The icon representing this page which is shown for previews of this page on other pages. This should be a purely black image which is ideally as wide as it is tall. It also appears in the first block of this impact area's page."
     )
-    intro = RichTextField(blank=True, help_text="This text will not be shown on the page itself, and will instead be shown as the short description for the page for instances such as the Search page or the Impact Areas page.")
-    
     intro_image = models.ForeignKey(
         "wagtailimages.Image",
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
         related_name="+",
-        help_text="Intro image"
+        help_text="This image will show on the home page's previews for impact areas."
     )
+    intro = RichTextField(blank=True, help_text="This text will not be shown on the page itself, and will instead be shown as the short description for the page for instances such as the Search page or the Impact Areas page.")
+    
     description = RichTextField(blank=True)
+    description_extended = RichTextField(blank=True)
 
     use_cases = StreamField(UseCaseBlock(), use_json_field=True, blank=True, null=True)
 
@@ -87,10 +89,11 @@ class IndividualImpactAreaPage(Page):
         MultiFieldPanel([
             FieldPanel('external_icon'),
             FieldPanel('intro'),
+            FieldPanel('intro_image'),
         ], heading="External"),
         MultiFieldPanel([
-            FieldPanel('intro_image'),
             FieldPanel('description'),
+            FieldPanel('description_extended'),
         ], heading="Body"),
         MultiFieldPanel([
             FieldPanel('use_cases'),

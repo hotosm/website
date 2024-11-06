@@ -24,7 +24,7 @@
             <div class="base-article-m py-5 col-span-2">
                 {% image page.image original class="mb-8 aspect-[8/5] object-cover" %}
                 <div class="text-intro">
-                    {{ page.intro|safe }}
+                    {{ page.intro|richtext }}
                 </div>
                 {{ page.extended_description }}
 
@@ -77,7 +77,7 @@
                         <h1 class="mb-4">
                             {{page.get_parent.specific.join_event_title}}
                         </h1>
-                        {{page.rsvp_description|safe}}
+                        {{page.rsvp_description|richtext}}
 
                         {% if page.rsvp_link %}
                             <a href="{{page.rsvp_link}}" class="[&_button]:mt-4">

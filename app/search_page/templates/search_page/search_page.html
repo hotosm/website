@@ -34,7 +34,7 @@
                             
                             {% if result.specific.intro %}
                                 <div>
-                                    {{result.specific.intro|safe}}
+                                    {{result.specific.intro|richtext}}
                                 </div>
                                 {% else %}
                                 {% if result.search_description %}

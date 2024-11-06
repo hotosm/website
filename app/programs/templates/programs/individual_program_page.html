@@ -10,32 +10,43 @@
 {% endblock extra_css %}
 
 {% block content %}
-    {% include "ui/components/PageHeaderWithBlur.html" with title=page.title subtitle=page.subtitle image=page.header_image full_length=True %}
+    {% include "ui/components/PageHeaderWithBlur.html" with title=page.title image=page.header_image full_length=True endinlarge=True %}
 
     <div class="max-w-7xl mx-auto my-10 px-6 md:px-10">
+        <div class="text-h5 font-bold max-w-3xl my-10 [&_b]:text-hot-red bold-override">
+            {{page.subtitle|richtext}}
+        </div>
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-10">
             <div class="base-article-m [&_p:first-child]:mt-0 lg:order-2">
+                <h2 style="margin-top:0">{{page.get_parent.specific.about_program_title}}</h2>
                 <div class="text-intro font-medium">
-                    {{ page.intro|safe }}
+                    {{ page.intro|richtext }}
                 </div>
-                {{ page.description|safe }}
+                {{ page.description|richtext }}
             </div>
             {% image page.intro_image original class="pb-8 lg:order-1 aspect-[3/2] object-cover object-center" %}
         </div>
+    </div>
+    <div class="bg-hot-off-white mt-20 mb-10">
+        <div class="max-w-7xl mx-auto px-6 md:px-10 pt-20 pb-10">
+            {% include "ui/components/TitleWithUnderline.html" with title=page.get_parent.specific.stats_title %}
 
-        <h1 class="text-h2 font-bold">
-            {{ page.get_parent.specific.stats_title }}
-        </h1>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 py-6">
-            {% for stat in page.stats %}
-                <div class="bg-hot-off-white p-8 flex items-center justify-center text-center">
-                    <h1 class="text-h5 font-bold">
-                        <span class="text-hot-red">{{ stat.value.title }}</span> {{ stat.value.description }}
-                    </h1>
-                </div>
-            {% endfor %}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-{%if page.stats|length_is:4%}4{%else%}3{%endif%} gap-10 py-6 mt-2">
+                {% for stat in page.stats %}
+                    <div class="bg-white p-8 flex items-center justify-center text-center flex-col">
+                        <h1 class="text-h2 font-bold">
+                            <span class="text-hot-red">{{ stat.value.title }}</span> 
+                        </h1>
+                        <p class="text-h5 font-bold">
+                            {{ stat.value.description }}
+                        </p>
+                    </div>
+                {% endfor %}
+            </div>
         </div>
-
+        {% image page.stat_section_image original class="max-h-96 w-full object-cover object-center" %}
+    </div>
+    <div class="max-w-7xl mx-auto my-10 px-6 md:px-10">
         <div class="py-6">
             <h1 class="text-h2 font-bold">
                 {{ page.get_parent.specific.goals_title }}
@@ -44,12 +55,11 @@
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 py-6">
             {% for goal in page.goals %}
-                <div class="[&_ul]:list-disc [&_li]:py-1 [&_ul]:p-4 [&_li::marker]:text-hot-red">
+                <div class="[&_ul]:list-disc [&_li]:py-1 [&_ul]:p-4 [&_li::marker]:text-hot-red bg-hot-off-white py-8 px-6">
                     <h1 class="text-h4 font-bold">
-                        {% image goal.value.icon original class="inline mr-3" %}
                         {{ goal.value.title }}
                     </h1>
-                    {{ goal.value.description|safe }}
+                    {{ goal.value.description|richtext }}
                 </div>
             {% endfor %}
         </div>

@@ -1,0 +1,21 @@
+{% comment %}
+==> PARAMETERS
+- title: a string; the title of the box
+- description: an HTML element (should really just be one <p> element)
+- colour: a string; the colour that the box's accents should be 
+          (can be hex code or any other CSS compatible colour thing)
+{% endcomment %}
+{% load wagtailcore_tags %}
+
+<div class="p-6 flex flex-col border-b-8 h-full" 
+     style="border-color: {{ colour }}; background: linear-gradient(45deg, var(--hot-off-white) 0%, var(--hot-off-white) 92.4%, transparent 92.5%, transparent 100%);">
+    <h1 class="text-h3 font-bold">
+        {{ title }}
+    </h1>
+    <div class="mt-4 mb-8">
+        {{ description|richtext }}
+    </div>
+    <div class="mt-auto text-intro mb-6">
+        {% include "ui/components/BaseLink.html" %}
+    </div>
+</div>

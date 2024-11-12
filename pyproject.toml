@@ -23,7 +23,7 @@ authors = ["Kat Olaguer <katherine.olaguer@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.11"
-wagtail = "^5.2"
+wagtail = "^6.2.2"
 psycopg2 = "^2.9.9"
 python-dotenv = "^1.0.0"
 docker = "^6.1.3"
@@ -38,6 +38,7 @@ whitenoise = "^6.6.0"
 django-storages = "^1.14.3"
 boto3 = "^1.34.129"
 wagtailgeowidget = "^8.1.1"
+wand = "^0.6.13"
 
 [tool.poetry.dev-dependencies]
 

@@ -5,21 +5,25 @@
 {% endcomment %}
 <div class="text-small font-medium [&>.show-at-large]:hidden [&:hover>.show-at-large]:block p-2 [&>p]:hover:text-hot-red [&_p:hover]:text-hot-red text-left">
     <p class="">
-        <a href="{%if item.link_page%}{{item.link_page.url}}{%elif item.link_url%}{{item.link_url}}{%else%}#{%endif%}">
+        {%if item.link%}
+            <a href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=item.link%}">
+                <span class="{%if item.children%}pr-2{%endif%}">{{item.title}}</span>
+            </a>
+            {% else %}
             <span class="{%if item.children%}pr-2{%endif%}">{{item.title}}</span>
-        </a>
+        {%endif%}
         {% if item.children %}
             {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-90 text-hot-red" %}
         {% endif %}
     </p>
 
     {% if item.children %}
-        <div class="show-at-large lg:absolute z-50 lg:mt-2 bg-hot-off-white lg:py-4 text-black">
+        <div class="show-at-large lg:absolute z-50 lg:mt-2 bg-white drop-shadow-md lg:py-4 text-black">
             {% comment %} CHILDREN NAVBAR ITEMS {% endcomment %}
             {% for child in item.children %}
-                <div class="[&>.show-at-large]:hidden [&:hover>.show-at-large]:block px-6 py-2 ">
+                <div class="[&>.show-at-large]:hidden [&:hover>.show-at-large]:block px-6 py-2">
                     <p class="">
-                        <a class="hover:text-hot-red" href="{%if child.value.link_page%}{{child.value.link_page.url}}{%elif child.value.link_url%}{{child.value.link_url}}{%else%}#{%endif%}">
+                        <a class="hover:text-hot-red" href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=child.value.link%}">
                             {{child.value.title}}
                         </a>
                         {% if child.value.children %}
@@ -29,10 +33,10 @@
 
                     {% comment %} GRANDCHILDREN NAVBAR ITEMS {% endcomment %}
                     {% if child.value.children%}
-                        <div class="show-at-large nav-grandchild lg:absolute lg:-mt-8 lg:left-full bg-hot-off-white px-6 lg:py-4 lg:w-fit">
+                        <div class="show-at-large nav-grandchild lg:absolute lg:left-full -mt-11 bg-white px-6 lg:py-4 lg:w-fit" style="z-index: 49">
                             {% for gchild in child.value.children %}
-                                <p class="py-2 lg:w-fit">
-                                    <a href="{%if gchild.value.link_page%}{{gchild.value.link_page.url}}{%elif gchild.value.link_url%}{{gchild.value.link_url}}{%else%}#{%endif%}">
+                                <p class="py-2 lg:w-fit text-nowrap">
+                                    <a href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=gchild.value.link%}">
                                         {{gchild.value.title}}
                                     </a>
                                 </p>

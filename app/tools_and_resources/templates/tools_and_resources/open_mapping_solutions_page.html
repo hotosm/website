@@ -10,25 +10,23 @@
 {% endblock extra_css %}
 
 {% block content %}
-    {% include "ui/components/PageHeaderWithBlur.html" with title=page.title image=page.header_image endinlarge=True full_length=True %}
+    {% include "ui/components/PageHeaderWithBlur.html" with title=page.title image=page.header_image endinlarge=True full_length=True smaller=True %}
     
     <div class="max-w-7xl mx-auto my-10">
         <div class="px-6 md:px-10">
             <div class="mb-10 text-intro font-medium lg:w-3/4">
-                {{page.intro|safe}}
+                {{page.intro|richtext}}
             </div>
 
             <div class="grid gap-8">
                 {% for solution in page.solutions %}
                     <div x-data="{ expand: false }">
-                        <div class="flex gap-4 justify-between px-4 cursor-pointer" @click="expand = !expand">
+                        <div class="flex gap-4 justify-between px-4 cursor-pointer [&:hover_.link-caret-circle]:bg-hot-red [&:hover_.link-caret-circle]:text-white [&:hover_h1]:underline" @click="expand = !expand">
                             <h1 class="text-h3 font-bold">
                                 {{solution.value.title}}
                             </h1>
-                            <div class="justify-self-end text-hot-red border-hot-red border-2 rounded-full h-8 w-8 flex items-center justify-center" :class="expand ? 'pl-0.5' : 'pr-0.5'">
-                                <div :class="expand ? 'rotate-90' : '-rotate-90'">
-                                    {% include "ui/components/icon_svgs/LinkCaret.html" %}
-                                </div>
+                            <div class="text-hot-red h-fit w-fit" :class="expand ? '-rotate-90' : 'rotate-90'">
+                                {% include "ui/components/icon_svgs/LinkCaretCircle.html" with styledhover=True %}
                             </div>
                         </div>
                         <div class="mt-8" x-show="expand" x-transition>
@@ -40,7 +38,7 @@
                                 <div>
                                     <div class="grid gap-2">
                                         {% for item in solution.value.items %}
-                                            <div class="font-semibold px-4 py-2 cursor-pointer" :class="selected == {{forloop.counter0}} ? 'bg-hot-red text-white' : 'bg-hot-off-white'" @click="selected = {{forloop.counter0}}">
+                                            <div class="font-semibold px-4 py-2 cursor-pointer hover:bg-hot-red hover:text-white transition duration-100" :class="selected == {{forloop.counter0}} ? 'bg-hot-red text-white' : 'bg-hot-off-white'" @click="selected = {{forloop.counter0}}">
                                                 {{item.value.title}}
                                             </div>
                                         {% endfor %}
@@ -48,19 +46,23 @@
                                 </div>
                                 <div class="md:col-span-2 lg:col-span-3">
                                     {% for item in solution.value.items %}
-                                        <div x-show="selected == {{forloop.counter0}}">
-                                            <h2 class="text-h4 font-semibold">
-                                                {{item.value.title}}
-                                            </h2>
+                                        <div x-show="selected == {{forloop.counter0}}" x-transition>
+                                            <div class="flex items-center gap-4">
+                                                {% image item.value.icon original class="h-6 w-auto" %}
+                                                <h2 class="text-h4 font-semibold">
+                                                    {{item.value.title}}
+                                                </h2>
+                                            </div>
+                                            
                                             <div class="base-article-m mt-4 text-small">
                                                 {{item.value.description}}
                                             </div>
                                             <div class="flex gap-8 flex-wrap mt-8">
                                                 {% for link in item.value.links %}
                                                     <a href="{% include 'ui/components/PageOrLinkHrefText.html' with linkurl=link.value.linkurl %}">
-                                                        <div class="bg-hot-red font-medium text-intro text-white px-5 flex items-center hover:bg-hot-off-white hover:text-hot-red border-2 border-transparent hover:border-hot-red">
+                                                        <div class="bg-hot-red font-medium text-intro text-white py-1 px-5 flex items-center hover:bg-hot-off-white hover:text-hot-red border-2 border-transparent hover:border-hot-red">
                                                             <p>{{link.value.linktext}}</p>
-                                                            <span class="ml-2 mb-2">
+                                                            <span class="ml-2">
                                                                 {% include "ui/components/icon_svgs/ExternalLinkIcon.html" %}
                                                             </span>
                                                         </div>
@@ -78,7 +80,7 @@
             </div>
 
             <div class="my-20">
-                {% include "ui/components/FooterBannerWithTextAndLink.html" with text=page.cta_title description=page.cta_description buttontext=page.cta_button_text buttonurl=page.cta_button_link %}
+                {% include "ui/components/FooterBannerWithTextAndLink.html" with text=page.cta_title description=page.cta_description buttontext=page.cta_button_text url=page.cta_button_link %}
             </div>
 
             <p class="text-intro font-medium my-20">

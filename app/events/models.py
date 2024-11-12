@@ -12,6 +12,9 @@ from wagtail.search import index
 from wagtail.snippets.models import register_snippet
 
 from app.members.models import IndividualMappingHubPage
+from app.core.models import LinkOrPageBlock
+
+from datetime import datetime
 
 
 class EventOwnerPage(Page):
@@ -27,7 +30,7 @@ class EventOwnerPage(Page):
         categories = EventCategory.objects.all()
         query = Q()
         for category in categories:
-            if request.GET.get(str(category), ''):
+            if request.GET.get("cat" + str(category), ''):
                 query = query | Q(event_categories=category)
         events_list = events_list.filter(query)
 
@@ -35,16 +38,22 @@ class EventOwnerPage(Page):
         event_host_types = EventHostType.objects.all()
         query = Q()
         for host_type in event_host_types:
-            if request.GET.get(str(host_type), ''):
+            if request.GET.get("htype" + str(host_type.id), ''):
                 query = query | Q(event_host_type=host_type)
         events_list = events_list.filter(query)
 
         hubs = IndividualMappingHubPage.objects.live().filter(locale=context['page'].locale)
         query = Q()
         for hub in hubs:
-            if request.GET.get(str(hub), ''):
+            if request.GET.get("hub" + str(hub.id), ''):
                 query = query | Q(event_region_hub=hub)
         events_list = events_list.filter(query).distinct()
+
+        from_date = request.GET.get("fromdate")
+        from_date = datetime.strptime(from_date, "%Y-%m-%d") if from_date else datetime.min
+        to_date = request.GET.get("todate")
+        to_date = datetime.strptime(to_date, "%Y-%m-%d") if to_date else datetime.max
+        events_list = events_list.filter(Q(start_date_time__range=[from_date,to_date]) | Q(end_date_time__range=[from_date,to_date]))
         
         match request.GET.get('sort', ''):
             case 'sort.new':
@@ -88,9 +97,10 @@ class EventOwnerPage(Page):
     rsvp_button_text = models.CharField(default="RSVP")
     more_events_title = models.CharField(default="More Events")
     view_all_events_text = models.CharField(default="View all Events")
-    view_all_events_url = models.URLField(blank=True)
+    view_all_events_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
     event_read_more_text = models.CharField(default="Read more")
 
+    applied_text = models.CharField(default="applied", help_text="This will be a suffix to a number, used to indicate how many filters are applied currently in some field.")
     keyword_search_hint = models.CharField(default="Search by keyword")
     filter_by_country = models.CharField(default="Filter by Country")
     host_type_select = models.CharField(default="Filter by Host Type")
@@ -99,11 +109,16 @@ class EventOwnerPage(Page):
     sort_by_old = models.CharField(default="Sort by Old")
     sort_by_titlea = models.CharField(default="Sort by Title Alphabetical")
     sort_by_titlez = models.CharField(default="Sort by Title Reverse Alphabetical")
+    date_date_text = models.CharField(default="Filter by Date")
+    date_from_text = models.CharField(default="From")
+    date_to_text = models.CharField(default="To")
     search_button_text = models.CharField(default="Search")
+    remove_filters_text = models.CharField(default="Remove All Filters")
     results_text = models.CharField(default="Results")
 
     content_panels = Page.content_panels + [
         MultiFieldPanel([
+            FieldPanel('applied_text'),
             FieldPanel('keyword_search_hint'),
             FieldPanel('filter_by_country'),
             FieldPanel('host_type_select'),
@@ -112,7 +127,11 @@ class EventOwnerPage(Page):
             FieldPanel('sort_by_old'),
             FieldPanel('sort_by_titlea'),
             FieldPanel('sort_by_titlez'),
+            FieldPanel('date_from_text'),
+            FieldPanel('date_to_text'),
+            FieldPanel('date_date_text'),
             FieldPanel('search_button_text'),
+            FieldPanel('remove_filters_text'),
             FieldPanel('results_text'),
         ], heading="Event Search Page"),
         MultiFieldPanel([
@@ -123,7 +142,7 @@ class EventOwnerPage(Page):
             FieldPanel('rsvp_button_text'),
             FieldPanel('more_events_title'),
             FieldPanel('view_all_events_text'),
-            FieldPanel('view_all_events_url'),
+            FieldPanel('view_all_events_link'),
             FieldPanel('event_read_more_text'),
         ], heading="Individual Event Page"),
     ]
@@ -159,13 +178,13 @@ class EventCategory(models.Model):
         verbose_name_plural = "Event Categories"
 
 
-class IndividualEventPage(Page):
+class IndividualEventPage(Page):    
     parent_page_types = [
         'events.EventOwnerPage'
     ]
 
-    start_date_time = models.DateTimeField()
-    end_date_time = models.DateTimeField()
+    start_date_time = models.DateTimeField(help_text="This datetime is in UTC.")
+    end_date_time = models.DateTimeField(help_text="This datetime is in UTC.")
 
     image = models.ForeignKey(
         "wagtailimages.Image",
@@ -178,7 +197,7 @@ class IndividualEventPage(Page):
     intro = RichTextField(blank=True)
     extended_description = StreamField([
         ('text_block', RichTextBlock(features=[
-        'h1', 'h2', 'h3', 'h4', 'bold', 'italic', 'link', 'ol', 'ul', 'hr', 'document-link', 'image', 'embed', 'code', 'blockquote'
+        'h2', 'h3', 'h4', 'bold', 'italic', 'link', 'ol', 'ul', 'hr', 'document-link', 'image', 'embed', 'code', 'blockquote'
         ]))
     ], use_json_field=True, null=True)
 

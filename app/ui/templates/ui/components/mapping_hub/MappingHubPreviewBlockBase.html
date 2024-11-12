@@ -4,10 +4,12 @@
 {% endcomment %}
 {% load wagtailimages_tags %}
 
-<div>
-    {% image hub.main_external_hub_image fill-600x300 %}
-    
-    <p class="text-h5 font-bold mt-4">
-        {{ hub.title }}
-    </p>
-</div>
+{% with hub.localized as hub %}
+    <div>
+        {% image hub.main_external_hub_image fill-600x300 %}
+        
+        <p class="text-h5 font-bold mt-4">
+            {{ hub.title }}
+        </p>
+    </div>
+{% endwith %}

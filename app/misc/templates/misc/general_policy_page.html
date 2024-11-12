@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load static %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+{% load compress %}
+{% block body_class %}template-generalpolicypage{% endblock %}
+{% block extra_css %}
+    {% compress css %}
+    {% endcompress css %}
+{% endblock extra_css %}
+
+{% block content %}
+    <div class="max-w-7xl mx-auto my-10">
+        <div class="px-6 md:px-10">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-2 [&_h2]:mt-6 [&_h2]:mb-4 [&_h3]:mt-6 [&_h3]:mb-4">
+                    <h1 class="font-semibold text-h1">
+                        {{page.title}}
+                    </h1>
+                    <div class="text-intro font-medium">
+                        {{page.intro|richtext}}
+                    </div>
+
+                    <div class="base-article-m">
+                        {{page.brief_body_text|richtext}}
+
+                        {% if page.show_table_of_contents %}
+                            <h3>
+                                {{page.table_of_contents_title}}
+                            </h3>
+                            <ol>
+                                {% for section in page.body_sections %}
+                                    <a href="#section-{{forloop.counter}}">    
+                                        <li>
+                                            {{section.value.title}}
+                                        </li>
+                                    </a>
+                                {% endfor %}
+                            </ol>
+                        {% endif %}
+
+                        {% for section in page.body_sections %}
+                            <h2 id="section-{{forloop.counter}}">
+                                {{forloop.counter}}. {{section.value.title}}
+                            </h2>
+                            {{section.value.body|richtext}}
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div>
+                    <h1 class="text-h2 font-bold">
+                        {{page.get_parent.specific.our_policies_title}}
+                    </h1>
+                    <ul class="grid gap-4 mt-4">
+                        {% include "./components/PolicyLinks.html" %}
+                    </ul>
+
+                    <div class="bg-hot-off-white p-8 mt-16">
+                        <h1 class="font-bold text-h3 mb-8">
+                            {{page.question_block_title}}
+                        </h1>
+                        <a href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=page.question_block_button_link%}">
+                            {% include "components/branded_elements/button.html" with text=page.question_block_button_text %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

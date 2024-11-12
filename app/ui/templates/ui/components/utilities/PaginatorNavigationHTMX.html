@@ -1,0 +1,70 @@
+{% comment %}
+PARAMETERS:
+=> paginator: a paginator object
+=> current_page: an integer, the current page
+{% endcomment %}
+{% load homepage_tags %}
+{% get_home_page as home_page %}
+
+<div x-data="{ params: new URLSearchParams((new URL(window.location.href)).search) }" id="paginator-navigation">
+    <div class="w-full flex justify-center items-center" 
+            x-data="{
+                    page: 1,
+                    paramsX: new URLSearchParams(activeParams),
+                    getPageLink(x) { this.paramsX.set('page', x); activeParams['page'] = x; return '?' + this.paramsX.toString() }
+                    }"
+            x-init="page = paramsX.get('page') ? paramsX.get('page') : 1"
+    >
+        <button :hx-get="{%if current_page == 1%}getPageLink(1){%else%}getPageLink({{current_page}} - 1){%endif%}"
+            hx-trigger="click"
+            hx-select="#items-list, #paginator-navigation"
+            hx-swap="outerHTML"
+            hx-select-oob="#items-list:outerHTML, #paginator-navigation:outerHTML"
+            {% if current_page == 1 %}disabled{% endif %}
+            aria-label="Previous Page"
+        >
+            <p class="cursor-pointer mr-2 {%if current_page == 1%}text-hot-slate-grey{%else%}text-hot-red{%endif%}">
+                {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-180" %} <span class="ml-2">{{home_page.paginator_previous}}</span>
+            </p>
+        </button>
+        <div class="flex gap-2 mx-4">
+            {% with ''|center:paginator.num_pages as range %}
+                {% for _ in range %}
+                    {% if forloop.counter == 1 or forloop.counter == paginator.num_pages or forloop.counter == current_page or forloop.counter|add:1 == current_page or forloop.counter|add:'-1' == current_page %}
+                        <button :hx-get="getPageLink(parseInt({{forloop.counter}}))"
+                                hx-trigger="click"
+                                hx-select="#items-list, #paginator-navigation"
+                                hx-swap="outerHTML"
+                                hx-select-oob="#items-list:outerHTML, #paginator-navigation:outerHTML"
+                        >
+                            <p class="px-2 font-bold {%if forloop.counter == current_page%}bg-hot-red text-white{%else%}bg-hot-off-white{%endif%}">
+                                {{forloop.counter}}
+                            </p>
+                        </button>
+                    {% endif %}
+                    {% if forloop.counter|add:2 == current_page or forloop.counter|add:'-2' == current_page and not forloop.last %}
+                        {% comment %} 
+                            for reasons that i can't begin to comprehend, the if statement 
+                            below CANNOT be part of the if statement above. it just does
+                            not work
+                        {% endcomment %}
+                        {% if not forloop.first %}
+                            <p class="mx-1">...</p>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            {% endwith %}
+        </div>
+        <button {%if current_page == paginator.num_pages%}{%else%}:hx-get="getPageLink(parseInt({{current_page}}) + 1)"{%endif%}
+                hx-trigger="click"
+                hx-select="#items-list, #paginator-navigation"
+                hx-swap="outerHTML"
+                hx-select-oob="#items-list:outerHTML, #paginator-navigation:outerHTML"
+                aria-label="Next Page"
+        >
+            <p class="cursor-pointer ml-2 {%if current_page == paginator.num_pages%}text-hot-slate-grey{%else%}text-hot-red{%endif%}">
+                <span class="mr-2">{{home_page.paginator_next}}</span> {% include "ui/components/icon_svgs/LinkCaret.html" %}
+            </p>
+        </button>
+    </div>
+</div>

@@ -3,7 +3,7 @@
 {% load wagtailcore_tags %}
 {% load wagtailimages_tags %}
 {% load compress %}
-{% block body_class %}template-dataprinciplespage{% endblock %}
+{% block body_class %}template-privacypolicypage{% endblock %}
 {% block extra_css %}
     {% compress css %}
     {% endcompress css %}
@@ -48,21 +48,17 @@
 
                 <div>
                     <h1 class="text-h2 font-bold">
-                        {{page.our_policies_title}}
+                        {{page.get_parent.specific.our_policies_title}}
                     </h1>
-                    <div class="grid gap-4 mt-4">
-                        {% for policy in page.our_policies_links %}
-                            <p>
-                                {% include "ui/components/BaseLink.html" with linktext=policy.value.text linkurl=policy.value.link %}
-                            </p>
-                        {% endfor %}
-                    </div>
+                    <ul class="grid gap-4 mt-4">
+                        {% include "./components/PolicyLinks.html" %}
+                    </ul>
 
                     <div class="bg-hot-off-white p-8 mt-16">
                         <h1 class="font-bold text-h3 mb-8">
                             {{page.question_block_title}}
                         </h1>
-                        <a href="{{page.question_block_button_link}}">
+                        <a href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=page.question_block_button_link%}">
                             {% include "components/branded_elements/button.html" with text=page.question_block_button_text %}
                         </a>
                     </div>

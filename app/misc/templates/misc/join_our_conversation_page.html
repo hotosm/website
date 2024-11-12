@@ -10,7 +10,7 @@
 {% endblock extra_css %}
 
 {% block content %}
-    {% include "ui/components/PageHeaderWithBlur.html" with title=page.title subtitle=page.intro image=page.header_image %}
+    {% include "ui/components/PageHeaderWithBlur.html" with title=page.title subtitle=page.intro image=page.header_image full_length=True smaller=True %}
     
     <div class="max-w-7xl mx-auto my-10">
         <div class="px-6 md:px-10">
@@ -18,7 +18,7 @@
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-6">
                 {% for block in page.get_connected_blocks %}
                     <div class="p-6 bg-hot-off-white">
-                        {% image block.value.icon original class="h-8 w-8 mt-2" %}
+                        {% image block.value.icon original class="h-12 w-auto mt-2" %}
                         <h1 class="text-h4 font-semibold mt-4">
                             {{block.value.title}}
                         </h1>
@@ -29,7 +29,7 @@
                 {% endfor %}
             </div>
 
-            <div class="text-black mt-20 [&_h1]:text-black [&_a]:text-black">
+            <div class="text-black my-20 [&_h1]:text-black">
                 {% include "ui/components/dogear_boxes/DogearAnyColourLong.html" with colour="var(--hot-off-white)" title=page.code_of_conduct_title linktext=page.code_of_conduct_link_text linkurl=page.code_of_conduct_link_url %}
             </div>
 

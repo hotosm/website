@@ -30,7 +30,7 @@
                     </div>
                 </div>
                 <div class="col-span-2 lg:text-right text-intro">
-                    {% include "ui/components/BaseLink.html" with linktext=page.view_all_programs_text linkurl=page.view_all_programs_url %}
+                    {% include "ui/components/BaseLink.html" with linktext=page.view_all_programs_text linkurl=page.view_all_programs_link %}
                 </div>
             </div>
             <div class="mb-10">
@@ -38,20 +38,28 @@
             </div>
 
             {% comment %} FILTERS {% endcomment %}
-            <div class="mt-20" x-data="{ mapView: params.get('mapView') ? params.get('mapView') : false, showFilters: params.get('showFilters') ? params.get('showFilters') : false }" id="projects-section">
+            <div class="mt-20" x-data="{ mapView: params.get('mapView') ? params.get('mapView') : true, showFilters: params.get('showFilters') ? params.get('showFilters') : false }" id="projects-section">
                 <h1 class="text-h2 font-bold">
                     {{ page.projects_title }}
                 </h1>
-                <form class="mt-8" action="#projects-section">
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-10 gap-8">
+                <form class="mt-8" action="#projects-section" 
+                    hx-get="{{page.url}}"
+                    hx-trigger="submit"
+                    hx-target="#projects-list, #next-project, #projects-list-map, #next-project-map"
+                    hx-select="#projects-list, #next-project, #projects-list-map, #next-project-map"
+                    hx-swap="innerHTML"
+                    hx-select-oob="#projects-list:outerHTML, #next-project:outerHTML, #projects-list-map:outerHTML, #next-project-map:outerHTML"
+                    @submit="$store.formdata = new FormData($el); refreshWithSearch();"
+                >
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-y-4">
                         {% comment %} KEYWORD SEARCH {% endcomment %}
-                        <div class="bg-hot-off-white flex items-center lg:col-span-3">
+                        <div class="bg-hot-off-white flex items-center">
                             <input class="w-full bg-transparent border-none" placeholder="{{page.search_keyword_text}}" type="text" name="keyword" :value="params.get('keyword')">
                             {% include "ui/components/icon_svgs/SearchIcon.html" with class="text-hot-red mx-3" %}
                         </div>
 
                         {% comment %} SORT {% endcomment %}
-                        <div class="relative lg:col-span-3" x-data="{ show: false, setSortType(text) {$refs.sorttype.innerText = text} }" @click.away="show = false">
+                        <div class="relative" x-data="{ show: false, setSortType(text) {$refs.sorttype.innerText = text} }" @click.away="show = false">
                             <div class="w-full h-full flex justify-between py-2 px-3 bg-hot-off-white items-center cursor-pointer" @click="show = !show">
                                 <p class="pointer-events-none overflow-hidden text-nowrap" x-ref="sorttype">
                                     {{page.sort_titlea_text}}
@@ -65,36 +73,39 @@
                             </div>
                         </div>
 
-                        <input class="hidden" id="showFilters" type="checkbox" name="showFilters" :checked="showFilters">
-                        <input class="hidden" id="mapView" type="checkbox" name="mapView" :checked="mapView">
-                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 md:col-span-2 lg:col-span-4">
-                            <div class="cursor-pointer lg:col-span-1 relative after:absolute after:h-10 after:w-full after:bg-hot-off-white after:hidden" :class="showFilters ? 'bg-hot-off-white md:after:block' : 'bg-hot-red text-white'" @click="showFilters = !showFilters">
-                                <p class="font-medium py-2 px-3 flex">
-                                    {{page.filters_text}}
-                                    <span class="ml-auto">{% include "ui/components/icon_svgs/FilterIcon.html" %}</span>
+                        <div class="text-white text-intro font-medium font-archivo py-1 bg-hot-red border-2 border-hot-red text-hot-white px-hot-3 hover:bg-hot-off-white hover:text-hot-red focus:bg-transparent focus:text-hot-red focus:ring-2 focus:ring-hot-red focus:ring-inset">
+                            <input type="submit" value="{{page.f_apply_filter_text}}" class="bg-transparent w-full h-full cursor-pointer">
+                        </div>
+
+                        <div class="grid grid-cols-2 lg:col-span-1">
+                            <div class="py-2 px-3 cursor-pointer" :class="mapView ? 'bg-hot-off-white' : 'bg-hot-red text-white'" @click="mapView = false">
+                                <p class="font-medium flex items-center">
+                                    <span class="mr-2">{% include "ui/components/icon_svgs/ViewGridIcon.html" %}</span>
+                                    {{page.view_grid_text}}
                                 </p>
                             </div>
-                            
-                            <div class="grid grid-cols-2 lg:col-span-2">
-                                <div class="py-2 px-3 cursor-pointer" :class="mapView ? 'bg-hot-off-white' : 'bg-hot-red text-white'" @click="mapView = false">
-                                    <p class="font-medium flex items-center">
-                                        <span class="mr-2">{% include "ui/components/icon_svgs/ViewGridIcon.html" %}</span>
-                                        {{page.view_grid_text}}
-                                    </p>
-                                </div>
-                                <div class="py-2 px-3 cursor-pointer" :class="!mapView ? 'bg-hot-off-white' : 'bg-hot-red text-white'" @click="mapView = true">
-                                    <p class="font-medium flex items-center">
-                                        <span class="mr-2">{% include "ui/components/icon_svgs/MapIcon.html" %}</span>
-                                        {{page.view_map_text}}
-                                    </p>
-                                </div>
+                            <div class="py-2 px-3 cursor-pointer" :class="!mapView ? 'bg-hot-off-white' : 'bg-hot-red text-white'" @click="mapView = true">
+                                <p class="font-medium flex items-center">
+                                    <span class="mr-2">{% include "ui/components/icon_svgs/MapIcon.html" %}</span>
+                                    {{page.view_map_text}}
+                                </p>
                             </div>
+                        </div>
+
+                        <input class="hidden" id="showFilters" type="checkbox" name="showFilters" :checked="showFilters">
+                        <input class="hidden" id="mapView" type="checkbox" name="mapView" :checked="mapView">
+                        
+                        <div class="cursor-pointer lg:col-span-1 relative after:absolute after:h-10 after:w-full after:bg-hot-off-white after:hidden" :class="showFilters ? 'bg-hot-off-white md:after:block' : 'bg-hot-red text-white'" @click="showFilters = !showFilters">
+                            <p class="font-medium py-2 px-3 flex">
+                                {{page.filters_text}}
+                                <span class="ml-auto">{% include "ui/components/icon_svgs/FilterIcon.html" %}</span>
+                            </p>
                         </div>
                     </div>
 
                     {% comment %} MAP AND FILTER CONTAINER {% endcomment %}
                     <div class="grid mt-4" x-show="mapView || showFilters" x-data="{ selectedProject: undefined }">
-                        <div class="md:col-start-1 md:row-start-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 min-h-[30rem]" :class="mapView ? '' : 'invisible hidden md:block'">
+                        <div class="md:col-start-1 md:row-start-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 min-h-[30rem] order-2 md:order-1" :class="mapView ? '' : 'invisible hidden md:block'">
                             {% comment %} MAP {% endcomment %}
                             <div class="lg:col-span-2 md:order-2 min-h-[30rem] [&_.mapboxgl-marker_path]:fill-hot-red" id="map"></div>
                             {% comment %} PROJECTS {% endcomment %}
@@ -114,12 +125,12 @@
                                             </p>
                                         {% endif %}
                                     </div>
-                                    <p class="text-center mt-4 mb-8" id="next-project-map" class="{% if not projects.has_next %}hidden{% endif %}">
+                                    <p class="text-center mt-4 mb-8 cursor-pointer" id="next-project-map" class="{% if not projects.has_next %}hidden{% endif %}">
                                         {% if projects.has_next %}
                                                 {% comment %} <a href="?page={{ projects.next_page_number }}"></a> {% endcomment %}
-                                                <button
-                                                    x-data="{ params: new URLSearchParams((new URL(window.location.href)).search), init() {this.params.set('page', '{{projects.next_page_number}}')} }"
-                                                    :hx-get="`?${params.toString()}`"
+                                                <span
+                                                    x-data="{ params: new URLSearchParams((new URL(window.location.href)).search) }"
+                                                    :hx-get="'?page={{ projects.next_page_number }}&' + `${(new URLSearchParams($store.formdata)).toString()}`"
                                                     hx-trigger="click"
                                                     hx-select="#projects-list-map, #next-project-map, #projects-list, #next-project"
                                                     hx-swap="beforeend"
@@ -129,7 +140,7 @@
                                                         {{page.load_more_projects_text}}
                                                     </span>
                                                     {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-90 text-hot-red" %}
-                                                </button>
+                                                </span>
                                         {% endif %}
                                     </p>
                                 </div>
@@ -137,7 +148,7 @@
                         </div>
                         
                         {% comment %} FILTERS {% endcomment %}
-                        <div class="md:col-start-1 md:row-start-1 min-h-[30rem] bg-hot-off-white z-10 px-12 py-10" :class="showFilters ? '' : 'invisible hidden md:block'">
+                        <div class="md:col-start-1 md:row-start-1 min-h-[30rem] bg-hot-off-white z-10 px-12 py-10 order-1 md:order-2" :class="showFilters ? '' : 'invisible hidden md:block'">
                             <div class="grid lg:grid-cols-3 gap-8">
                                 {% include "./components/FilterCategoryPage.html" with pages=impact_areas denoter="ia" title=page.f_impact_areas_text %}
                                 {% include "./components/FilterCategoryPage.html" with pages=hubs denoter="hub" title=page.f_open_mapping_hubs_text %}
@@ -189,11 +200,11 @@
                             </p>
                         {% endif %}
                     </div>
-                    <p class="text-center mt-10" id="next-project" class="{% if not projects.has_next %}hidden{% endif %}" x-init="$store.pageNum = {{projects.number}}; callMapUpdate();">
+                    <p class="text-center mt-10" id="next-project" class="{% if not projects.has_next %}hidden{% endif %}" x-init="$store.pageNum = {{projects.number}}; callMapUpdate(); console.log($store.pageNum)">
                         {% if projects.has_next %}
                                 <button
-                                    x-data="{ params: new URLSearchParams((new URL(window.location.href)).search), init() {this.params.set('page', '{{projects.next_page_number}}')} }"
-                                    :hx-get="`?${params.toString()}`"
+                                    x-data="{ params: new URLSearchParams((new URL(window.location.href)).search) }"
+                                    :hx-get="'?page={{ projects.next_page_number }}&' + `${(new URLSearchParams($store.formdata)).toString()}`"
                                     hx-trigger="click"
                                     hx-select="#projects-list-map, #next-project-map, #projects-list, #next-project"
                                     hx-swap="beforeend"
@@ -225,8 +236,8 @@
                     {{page.open_mapping_hub_title}}
                 </h1>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                    {% for hub_project in hubs_projects %}
-                        {% include "ui/components/mapping_hub/MappingHubPreviewProjectsBlock.html" %}
+                    {% for hub in hubs %}
+                        {% include "ui/components/mapping_hub/MappingHubPreviewProjectsBlock.html" with baselink=page.projects_link %}
                     {% endfor %}
                 </div>
             </div>
@@ -236,39 +247,11 @@
                     {% include "ui/components/dogear_boxes/DogearRed.html" with title=page.red_box_title linktext=page.red_box_link_text linkurl=page.red_box_link %}
                 </div>
                 <div>
-                    {% include "ui/components/dogear_boxes/DogearBlack.html" with title=page.black_box_title linktext=page.black_box_link_text linkurl=black_box_link %}
+                    {% include "ui/components/dogear_boxes/DogearBlack.html" with title=page.black_box_title linktext=page.black_box_link_text linkurl=page.black_box_link %}
                 </div>
             </div>
         </div>
     </div>
     
     {% include "./components/MapboxScript.html" %}
-    <script>
-        const callMapUpdate = async () => {
-            const params = new URLSearchParams((new URL(window.location.href)).search);
-            params.set('page', Alpine.store('pageNum'));
-            params.set('projects', true);
-            const apiUrl = '?' + params.toString();
-            fetch(apiUrl).then(response => {
-                if (response.ok)
-                    return response.json();
-                throw new Error("Failed to fetch projects.");
-            }).then(data => {
-                geojson = data;
-                
-                for (const feature of geojson.features) {
-                    const element = `
-                        <div class="" @click="$refs['project${feature.properties.id}'].scrollIntoView({block: 'nearest', behavior: 'smooth'}); selectedProject = 'project${feature.properties.id}';">
-                            {% include './components/MapboxMarker.html' %}
-                        </div>
-                    `;
-                    const el = document.createElement('div');
-                    el.innerHTML = element;
-                    new mapboxgl.Marker(el).setLngLat(feature.geometry.coordinates).addTo(map);
-                }
-            })
-        }
-        
-        
-    </script>
 {% endblock %}

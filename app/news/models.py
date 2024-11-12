@@ -14,13 +14,18 @@ from wagtail.blocks import CharBlock, StreamBlock, StructBlock, URLBlock, RichTe
 from wagtail.snippets.models import register_snippet
 from wagtail.search import index
 
+from app.core.models import LinkOrPageBlock
+from app.mapping_hubs.models import IndividualMappingHubPage
+
 
 class NewsOwnerPage(Page):
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
 
+        base_locale = context['page'].get_translation(1).locale
+
         keyword = request.GET.get('keyword', '')
-        news_list = IndividualNewsPage.objects.live().filter(locale=context['page'].locale)
+        news_list = IndividualNewsPage.objects.live().filter(locale=base_locale)
         
         if keyword:
             news_list = news_list.search(keyword).get_queryset()
@@ -29,13 +34,20 @@ class NewsOwnerPage(Page):
         tags = [x[4:] for x in request.GET.keys() if x.startswith("tag.")]
         query = Q()
         for category in categories:
-            if request.GET.get(str(category), ''):
+            if request.GET.get("cat" + str(category.id), ''):
                 query = query | Q(categories=category)
         news_list = news_list.filter(query).distinct()
         
         query = Q()
         for tag in tags:
             query = query | Q(tags__name=tag)
+        news_list = news_list.filter(query).distinct()
+
+        hubs = IndividualMappingHubPage.objects.live().filter(locale=base_locale)
+        query = Q()
+        for hub in hubs:
+            if request.GET.get(f"hub{hub.id}", ''):
+                query = query | Q(associated_hubs__contains=[{'type': 'region_hub', 'value': hub.id }])
         news_list = news_list.filter(query).distinct()
 
         match request.GET.get('sort', ''):
@@ -63,6 +75,7 @@ class NewsOwnerPage(Page):
         context['news_paginator'] = paginator
         context['current_page'] = int(page)
         context['categories'] = categories
+        context['hubs'] = hubs
         return context
     
     max_count = 1
@@ -76,12 +89,15 @@ class NewsOwnerPage(Page):
     related_projects_title = models.CharField(default="Related Projects")
     related_news_title = models.CharField(default="Related News")
     view_all_news_text = models.CharField(default="View all News")
-    view_all_news_url = models.URLField(blank=True)
+    view_all_news_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
     news_read_more_text = models.CharField(default="Read More")
     categories_title = models.CharField(default="Categories")
     tags_title = models.CharField(default="Tags")
+    hubs_title = models.CharField(default="Associated Hubs")
 
+    applied_text = models.CharField(default="applied", help_text="This will be a suffix to a number, used to indicate how many filters are applied currently in some field.")
     keyword_search_hint = models.CharField(default="Search by keyword")
+    filter_by_hub = models.CharField(default="Filter by Hub")
     category_select = models.CharField(default="Select Categories")
     sort_by_new = models.CharField(default="Sort by New")
     sort_by_old = models.CharField(default="Sort by Old")
@@ -94,7 +110,9 @@ class NewsOwnerPage(Page):
 
     content_panels = Page.content_panels + [
         MultiFieldPanel([
+            FieldPanel('applied_text'),
             FieldPanel('keyword_search_hint'),
+            FieldPanel('filter_by_hub'),
             FieldPanel('category_select'),
             FieldPanel('sort_by_new'),
             FieldPanel('sort_by_old'),
@@ -114,12 +132,12 @@ class NewsOwnerPage(Page):
                 FieldPanel('related_projects_title'),
                 FieldPanel('related_news_title'),
                 FieldPanel('view_all_news_text'),
-                FieldPanel('view_all_news_url'),
+                FieldPanel('view_all_news_link'),
                 FieldPanel('news_read_more_text'),
                 FieldPanel('categories_title'),
                 FieldPanel('tags_title'),
             ], heading="Sidebar"),
-        ], heading="Individual Project Page"),
+        ], heading="Individual News Page"),
     ]
 
 
@@ -168,7 +186,7 @@ class IndividualNewsPage(Page):
 
     article_body = StreamField([
         ('text_block', RichTextBlock(features=[
-        'h1', 'h2', 'h3', 'h4', 'bold', 'italic', 'link', 'ol', 'ul', 'hr', 'document-link', 'image', 'embed', 'code', 'blockquote'
+        'h2', 'h3', 'h4', 'bold', 'italic', 'link', 'ol', 'ul', 'hr', 'document-link', 'image', 'embed', 'code', 'blockquote'
         ]))
     ], use_json_field=True, null=True, blank=True)
 
@@ -184,11 +202,11 @@ class IndividualNewsPage(Page):
 
     tags = ClusterTaggableManager(through=NewsTag, blank=True)
 
+    associated_hubs = StreamField([('region_hub', PageChooserBlock(page_type="mapping_hubs.IndividualMappingHubPage"))], use_json_field=True, null=True, blank=True)
+
     search_fields = Page.search_fields + [
         index.SearchField('title'),
         index.SearchField('intro'),
-        # index.FilterField('newscategory_id'),  # the console warns you about this but if you don't have this then category search doesn't work
-        # index.FilterField('name'),
         index.SearchField('search_description'),
     ]
 
@@ -207,8 +225,6 @@ class IndividualNewsPage(Page):
             FieldPanel('related_news'),
             FieldPanel('categories', widget=forms.CheckboxSelectMultiple),
             FieldPanel('tags'),
+            FieldPanel('associated_hubs'),
         ], heading="Sidebar"),
     ]
-
-
-

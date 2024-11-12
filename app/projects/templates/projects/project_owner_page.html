@@ -10,30 +10,172 @@
 {% endblock extra_css %}
 
 {% block content %}
-    {% include "ui/components/BasePageHeader.html" with title=page.title image=page.header_image %}
-    <div class="max-w-7xl mx-auto my-10" x-data="{ params: new URLSearchParams((new URL(window.location.href)).search) }">
+    {% include "ui/components/PageHeaderWithBlur.html" with title=page.title image=page.header_image endinlarge=True %}
+    <div class="max-w-7xl mx-auto mt-10 mb-20" x-data="{ 
+        params: new URLSearchParams((new URL(window.location.href)).search), 
+        activeParams: new URLSearchParams((new URL(window.location.href)).search), 
+        {% include 'ui/components/utilities/FormGetActiveXData.js' %}, 
+    }">
         <div class="px-6 md:px-10">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" id="projects-list">
-                {% for project in projects %}
-                    {% include "ui/components/projects/ProjectPreviewBlockNews.html" with project=project.specific showimage=True %}
-                {% endfor %}
-            </div>
-            <p class="text-center mt-10" id="next-project" class="{% if not projects.has_next %}hidden{% endif %}">
-                {% if projects.has_next %}
-                        {% comment %} <a href="?page={{ projects.next_page_number }}"></a> {% endcomment %}
-                        <button hx-get="?page={{ projects.next_page_number }}"
-                            hx-trigger="click"
-                            hx-select="#projects-list, #next-project"
-                            hx-swap="beforeend"
-                            hx-select-oob="#projects-list:beforeend, #next-project:outerHTML"
-                        >
-                            <span class="border-b-hot-red border-b-2 pb-1 font-medium mr-4 text-intro">
-                                {{page.load_more_projects_text}}
-                            </span>
+            <form id="search-form"
+                hx-get="{{page.url}}"
+                hx-trigger="submit"
+                hx-target="#items-list, #paginator-navigation"
+                hx-select="#items-list, #paginator-navigation"
+                hx-swap="innerHTML"
+                hx-select-oob="#items-list:outerHTML, #paginator-navigation:innerHTML"
+                @submit="activeParams = new FormData($el);"
+            >
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {% comment %} KEYWORD SEARCH {% endcomment %}
+                    <div class="bg-hot-off-white flex items-center">
+                        <input class="w-full bg-transparent border-none" placeholder="{{page.search_keyword_text}}" type="text" name="keyword" :value="params.get('keyword')">
+                        {% include "ui/components/icon_svgs/SearchIcon.html" with class="text-hot-red mx-3" %}
+                    </div>
+
+                    {% comment %} SORT {% endcomment %}
+                    <div class="relative" x-data="{ show: false, setSortType(text) {$refs.sorttype.innerText = text} }" @click.away="show = false">
+                        <div class="w-full h-full flex justify-between py-2 px-3 bg-hot-off-white items-center cursor-pointer" @click="show = !show">
+                            <p class="pointer-events-none" x-ref="sorttype">
+                                {{page.sort_titlea_text}}
+                            </p>
+                        {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-90 text-hot-red" %}
+                        </div>
+                        <div class="absolute z-20 bg-hot-off-white p-4 w-full" x-show="show">
+                            <hr class="border-b-2">
+                            {% include "our_work/components/ProjectSortOption.html" with sort_by=page.sort_titlea_text sort_id="sort.titlea" %}
+                            {% include "our_work/components/ProjectSortOption.html" with sort_by=page.sort_titlez_text sort_id="sort.titlez" %}
+                        </div>
+                    </div>
+
+                    {% comment %} HUB {% endcomment %}
+                    <div class="relative" x-data="{ show: false }" @click.away="show = false">
+                        <div class="w-full h-full flex justify-between py-2 px-3 bg-hot-off-white items-center cursor-pointer" @click="show = !show">
+                            <p class="pointer-events-none">
+                                {{page.open_mapping_hubs_text}} {% include "ui/components/utilities/FormAppliedSuffix.html" with key="hub" applied_text=page.applied_text %}
+                            </p>
                             {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-90 text-hot-red" %}
+                        </div>
+                        <div class="absolute z-20 bg-hot-off-white p-4 w-full" x-show="show">
+                            <hr class="border-b-2">
+                            {% for hub in hubs %}
+                                <div class="mt-4 flex">
+                                    <label for="hub-{{forloop.counter}}">
+                                        {{hub.localized.title}}
+                                    </label>
+                                    <input class="ml-auto checked:bg-hot-red checked:hover:bg-hot-red checked:focus:bg-hot-red" id="hub-{{forloop.counter}}" type="checkbox" name="hub{{hub.id}}" :checked="params.get('hub{{hub.id}}')">
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    {% comment %} IMPACT AREA {% endcomment %}
+                    <div class="relative" x-data="{ show: false }" @click.away="show = false">
+                        <div class="w-full h-full flex justify-between py-2 px-3 bg-hot-off-white items-center cursor-pointer" @click="show = !show">
+                            <p class="pointer-events-none">
+                                {{page.impact_areas_text}} {% include "ui/components/utilities/FormAppliedSuffix.html" with key="ia" applied_text=page.applied_text %}
+                            </p>
+                            {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-90 text-hot-red" %}
+                        </div>
+                        <div class="absolute z-20 bg-hot-off-white p-4 w-full" x-show="show">
+                            <hr class="border-b-2">
+                            {% for ia in impact_areas %}
+                                <div class="mt-4 flex">
+                                    <label for="ia-{{forloop.counter}}">
+                                        {{ia.localized.title}}
+                                    </label>
+                                    <input class="ml-auto checked:bg-hot-red checked:hover:bg-hot-red checked:focus:bg-hot-red" id="ia-{{forloop.counter}}" type="checkbox" name="ia{{ia.id}}" :checked="params.get('ia{{ia.id}}')">
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    {% comment %} PROGRAMS {% endcomment %}
+                    <div class="relative" x-data="{ show: false }" @click.away="show = false">
+                        <div class="w-full h-full flex justify-between py-2 px-3 bg-hot-off-white items-center cursor-pointer" @click="show = !show">
+                            <p class="pointer-events-none">
+                                {{page.projects_by_programme_text}} {% include "ui/components/utilities/FormAppliedSuffix.html" with key="pg" applied_text=page.applied_text %}
+                            </p>
+                            {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-90 text-hot-red" %}
+                        </div>
+                        <div class="absolute z-20 bg-hot-off-white p-4 w-full" x-show="show">
+                            <hr class="border-b-2">
+                            {% for pg in programs %}
+                                <div class="mt-4 flex">
+                                    <label for="pg-{{forloop.counter}}">
+                                        {{pg.localized.title}}
+                                    </label>
+                                    <input class="ml-auto checked:bg-hot-red checked:hover:bg-hot-red checked:focus:bg-hot-red" id="pg-{{forloop.counter}}" type="checkbox" name="pg{{pg.id}}" :checked="params.get('pg{{pg.id}}')">
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    {% comment %} TYPE {% endcomment %}
+                    <div class="relative" x-data="{ show: false }" @click.away="show = false">
+                        <div class="w-full h-full flex justify-between py-2 px-3 bg-hot-off-white items-center cursor-pointer" @click="show = !show">
+                            <p class="pointer-events-none">
+                                {{page.projects_by_type_text}} {% include "ui/components/utilities/FormAppliedSuffix.html" with key="pt" applied_text=page.applied_text %}
+                            </p>
+                            {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-90 text-hot-red" %}
+                        </div>
+                        <div class="absolute z-20 bg-hot-off-white p-4 w-full" x-show="show">
+                            <hr class="border-b-2">
+                            {% for pt in types %}
+                                <div class="mt-4 flex">
+                                    <label for="pt-{{forloop.counter}}">
+                                        {{pt}}
+                                    </label>
+                                    <input class="ml-auto checked:bg-hot-red checked:hover:bg-hot-red checked:focus:bg-hot-red" id="pt-{{forloop.counter}}" type="checkbox" name="pt{{pt.id}}" :checked="params.get('pt{{pt.id}}')">
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    {% comment %} STATUS {% endcomment %}
+                    <div class="relative" x-data="{ show: false }" @click.away="show = false">
+                        <div class="w-full h-full flex justify-between py-2 px-3 bg-hot-off-white items-center cursor-pointer" @click="show = !show">
+                            <p class="pointer-events-none">
+                                {{page.project_status_text}}
+                            </p>
+                            {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-90 text-hot-red" %}
+                        </div>
+                        <div class="absolute z-20 bg-hot-off-white p-4 w-full" x-show="show">
+                            <hr class="border-b-2 mb-4">
+                            <div class="flex flex-col gap-2">
+                                {% include "our_work/components/ProjectStatusOption.html" with status_by="---" status_id="none" %}
+                                {% for status in statuses %}
+                                    {% include "our_work/components/ProjectStatusOption.html" with status_by=status status_id=status.id %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-hot-red text-white font-semibold">
+                        <button class="bg-transparent w-full h-full cursor-pointer py-2">
+                            {{page.apply_filter_text}}
                         </button>
-                {% endif %}
-            </p>
+                    </div>
+                </div>
+                <a href="{{page.url}}">
+                    <p class="cursor-pointer inline-block mt-4">
+                        {{page.reset_filters_text}}
+                        {% include "ui/components/icon_svgs/RefreshIcon.html" with class="ml-4" %}
+                    </p>
+                </a>
+            </form>
+            <div id="items-list">
+                <h2 class="text-h2 font-bold my-8">{{paginator.count}} {{page.results_text}}</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 my-10">
+                    {% for project in projects %}
+                        {% include "ui/components/projects/ProjectPreviewBlockNews.html" with project=project.specific showimage=True %}
+                    {% endfor %}
+                </div>
+            </div>
+            {% include "ui/components/utilities/PaginatorNavigationHTMX.html" with paginator=paginator current_page=current_page %}
+            <div class="text-black my-20 [&_h1]:text-black [&_a]:text-black">
+                {% include "ui/components/dogear_boxes/DogearAnyColourLong.html" with colour="var(--hot-off-white)" title=page.bottom_dogear_title linktext=page.bottom_dogear_link_text linkurl=page.bottom_dogear_link linkappendage="#projects-section" %}
+            </div>
         </div>
     </div>
 {% endblock %}

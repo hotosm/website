@@ -1,0 +1,17 @@
+{% load wagtailcore_tags %}
+
+{% if linkurl.0 and linkurl.0.value %}
+    {% if linkurl.0.value.page or linkurl.0.value.url %}
+        {% include "ui/components/icon_svgs/LinkCaret.html" %}
+    {% else %}
+        {% include "ui/components/icon_svgs/ExternalLinkIcon.html" %}
+    {% endif %}
+{% else %}
+    {% if linkurl %}
+        {% if linkurl.url %}
+            {% include "ui/components/icon_svgs/LinkCaret.html" %}
+        {% else %}
+            {% include "ui/components/icon_svgs/ExternalLinkIcon.html" %}
+        {% endif %}
+    {% endif %}
+{% endif %}

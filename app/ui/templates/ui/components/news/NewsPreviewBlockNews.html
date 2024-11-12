@@ -3,32 +3,30 @@
 - news: an IndividualNewsPage object; the news page to be previewed
 - readmoretext: a string; the text that should show for the "read more" button
 {% endcomment %}
+{% load wagtailcore_tags %}
 
-<div class="{{class}}">
-    <p>
-        <span class="text-small text-hot-dark-grey">
-            {{ news.date }}
-        </span>
-    </p>
-
-    <p class="text-h5 font-bold my-2">
-        {{ news.title }}
-    </p>
-
-    <div class="[&_p]:max-h-20 [&_p]:text-ellipsis [&_p]:overflow-hidden [&_p]:text-small">
-        {{ news.intro|safe }}
-    </div>
-
-    <p class="mt-6 font-medium">
-        <a href="{{ news.url }}" class="text-hot-red">
-            <span class="pr-2">
-                {% if readmoretext %}
-                    {{ readmoretext }}
-                {% else %}
-                    Read More
-                {% endif %}
+{% with news.localized as news %}
+    <div class="{{class}}">
+        <p>
+            <span class="text-small text-hot-dark-grey">
+                {{ news.date }}
             </span>
-            {% include "ui/components/icon_svgs/LinkCaret.html" %}
-        </a>
-    </p>
-</div>
+        </p>
+
+        <p class="text-h5 font-bold my-2">
+            {{ news.title }}
+        </p>
+
+        <div class="[&_p]:max-h-20 [&_p]:text-ellipsis [&_p]:overflow-hidden [&_p]:text-small">
+            {{ news.intro|richtext }}
+        </div>
+
+        <p class="mt-4 font-medium">
+            {% if readmoretext %}
+                {% include "ui/components/BaseLinkNoUnderline.html" with linkurl=news linktext=readmoretext %}
+            {% else %}
+                {% include "ui/components/BaseLinkNoUnderline.html" with linkurl=news linktext="Read More" %}
+            {% endif %}
+        </p>
+    </div>
+{% endwith %}

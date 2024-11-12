@@ -1,0 +1,44 @@
+<div class="md:hidden max-w-lg mx-auto" x-data="{ selected: 1 }">
+    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="auto" viewBox="0 0 350 450">
+        <defs>
+            <clipPath id="clip-path">
+                <rect id="Rectangle_17435" data-name="Rectangle 17435" width="68" height="318" transform="translate(507 619)" fill="#fff" stroke="#707070" stroke-width="1"/>
+                <circle width="40%" height="40%" />
+            </clipPath>
+        </defs>
+        <circle id="Ellipse_320" data-name="Ellipse 320" cx="175" cy="175" r="175" fill="#f0efef"/>
+        <text id="What_We_Do" data-name="{{page.what_we_do_title}}" transform="translate(54 157)" font-size="32" font-family="inherit" font-weight="700"><tspan x="29.352" y="28">{{page.what_we_do_title}}</tspan></text>
+        <g id="Mask_Group_13" data-name="Mask Group 13" transform="translate(954 -140) rotate(90)" clip-path="url(#clip-path)" style="clip-path: ellipse(500px 150px);">
+            <g id="Ellipse_360" data-name="Ellipse 360" transform="translate(-33 521)" fill="none" stroke="#c4c4c4" stroke-width="3" stroke-dasharray="5 8">
+                <ellipse cx="294" cy="255" rx="294" ry="255" stroke="none"/>
+                <ellipse cx="294" cy="255" rx="292.5" ry="253.5" fill="none"/>
+            </g>
+        </g>
+        <g id="Component_267_1" data-name="Component 267 – 1" transform="translate(1 334)" @click="selected = 1" class="cursor-pointer transition" :class="selected == 1 ? 'fill-hot-red text-white' : 'fill-hot-off-white'">
+            <rect id="Rectangle_17318" data-name="Rectangle 17318" width="67" height="67" rx="33.5" fill="inherit"/>
+            <text id="_1" data-name="1" transform="translate(24 43)" fill="#fff" font-size="31" font-family="inherit" font-weight="700" :class="selected == 1 ? 'fill-white' : 'fill-black'"><tspan x="0" y="0">1</tspan></text>
+        </g>
+        <g id="Component_265_1" data-name="Component 265 – 1" transform="translate(143 381)" @click="selected = 2" class="cursor-pointer transition" :class="selected == 2 ? 'fill-hot-red text-white' : 'fill-hot-off-white'">
+            <rect id="Rectangle_17320" data-name="Rectangle 17320" width="67" height="67" rx="33.5" fill="inherit"/>
+            <text id="_2" data-name="2" transform="translate(24 44)" font-size="31" font-family="inherit" font-weight="700" :class="selected == 2 ? 'fill-white' : 'fill-black'"><tspan x="0" y="0">2</tspan></text>
+        </g>
+        <g id="Component_266_1" data-name="Component 266 – 1" transform="translate(283 334)" @click="selected = 3" class="cursor-pointer transition" :class="selected == 3 ? 'fill-hot-red text-white' : 'fill-hot-off-white'">
+            <rect id="Rectangle_17319" data-name="Rectangle 17319" width="67" height="67" rx="33.5" fill="inherit"/>
+            <text id="_3" data-name="3" transform="translate(24 44)" font-size="31" font-family="inherit" font-weight="700" :class="selected == 3 ? 'fill-white' : 'fill-black'"><tspan x="0" y="0">3</tspan></text>
+        </g>
+    </svg>
+    
+    <div class="grid text-center mt-10 text-intro font-medium">
+        <p class="col-start-1 row-start-1" :class="selected == 1 ? '' : 'hidden'">
+            {{page.what_we_do_items.0.value}}
+        </p>
+        
+        <p class="col-start-1 row-start-1" :class="selected == 2 ? '' : 'hidden'">
+            {{page.what_we_do_items.1.value}}
+        </p>
+
+        <p class="col-start-1 row-start-1" :class="selected == 3 ? '' : 'hidden'">
+            {{page.what_we_do_items.2.value}}
+        </p>
+    </div>
+</div>

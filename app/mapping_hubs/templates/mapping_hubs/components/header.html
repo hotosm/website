@@ -7,35 +7,30 @@
 {% load wagtailimages_tags %}
 
 {% image page.header_image original as image_p %}
-<div class="w-full min-h-[24rem] content-end bg-no-repeat bg-cover" style="background-image: url('{{ image_p.url }}')">
+<div class="w-full min-h-[24rem] content-end bg-no-repeat bg-cover bg-center" style="background-image: url('{{ image_p.url }}')">
     <div class="bg-gradient-to-t from-black/70 to-transparent w-full">
         <div class="h-fit w-full pt-10 md:pb-16 text-white max-w-7xl mx-auto">
             <div class="grid grid-cols-1 lg:grid-cols-2 md:px-8 pt-10">
-                <div class="[&_a]:text-intro [&_a]:font-medium [&_a_p]:mt-2 [&_svg]:text-hot-red px-8 md:px-0">
+                <div class="[&_a]:text-intro [&_a]:font-medium [&_svg]:text-hot-red px-8 md:px-0">
                     <p class="font-bold text-h5">
                         {{ page.get_parent.specific.header_hub_text_white }} <span class="text-hot-red">{{ page.get_parent.specific.header_hub_text_red }}</span>
                     </p>
                     <h1 class="text-h1 font-semibold mb-4">
                         {{ page.title }}
                     </h1>
-                    <a href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=page.header_project_link%}">
+                    <div class="grid gap-4">
                         <p>
-                            {{ page.get_parent.specific.header_project_link_text }}
-                            {% include "ui/components/icon_svgs/LinkCaret.html" %}
+                            {% include "ui/components/BaseLinkNoUnderlineWhite.html" with linkurl=page.get_parent.specific.header_project_link linktext=page.get_parent.specific.header_project_link_text linkappendage="?hub"|add:original_id|add:"=on" %}
                         </p>
-                    </a>
-                    <a href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=page.get_parent.specific.header_news_link%}">
-                        <p>
-                            {{ page.get_parent.specific.header_news_link_text }}
-                            {% include "ui/components/icon_svgs/LinkCaret.html" %}
-                        </p>
-                    </a>
-                    <a href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=page.get_parent.specific.header_events_link%}">
-                        <p>
-                            {{ page.get_parent.specific.header_events_link_text }}
-                            {% include "ui/components/icon_svgs/LinkCaret.html" %}
-                        </p>
-                    </a>
+                        {% with page.id|stringformat:"s" as id %}
+                            <p>
+                                {% include "ui/components/BaseLinkNoUnderlineWhite.html" with linkurl=page.get_parent.specific.header_news_link linktext=page.get_parent.specific.header_news_link_text linkappendage="?hub"|add:original_id|add:"=on" %}
+                            </p>
+                            <p>
+                                {% include "ui/components/BaseLinkNoUnderlineWhite.html" with linkurl=page.get_parent.specific.header_events_link linktext=page.get_parent.specific.header_events_link_text linkappendage="?hub"|add:original_id|add:"=on" %}
+                            </p>
+                        {% endwith %}
+                    </div>
                 </div>
                 <div>
                     {% include "ui/components/ThreeElementCarousel.html" with carousel=page.header_carousel %}

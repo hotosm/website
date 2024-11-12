@@ -12,6 +12,8 @@ from wagtail.models import Page
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
 
 from app.core.models import LinkOrPageBlock, Partner
+from app.mapping_hubs.models import IndividualMappingHubPage
+from app.programs.models import IndividualProgramPage
 
 
 # The "partners" snippet is in the core app's models.
@@ -42,7 +44,7 @@ class PartnershipTemplatePage(Page):
 
     intro = RichTextField(blank=True)
     body = RichTextField(blank=True, features=[
-        'h1', 'h2', 'h3', 'h4', 'bold', 'italic', 'link', 'ol', 'ul', 'hr', 'document-link', 'image', 'embed', 'code', 'blockquote'
+        'h2', 'h3', 'h4', 'bold', 'italic', 'link', 'ol', 'ul', 'hr', 'document-link', 'image', 'embed', 'code', 'blockquote'
     ])
 
     related_projects = StreamField([
@@ -162,13 +164,27 @@ class OurPartnersPage(Page):
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
 
-        partners = Partner.objects.all()
+        partners = Partner.objects.all().order_by('id')
         
         p_types = PartnershipTemplatePage.objects.live().filter(locale=context['page'].locale)
         query = Q()
         for p_type in p_types:
             if request.GET.get("pt" + str(p_type.id), ''):
                 query = query | Q(partner_type__contains=[{'type': 'type', 'value': p_type.id }])
+        partners = partners.filter(query).distinct()
+        
+        hubs = IndividualMappingHubPage.objects.live().filter(locale=context['page'].locale)
+        query = Q()
+        for hub in hubs:
+            if request.GET.get("hub" + str(hub.id), ''):
+                query = query | Q(id__in=[x.value.id for x in hub.specific.partner_list])
+        partners = partners.filter(query).distinct()
+
+        programs = IndividualProgramPage.objects.live().filter(locale=context['page'].locale)
+        query = Q()
+        for program in programs:
+            if request.GET.get("prg" + str(program.id), ''):
+                query = query | Q(id__in=[x.value.id for x in program.specific.partner_list])
         partners = partners.filter(query).distinct()
 
         page = request.GET.get('page', 1)
@@ -182,6 +198,8 @@ class OurPartnersPage(Page):
 
         context['partners'] = partners
         context['partner_types'] = p_types
+        context['hubs'] = hubs
+        context['programs'] = programs
         return context
     
     max_count = 1
@@ -196,8 +214,10 @@ class OurPartnersPage(Page):
     )
     intro = RichTextField(blank=True, help_text="This is shown in the header.")
 
+    applied_text = models.CharField(default="applied", help_text="This will be a suffix to a number, used to indicate how many filters are applied currently in some field.")
     filter_by_type_text = models.CharField(default="Filter by Type")
-    
+    filter_by_program = models.CharField(default="Filter by Program")
+    filter_by_hub = models.CharField(default="Filter by Hub")
     filter_button_text = models.CharField(default="Submit")
 
     load_more_partners_text = models.CharField(default="Load More Partners")
@@ -214,7 +234,10 @@ class OurPartnersPage(Page):
             FieldPanel('header_image'),
             FieldPanel('intro'),
         ], heading="Header"),
+        FieldPanel('applied_text'),
         FieldPanel('filter_by_type_text'),
+        FieldPanel('filter_by_program'),
+        FieldPanel('filter_by_hub'),
         FieldPanel('filter_button_text'),
         FieldPanel('load_more_partners_text'),
         MultiFieldPanel([

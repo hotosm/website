@@ -6,34 +6,38 @@
 {% load wagtailcore_tags %}
 {% load wagtailimages_tags %}
 
-{% image news.image original as image_p %}
-<div class=" {{class}}">
-    <a href="{{ news.url }}">
-        {% if showimage %}
-            <div class="image-hide-small w-full min-h-[9rem] mb-3 content-end bg-no-repeat bg-cover image-overshadow-gradient" style="background-image: url('{{ image_p.url }}')">
-                <div>
+{% with news.localized as news %}
+    {% image news.image original as image_p %}
+    <div class="{{class}} [&:hover_.hover-title]:text-hot-red">
+        <a href="{% include 'ui/components/PageOrLinkHrefText.html' with linkurl=news %}">
+            {% if showimage %}
+                <div class="image-hide-small w-full min-h-[9rem] mb-3 content-end bg-no-repeat bg-cover bg-center image-overshadow-gradient aspect-[5/3]" style="background-image: url('{{ image_p.url }}')">
+                    <div>
+                    </div>
                 </div>
+            {% endif %}
+
+            <p class="text-hot-red text-small font-semibold">
+                {% for category in news.categories.all %}
+                    {{category.category_name}}{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </p>
+
+            <hr class="my-2" />
+
+            <p class="text-h5 font-bold my-2 hover-title">
+                {{ news.title }}
+            </p>
+
+            <div class="[&_p]:max-h-20 [&_p]:text-ellipsis [&_p]:overflow-hidden [&_p]:text-small">
+                {{ news.intro|richtext }}
             </div>
-        {% endif %}
 
-        <p class="text-hot-red text-small font-semibold">
-            Blog
-        </p>
-
-        <hr class="my-2" />
-
-        <p class="text-h5 font-bold my-2">
-            {{ news.title }}
-        </p>
-
-        <div class="[&_p]:max-h-20 [&_p]:text-ellipsis [&_p]:overflow-hidden [&_p]:text-small">
-            {{ news.intro|richtext }}
-        </div>
-
-        <p class="my-2">
-            <span class="text-small text-hot-dark-grey">
-                {{ news.date }}
-            </span>
-        </p>
-    </a>
-</div>
+            <p class="my-2">
+                <span class="text-small text-hot-dark-grey">
+                    {{ news.date }}
+                </span>
+            </p>
+        </a>
+    </div>
+{% endwith %}

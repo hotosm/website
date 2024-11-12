@@ -1,0 +1,46 @@
+{% comment %}
+==> PARAMETERS
+- item: a navigation item; has a title and a link_page OR link_url, as well as potentially children
+    - these children will have the same parameters, and those children's children will have the same except they cannot have children
+{% endcomment %}
+<div x-data="{ opened: false }" class="text-small font-medium p-2 [&>p]:hover:text-hot-red [&_p:hover]:text-hot-red text-left">
+    <p class="cursor-pointer" @click="opened = !opened">
+        <a href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=item.link%}">
+            <span class="{%if item.children%}pr-2{%endif%}">{{item.title}}</span>
+        </a>
+        {% if item.children %}
+            {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-90 text-hot-red" %}
+        {% endif %}
+    </p>
+
+    {% if item.children %}
+        <div class="show-at-large lg:absolute z-50 mt-2 bg-hot-off-white lg:py-4 text-black" x-show="opened">
+            {% comment %} CHILDREN NAVBAR ITEMS {% endcomment %}
+            {% for child in item.children %}
+                <div class="px-6 py-2" x-data="{ gcOpened: false }">
+                    <p class="cursor-pointer" @click="gcOpened = !gcOpened">
+                        <a class="hover:text-hot-red" href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=child.value.link%}">
+                            {{child.value.title}}
+                        </a>
+                        {% if child.value.children %}
+                            {% include "ui/components/icon_svgs/LinkCaret.html" with class="text-hot-red caret-arrow ml-2 rotate-90 lg:rotate-0" %}
+                        {% endif %}
+                    </p>
+
+                    {% comment %} GRANDCHILDREN NAVBAR ITEMS {% endcomment %}
+                    {% if child.value.children%}
+                        <div class="show-at-large nav-grandchild lg:absolute lg:-mt-8 lg:left-full bg-hot-off-white px-6 lg:py-4 lg:w-fit" x-show="gcOpened">
+                            {% for gchild in child.value.children %}
+                                <p class="py-2 lg:w-fit">
+                                    <a href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=gchild.value.link%}">
+                                        {{gchild.value.title}}
+                                    </a>
+                                </p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>

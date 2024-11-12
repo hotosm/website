@@ -1,0 +1,5 @@
+{% extends "./CarouselShellGeneric.html" %}
+
+{% block individual_item %}
+    {% include "ui/components/dogear_boxes/SpecialDogearLinkBoxNoEar.html" with description=item.value.description colour="var(--hot-red)" linktext=page.get_parent.specific.learn_more_text link=item.value.link title=item.value.title %}
+{% endblock %}

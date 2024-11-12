@@ -7,11 +7,16 @@ from wagtail.blocks import CharBlock, StreamBlock, StructBlock, URLBlock, RichTe
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.models import Page
 from wagtail.documents.blocks import DocumentChooserBlock
+from wagtail.contrib.table_block.blocks import TableBlock
 
 from app.core.models import LinkOrPageBlock
 
 
 class CodeOfConductPage(Page):
+    parent_page_type = [
+        'misc.GeneralPolicyOwnerPage'
+    ]
+
     max_count = 1
 
     intro = RichTextField(blank=True)
@@ -24,14 +29,6 @@ class CodeOfConductPage(Page):
 
     complaint_handling_title = models.CharField(default="Complaint Handling Process")
     complaint_handling_body = RichTextField(blank=True)
-
-    our_policies_title = models.CharField(default="Our Policies")
-    our_policies_links = StreamField([
-        ('blocks', StructBlock([
-            ('text', CharBlock()),
-            ('link', LinkOrPageBlock())
-        ]))
-    ], use_json_field=True, null=True, blank=True, help_text="Links to be shown under the Our Policies section.")
 
     question_block_title = models.CharField(default="Have a question about the code of conduct?")
     question_block_button_text = models.CharField(default="Contact Community Working Group")
@@ -48,8 +45,6 @@ class CodeOfConductPage(Page):
             FieldPanel('complaint_handling_body'),
         ], heading="Body"),
         MultiFieldPanel([
-            FieldPanel('our_policies_title'),
-            FieldPanel('our_policies_links'),
             FieldPanel('question_block_title'),
             FieldPanel('question_block_button_text'),
             FieldPanel('question_block_button_link'),
@@ -58,6 +53,10 @@ class CodeOfConductPage(Page):
 
 
 class PrivacyPolicyPage(Page):
+    parent_page_type = [
+        'misc.GeneralPolicyOwnerPage'
+    ]
+
     max_count = 1
 
     intro = RichTextField(blank=True)
@@ -69,14 +68,6 @@ class PrivacyPolicyPage(Page):
             ('body', RichTextBlock())
         ]))
     ], use_json_field=True, null=True, blank=True, help_text="Sections to be shown in the body following the table of contents; these sections will automatically populate the table of contents.")
-
-    our_policies_title = models.CharField(default="Our Policies")
-    our_policies_links = StreamField([
-        ('blocks', StructBlock([
-            ('text', CharBlock()),
-            ('link', LinkOrPageBlock())
-        ]))
-    ], use_json_field=True, null=True, blank=True, help_text="Links to be shown under the Our Policies section.")
 
     question_block_title = models.CharField(default="Have a question about the privacy policy?")
     question_block_button_text = models.CharField(default="Contact HOT")
@@ -90,8 +81,69 @@ class PrivacyPolicyPage(Page):
             FieldPanel('body_sections'),
         ], heading="Body"),
         MultiFieldPanel([
-            FieldPanel('our_policies_title'),
-            FieldPanel('our_policies_links'),
+            FieldPanel('question_block_title'),
+            FieldPanel('question_block_button_text'),
+            FieldPanel('question_block_button_link'),
+        ], heading="Sidebar"),
+    ]
+
+
+class GeneralPolicyOwnerPage(Page):
+    max_count = 1
+
+    subpage_types = [
+        'misc.GeneralPolicyPage',
+        'misc.PrivacyPolicyPage',
+        'misc.CodeOfConductPage',
+    ]
+
+    our_policies_title = models.CharField(default="Our Policies")
+    our_policies_links = StreamField([
+        ('blocks', StructBlock([
+            ('text', CharBlock()),
+            ('link', LinkOrPageBlock())
+        ]))
+    ], use_json_field=True, null=True, blank=True, 
+        help_text="Links to be shown under the Our Policies section of the child policy pages. " +
+        "This list will automatically include all pages that are a child of this page, so please only add links to any externally-hosted " +
+        "policies (or policies that are documents)! This list of policies will appear after the child pages."
+    )
+
+    content_panels = Page.content_panels + [
+        FieldPanel('our_policies_title'),
+        FieldPanel('our_policies_links'),
+    ]
+
+
+class GeneralPolicyPage(Page):
+    parent_page_type = [
+        'misc.GeneralPolicyOwnerPage'
+    ]
+
+    intro = RichTextField(blank=True)
+    brief_body_text = RichTextField(blank=True)
+    table_of_contents_title = models.CharField(default="Table of Contents")
+    show_table_of_contents = models.BooleanField()
+    body_sections = StreamField([
+        ('blocks', StructBlock([
+            ('title', CharBlock()),
+            ('body', RichTextBlock())
+        ]))
+    ], use_json_field=True, null=True, blank=True, help_text="These sections will automatically populate the table of contents if the table of contents is set to show.")
+
+    question_block_title = models.CharField(default="Have a question about our policies?")
+    question_block_button_text = models.CharField(default="Contact HOT")
+    question_block_button_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
+
+    content_panels = Page.content_panels + [
+        MultiFieldPanel([
+            FieldPanel('intro'),
+            FieldPanel('brief_body_text'),
+            FieldPanel('table_of_contents_title'),
+            FieldPanel('show_table_of_contents'),
+            FieldPanel('body_sections'),
+        ], heading="Body"),
+        MultiFieldPanel([
             FieldPanel('question_block_title'),
             FieldPanel('question_block_button_text'),
             FieldPanel('question_block_button_link'),
@@ -254,6 +306,7 @@ class DocumentCollectionPage(Page):
         
         context['documents'] = documents
         context['paginator'] = paginator
+        context['current_page'] = int(page)
         return context
 
     header_image = models.ForeignKey(
@@ -270,7 +323,8 @@ class DocumentCollectionPage(Page):
     documents = StreamField([
         ('block', StructBlock([
             ('icon', ImageChooserBlock(blank=True, null=True, required=False)),
-            ('document', DocumentChooserBlock()),
+            ('title', CharBlock()),
+            ('link', LinkOrPageBlock()),
             ('description', RichTextBlock(blank=True, null=True, required=False))
         ]))
     ], use_json_field=True, null=True, blank=True)
@@ -306,6 +360,15 @@ class ContactUsPage(Page):
         on_delete=models.SET_NULL,
         related_name="+",
         help_text="Header image"
+    )
+
+    body_background_image = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text="Shows behind the entire body"
     )
 
     global_office_title = models.CharField(default="Global Office")
@@ -356,6 +419,7 @@ class ContactUsPage(Page):
     
     content_panels = Page.content_panels + [
         FieldPanel('header_image'),
+        FieldPanel('body_background_image'),
         MultiFieldPanel([
             FieldPanel('global_office_title'),
             FieldPanel('global_office_text'),
@@ -412,12 +476,28 @@ class WorkForHotPage(Page):
     our_values_title = models.CharField(default="Our Values")
     our_values_text = RichTextField(blank=True)
     our_values_youtube_url = models.URLField(blank=True, help_text="The YouTube link provided should be in the following format: 'https://www.youtube.com/embed/[slug]'. You can get this by right-clicking on the YouTube video player and pressing 'Copy embed code'; this will give you a full embed code, which you will need to take the embed URL from.")
-    our_values_youtube_subtitle = models.CharField(blank=True)
+    our_values_image = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text="If a YouTube URL is provided, the video will be prioritised over this image; if there is no URL provided, this image will show."
+    )
+    our_values_subtitle = models.CharField(blank=True)
 
     work_culture_title = models.CharField(default="Work Culture & Benefits")
     work_culture_description = RichTextField(blank=True)
-    work_culture_youtube_url = models.URLField(blank=True)
-    work_culture_youtube_subtitle = models.CharField(blank=True, help_text="The YouTube link provided should be in the following format: 'https://www.youtube.com/embed/[slug]'. You can get this by right-clicking on the YouTube video player and pressing 'Copy embed code'; this will give you a full embed code, which you will need to take the embed URL from.")
+    work_culture_youtube_url = models.URLField(blank=True, help_text="The YouTube link provided should be in the following format: 'https://www.youtube.com/embed/[slug]'. You can get this by right-clicking on the YouTube video player and pressing 'Copy embed code'; this will give you a full embed code, which you will need to take the embed URL from.")
+    work_culture_image = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text="If a YouTube URL is provided, the video will be prioritised over this image; if there is no URL provided, this image will show."
+    )
+    work_culture_subtitle = models.CharField(blank=True)
 
     testimonials_title = models.CharField(default="What Our Staff Say")
     testimonials = StreamField([
@@ -453,13 +533,15 @@ class WorkForHotPage(Page):
             FieldPanel('our_values_title'),
             FieldPanel('our_values_text'),
             FieldPanel('our_values_youtube_url'),
-            FieldPanel('our_values_youtube_subtitle'),
+            FieldPanel('our_values_image'),
+            FieldPanel('our_values_subtitle'),
         ], heading="Our Values"),
         MultiFieldPanel([
             FieldPanel('work_culture_title'),
             FieldPanel('work_culture_description'),
             FieldPanel('work_culture_youtube_url'),
-            FieldPanel('work_culture_youtube_subtitle'),
+            FieldPanel('work_culture_image'),
+            FieldPanel('work_culture_subtitle'),
         ], heading="Work Culture"),
         MultiFieldPanel([
             FieldPanel('testimonials_title'),
@@ -503,4 +585,232 @@ class LivingStrategyPage(Page):
         FieldPanel('download_title'),
         FieldPanel('downloads'),
         FieldPanel('description'),
+    ]
+
+
+class SalaryFrameworkPage(Page):
+    max_count = 1
+
+    intro = RichTextField(blank=True)
+    body = StreamField([
+        ('text', RichTextBlock()),
+        ('table', TableBlock()),
+    ], use_json_field=True, blank=True)
+    go_back_prefix_text = models.CharField(default="Go Back to", help_text="This text will be a prefix to the parent page of this current page, and the attached link will always go to the parent page; i.e., if this page is a child of the 'Work for HOT' page, and this field is 'Go Back to', the link will read 'Go Back to Work for HOT'.")
+
+    sidebar_block_title = models.CharField(default="HOT's Journey through Salary Transparency")
+    sidebar_block_description = RichTextField(blank=True)
+    sidebar_block_button_text = models.CharField(default="Read More")
+    sidebar_block_button_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
+
+    content_panels = Page.content_panels + [
+        MultiFieldPanel([
+            FieldPanel('intro'),
+            FieldPanel('body'),
+            FieldPanel('go_back_prefix_text'),
+        ]),
+        MultiFieldPanel([
+            FieldPanel('sidebar_block_title'),
+            FieldPanel('sidebar_block_description'),
+            FieldPanel('sidebar_block_button_text'),
+            FieldPanel('sidebar_block_button_link'),
+        ]),
+    ]
+
+
+class DonatePage(Page):
+    max_count = 1
+
+    banner_image = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text="Header image"
+    )
+    banner_description = RichTextField(blank=True)
+
+    intro = RichTextField(blank=True)
+
+    other_ways_to_donate_title = models.CharField(default="Other Ways to Donate")
+    other_ways_to_donate = StreamField([
+        ('block', StructBlock([
+            ('icon', ImageChooserBlock()),
+            ('title', CharBlock()),
+            ('text', RichTextBlock()),
+        ]))
+    ], use_json_field=True, blank=True)
+
+    content_panels = Page.content_panels + [
+        FieldPanel('banner_image'),
+        FieldPanel('banner_description'),
+        FieldPanel('intro'),
+        FieldPanel('other_ways_to_donate_title'),
+        FieldPanel('other_ways_to_donate'),
+    ]
+
+
+class MultimediaPage(Page):
+    max_count = 1
+
+    banner_image = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text="Header image"
+    )
+    intro = RichTextField(blank=True)
+
+    map_title = models.CharField(default="Map Gallery")
+    map_view_all_text = models.CharField(default="View all maps")
+    map_view_all_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
+
+    video_title = models.CharField(default="Videos")
+    video_view_all_text = models.CharField(default="View more videos on YouTube")
+    video_view_all_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
+    video_overlay_icon = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text="This icon will show on top of the video previews in this section; this should either be a play button, or nothing at all."
+    )
+    video_previews = StreamField([
+        ('preview', StructBlock([
+            ('link', URLBlock(help_text="This link should be in the format of 'https://www.youtube.com/watch?v=[code]', as opposed to a share link.")),
+            ('short_desc', CharBlock(required=False, help_text="This will show beneath the image.")),
+        ], min_num=8, max_num=8))
+    ], use_json_field=True, blank=True)
+
+    image_title = models.CharField(default="Images")
+    image_view_all_text = models.CharField(default="View more images on Flickr")
+    image_view_all_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
+    image_previews = StreamField([
+        ('preview', StructBlock([
+            ('link', URLBlock(required=False, help_text="The link to the image source (if known).")),
+            ('image', ImageChooserBlock()),
+            ('short_desc', CharBlock(required=False, help_text="This will show beneath the image.")),
+        ], min_num=8, max_num=8))
+    ], use_json_field=True, blank=True)
+
+    license_title = models.CharField(default="License and Attributions")
+    license_block = RichTextField(blank=True)
+
+    content_panels = Page.content_panels + [
+        MultiFieldPanel([
+            FieldPanel('banner_image'),
+            FieldPanel('intro'),
+        ], heading="Header"),
+        MultiFieldPanel([
+            FieldPanel('map_title'),
+            FieldPanel('map_view_all_text'),
+            FieldPanel('map_view_all_link'),
+        ], heading="Map"),
+        MultiFieldPanel([
+            FieldPanel('video_title'),
+            FieldPanel('video_view_all_text'),
+            FieldPanel('video_view_all_link'),
+            FieldPanel('video_overlay_icon'),
+            FieldPanel('video_previews'),
+        ], heading="Video"),
+        MultiFieldPanel([
+            FieldPanel('image_title'),
+            FieldPanel('image_view_all_text'),
+            FieldPanel('image_view_all_link'),
+            FieldPanel('image_previews'),
+        ], heading="Image"),
+        MultiFieldPanel([
+            FieldPanel('license_title'),
+            FieldPanel('license_block'),
+        ], heading="License"),
+    ]
+
+
+class OurApproachPage(Page):
+    max_count = 1
+
+    banner_image = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text="Header image"
+    )
+    intro = RichTextField(blank=True)
+
+    what_we_do_title = models.CharField(default="What We Do")
+    what_we_do_items = StreamField([
+        ('item', CharBlock(min_num=3, max_num=3))
+    ], use_json_field=True, blank=True)
+
+    our_toolbox_title = models.CharField(default="Our Toolbox")
+    our_toolbox_items = StreamField([
+        ('block', StructBlock([
+            ('icon', ImageChooserBlock()),
+            ('text', CharBlock()),
+        ], min_num=6, max_num=6))
+    ], use_json_field=True, blank=True)
+
+    what_happens_title = models.CharField(default="What Happens Because of Our Work")
+    what_happens_items = StreamField([
+        ('block', StructBlock([
+            ('icon', ImageChooserBlock()),
+            ('text', CharBlock()),
+        ], min_num=4, max_num=4))
+    ], use_json_field=True, blank=True)
+
+    hot_envisions_title = models.CharField(default="HOT Envisions a World in Which...")
+    hot_envisions_bg = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+    )
+    hot_envisions_items = StreamField([
+        ('item', CharBlock(min_num=3, max_num=3))
+    ], use_json_field=True, blank=True)
+
+    red_box_title = models.CharField(default="Check out the many opportunities to get involved with HOT")
+    red_box_link_text = models.CharField(default="Get Involved")
+    red_box_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
+    black_box_title = models.CharField(default="Partner with us to create and use open map data")
+    black_box_link_text = models.CharField(default="Partner With Us")
+    black_box_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
+
+    content_panels = Page.content_panels + [
+        MultiFieldPanel([
+            FieldPanel('banner_image'),
+            FieldPanel('intro'),
+        ], heading="Banner"),
+        MultiFieldPanel([
+            FieldPanel('what_we_do_title'),
+            FieldPanel('what_we_do_items'),
+        ], heading="What We Do"),
+        MultiFieldPanel([
+            FieldPanel('our_toolbox_title'),
+            FieldPanel('our_toolbox_items'),
+        ], heading="Our Toolbox"),
+        MultiFieldPanel([
+            FieldPanel('what_happens_title'),
+            FieldPanel('what_happens_items'),
+        ], heading="What Happens"),
+        MultiFieldPanel([
+            FieldPanel('hot_envisions_title'),
+            FieldPanel('hot_envisions_bg'),
+            FieldPanel('hot_envisions_items'),
+        ], heading="HOT Envisions"),
+        MultiFieldPanel([
+            FieldPanel('red_box_title'),
+            FieldPanel('red_box_link_text'),
+            FieldPanel('red_box_link'),
+            FieldPanel('black_box_title'),
+            FieldPanel('black_box_link_text'),
+            FieldPanel('black_box_link'),
+        ], heading="Dogear Boxes"),
     ]

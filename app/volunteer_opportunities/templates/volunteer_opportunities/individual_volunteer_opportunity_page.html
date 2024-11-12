@@ -10,14 +10,14 @@
 {% endblock extra_css %}
 
 {% block content %}
-    <div class="max-w-7xl mx-auto">
+    <div class="max-w-7xl mx-auto my-10">
         {% comment %} HEADER {% endcomment %}
-        <div class="base-article px-6 md:px-10 py-5">
-            <h1>{{ page.title }}</h1>
-            <p>
+        <div class="px-6 md:px-10">
+            <h1 class="font-bold text-h1">{{ page.title }}</h1>
+            <p class="mt-2">
                 {{page.get_parent.specific.posted_by_prefix_text}}
                 {% for poster in page.posters %}
-                    <a href="{{poster.value.url}}"><b class="text-black">{{poster.value.title}}</b></a>{% if not forloop.last %}, {% endif %}
+                    <a href="{{poster.value.url}}" class="text-black font-bold hover:underline">{{poster.value.title}}</a>{% if not forloop.last %}, {% endif %}
                 {% endfor %}
             </p>
         </div>
@@ -26,7 +26,7 @@
             {% comment %} BODY {% endcomment %}
             <div class="base-article-m py-5 col-span-2">
                 <div class="text-intro font-medium mb-4">
-                    {{ page.intro|safe }}
+                    {{ page.intro|richtext }}
                 </div>
                 {{ page.article_body }}
             </div>
@@ -37,14 +37,14 @@
                     <h1 class="text-h2 font-bold mb-4">
                         {{ page.get_parent.specific.contact_title }}
                     </h1>
-                    {{ page.contact_description|safe }}
+                    {{ page.contact_description|richtext }}
                 </div>
                 <div>
                     <hr />
                     <h1 class="text-h2 font-bold mb-4">
                         {{ page.get_parent.specific.application_date_title }}
                     </h1>
-                    {{ page.application_description|safe }}
+                    {{ page.application_description|richtext }}
                     <p>
                         {{ page.application_date }}
                     </p>
@@ -54,7 +54,7 @@
                     <h1 class="text-h2 font-bold mb-4">
                         {{ page.get_parent.specific.location_title }}
                     </h1>
-                    {{ page.location_text|safe }}
+                    {{ page.location_text|richtext }}
                 </div>
             </div>
         </div>

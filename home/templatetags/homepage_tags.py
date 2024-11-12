@@ -33,6 +33,20 @@ def get_navigation(context):
     return navigation
 
 
+@register.simple_tag(takes_context=True)
+def get_share_links(context):
+    current_page = context.get('self')
+
+    if current_page is None:
+        return None
+
+    social_share_links = current_page.get_ancestors(inclusive=True).type(HomePage).first().specific.social_share_links
+
+    links = [{"icon": x.value["icon"], "link": str(x.value["link"]).replace("{}", current_page.full_url)} for x in social_share_links]
+
+    return links
+
+
 @register.simple_tag
 def get_mapbox_key():
     return settings.MAPBOX_ACCESS_TOKEN

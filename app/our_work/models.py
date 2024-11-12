@@ -14,7 +14,7 @@ from modelcluster.fields import ParentalKey, ParentalManyToManyField
 
 from app.projects.models import IndividualProjectPage, ProjectType, ProjectStatus
 from app.impact_areas.models import IndividualImpactAreaPage
-from app.mapping_hubs.models import MappingHubProjectsPage, IndividualMappingHubPage
+from app.mapping_hubs.models import IndividualMappingHubPage
 from app.programs.models import IndividualProgramPage
 from app.core.models import LinkOrPageBlock
 
@@ -97,7 +97,6 @@ class OurWorkPage(Page):
         context['paginator'] = paginator
         context['impact_areas'] = IndividualImpactAreaPage.objects.live().filter(locale=base_locale)
         context['hubs'] = IndividualMappingHubPage.objects.live().filter(locale=base_locale)
-        context['hubs_projects'] = MappingHubProjectsPage.objects.live().filter(locale=base_locale)
         context['programs'] = IndividualProgramPage.objects.live().filter(locale=base_locale)
         context['types'] = ProjectType.objects.all()
         context['statuses'] = ProjectStatus.objects.all()
@@ -176,6 +175,7 @@ class OurWorkPage(Page):
     no_projects_found = models.CharField(default="No projects found with the applied filters.")
     impact_area_title = models.CharField(default="See Projects by Impact Area")
     open_mapping_hub_title = models.CharField(default="See Projects by Open Mapping Hub")
+    projects_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
 
     red_box_title = models.CharField(default="Check our upcoming events!")
     red_box_link_text = models.CharField(default="View all events")
@@ -218,6 +218,7 @@ class OurWorkPage(Page):
         MultiFieldPanel([
             FieldPanel('impact_area_title'),
             FieldPanel('open_mapping_hub_title'),
+            FieldPanel('projects_link'),
             FieldPanel('red_box_title'),
             FieldPanel('red_box_link_text'),
             FieldPanel('red_box_link'),

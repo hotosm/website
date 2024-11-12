@@ -14,6 +14,8 @@ from wagtail.snippets.models import register_snippet
 from app.members.models import IndividualMappingHubPage
 from app.core.models import LinkOrPageBlock
 
+from datetime import datetime
+
 
 class EventOwnerPage(Page):
     def get_context(self, request, *args, **kwargs):
@@ -46,6 +48,12 @@ class EventOwnerPage(Page):
             if request.GET.get("hub" + str(hub.id), ''):
                 query = query | Q(event_region_hub=hub)
         events_list = events_list.filter(query).distinct()
+
+        from_date = request.GET.get("fromdate")
+        from_date = datetime.strptime(from_date, "%Y-%m-%d") if from_date else datetime.min
+        to_date = request.GET.get("todate")
+        to_date = datetime.strptime(to_date, "%Y-%m-%d") if to_date else datetime.max
+        events_list = events_list.filter(Q(start_date_time__range=[from_date,to_date]) | Q(end_date_time__range=[from_date,to_date]))
         
         match request.GET.get('sort', ''):
             case 'sort.new':
@@ -101,6 +109,9 @@ class EventOwnerPage(Page):
     sort_by_old = models.CharField(default="Sort by Old")
     sort_by_titlea = models.CharField(default="Sort by Title Alphabetical")
     sort_by_titlez = models.CharField(default="Sort by Title Reverse Alphabetical")
+    date_date_text = models.CharField(default="Filter by Date")
+    date_from_text = models.CharField(default="From")
+    date_to_text = models.CharField(default="To")
     search_button_text = models.CharField(default="Search")
     remove_filters_text = models.CharField(default="Remove All Filters")
     results_text = models.CharField(default="Results")
@@ -116,6 +127,9 @@ class EventOwnerPage(Page):
             FieldPanel('sort_by_old'),
             FieldPanel('sort_by_titlea'),
             FieldPanel('sort_by_titlez'),
+            FieldPanel('date_from_text'),
+            FieldPanel('date_to_text'),
+            FieldPanel('date_date_text'),
             FieldPanel('search_button_text'),
             FieldPanel('remove_filters_text'),
             FieldPanel('results_text'),

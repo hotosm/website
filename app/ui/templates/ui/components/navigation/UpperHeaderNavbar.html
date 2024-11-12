@@ -18,8 +18,7 @@
             role="navigation"
             aria-label="Secondary Menu">
             {% comment %} Strings for Translations {% endcomment %}
-            <li class="hidden lg:block">{% include "components/search/search_icon.html" %}</li>
-            <li class="lg:hidden border-b border-b-hot-off-white">{% include "ui/components/navigation/SearchForm.html" %}</li>
+            <li class="">{% include "components/search/search_icon.html" %}</li>
             <li class="hidden lg:block text-black [&_input]:text-black">{% include "language_switcher.html" %}</li>
             {% for link in home_page.top_navigation_links %}
                 <li class="hidden lg:block">{% include "components/branded_elements/link.html" with link=link.value.link text=link.value.text %}</li>

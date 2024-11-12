@@ -34,51 +34,6 @@ class DogearBoxBlock(StreamBlock):
     blocks = DogearBoxStructBlock()
 
 
-class MappingHubProjectsPage(Page):
-    def get_context(self, request):
-        context = super().get_context(request)
-
-        parent_hub = context['page'].get_parent()
-
-        base_id = parent_hub.get_translation(1).id
-
-        projects = IndividualProjectPage.objects.live().filter(
-            Q(region_hub_list__contains=[{'type': 'region_hub', 'value': base_id}])
-        ).filter(locale=context['page'].locale)
-
-        other_hubs_projects = MappingHubProjectsPage.objects.live().filter(locale=context['page'].locale)
-
-        context['projects'] = projects
-        context['other_hubs'] = other_hubs_projects
-        return context
-    
-    parent_page_types = [
-        'mapping_hubs.IndividualMappingHubPage'
-    ]
-
-    load_more_projects_text = models.CharField(default="Load More Projects")
-
-    projects_by_hub_title = models.CharField(default="See Projects by Open Mapping Hub")
-
-    red_box_title = models.CharField(default="See all of HOT's projects")
-    red_box_link_text = models.CharField(default="Explore projects")
-    red_box_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
-    black_box_title = models.CharField(default="See the many ways to get involved with HOT and open mapping")
-    black_box_link_text = models.CharField(default="Get involved")
-    black_box_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
-
-    content_panels = Page.content_panels + [
-        FieldPanel('load_more_projects_text'),
-        FieldPanel('projects_by_hub_title'),
-        FieldPanel('red_box_title'),
-        FieldPanel('red_box_link_text'),
-        FieldPanel('red_box_link'),
-        FieldPanel('black_box_title'),
-        FieldPanel('black_box_link_text'),
-        FieldPanel('black_box_link'),
-    ]
-
-
 class OpenMappingHubsPage(Page):
     max_count = 1
 
@@ -101,6 +56,7 @@ class OpenMappingHubsPage(Page):
     header_hub_text_white = models.CharField(default="Open Mapping")
     header_hub_text_red = models.CharField(default="Hub")
     header_project_link_text = models.CharField(default="Projects")
+    header_project_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
     header_news_link_text = models.CharField(default="News")
     header_news_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
     header_events_link_text = models.CharField(default="Events")
@@ -126,6 +82,7 @@ class OpenMappingHubsPage(Page):
                 FieldPanel('header_hub_text_white'),
                 FieldPanel('header_hub_text_red'),
                 FieldPanel('header_project_link_text'),
+                FieldPanel('header_project_link'),
                 FieldPanel('header_news_link_text'),
                 FieldPanel('header_news_link'),
                 FieldPanel('header_events_link_text'),
@@ -193,7 +150,6 @@ class IndividualMappingHubPage(Page):
         related_name="+",
         help_text="Header image",
     )
-    header_project_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
     header_carousel = StreamField(CarouselBlock(max_num=3, min_num=3), blank=True, use_json_field=True, null=True)
 
     project_section_title = models.CharField()
@@ -232,7 +188,6 @@ class IndividualMappingHubPage(Page):
         ], heading="Main"),
         MultiFieldPanel([
             FieldPanel('header_image'),
-            FieldPanel('header_project_link'),
             FieldPanel('header_carousel'),
         ], heading="Header"),
         MultiFieldPanel([

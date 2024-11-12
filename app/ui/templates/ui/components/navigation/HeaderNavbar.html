@@ -29,6 +29,7 @@ No parameters; it grabs directly from the home page (for the correct locale).
                 {% endfor %}
 
                 {% comment %} MOBILE BURGER/X BUTTON FOR OPENING/CLOSING THE NAV MENU {% endcomment %}
+                <li class="md:hidden">{% include "components/search/search_icon.html" %}</li>
                 <li class="lg:hidden" @click="expanded = !expanded">
                     <svg x-show="!expanded"
                         class="h-6 w-6"
@@ -55,7 +56,7 @@ No parameters; it grabs directly from the home page (for the correct locale).
     
     {% comment %} MOBILE EXPANDED LIST {% endcomment %}
     <ul class="text-black lg:hidden p-4" x-show="expanded" :class="{ 'pt-20': isLandingPage }">
-        <li class="border-b border-b-hot-off-white mb-2 md:hidden">{% include "ui/components/navigation/SearchForm.html" %}</li>
+        {% comment %} <li class="border-b border-b-hot-off-white mb-2 md:hidden">{% include "ui/components/navigation/SearchForm.html" %}</li> {% endcomment %}
 
         {% for item in navigation %}
             <li class="text-black {%if item.value.is_button%}md:hidden{%endif%}">

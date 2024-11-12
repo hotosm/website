@@ -20,7 +20,7 @@
                     </h1>
                     <div class="grid gap-4">
                         <p>
-                            {% include "ui/components/BaseLinkNoUnderlineWhite.html" with linkurl=page.header_project_link linktext=page.get_parent.specific.header_project_link_text %}
+                            {% include "ui/components/BaseLinkNoUnderlineWhite.html" with linkurl=page.get_parent.specific.header_project_link linktext=page.get_parent.specific.header_project_link_text linkappendage="?hub"|add:original_id|add:"=on" %}
                         </p>
                         {% with page.id|stringformat:"s" as id %}
                             <p>

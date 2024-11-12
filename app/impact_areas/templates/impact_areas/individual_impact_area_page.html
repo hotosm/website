@@ -41,7 +41,7 @@
 
             {% comment %} PROJECTS {% endcomment %}
             <div class="my-20" id="projects-section">
-                {% include "ui/components/FlexTitleWithLink.html" with title=page.get_parent.specific.projects_title linktext=page.get_parent.specific.view_all_projects_text linkurl=page.get_parent.specific.view_all_projects_url titleclass="text-h2" %}
+                {% include "ui/components/FlexTitleWithLink.html" with title=page.get_parent.specific.projects_title linktext=page.get_parent.specific.view_all_projects_text linkurl=page.get_parent.specific.view_all_projects_url titleclass="text-h2" linkappendage="?ia"|add:baseid|add:"=on" %}
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-10" id="projects-list">
                     {% for project in projects %}
                         {% include "ui/components/projects/ProjectPreviewBlockNews.html" with project=project showimage=True %}

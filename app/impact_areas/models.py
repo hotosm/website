@@ -27,6 +27,8 @@ class IndividualImpactAreaPage(Page):
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
 
+        context['baseid'] = str(context['page'].get_translation(1).id)
+
         projects_list = IndividualProjectPage.objects.live().filter(
             Q(impact_area_list__contains=[{'type': 'impact_area', 'value': context['page'].get_translation(1).id}])
         ).filter(locale=context['page'].locale)

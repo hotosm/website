@@ -3,6 +3,7 @@
 - news: an IndividualNewsPage object; the news page to be previewed
 - readmoretext: a string; the text that should show for the "read more" button
 {% endcomment %}
+{% load wagtailcore_tags %}
 
 {% with news.localized as news %}
     <div class="{{class}}">

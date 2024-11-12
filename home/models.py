@@ -170,6 +170,12 @@ class HomePage(Page):
     paginator_previous = models.CharField(default="Previous")
     paginator_next = models.CharField(default="Next")
 
+    gdpr_tracking_title = models.CharField(default="About the information we collect")
+    gdpr_tracking_message = RichTextField(blank=True)
+    gdpr_tracking_consent_message = models.CharField(default='By clicking "I Agree", you consent to the use of cookies.')
+    gdpr_tracking_option_agree = models.CharField(default="I Agree")
+    gdpr_tracking_option_disagree = models.CharField(default="I Do Not Agree")
+
     social_share_links = StreamField([
         ('social', StructBlock([
             ('icon', ImageChooserBlock()),
@@ -324,8 +330,15 @@ class HomePage(Page):
                 FieldPanel('paginator_next'),
             ], heading="Paginator", help_text="This is used in instances where there's a previous/next button; i.e., the news page when flipping through pages."),
             MultiFieldPanel([
+                FieldPanel('gdpr_tracking_title'),
+                FieldPanel('gdpr_tracking_message'),
+                FieldPanel('gdpr_tracking_consent_message'),
+                FieldPanel('gdpr_tracking_option_agree'),
+                FieldPanel('gdpr_tracking_option_disagree'),
+            ], heading="GDPR Tracking Banner"),
+            MultiFieldPanel([
                 FieldPanel('social_share_links'),
-            ], heading="Misc")
+            ], heading="Misc"),
         ], heading="Universal items"),
         MultiFieldPanel([
             FieldPanel("image"),

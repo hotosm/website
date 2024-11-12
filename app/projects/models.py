@@ -16,6 +16,10 @@ from wagtailgeowidget.panels import LeafletPanel
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
 
 from app.core.models import LinkOrPageBlock, Partner
+import importlib
+# from app.impact_areas.models import IndividualImpactAreaPage
+# from app.mapping_hubs.models import MappingHubProjectsPage, IndividualMappingHubPage
+# from app.programs.models import IndividualProgramPage
 
 
 """
@@ -26,8 +30,68 @@ to create one unifying place where unchanging fields may be modified.
 class ProjectOwnerPage(Page):
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
+        
+        ia_module = importlib.import_module("app.impact_areas.models")
+        IndividualImpactAreaPage = getattr(ia_module, "IndividualImpactAreaPage")
+        hub_module = importlib.import_module("app.mapping_hubs.models")
+        IndividualMappingHubPage = getattr(hub_module, "IndividualMappingHubPage")
+        pr_module = importlib.import_module("app.programs.models")
+        IndividualProgramPage = getattr(pr_module, "IndividualProgramPage")
 
-        projects_list = context['page'].get_children().filter(locale=context['page'].locale)
+        projects_list = IndividualProjectPage.objects.live().filter(locale=context['page'].locale)
+
+        keyword = request.GET.get('keyword', '')
+
+        if keyword:
+            projects_list = projects_list.search(keyword).get_queryset()
+        
+        p_types = ProjectType.objects.all()
+        query = Q()
+        for p_type in p_types:
+            if request.GET.get("pt" + str(p_type.id), ''):
+                query = query | Q(types=p_type)
+        projects_list = projects_list.filter(query).distinct()
+
+        if request.GET.get("status", 'statusnone') != "statusnone":
+            statuses = ProjectStatus.objects.all()
+            query = Q()
+            for status in statuses:
+                if request.GET.get("status", '') == f"status{status.id}":
+                    query = query | Q(project_status=status)
+                    break
+            projects_list = projects_list.filter(query).distinct()
+        
+        base_locale = context['page'].get_translation(1).locale
+        
+        hubs = IndividualMappingHubPage.objects.live().filter(locale=base_locale)
+        query = Q()
+        for hub in hubs:
+            if request.GET.get(f"hub{hub.id}", ''):
+                query = query | Q(region_hub_list__contains=[{'type': 'region_hub', 'value': hub.id }])
+        projects_list = projects_list.filter(query).distinct()
+        
+        impact_areas = IndividualImpactAreaPage.objects.live().filter(locale=base_locale)
+        query = Q()
+        for area in impact_areas:
+            if request.GET.get(f"ia{area.id}", ''):
+                query = query | Q(impact_area_list__contains=[{'type': 'impact_area', 'value': area.id }])
+        projects_list = projects_list.filter(query).distinct()
+
+        programs = IndividualProgramPage.objects.live().filter(locale=base_locale)
+        query = Q()
+        for program in programs:
+            if request.GET.get(f"pg{program.id}", ''):
+                query = query | Q(owner_program=program)
+        projects_list = projects_list.filter(query).distinct()
+
+        match request.GET.get('sort', ''):
+            case 'sort.titlea':
+                projects_list = projects_list.order_by('title')
+            case 'sort.titlez':
+                projects_list = projects_list.order_by('-title')
+            case _:
+                projects_list = projects_list.order_by('title')
+
         page = request.GET.get('page', 1)
         paginator = Paginator(projects_list, 8)  # if you want more/less items per page (i.e., per load), change the number here to something else
         try:
@@ -36,7 +100,15 @@ class ProjectOwnerPage(Page):
             projects = paginator.page(1)
         except EmptyPage:
             projects = paginator.page(paginator.num_pages)
+
         context['projects'] = projects
+        context['paginator'] = paginator
+        context['impact_areas'] = impact_areas
+        context['hubs'] = hubs
+        context['programs'] = programs
+        context['types'] = ProjectType.objects.all()
+        context['statuses'] = ProjectStatus.objects.all()
+        context['current_page'] = int(page)
         return context
     
     max_count = 1
@@ -54,7 +126,24 @@ class ProjectOwnerPage(Page):
         help_text="Header image"
     )
 
+    search_keyword_text = models.CharField(default="Search by keyword")
+    sort_titlea_text = models.CharField(default="Sort by Name Alphabetical")
+    sort_titlez_text = models.CharField(default="Sort by Name Reverse Alphabetical")
+    impact_areas_text = models.CharField(default="Filter by Impact Area")
+    open_mapping_hubs_text = models.CharField(default="Filter by Hub")
+    projects_by_programme_text = models.CharField(default="Filter by Program")
+    projects_by_type_text = models.CharField(default="Filter by Type")
+    project_status_text = models.CharField(default="Filter by Status")
+    apply_filter_text = models.CharField(default="Apply Filter")
+    reset_filters_text = models.CharField(default="Reset Filters")
+    applied_text = models.CharField(default="applied")
+    
+    results_text = models.CharField(default="Results")
     load_more_projects_text = models.CharField(default="Load More Projects")
+
+    bottom_dogear_title = models.CharField(default="See our projects on the map")
+    bottom_dogear_link_text = models.CharField(default="Check our work")
+    bottom_dogear_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
 
     impact_areas_title = models.CharField(default="Impact Areas")
     region_hub_title = models.CharField(default="Region Hub/Country")
@@ -81,7 +170,24 @@ class ProjectOwnerPage(Page):
     content_panels = Page.content_panels + [
         MultiFieldPanel([
             FieldPanel('header_image'),
+            MultiFieldPanel([
+                FieldPanel('search_keyword_text'),
+                FieldPanel('sort_titlea_text'),
+                FieldPanel('sort_titlez_text'),
+                FieldPanel('impact_areas_text'),
+                FieldPanel('open_mapping_hubs_text'),
+                FieldPanel('projects_by_programme_text'),
+                FieldPanel('projects_by_type_text'),
+                FieldPanel('project_status_text'),
+                FieldPanel('apply_filter_text'),
+                FieldPanel('reset_filters_text'),
+                FieldPanel('applied_text'),
+            ], heading="Filters"),
+            FieldPanel('results_text'),
             FieldPanel('load_more_projects_text'),
+            FieldPanel('bottom_dogear_title'),
+            FieldPanel('bottom_dogear_link_text'),
+            FieldPanel('bottom_dogear_link'),
         ], heading="Project Page"),
         MultiFieldPanel([
             MultiFieldPanel([

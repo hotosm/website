@@ -30,7 +30,7 @@
                     {% include "ui/components/SectionHeadingWithUnderline.html" with title=page.project_section_title %}
                 </div>
                 <div class="text-left lg:text-right text-intro mt-4 lg:mt-0 self-center">
-                    {% include "ui/components/BaseLink.html" with linktext=page.project_section_link_text linkurl=page.project_section_link %}
+                    {% include "ui/components/BaseLink.html" with linktext=page.project_section_link_text linkurl=page.get_parent.specific.header_project_link linkappendage="?hub"|add:original_id|add:"=on" %}
                 </div>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 py-6">

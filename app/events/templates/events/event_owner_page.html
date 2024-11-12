@@ -103,6 +103,26 @@
                         </div>
                     </div>
 
+                    <div class="relative" x-data="{ show: false }" @click.away="show = false">
+                        <div class="w-full h-full flex justify-between py-2 px-3 bg-hot-off-white items-center cursor-pointer" @click="show = !show">
+                            <p class="pointer-events-none">
+                                {{page.date_date_text}}
+                            </p>
+                            {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-90 text-hot-red" %}
+                        </div>
+                        <div class="absolute z-20 bg-hot-off-white p-4 w-full flex flex-col gap-2" x-show="show">
+                            <hr class="border-b-2 mb-2">
+                            <p>{{page.date_from_text}}</p>
+                            <div class="bg-white flex items-center mb-2">
+                                <input class="w-full bg-transparent border-none" type="date" name="fromdate" :value="params.get('fromdate')">
+                            </div>
+                            <p>{{page.date_to_text}}</p>
+                            <div class="bg-white flex items-center">
+                                <input class="w-full bg-transparent border-none" type="date" name="todate" :value="params.get('todate')">
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="bg-hot-red text-white font-semibold">
                         <input type="submit" value="{{page.search_button_text}}" class="bg-transparent w-full h-full cursor-pointer py-2">
                     </div>

@@ -6,15 +6,11 @@
             }">
     {% comment %} SELECTOR PANEL {% endcomment %}
     <div class="text-right mb-4 {%if impact_areas|length <= 5%}lg:hidden{%endif%}">
-        <div x-on:click="moveIndex(-1)" class="pr-4 text-hot-red inline-flex flex-col justify-center">
-            <div class="border-hot-red border-2 rounded-full h-8 w-8 text-center">
-                {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-180" %}
-            </div>
+        <div x-on:click="moveIndex(1)" class="pr-4 text-hot-red inline-flex flex-col justify-center">
+            {% include "ui/components/icon_svgs/LinkCaretCircle.html" with outerclass="rotate-180" styledhover=True %}
         </div>
-        <div x-on:click="moveIndex(1)" class="text-hot-red inline-flex flex-col justify-center">
-            <div class="border-hot-red border-2 rounded-full h-8 w-8 text-center">
-                {% include "ui/components/icon_svgs/LinkCaret.html" %}
-            </div>
+        <div x-on:click="moveIndex(-1)" class="text-hot-red inline-flex flex-col justify-center">
+            {% include "ui/components/icon_svgs/LinkCaretCircle.html" with styledhover=True %}
         </div>
     </div>
     <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-10">
@@ -54,24 +50,19 @@
             <div class="row-start-1 col-start-1 bg-white w-full p-12"
                  x-bind:class="{'invisible pointer-events-none': selIndex != {{forloop.counter0}}}"
             >
-                <div class="grid grid-cols-1 md:grid-cols-5 gap-y-8 md:gap-8 max-w-5xl mx-auto">
-                    <div class="col-span-3">
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-y-8 md:gap-8 max-w-5xl mx-auto h-full">
+                    <div class="col-span-3 flex flex-col h-full">
                         <h1 class="text-hot-red font-bold text-h4">
                             {{ area.title }}
                         </h1>
                         <div class="pt-2 mb-6">
                             {{ area.description|richtext }}
                         </div>
-                        <a href="{{ area.url }}" class="text-hot-red font-medium">
-                            <p>
-                                <span class="mr-2">{{ page.impact_areas_learn_more }}</span>
-                                {% include "ui/components/icon_svgs/LinkCaret.html" %}
-                            </p>
-                        </a>
+                        <p class="mt-auto">
+                            {% include "ui/components/BaseLinkNoUnderline.html" with linktext=page.impact_areas_learn_more linkurl=area.url %}
+                        </p>
                     </div>
-                    {% image area.intro_image original as area_image %}
-                    <div class="col-span-2 bg-cover bg-no-repeat h-40" style="background-image: url('{{area_image.url}}')" >
-                    </div>
+                    {% image area.intro_image original class="col-span-2 w-full aspect-[2/1] object-cover object-center" %}
                 </div>
             </div>
         {% endfor %}

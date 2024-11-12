@@ -6,14 +6,16 @@
 {% load wagtailimages_tags %}
 
 {% image image original as previmg %}
-<a href="{{page.url}}">
-    <div class="bg-gradient-to-t from-black to-transparent to-30% grid">
-        <div class="min-h-[20rem] bg-cover bg-no-repeat -z-10 relative row-start-1 col-start-1" style="background-image: url('{{previmg.url}}')">
+{% with page.localized as page %}
+    <a href="{{page.url}}">
+        <div class="bg-gradient-to-t from-black to-transparent to-30% grid">
+            <div class="min-h-[20rem] bg-cover bg-no-repeat -z-10 relative row-start-1 col-start-1" style="background-image: url('{{previmg.url}}')">
+            </div>
+            <div class="row-start-1 col-start-1 flex flex-col justify-end p-4">
+                <h1 class="font-semibold text-h2 text-white">
+                    {{page.title}}
+                </h1>
+            </div>
         </div>
-        <div class="row-start-1 col-start-1 flex flex-col justify-end p-4">
-            <h1 class="font-semibold text-h2 text-white">
-                {{page.title}}
-            </h1>
-        </div>
-    </div>
-</a>
+    </a>
+{% endwith %}

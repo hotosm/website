@@ -1,3 +1,4 @@
+from django import forms
 from django.db import models
 
 from wagtail.models import Page
@@ -41,8 +42,12 @@ class ToolsAndResourcesPage(Page):
     intro_header = models.CharField(blank=True)
     intro = RichTextField(blank=True)
     description = RichTextField(blank=True)
-    learn_more_data_principles_text = models.CharField(default="Learn about our Data & Principles")
-    learn_more_data_principles_link = models.URLField(blank=True)
+    description_links = StreamField([
+        ('link', StructBlock([
+            ('linktext', CharBlock()),
+            ('linkurl', LinkOrPageBlock(required=False)),
+        ]))
+    ], use_json_field=True, blank=True)
 
     large_panels = StreamField([('panel', LargePanel())], use_json_field=True, null=True, blank=True)
 
@@ -56,19 +61,31 @@ class ToolsAndResourcesPage(Page):
     )
     resource_learning_title = models.CharField(default="Resource and Learning Centre")
     resource_learning_description = RichTextField(blank=True)
-    get_connected_button_text = models.CharField(default="Get connected now")
-    get_connected_button_link = models.URLField(blank=True)
+    resource_learning_links = StreamField([
+        ('link', StructBlock([
+            ('linktext', CharBlock()),
+            ('linkurl', LinkOrPageBlock(required=False)),
+        ]))
+    ], use_json_field=True, blank=True)
 
     dogear_tech_news_title = models.CharField(blank=True)
     dogear_tech_news_link_text = models.CharField(default="View our Tech News")
-    dogear_tech_news_link_url = models.URLField(blank=True)
+    dogear_tech_news_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
+    category_filter_selector = models.ForeignKey(
+        "news.NewsCategory",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text="The 'Tech News' link will be appended with a filter for this category. The selected category should be the Tech category."
+    )
 
     red_box_title = models.CharField(default="Start Mapping")
     red_box_link_text = models.CharField(default="Start Mapping")
-    red_box_link_url = models.URLField(null=True, blank=True)
+    red_box_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
     black_box_title = models.CharField(default="Check many opportunities to get involved with HOT!")
     black_box_link_text = models.CharField(default="Get Involved with HOT")
-    black_box_link_url = models.URLField(null=True, blank=True)
+    black_box_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
 
     content_panels = Page.content_panels + [
         FieldPanel('header_image'),
@@ -77,27 +94,26 @@ class ToolsAndResourcesPage(Page):
             FieldPanel('intro_header'),
             FieldPanel('intro'),
             FieldPanel('description'),
-            FieldPanel('learn_more_data_principles_text'),
-            FieldPanel('learn_more_data_principles_link'),
+            FieldPanel('description_links'),
         ], heading="Intro"),
         FieldPanel('large_panels'),
         MultiFieldPanel([
             FieldPanel('resource_learning_image'),
             FieldPanel('resource_learning_title'),
             FieldPanel('resource_learning_description'),
-            FieldPanel('get_connected_button_text'),
-            FieldPanel('get_connected_button_link'),
+            FieldPanel('resource_learning_links'),
         ], heading="Resource and Learning Centre"),
         MultiFieldPanel([
             FieldPanel('dogear_tech_news_title'),
             FieldPanel('dogear_tech_news_link_text'),
-            FieldPanel('dogear_tech_news_link_url'),
+            FieldPanel('dogear_tech_news_link'),
+            FieldPanel('category_filter_selector', widget=forms.RadioSelect),
             FieldPanel('red_box_title'),
             FieldPanel('red_box_link_text'),
-            FieldPanel('red_box_link_url'),
+            FieldPanel('red_box_link'),
             FieldPanel('black_box_title'),
             FieldPanel('black_box_link_text'),
-            FieldPanel('black_box_link_url'),
+            FieldPanel('black_box_link'),
         ], heading="Dogear Boxes"),
     ]
 
@@ -129,6 +145,7 @@ class ResourceAndLearningPage(Page):
 
 
 class OpenMappingSolutionIndividualItemBlock(StructBlock):
+    icon = ImageChooserBlock(required=False)
     title = CharBlock()
     description = RichTextBlock()
     links = StreamBlock([

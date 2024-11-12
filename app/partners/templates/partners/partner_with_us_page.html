@@ -10,22 +10,22 @@
 {% endblock extra_css %}
 
 {% block content %}
-    {% include "ui/components/PageHeaderWithBlur.html" with title=page.title subtitle=page.header_description image=page.header_image full_length=True %}
+    {% include "ui/components/PageHeaderWithBlur.html" with title=page.title image=page.header_image full_length=True smaller=True %}
     
     <div class="max-w-7xl mx-auto my-10">
         <div class="px-6 md:px-10">
             <div class="lg:grid lg:grid-cols-6 mb-10">
                 <div class="col-span-5 text-intro font-medium">
-                    {{page.intro|safe}}
+                    {{page.intro|richtext}}
                 </div>
             </div>
 
             {% include "ui/components/SectionHeadingWithUnderline.html" with title=page.partnership_types_title %}
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-6 mb-20">
+            <div class="grid md:grid-cols-2 gap-8 mt-6 mb-20">
                 {% for ptype in page.get_children %}
                     <div class="p-6 bg-hot-off-white">
-                        {% image ptype.specific.external_icon original class="h-8 w-8 mt-2" %}
-                        <a href="{{ptype.url}}">
+                        {% image ptype.specific.external_icon original class="h-12 w-auto mt-2" %}
+                        <a href="{{ptype.url}}" class="hover:underline">
                             <h1 class="text-h4 font-semibold mt-4">
                                 {{ptype.specific.title}}
                             </h1>

@@ -1,7 +1,7 @@
 {% load wagtailimages_tags %}
 <div x-data="{ partnerIndex: 0, fixedIndex(x) {return ({{items|length}} + x + this.partnerIndex) % {{items|length}}}, moveIndex(x) {this.partnerIndex = this.fixedIndex(x)} }" 
      class="grid {{class}}">
-    <div class="flex justify-between gap-8 items-center">
+    <div class="flex justify-between gap-8 items-center ml-auto">
         {% if title %}
         <div>
             {% include "ui/components/SectionHeadingWithUnderline.html" %}
@@ -13,13 +13,13 @@
             }"
         >
             <div x-on:click="moveIndex(1)" class="pr-4 text-hot-red inline-flex flex-col justify-center">
-                <div class="border-hot-red border-2 rounded-full h-8 w-8 text-center">
-                    {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-180" %}
+                <div class="rotate-180">
+                    {% include "ui/components/icon_svgs/LinkCaretCircle.html" with class="" styledhover=True %}
                 </div>
             </div>
             <div x-on:click="moveIndex(-1)" class="text-hot-red inline-flex flex-col justify-center">
-                <div class="border-hot-red border-2 rounded-full h-8 w-8 text-center">
-                    {% include "ui/components/icon_svgs/LinkCaret.html" %}
+                <div class="">
+                    {% include "ui/components/icon_svgs/LinkCaretCircle.html" with class="" styledhover=True %}
                 </div>
             </div>
         </div>
@@ -42,13 +42,13 @@
          :class="{ 'hidden': {{items|length}} == 1 }"
     >
         <div x-on:click="moveIndex(1)" class="pr-4 text-hot-red inline-flex flex-col justify-center">
-            <div class="border-hot-red border-2 rounded-full h-8 w-8 text-center">
-                {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-180" %}
+            <div class="rotate-180">
+                {% include "ui/components/icon_svgs/LinkCaretCircle.html" with class="" styledhover=True %}
             </div>
         </div>
         <div x-on:click="moveIndex(-1)" class="text-hot-red inline-flex flex-col justify-center">
-            <div class="border-hot-red border-2 rounded-full h-8 w-8 text-center">
-                {% include "ui/components/icon_svgs/LinkCaret.html" %}
+            <div class="">
+                {% include "ui/components/icon_svgs/LinkCaretCircle.html" with class="" styledhover=True %}
             </div>
         </div>
     </div>

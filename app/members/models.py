@@ -11,6 +11,8 @@ from app.news.models import IndividualNewsPage
 from app.mapping_hubs.models import IndividualMappingHubPage
 from wagtail.search import index
 
+from app.core.models import LinkOrPageBlock
+
 class WebLinkStructBlock(StructBlock):
     link_text = CharBlock(required=True)
     link_url = URLBlock(required=False, blank=True)
@@ -27,11 +29,13 @@ class MemberGroupOwnerPage(Page):
         'members.MemberGroupPage'
     ]
 
+    applied_text = models.CharField(default="applied", help_text="This will be a suffix to a number, used to indicate how many filters are applied currently in some field.")
     search_placeholder = models.CharField(default="Search by name")
     filter_by_country = models.CharField(default="Filter by Country")
     sort_by_titlea = models.CharField(default="Sort by Name Alphabetical")
     sort_by_titlez = models.CharField(default="Sort by Name Reverse Alphabetical")
     search_button_text = models.CharField(default="Search")
+    remove_filters_text = models.CharField(default="Remove All Filters")
 
     load_more_text = models.CharField(default="Load more", help_text="This will be a prefix to the title of the page; i.e., if the page title is 'Voting members', and this field is 'Load more', this will end up appearing as 'Load more Voting members'.")
 
@@ -40,15 +44,17 @@ class MemberGroupOwnerPage(Page):
     footer_box_title = models.CharField(default="Work for HOT")
     footer_box_description = RichTextField(blank=True)
     footer_box_button_text = models.CharField(default="Check our Job Opportunities")
-    footer_box_button_link = models.URLField(blank=True)
+    footer_box_button_url = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
 
     content_panels = Page.content_panels + [
         MultiFieldPanel([
+            FieldPanel('applied_text'),
             FieldPanel('search_placeholder'),
             FieldPanel('filter_by_country'),
             FieldPanel('sort_by_titlea'),
             FieldPanel('sort_by_titlez'),
             FieldPanel('search_button_text'),
+            FieldPanel('remove_filters_text'),
         ], heading="Search options"),
         FieldPanel('load_more_text'),
         FieldPanel('view_all_text'),
@@ -56,7 +62,7 @@ class MemberGroupOwnerPage(Page):
             FieldPanel('footer_box_title'),
             FieldPanel('footer_box_description'),
             FieldPanel('footer_box_button_text'),
-            FieldPanel('footer_box_button_link'),
+            FieldPanel('footer_box_button_url'),
         ], heading="Footer box"),
     ]
 
@@ -66,18 +72,18 @@ class MemberGroupPage(Page):
         context = super().get_context(request, *args, **kwargs)
 
         members = IndividualMemberPage.objects.live().filter(
-            Q(member_groups__contains=[{'type': 'member_group', 'value': { 'group': context['page'].id }}])
+            Q(member_groups__contains=[{'type': 'member_group', 'value': { 'group': context['page'].get_translation(1).id }}])
         ).filter(locale=context['page'].locale)
 
         keyword = request.GET.get('keyword', '')
 
         if keyword:
-            members = members.search(keyword).get_queryset()
+            members = members.search(keyword, fields=["title"]).get_queryset()
         
-        hubs = IndividualMappingHubPage.objects.live().filter(locale=context['page'].locale)
+        hubs = IndividualMappingHubPage.objects.live().filter(locale=context['page'].get_translation(1).locale)
         query = Q()
         for hub in hubs:
-            if request.GET.get(str(hub), ''):
+            if request.GET.get("hub" + str(hub.id), ''):
                 query = query | Q(location_hub=hub)
         members = members.filter(query).distinct()
 
@@ -209,6 +215,7 @@ class IndividualMemberPage(Page):
         index.SearchField('title'),
         index.SearchField('search_description'),
         index.SearchField('intro'),
+        index.FilterField('member_groups'),
     ]
 
     content_panels = Page.content_panels + [

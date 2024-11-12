@@ -3,16 +3,23 @@
 - class: string; the classes for the containing div
 - sharetext: string; the text to be shown next to the share icons
 {% endcomment %}
+{% load wagtailimages_tags %}
+{% load homepage_tags %}
+{% get_share_links as links %}
+
 <div class="{{class}}">
-    <p class="text-h5 font-bold text-hot-black">
-        <span class="mr-4 text-black">
+    <div class="flex gap-4 flex-wrap items-center">
+        <p class="text-h5 font-bold text-black">
             {% if sharetext %}
                 {{ sharetext }}
             {% else %}
                 Share
             {% endif %}
-        </span>
-        
-        {% include "./FacebookSharer.html" %}
-    </p>
+        </p>
+        {% for link in links %}
+            <a href="{{link.link}}">
+                {% image link.icon original class="h-6 w-auto" %}
+            </a>
+        {% endfor %}
+    </div>
 </div>

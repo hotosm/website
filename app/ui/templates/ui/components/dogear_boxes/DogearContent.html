@@ -10,21 +10,25 @@
 {% endcomment %}
 {% load wagtailcore_tags %}
 
-<h1 class="font-bold text-h2 my-0">
-    {{ title }}
-</h1>
-{% if description %}
-    <p class="font-medium mt-2">{{description|richtext}}</p>
-{% endif %}
-<a href="{% include 'ui/components/PageOrLinkHrefText.html' %}" class="mt-auto pt-6">
-    <p class="text-h5 font-medium">
-        {{ linktext }}
-        <span class="ml-2" 
-        {% if color %}
-            style="color: {{ color }}"
-        {% endif %}
-        >
-            {% include "ui/components/icon_svgs/LinkCaret.html" %}
-        </span>
-    </p>
-</a>
+<div class="p-8 flex flex-col h-full w-full">
+    <h1 class="font-bold text-h2 mb-6">
+        {{ title }}
+    </h1>
+    {% if description %}
+        <p class="font-medium mt-2">{{description|richtext}}</p>
+    {% endif %}
+    <div class="mt-auto pt-10">
+        <a href="{% include 'ui/components/PageOrLinkHrefText.html' %}">
+            <p class="text-h5 font-medium hover:underline decoration-2">
+                {{ linktext }}
+                <span class="ml-2" 
+                {% if color %}
+                    style="color: {{ color }}"
+                {% endif %}
+                >
+                    {% include "ui/components/icon_svgs/LinkCaret.html" %}
+                </span>
+            </p>
+        </a>
+    </div>
+</div>

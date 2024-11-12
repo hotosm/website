@@ -5,27 +5,39 @@
 - tablet_description: html element; the description of the block, which only shows on tablet sizes and smaller
 - read_more_text: string; the text to show for "read more"
 {% endcomment %}
+{% load wagtailcore_tags %}
 {% load wagtailimages_tags %}
 
 {% image image original as previmg %}
-<a href="{{page.url}}">
-    <div class="bg-gradient-to-t from-black to-transparent to-30% grid">
-        <div class="min-h-[16rem] bg-cover bg-no-repeat -z-10 relative row-start-1 col-start-1" style="background-image: url('{{previmg.url}}')">
+{% with page.localized as page %}
+    <a href="{{page.url}}">
+        <div class="bg-gradient-to-t from-black to-transparent to-30% grid lg:[&:hover_.hover-show]:pointer-events-auto lg:[&:hover_.hover-show]:opacity-100 w-full aspect-[3/2]">
+            <div class="min-h-[16rem] bg-cover bg-no-repeat -z-10 relative row-start-1 col-start-1" style="background-image: url('{{previmg.url}}')">
+            </div>
+            <div class="row-start-1 col-start-1 flex-col justify-end p-4 hidden lg:flex">
+                <h1 class="font-semibold text-h3 text-white">
+                    {{page.title}}
+                </h1>
+            </div>
+            {% if not hoverless %}
+                <div class="hover-show row-start-1 col-start-1 opacity-0 pointer-events-none bg-hot-red text-white justify-center py-4 px-6 flex flex-col transition duration-100">
+                    <h2 class="text-h3 font-bold">{{page.title}}</h2>
+                    <div class="w-full aspect-[3/1] overflow-hidden">{{tablet_description|richtext}}</div>
+                    <p class="mt-4">
+                        {% include "ui/components/BaseLinkNoUnderlineWhite.html" with anchorless=True linktext=read_more_text whitearrow=True %}
+                    </p>
+                </div>
+            {% endif %}
         </div>
-        <div class="row-start-1 col-start-1 flex-col justify-end p-4 hidden lg:flex">
-            <h1 class="font-semibold text-h3 text-white">
-                {{page.title}}
-            </h1>
+        <div class="lg:hidden">
+            <h1 class="font-bold text-h3 my-2">{{page.title}}</h1>
+            <div class="my-2">
+                {{tablet_description|richtext}}
+            </div>
+            <p class="text-hot-red font-medium">
+                {{read_more_text}}
+                {% include "ui/components/icon_svgs/LinkCaret.html" with class="ml-2" %}
+            </p>
         </div>
-    </div>
-    <div class="lg:hidden">
-        <h1 class="font-bold text-h3 my-2">{{page.title}}</h1>
-        <div class="my-2">
-            {{tablet_description}}
-        </div>
-        <p class="text-hot-red font-medium">
-            {{read_more_text}}
-            {% include "ui/components/icon_svgs/LinkCaret.html" with class="ml-2" %}
-        </p>
-    </div>
-</a>
+    </a>
+{% endwith %}

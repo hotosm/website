@@ -8,8 +8,46 @@
 
         const map = new mapboxgl.Map({
             container: 'map',
-            style: 'mapbox://styles/mapbox/streets-v12',
+            style: 'mapbox://styles/hot/cm2dpp8lb000j01pb8chz3y15',
             center: [0, 0],
             zoom: 2
         });
+
+        const currentMarkers = [];
+
+        const callMapUpdate = async () => {
+            let params = new URLSearchParams(Alpine.store('formdata'));
+            if (!params) {
+                params = new URLSearchParams();
+            }
+            params.set('page', Alpine.store('pageNum'));
+            params.set('projects', true);
+            const apiUrl = '?' + params.toString();
+            fetch(apiUrl).then(response => {
+                if (response.ok)
+                    return response.json();
+                throw new Error("Failed to fetch projects.");
+            }).then(data => {
+                geojson = data;
+                
+                for (const feature of geojson.features) {
+                    const element = `
+                        <div class="" @click="$refs['project${feature.properties.id}'].scrollIntoView({block: 'nearest', behavior: 'smooth'}); selectedProject = 'project${feature.properties.id}';">
+                            {% include './MapboxMarker.html' %}
+                        </div>
+                    `;
+                    const el = document.createElement('div');
+                    el.innerHTML = element;
+                    var marker = new mapboxgl.Marker(el);
+                    marker.setLngLat(feature.geometry.coordinates).addTo(map);
+                    currentMarkers.push(marker);
+                }
+            })
+        }
+
+        const refreshWithSearch = () => {
+            for (const marker of currentMarkers) {
+                marker.remove();
+            }
+        }
 </script>

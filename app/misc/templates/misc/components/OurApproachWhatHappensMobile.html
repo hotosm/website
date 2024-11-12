@@ -1,0 +1,19 @@
+<div class="md:hidden max-w-lg mx-auto">
+    <div class="bg-hot-off-white rounded-full w-full aspect-square p-8 text-center grid mb-10">
+        <div class="col-start-1 row-start-1 flex items-center justify-center">
+            <h2 class="text-h3 font-bold max-w-sm">
+                {{page.what_happens_title}}
+            </h2>
+        </div>
+        <div class="col-start-1 row-start-1 w-full flex justify-center items-end text-hot-red text-h2">
+            {% include "ui/components/icon_svgs/DoubleDownChevron.html" %}
+        </div>
+    </div>
+
+    <div class="grid gap-8">
+        {% include "./OurApproachWhatHappensMobileTopic.html" with topic=page.what_happens_items.0.value %}
+        {% include "./OurApproachWhatHappensMobileTopic.html" with topic=page.what_happens_items.1.value %}
+        {% include "./OurApproachWhatHappensMobileTopic.html" with topic=page.what_happens_items.2.value %}
+        {% include "./OurApproachWhatHappensMobileTopic.html" with topic=page.what_happens_items.3.value %}
+    </div>
+</div>

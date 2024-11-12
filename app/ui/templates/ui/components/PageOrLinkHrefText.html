@@ -1,13 +1,27 @@
+{% load wagtailcore_tags %}
+
 {% if linkurl.0 and linkurl.0.value %}
     {% if linkurl.0.value.page %}
-        {{linkurl.0.value.page.url}}
+        {{linkurl.0.value.page.url}}{{linkappendage}}
     {% elif linkurl.0.value.url %}
-        {{linkurl.0.value.url}}
+        {% if linkurl.0.value.localized %}
+            {{linkurl.0.value.localized.url}}{{linkappendage}}
+            {% else %}
+            {{linkurl.0.value.url}}{{linkappendage}}
+        {% endif %}
     {% else %}
-        {{linkurl.0.value}}
+        {{linkurl.0.value}}{{linkappendage}}
     {% endif %}
 {% else %}
     {% if linkurl %}
-        {{ linkurl }}
+        {% if linkurl.url %}
+            {% if linkurl.localized %}
+                {{linkurl.localized.url}}{{linkappendage}}
+                {% else %}
+                {{linkurl.url}}{{linkappendage}}
+            {% endif %}
+        {% else %}
+            {{linkurl}}{{linkappendage}}
+        {% endif %}
     {% endif %}
 {% endif %}

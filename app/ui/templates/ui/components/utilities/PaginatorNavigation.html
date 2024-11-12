@@ -3,6 +3,9 @@ PARAMETERS:
 => paginator: a paginator object
 => current_page: an integer, the current page
 {% endcomment %}
+{% load homepage_tags %}
+{% get_home_page as home_page %}
+
 <div x-data="{ params: new URLSearchParams((new URL(window.location.href)).search) }">
     <div class="w-full flex justify-center items-center" 
             x-data="{
@@ -11,8 +14,8 @@ PARAMETERS:
                     getPageLink(x) { this.paramsX.set('page', x); return '?' + this.paramsX.toString() } 
     }">
         <a :href="page > 1 ? getPageLink(parseInt(page) - 1) : ''" aria-label="Previous Page">
-            <p class="cursor-pointer" :class="page == 1 ? 'text-hot-slate-grey' : 'text-hot-red'">
-                {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-180" %}
+            <p class="cursor-pointer mr-2" :class="page == 1 ? 'text-hot-slate-grey' : 'text-hot-red'">
+                {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-180" %} <span class="ml-2">{{home_page.paginator_previous}}</span>
             </p>
         </a>
         <div class="flex gap-2 mx-4">
@@ -39,8 +42,8 @@ PARAMETERS:
             {% endwith %}
         </div>
         <a :href="page < {{paginator.num_pages}} ? getPageLink(parseInt(page) + 1) : ''" aria-label="Next Page">
-            <p class="cursor-pointer" :class="page == {{paginator.num_pages}} ? 'text-hot-slate-grey' : 'text-hot-red'">
-                {% include "ui/components/icon_svgs/LinkCaret.html" %}
+            <p class="cursor-pointer ml-2" :class="page == {{paginator.num_pages}} ? 'text-hot-slate-grey' : 'text-hot-red'">
+                <span class="mr-2">{{home_page.paginator_next}}</span> {% include "ui/components/icon_svgs/LinkCaret.html" %}
             </p>
         </a>
     </div>

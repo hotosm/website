@@ -54,12 +54,14 @@ INSTALLED_APPS = [
     "app.partners",
     "app.tech",
     "app.our_work",
+    "app.job_opportunities",
     "search",
     "users",
     "utils",
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
     "wagtail.contrib.settings",
+    "wagtail.contrib.table_block",
     "wagtail.embeds",
     "wagtail.sites",
     "wagtail.users",
@@ -271,3 +273,5 @@ GEO_WIDGET_LEAFLET_TILE_LAYER = "https://api.mapbox.com/styles/v1/mapbox/streets
 GEO_WIDGET_LEAFLET_TILE_LAYER_OPTIONS = {
     "attribution": '© <a href="https://www.mapbox.com/feedback/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
 }
+
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 2000

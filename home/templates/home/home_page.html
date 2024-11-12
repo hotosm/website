@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% load compress %}
+{% load wagtailcore_tags %}
 {% load wagtailimages_tags %}
 {% block body_class %}
     template-homepage
@@ -39,23 +40,18 @@
                         {% include "home/components/HomeSpecificCarousel.html" %}
                     </div>
                     <!--CTA Statistics, TODO: Use HTMX to query endpoint for stats once the endpoint exists  -->
-                    <div class="grid grid-cols-2 md:grid-cols-4 h-full md:pt-16 bg-hot-red md:bg-transparent gap-8 max-w-5xl mx-auto md:px-4">
-                        <div class="md:backdrop-blur-lg md:shadow-md flex flex-col justify-center text-center h-32 p-4">
-                            <div class="font-barlow font-semibold text-h4">468K</div>
-                            <div class="font-regular text-base-18">Total Mappers ⓘ</div>
-                        </div>
-                        <div class="md:backdrop-blur-lg md:shadow-md flex flex-col justify-center text-center h-32 p-4">
-                            <div class="font-barlow font-semibold text-h4">246.7M</div>
-                            <div class="font-regular text-base-18">Total Map Edits ⓘ</div>
-                        </div>
-                        <div class="md:backdrop-blur-lg md:shadow-md flex flex-col justify-center text-center h-32 p-4">
-                            <div class="font-barlow font-semibold text-h4">147.5M</div>
-                            <div class="font-regular text-base-18">Buildings Mapped ⓘ</div>
-                        </div>
-                        <div class="md:backdrop-blur-lg md:shadow-md flex flex-col justify-center text-center h-32 p-4">
-                            <div class="font-barlow font-semibold text-h4">2.7M</div>
-                            <div class="font-regular text-base-18">Roads Mapped(KM) ⓘ</div>
-                        </div>
+                    <div class="grid grid-cols-2 md:grid-cols-4 h-full md:pt-16 bg-hot-red md:bg-transparent gap-8 max-w-5xl mx-auto md:px-4 [&_.stat-block:nth-child(odd)_.show-at-hover]:left-0 [&_.stat-block:nth-child(even)_.show-at-hover]:right-0 md:[&_.stat-block:nth-child(-n+2)_.show-at-hover]:left-0 md:[&_.stat-block:nth-child(n+1)_.show-at-hover]:right-0">
+                        {% for stat in api_responses %}
+                            {% if stat.value.api %}
+                                {% include "./components/StatBlock.html" with number=stat.value.api stat=stat.value.statistic tooltiptext=stat.value.tooltip %}
+                                {% else %}
+                                    {% include "./components/StatBlock.html" with number=stat.value.fallback_number stat=stat.value.statistic tooltiptext=stat.value.tooltip %}
+                            {% endif %}
+                        {% endfor %}
+                        {% comment %} {% include "./components/StatBlock.html" with number=tm_json.totalMappers stat="Total Mappers" %}
+                        {% include "./components/StatBlock.html" with number="246.7M" stat="Total Map Edits" %}
+                        {% include "./components/StatBlock.html" with number="147.5M" stat="Buildings Mapped" %}
+                        {% include "./components/StatBlock.html" with number="2.7M" stat="Roads Mapped(KM)" %} {% endcomment %}
                     </div>
                 </div>
             </div>
@@ -68,28 +64,28 @@
                 {% comment %} HIGHLIGHTED PROGRAMS {% endcomment %}
                 <div class="grid grid-cols-1 lg:grid-cols-5 mt-10 mb-5 gap-4">
                     <div class="col-span-3">
-                        <h2 class="text-h4 font-semibold">
+                        <h2 class="text-h4 font-semibold mb-2">
                             {{ page.highlighted_programs_title }}
                         </h2>
                         <div class="text-intro">
-                            {{ page.highlighted_programs_description|safe }}
+                            {{ page.highlighted_programs_description|richtext }}
                         </div>
                     </div>
                     <div class="col-span-2 lg:text-right text-intro">
                         {% include "ui/components/BaseLink.html" with linktext=page.view_all_programs_text linkurl=page.view_all_programs_url %}
                     </div>
                 </div>
-                <div class="mb-10">
+                <div class="mb-20">
                     {% include "ui/components/programs/ProgramCarouselBlock.html" with programs=page.highlighted_programs %}
                 </div>
 
                 {% comment %} IMPACT AREAS {% endcomment %}
                 <div class="lg:w-3/5 my-10">
-                    <h2 class="text-h4 font-semibold">
+                    <h2 class="text-h4 font-semibold mb-2">
                         {{ page.impact_areas_title }}
                     </h2>
                     <div class="text-intro">
-                        {{ page.impact_areas_description|safe }}
+                        {{ page.impact_areas_description|richtext }}
                     </div>
                 </div>
                 {% include "home/components/ImpactAreasPanel.html" %}
@@ -103,10 +99,10 @@
                 {% image page.who_we_are_image original class="order-1 lg:order-2" %}
                 <div class="order-2 lg:order-1">
                     <div class="text-h2 [&_b]:text-hot-red bold-override font-bold lg:font-semibold">
-                        {{page.who_we_are_intro_title|safe}}
+                        {{page.who_we_are_intro_title|richtext}}
                     </div>
                     <div class="text-intro my-2">
-                        {{page.who_we_are_intro_description|safe}}
+                        {{page.who_we_are_intro_description|richtext}}
                     </div>
                     <a href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=page.who_we_are_button_url%}">
                         {% include "components/branded_elements/button.html" with text=page.who_we_are_button_text classes="mt-4" %}
@@ -125,10 +121,10 @@
                 <div class="min-h-[20rem] bg-cover bg-no-repeat" style="background-image: url('{{tr_image.url}}')"></div>
                 <div class="flex flex-col justify-center lg:px-8 py-8 py:8">
                     <div class="text-h2 [&_b]:text-hot-red bold-override font-bold lg:font-semibold">
-                        {{page.tools_resources_title|safe}}
+                        {{page.tools_resources_title|richtext}}
                     </div>
                     <div class="text-intro font-medium my-4">
-                        {{page.tools_resources_description|safe}}
+                        {{page.tools_resources_description|richtext}}
                     </div>
                     <a href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=page.tools_resources_button_link%}">
                         {% include "components/branded_elements/button.html" with text=page.tools_resources_button_text classes="mt-4" %}
@@ -161,55 +157,8 @@
 
             {% comment %} SUBSCRIBE {% endcomment %}
             <div class="rounded-2xl shadow-md">
-                <div class="bg-hot-off-white py-8 px-16 my-20">
-                    <h1 class="text-h2 font-bold">
-                        {{ page.subscribe_title }}
-                    </h1>
-                    <form class=" mt-4 [&_label]:block 
-                                [&_input]:border-none
-                    ">
-                        <div class="flex gap-4">
-                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 grow">
-                                <div>
-                                    <label for="firstname" class="font-medium mb-2">{{ page.subscribe_first_name_text }}</label>
-                                    <div class="rounded-2xl shadow-md">
-                                        <input name="firstname" id="firstname" type="text" placeholder="{{page.subscribe_first_name_field_hint}}" class="w-full">
-                                    </div>
-                                </div>
-                                <div>
-                                    <label for="lastname" class="font-medium mb-2">{{ page.subscribe_last_name_text }}</label>
-                                    <div class="rounded-2xl shadow-md">
-                                        <input name="lastname" id="lastname" type="text" placeholder="{{page.subscribe_last_name_field_hint}}" class="w-full">
-                                    </div>
-                                </div>
-                                <div class="md:col-span-2 lg:col-span-1 flex gap-4">
-                                    <div class="grow">
-                                        <label for="email" class="font-medium mb-2">{{ page.subscribe_email_text }}</label>
-                                        <div class="rounded-2xl shadow-md">
-                                            <input name="email" id="email" type="text" placeholder="{{page.subscribe_email_field_hint}}" class="w-full">
-                                        </div>
-                                    </div>
-                                    <div class="cursor-pointer hidden md:block lg:hidden self-end">
-                                        {% include "components/branded_elements/button.html" with text=page.subscribe_submit_button_text %}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="cursor-pointer hidden lg:block self-end">
-                                {% include "components/branded_elements/button.html" with text=page.subscribe_submit_button_text %}
-                            </div>
-                        </div>
-                        
-                        <div class="flex items-center mt-4 mb-4 md:mb-0">
-                            <input type="checkbox" id="agreecheckmark" name="agreecheckmark" value="Agree" class="rounded shadow-md">
-                            <label for="agreecheckmark" class="ml-2 [&_a]:font-medium">
-                                {{page.subscribe_checkbox_text|safe}}
-                            </label>
-                        </div>
-
-                        <div class="cursor-pointer md:hidden">
-                            {% include "components/branded_elements/button.html" with text=page.subscribe_submit_button_text %}
-                        </div>
-                    </form>
+                <div class="bg-hot-off-white py-6 md:py-8 px-8 md:px-16 my-20">
+                    {% include "./components/SubscribeForm.html" %}
                 </div>
             </div>
         </div>

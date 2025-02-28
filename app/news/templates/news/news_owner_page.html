@@ -140,7 +140,9 @@
             </div>
 
             {% comment %} PAGE NAVIGATION {% endcomment %}
-            {% include "ui/components/utilities/PaginatorNavigationHTMX.html" with paginator=news_paginator current_page=current_page %}
+            <div class="mb-20">
+                {% include "ui/components/utilities/PaginatorNavigationHTMX.html" with paginator=news_paginator current_page=current_page %}
+            </div>
         </div>
     </div>
 {% endblock %}

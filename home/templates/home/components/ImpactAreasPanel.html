@@ -22,11 +22,11 @@
                  :style="`order: ${getRelCar({{forloop.counter0}}) + 1}`"
             >
                 <div class="rounded-2xl shadow-md h-full">
-                    <div class="px-6 pt-6 pb-4 text-center font-medium text-intro h-full cursor-pointer" 
+                    <div class="px-6 pt-6 pb-4 text-center flex flex-col items-center font-medium text-intro h-full cursor-pointer" 
                             x-bind:class="{'bg-hot-red text-white [&_img]:invert': selIndex == {{forloop.counter0}}, 'bg-hot-white': selIndex != {{forloop.counter0}}}"
                             @click="selIndex={{forloop.counter0}}"
                     >
-                        {% image area.external_icon fill-200x200 class="px-10" %}
+                        {% image area.external_icon fill-200x200 class="px-2 max-h-20 w-auto" %}
                         <p>
                             {{ area.title }}
                         </p>

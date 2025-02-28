@@ -90,10 +90,10 @@
                 </div>
             </form>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8 mt-10" id="partners-list">
+            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8 gap-y-16 mt-10" id="partners-list">
                 {% for partner in partners %}
-                    <a href="{{partner.partner_url}}">
-                        <div class="flex justify-center">
+                    <a href="{{partner.partner_url}}" class="flex justify-center items-center h-24">
+                        <div class="flex justify-center items-center">
                             {% image partner.partner_logo original class="max-h-24 max-w-full h-full w-auto" %}
                         </div>
                     </a>

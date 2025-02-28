@@ -1,0 +1,37 @@
+<script type="text/javascript">
+    const siteId = 1;
+    const domain = "*.hotosm.org";
+    const matomoURL = "https://matomo.hotosm.org/";
+    const matomoFile = "piwik.php";
+
+    var _paq = window._paq = window._paq || [];
+    _paq.push(["requireConsent"]);
+    _paq.push(["setDomains", [domain]]);
+    _paq.push(["trackPageView"]);
+    _paq.push(["enableLinkTracking"]); // Tracks downloads
+    _paq.push(["trackVisibleContentImpressions"]); // Tracks content
+
+    (function() {
+        var u=matomoURL;
+        _paq.push(['setTrackerUrl', u + matomoFile]);
+        _paq.push(['setSiteId', siteId]);
+        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+        g.type='text/javascript'; g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+    })();
+
+    const form = document.getElementById('gdpr-banner-form');
+    const agreeButton = document.getElementById('gdpr-banner-agree-button');
+    const disagreeButton = document.getElementById('gdpr-banner-disagree-button');
+
+    const closeForm = () => {
+        form.style.display = 'none';
+        localStorage.setItem("optout-closed", true)
+    }
+
+    if(localStorage.getItem("optout-closed")) {
+        closeForm();
+    }
+
+    agreeButton.onclick = () => {_paq.push(['rememberConsentGiven']); closeForm();}
+    disagreeButton.onclick = () => {_paq.push(['forgetConsentGiven']); closeForm();}
+</script>

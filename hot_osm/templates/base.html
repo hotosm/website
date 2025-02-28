@@ -48,8 +48,7 @@
         {% endblock %}
     </head>
     <body class="min-h-screen {% block body_class %}{% endblock body_class %}">
-        <div x-data="{ isMenuOpen: false, isSearchClicked: false, searchkeyword: '', isLandingPage: false, setIsLandingPage(x) {this.isLandingPage = x}, test: false }" :style="test ? '--font-size-intro: 1.33rem;' : ''">
-            <p class="cursor-pointer" @click="test = !test">im the testing button for intro size</p>
+        <div x-data="{ isMenuOpen: false, isSearchClicked: false, searchkeyword: '', isLandingPage: false, setIsLandingPage(x) {this.isLandingPage = x} }">
             {% include "ui/components/navigation/UpperHeaderNavbar.html" %}
             <div class="relative">
                 {% comment %} {% include "components/header/header.html" %} {% endcomment %}
@@ -62,5 +61,6 @@
             {% django_browser_reload_script %}
             {% wagtailuserbar %}
         </div>
+        {% include "ui/components/gdpr/GDPRBanner.html" %}
     </body>
 </html>

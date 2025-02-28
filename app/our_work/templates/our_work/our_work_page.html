@@ -172,10 +172,10 @@
                             </div>
                             <hr class="border-b-2 my-8">
                             <div class="flex justify-end gap-8 items-center">
-                                <div class="text-white text-intro font-medium font-archivo py-1 bg-hot-red border-2 border-hot-red text-hot-white px-hot-3 hover:bg-hot-off-white hover:text-hot-red focus:bg-transparent focus:text-hot-red focus:ring-2 focus:ring-hot-red focus:ring-inset">
-                                    <input type="submit" value="{{page.f_apply_filter_text}}" class="bg-transparent w-full h-full cursor-pointer">
+                                <div>
+                                    <input type="submit" value="{{page.f_apply_filter_text}}" class="text-white text-intro font-medium font-archivo py-1 bg-hot-red border-2 border-hot-red text-hot-white px-hot-3 hover:bg-hot-off-white hover:text-hot-red focus:bg-transparent focus:text-hot-red focus:ring-2 focus:ring-hot-red focus:ring-inset w-full h-full cursor-pointer" @click="showFilters = false;">
                                 </div>
-                                <a href="{{page.url}}#projects-section">
+                                <a href="{{page.url}}#projects-section" @click="window.location.reload();">
                                     <p class="cursor-pointer inline-block text-intro font-medium">
                                         <span class="border-b-hot-red border-b-2 pb-1">
                                             {{page.f_reset_filters_text}}

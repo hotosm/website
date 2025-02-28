@@ -22,7 +22,7 @@ No parameters; it grabs directly from the home page (for the correct locale).
                 {% for item in home_page.navigation_buttons %}
                     <li class="hidden md:flex items-center text-small font-medium">
                         {% comment %} {% include "ui/components/navigation/HeaderNavbarButton.html" with item=item.value %} {% endcomment %}
-                        <a class="hover:underline decoration-2 text-black" href="{%if item.value.link_page%}{{item.value.link_page.url}}{%elif item.value.link_url%}{{item.value.link_url}}{%else%}#{%endif%}">
+                        <a class="hover:underline decoration-2 text-black" href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=item.value.link%}">
                             <span class="text-hot-red">{{item.value.title}}</span>
                         </a>
                     </li>

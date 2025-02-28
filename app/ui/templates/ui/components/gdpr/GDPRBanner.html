@@ -1,0 +1,23 @@
+{% load wagtailcore_tags %}
+{% load homepage_tags %}
+{% get_home_page as home_page %}
+
+<div class="fixed bottom-4 w-screen pointer-events-none" id="gdpr-banner-form">
+    <div class="max-w-2xl bg-white mx-auto pointer-events-auto shadow-md p-8 text-center flex flex-col items-center justify-center">
+        <h1 class="text-h3 font-bold mb-2">{{home_page.gdpr_tracking_title}}</h1>
+        <div class="base-article">
+            {{home_page.gdpr_tracking_message|richtext}}
+            <p class="mt-2">{{home_page.gdpr_tracking_consent_message}}</p>
+        </div>
+        <div class="flex flex-row flex-wrap gap-4 mt-6">
+            <div id="gdpr-banner-agree-button">
+                {% include "components/branded_elements/button.html" with text=home_page.gdpr_tracking_option_agree %}
+            </div>
+            <div id="gdpr-banner-disagree-button">
+                {% include "components/branded_elements/button.html" with text=home_page.gdpr_tracking_option_disagree %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include "./GDPRScript.html" %}

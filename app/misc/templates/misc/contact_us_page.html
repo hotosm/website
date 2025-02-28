@@ -88,8 +88,7 @@
                         <div class="mt-4 grid lg:grid-cols-2 gap-8">
                             {% for location in page.office_locations %}
                                 <div>
-                                    <p class="font-medium text-intro">{{location.value.title}}</p>
-                                    <p>{% include "ui/components/BaseLinkNoUnderline.html" with linktext=page.office_locations_visit_page_text linkurl=location.value.link %}</p>
+                                    <p class="font-medium text-intro"><a href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=location.value.link%}">{{location.value.title}}</a></p>
                                     <p>{{location.value.description}}</p>
                                 </div>
                             {% endfor %}

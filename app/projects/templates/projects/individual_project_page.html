@@ -10,7 +10,7 @@
 {% endblock extra_css %}
 
 {% block content %}
-    {% include "ui/components/BasePageHeader.html" with title=page.title subtitle=page.owner_program.title|add:" • "|add:page.location image=page.header_image %}
+    {% include "./components/header.html" %}
 
     <div class="max-w-7xl mx-auto" x-init="isLandingPage = false">
         <div class="grid grid-cols-1 lg:grid-cols-3">
@@ -22,7 +22,9 @@
                     </div>
                     {{ page.description }}
                 </div>
-                {% include "ui/components/CTABodyPanelBase.html" with title=page.call_to_action_title text=page.call_to_action_description linktext=page.call_to_action_link_text linkurl=page.call_to_action_link %}
+                {% if page.call_to_action_title %}
+                    {% include "ui/components/CTABodyPanelBase.html" with title=page.call_to_action_title text=page.call_to_action_description linktext=page.call_to_action_link_text linkurl=page.call_to_action_link %}
+                {% endif %}
             </div>
 
             {% comment %} SIDEBAR {% endcomment %}
@@ -47,18 +49,35 @@
                                 {{page.country_text|richtext}}
                             </div>
                         {% endif %}
-
-                        <div>
-                            <p>{{page.get_parent.specific.duration_title}}</p>
-                            <p>{{page.duration}}</p>
-                            {%if page.project_status%}<p>{{page.project_status}}</p>{%endif%}
-                        </div>
+                        
+                        {% if page.duration or page.duration_start or page.duration_end or page.project_status %}
+                            <div>
+                                <p>{{page.get_parent.specific.duration_title}}</p>
+                                {%if page.duration%}<p>{{page.duration}}</p>{%endif%}
+                                {% if page.duration_start %}
+                                    <p>
+                                        {{page.duration_start}} ー {%if page.duration_end%}{{page.duration_end}}{%else%}{{page.get_parent.specific.duration_ongoing}}{%endif%}
+                                    </p>
+                                {% else %}
+                                    {% if page.duration_end %}
+                                        <p>
+                                            {{page.get_parent.specific.duration_until}} {{page.duration_end}}
+                                        </p>
+                                    {% endif %}
+                                {% endif %}
+                                {%if page.project_status%}<p>{{page.project_status}}</p>{%endif%}
+                            </div>
+                        {% endif %}
 
                         {% if page.partner_list %}
                             <div>
                                 <p>{{page.get_parent.specific.partners_title}}</p>
                                 {% for partner in page.partner_list %}
-                                    <p><a href="{{partner.value.partner_url}}">{{partner.value.partner_name}}</a></p>
+                                    {% if partner.value.partner_name %}
+                                        <p><a href="{{partner.value.partner_url}}">{{partner.value.partner_name}}</a></p>
+                                    {% else %}
+                                        <p>{{partner.value}}</p>
+                                    {% endif %}
                                 {% endfor %}
                             </div>
                         {% endif %}
@@ -67,7 +86,20 @@
                             <div>
                                 <p>{{page.get_parent.specific.tools_title}}</p>
                                 {% for tool in page.tools_list %}
-                                    <p><a href="{{tool.value.url}}">{{tool.value.title}}</a></p>
+                                    {% if tool.value.title %}
+                                        <p><a href="{{tool.value.url}}">{{tool.value.title}}</a></p>
+                                    {% else %}
+                                        <p><a href="{{tool.value.link}}">{{tool.value.text}}</a></p>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        {% if page.data_links %}
+                            <div>
+                                <p>{{page.get_parent.specific.data_title}}</p>
+                                {% for datum in page.data_links %}
+                                    <p><a href="{{datum.value.link}}">{{datum.value.text}}</a></p>
                                 {% endfor %}
                             </div>
                         {% endif %}

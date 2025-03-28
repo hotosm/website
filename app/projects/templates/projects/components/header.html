@@ -1,0 +1,47 @@
+{% comment %}
+==> PARAMETERS
+- title: A string, the title shown in the header
+- intro: An HTML element (regular usage would be a <p> with some text in it)
+- subtitle: An HTML element
+- image: A Wagtail image
+
+Only one of either intro or subtitle should be present; you probably would not want both.
+{% endcomment %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+
+{% if page.header_image %}
+    {% image page.header_image original as image_p %}
+{% else %}
+    {% image page.get_parent.specific.fallback_image original as image_p %}
+{% endif %}
+<div class="w-full min-h-[20rem] content-end bg-no-repeat bg-cover bg-center" style="background-image: url('{{ image_p.url }}')">
+    <div class="bg-gradient-to-t from-black/70 to-transparent w-full">
+        <div class="h-fit w-full py-10 text-white max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-3">
+                <div class="px-10 pb-4 h-fit {% if intro %}col-span-1{% else %}col-span-3{% endif %}">
+                    <h1 class="text-h1 font-bold lg:font-semibold text-wrap">
+                        {{ page.title }}
+                    </h1>
+                </div>
+            </div>
+            {% if page.owner_program or page.location or page.is_community_led %}
+                <div class="px-10">
+                    <p>
+                        {% if page.owner_program %}
+                            <a href="{{page.owner_program.url}}">{{page.owner_program.title}}</a>
+                            {% if page.location or page.is_community_led %} • {% endif %}
+                        {% endif %}
+                        {% if page.location %}
+                            {{page.location}}
+                            {% if page.is_community_led %} • {% endif %}
+                        {% endif %}
+                        {% if page.is_community_led %}
+                            {{page.get_parent.specific.community_led_text}}
+                        {% endif %}
+                    </p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>

@@ -10,6 +10,7 @@ from wagtail.blocks import CharBlock, StreamBlock, StructBlock, URLBlock, RichTe
 from wagtail.snippets.blocks import SnippetChooserBlock
 from wagtail.search import index
 from wagtail.snippets.models import register_snippet
+from wagtailmarkdown.blocks import MarkdownBlock
 
 from wagtailgeowidget.panels import LeafletPanel
 
@@ -93,7 +94,7 @@ class ProjectOwnerPage(Page):
                 projects_list = projects_list.order_by('title')
 
         page = request.GET.get('page', 1)
-        paginator = Paginator(projects_list, 8)  # if you want more/less items per page (i.e., per load), change the number here to something else
+        paginator = Paginator(projects_list, 12)  # if you want more/less items per page (i.e., per load), change the number here to something else
         try:
             projects = paginator.page(page)
         except PageNotAnInteger:
@@ -145,11 +146,24 @@ class ProjectOwnerPage(Page):
     bottom_dogear_link_text = models.CharField(default="Check our work")
     bottom_dogear_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
 
+    fallback_image = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text="If no cover image is provided for a news post, this image will display instead."
+    )
+
+    community_led_text = models.CharField(default="Community Led", help_text="If a project is community led, this text will appear in the header.")
     impact_areas_title = models.CharField(default="Impact Areas")
     region_hub_title = models.CharField(default="Region Hub/Country")
     duration_title = models.CharField(default="Duration")
+    duration_ongoing = models.CharField(default="Ongoing")
+    duration_until = models.CharField(default="Until")
     partners_title = models.CharField(default="Partners")
     tools_title = models.CharField(default="Tools")
+    data_title = models.CharField(default="Data")
     types_title = models.CharField(default="Project Type")
     contact_title = models.CharField(default="Contact")
 
@@ -190,12 +204,17 @@ class ProjectOwnerPage(Page):
             FieldPanel('bottom_dogear_link'),
         ], heading="Project Page"),
         MultiFieldPanel([
+            FieldPanel('fallback_image'),
             MultiFieldPanel([
+                FieldPanel('community_led_text'),
                 FieldPanel('impact_areas_title'),
                 FieldPanel('region_hub_title'),
                 FieldPanel('duration_title'),
+                FieldPanel('duration_ongoing'),
+                FieldPanel('duration_until'),
                 FieldPanel('partners_title'),
                 FieldPanel('tools_title'),
+                FieldPanel('data_title'),
                 FieldPanel('types_title'),
                 FieldPanel('contact_title'),
                 MultiFieldPanel([
@@ -267,7 +286,8 @@ class IndividualProjectPage(Page):
         on_delete=models.SET_NULL,
         related_name='+'
     )
-    location = models.CharField(blank=True)
+    location = models.CharField(blank=True, help_text="This location will appear in the header if provided.")
+    is_community_led = models.BooleanField(blank=True, null=True)
     header_image = models.ForeignKey(
         "wagtailimages.Image",
         null=True,
@@ -282,27 +302,47 @@ class IndividualProjectPage(Page):
     description = StreamField([
         ('text_block', RichTextBlock(features=[
         'h2', 'h3', 'h4', 'bold', 'italic', 'link', 'ol', 'ul', 'hr', 'document-link', 'image', 'embed', 'code', 'blockquote'
-        ]))
-    ], use_json_field=True, null=True)
+        ])),
+        ('md_block', MarkdownBlock())
+    ], use_json_field=True, null=True, blank=True)
 
-    call_to_action_title = models.CharField(default="Call to Action")
+    call_to_action_title = models.CharField(null=True, blank=True)
     call_to_action_description = RichTextField(null=True, blank=True)
-    call_to_action_link_text = models.CharField(default="Call to Action Link")
+    call_to_action_link_text = models.CharField(null=True, blank=True)
     call_to_action_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
 
     # > SIDE BAR
+    impact_area_list = StreamField([('impact_area', PageChooserBlock(page_type="impact_areas.IndividualImpactAreaPage"))], use_json_field=True, null=True, blank=True)
+    region_hub_list = StreamField([('region_hub', PageChooserBlock(page_type="mapping_hubs.IndividualMappingHubPage"))], use_json_field=True, null=True, blank=True)
+    country_text = RichTextField(blank=True, help_text="This field is mostly for projects with no specified region hub. Regardless, if region hub(s) and country are both provided, both fields will appear on the page.")
+    
+    duration = models.CharField(blank=True, help_text="Any text-based description of duration should be here; dates should ideally use the Duration Start and End fields.")
+    duration_start = models.DateField(blank=True, null=True, help_text="The start date of the project; if a start is provided but no end, this will display as '[start date] ー Ongoing'.")
+    duration_end = models.DateField(blank=True, null=True, help_text="The end date of the project; if an end is provided but no start, this will dislpay as 'Until [end date]'.")
     project_status = models.ForeignKey(
         "projects.ProjectStatus",
         null=True,
         blank=True,
         on_delete=models.SET_NULL
     )
-    impact_area_list = StreamField([('impact_area', PageChooserBlock(page_type="impact_areas.IndividualImpactAreaPage"))], use_json_field=True, null=True, blank=True)
-    region_hub_list = StreamField([('region_hub', PageChooserBlock(page_type="mapping_hubs.IndividualMappingHubPage"))], use_json_field=True, null=True, blank=True)
-    country_text = RichTextField(blank=True, help_text="This field is not required; this field is mostly for projects with no specified region hub. Regardless, if region hub(s) and country are both provided, both fields will appear on the page.")
-    duration = models.CharField(default="Ongoing", blank=True)
-    partner_list = StreamField([('partner', SnippetChooserBlock(Partner))], use_json_field=True, null=True, blank=True)
-    tools_list = StreamField([('tool', PageChooserBlock(page_type="tech.IndividualTechStackPage"))], use_json_field=True, null=True, blank=True)
+
+    partner_list = StreamField([
+        ('partner', SnippetChooserBlock(Partner)), 
+        ('manual_partner', CharBlock())
+    ], use_json_field=True, null=True, blank=True)
+    tools_list = StreamField([
+        ('tool', PageChooserBlock(page_type="tech.IndividualTechStackPage")),
+        ('manual_tool', StructBlock([
+            ('text', CharBlock()),
+            ('link', URLBlock(required=False))
+        ]))
+    ], use_json_field=True, null=True, blank=True)
+    data_links = StreamField([
+        ('data', StructBlock([
+            ('text', CharBlock()),
+            ('link', URLBlock(required=False))
+        ]))
+    ], use_json_field=True, null=True, blank=True)
     contact = RichTextField(null=True, blank=True, help_text="If you provide an email here, make sure to turn it into an email link. This can be done by highlighting the text containing the email and pressing CTRL + K.")
     types = ParentalManyToManyField('projects.ProjectType', blank=True)
     related_news = StreamField([
@@ -312,7 +352,11 @@ class IndividualProjectPage(Page):
         ('event_page', PageChooserBlock(page_type="events.IndividualEventPage"))
     ], use_json_field=True, null=True, blank=True)
 
-    project_contributors = StreamField([('contributor', PageChooserBlock(page_type="members.IndividualMemberPage"))], use_json_field=True, null=True, blank=True, help_text="If a member is listed as a contributor to a project, that project will appear on the given member's page.")
+    project_contributors = StreamField([('contributor', PageChooserBlock(page_type="members.IndividualMemberPage")), ('manual_contributor', CharBlock())], 
+        use_json_field=True, null=True, blank=True, 
+        help_text="If a member is listed as a contributor to a project, that project will appear on the given member's page. " +
+        "Please refrain from adding new Manual Contributors; the option was created primarily for data preservation after page migration from the previous HOT website."
+    )
     location_coordinates = models.CharField(max_length=250, blank=True, null=True, help_text="Used to show where on the map the project takes place; used on the Our Work page.")
 
     search_fields = Page.search_fields + [
@@ -325,6 +369,7 @@ class IndividualProjectPage(Page):
         MultiFieldPanel([
             PageChooserPanel('owner_program', 'programs.IndividualProgramPage'),
             FieldPanel('location'),
+            FieldPanel('is_community_led'),
             FieldPanel('header_image'),
         ], heading="Header"),
         MultiFieldPanel([
@@ -338,13 +383,18 @@ class IndividualProjectPage(Page):
             ], heading="Call to Action"),
         ], heading="Body"),
         MultiFieldPanel([
-            FieldPanel('project_status', widget=forms.RadioSelect),
             FieldPanel('impact_area_list'),
             FieldPanel('region_hub_list'),
             FieldPanel('country_text'),
-            FieldPanel('duration'),
+            MultiFieldPanel([
+                FieldPanel('duration'),
+                FieldPanel('duration_start'),
+                FieldPanel('duration_end'),
+                FieldPanel('project_status', widget=forms.RadioSelect),
+            ], heading="Status"),
             FieldPanel('partner_list'),
             FieldPanel('tools_list'),
+            FieldPanel('data_links'),
             FieldPanel('contact'),
             FieldPanel('types', widget=forms.CheckboxSelectMultiple),
             MultiFieldPanel([

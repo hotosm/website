@@ -7,7 +7,11 @@
 {% load wagtailimages_tags %}
 
 {% with news.localized as news %}
-    {% image news.image original as image_p %}
+    {% if news.image %}
+        {% image news.image width-600 as image_p %}
+    {% else %}
+        {% image news.get_parent.specific.fallback_image width-600 as image_p %}
+    {% endif %}
     <div class="{{class}} [&:hover_.hover-title]:text-hot-red">
         <a href="{% include 'ui/components/PageOrLinkHrefText.html' with linkurl=news %}">
             {% if showimage %}
@@ -29,7 +33,7 @@
                 {{ news.title }}
             </p>
 
-            <div class="[&_p]:max-h-20 [&_p]:text-ellipsis [&_p]:overflow-hidden [&_p]:text-small">
+            <div class="max-h-20 text-ellipsis overflow-hidden text-small">
                 {{ news.intro|richtext }}
             </div>
 

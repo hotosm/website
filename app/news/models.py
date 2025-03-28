@@ -14,6 +14,9 @@ from wagtail.blocks import CharBlock, StreamBlock, StructBlock, URLBlock, RichTe
 from wagtail.snippets.models import register_snippet
 from wagtail.search import index
 
+from wagtailmarkdown.fields import MarkdownField
+from wagtailmarkdown.blocks import MarkdownBlock
+
 from app.core.models import LinkOrPageBlock
 from app.mapping_hubs.models import IndividualMappingHubPage
 
@@ -63,7 +66,7 @@ class NewsOwnerPage(Page):
                 news_list = news_list.order_by('-date')
 
         page = request.GET.get('page', 1)
-        paginator = Paginator(news_list, 6)  # if you want more/less items per page (i.e., per load), change the number here to something else
+        paginator = Paginator(news_list, 9)  # if you want more/less items per page (i.e., per load), change the number here to something else
         try:
             news = paginator.page(page)
         except PageNotAnInteger:
@@ -95,6 +98,14 @@ class NewsOwnerPage(Page):
     tags_title = models.CharField(default="Tags")
     hubs_title = models.CharField(default="Associated Hubs")
 
+    fallback_image = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text="If no cover image is provided for a news post, this image will display instead."
+    )
     applied_text = models.CharField(default="applied", help_text="This will be a suffix to a number, used to indicate how many filters are applied currently in some field.")
     keyword_search_hint = models.CharField(default="Search by keyword")
     filter_by_hub = models.CharField(default="Filter by Hub")
@@ -124,6 +135,9 @@ class NewsOwnerPage(Page):
             FieldPanel('results_text'),
         ], heading="News Search Page"),
         MultiFieldPanel([
+            MultiFieldPanel([
+                FieldPanel('fallback_image'),
+            ], heading="General"),
             MultiFieldPanel([
                 FieldPanel("authors_posted_by_text"),
                 FieldPanel("authors_posted_on_text"),
@@ -169,7 +183,7 @@ class IndividualNewsPage(Page):
         'news.NewsOwnerPage'
     ]
 
-    authors = StreamField([('author', PageChooserBlock(page_type="members.IndividualMemberPage"))], use_json_field=True, null=True, blank=True)
+    authors = StreamField([('author', PageChooserBlock(page_type="members.IndividualMemberPage")), ('manual_author', CharBlock())], use_json_field=True, null=True, blank=True)
 
     image = models.ForeignKey(
         "wagtailimages.Image",
@@ -180,14 +194,15 @@ class IndividualNewsPage(Page):
         help_text="Cover image"
     )
 
-    intro = RichTextField(blank=True)
+    intro = MarkdownField(blank=True)
 
     date = models.DateField(help_text="Post date")
 
     article_body = StreamField([
         ('text_block', RichTextBlock(features=[
         'h2', 'h3', 'h4', 'bold', 'italic', 'link', 'ol', 'ul', 'hr', 'document-link', 'image', 'embed', 'code', 'blockquote'
-        ]))
+        ])),
+        ('md_block', MarkdownBlock())
     ], use_json_field=True, null=True, blank=True)
 
     related_projects = StreamField([

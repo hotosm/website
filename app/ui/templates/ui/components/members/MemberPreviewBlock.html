@@ -2,7 +2,11 @@
 
 <div class="grid grid-cols-3 gap-4 md:block">
     <a href="{{member.url}}">
-        {% image member.image original class="aspect-[4/5] object-cover w-full col-span-1" %}
+        {% if member.image %}
+            {% image member.image original class="aspect-[4/5] object-cover w-full col-span-1" %}
+        {% else %}
+            {% image member.get_parent.specific.fallback_avatar original class="aspect-[4/5] object-cover w-full col-span-1" %}
+        {% endif %}
     </a>
     <div class="col-span-2 flex md:block flex-col justify-center">
         <a href="{{member.url}}">

@@ -2,6 +2,7 @@
 {% load static %}
 {% load wagtailcore_tags %}
 {% load wagtailimages_tags %}
+{% load wagtailmarkdown %}
 {% load compress %}
 {% block body_class %}template-individualmemberpage{% endblock %}
 {% block extra_css %}
@@ -16,6 +17,8 @@
             <div class="w-full">
                 {% if page.image %}
                     {% image page.image original class="md:w-full h-auto w-auto max-h-[24rem] object-contain" %}
+                {% else %}
+                    {% image page.get_parent.specific.fallback_avatar original class="md:w-full h-auto w-auto max-h-[24rem] object-contain" %}
                 {% endif %}
             </div>
             <div class="col-span-2">
@@ -29,12 +32,22 @@
                 {% endif %}
                 <h1 class="text-h1 font-semibold my-2">{{page.title}}</h1>
                 <p class="text-intro font-medium my-4">
-                    <span>{{page.position}}</span>
-                    /
-                    <a href="{{page.location_hub.url}}" class="text-hot-red">{{page.location_hub.title}}</a>
+                    {% if page.position %}
+                        <span>{{page.position}}</span>
+                        {% if page.location_hub or page.country %}/{% endif %}
+                    {% endif %}
+
+                    {% if page.location_hub %}
+                        <a href="{{page.location_hub.url}}" class="text-hot-red">{{page.location_hub.title}}</a>
+                        {% if page.country %}/{% endif %}
+                    {% endif %}
+                    
+                    {% if page.country %}
+                        <span>{{page.country}}</span>
+                    {% endif %}
                 </p>
                 <div class="base-article-m">
-                    {{page.intro|richtext}}
+                    {{page.body}}
                 </div>
             </div>
         </div>

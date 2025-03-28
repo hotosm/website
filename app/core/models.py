@@ -25,12 +25,14 @@ class Partner(models.Model):
     )
     partner_url = models.URLField(blank=True)
     partner_type = StreamField([('type', PageChooserBlock(page_type="partners.PartnershipTemplatePage"))], use_json_field=True, null=True, blank=True)
+    partner_is_active = models.BooleanField(default=True, help_text="If this field is unchecked, this partner will not appear in partner showcase carousels, nor the Our Partners page. They will, however, still appear in project pages that have them listed.")
 
     panels = [
         FieldPanel("partner_name"),
         FieldPanel("partner_logo"),
         FieldPanel("partner_url"),
         FieldPanel("partner_type"),
+        FieldPanel("partner_is_active"),
     ]
 
     def __str__(self):

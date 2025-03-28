@@ -1,7 +1,7 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel
-from wagtail.blocks import CharBlock, StreamBlock, StructBlock, URLBlock, PageChooserBlock
+from wagtail.blocks import CharBlock, StreamBlock, StructBlock, URLBlock, PageChooserBlock, RichTextBlock
 from wagtail.fields import RichTextField, StreamField
 from wagtail.models import Page
 from django.db.models import Q
@@ -10,6 +10,8 @@ from app.projects.models import IndividualProjectPage
 from app.news.models import IndividualNewsPage
 from app.mapping_hubs.models import IndividualMappingHubPage
 from wagtail.search import index
+from wagtailmarkdown.fields import MarkdownField
+from wagtailmarkdown.blocks import MarkdownBlock
 
 from app.core.models import LinkOrPageBlock
 
@@ -153,11 +155,20 @@ class MemberOwnerPage(Page):
     on_the_web_title = models.CharField(default="On the Web")
     posts_title = models.CharField(default="Posts")
     project_contribution_title = models.CharField(default="Project Contribution")
+    fallback_avatar = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text="If a member doesn't have a profile picture set, this image will show instead.",
+    )
 
     content_panels = Page.content_panels + [
         FieldPanel('on_the_web_title'),
         FieldPanel('posts_title'),
         FieldPanel('project_contribution_title'),
+        FieldPanel('fallback_avatar'),
     ]
 
 
@@ -200,7 +211,7 @@ class IndividualMemberPage(Page):
         help_text="An image of the member",
     )
     member_groups = StreamField([('member_group', MemberGroupBlock())], use_json_field=True, null=True, blank=True)
-    position = models.CharField()
+    position = models.CharField(blank=True)
     location_hub = models.ForeignKey(
         'mapping_hubs.IndividualMappingHubPage',
         null=True,
@@ -208,13 +219,19 @@ class IndividualMemberPage(Page):
         on_delete=models.SET_NULL,
         related_name='+'
     )
-    intro = RichTextField()
+    country = models.CharField(blank=True)
+    body = StreamField([
+        ('text_block', RichTextBlock(features=[
+        'h2', 'h3', 'h4', 'bold', 'italic', 'link', 'ol', 'ul', 'hr', 'document-link', 'image', 'embed', 'code', 'blockquote'
+        ])),
+        ('md_block', MarkdownBlock())
+    ], use_json_field=True, null=True, blank=True)
     on_the_web_links = StreamField(WebLinkBlock(), blank=True, use_json_field=True)
     
     search_fields = Page.search_fields + [
         index.SearchField('title'),
         index.SearchField('search_description'),
-        index.SearchField('intro'),
+        index.SearchField('body'),
         index.FilterField('member_groups'),
     ]
 
@@ -223,6 +240,7 @@ class IndividualMemberPage(Page):
         FieldPanel('member_groups'),
         FieldPanel('position'),
         FieldPanel('location_hub'),
-        FieldPanel('intro'),
+        FieldPanel('country'),
+        FieldPanel('body'),
         FieldPanel('on_the_web_links'),
     ]

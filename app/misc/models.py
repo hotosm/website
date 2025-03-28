@@ -667,6 +667,13 @@ class MultimediaPage(Page):
     map_title = models.CharField(default="Map Gallery")
     map_view_all_text = models.CharField(default="View all maps")
     map_view_all_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
+    map_previews = image_previews = StreamField([
+        ('preview', StructBlock([
+            ('link', URLBlock(required=False, help_text="The link to the image source (if known).")),
+            ('image', ImageChooserBlock()),
+            ('short_desc', CharBlock(required=False, help_text="This will show beneath the image.")),
+        ], min_num=8, max_num=8))
+    ], use_json_field=True, blank=True)
 
     video_title = models.CharField(default="Videos")
     video_view_all_text = models.CharField(default="View more videos on YouTube")
@@ -709,6 +716,7 @@ class MultimediaPage(Page):
             FieldPanel('map_title'),
             FieldPanel('map_view_all_text'),
             FieldPanel('map_view_all_link'),
+            FieldPanel('map_previews'),
         ], heading="Map"),
         MultiFieldPanel([
             FieldPanel('video_title'),

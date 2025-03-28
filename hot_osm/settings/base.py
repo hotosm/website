@@ -85,6 +85,7 @@ INSTALLED_APPS = [
     "wagtail_modeladmin",
     "storages",
     "wagtailgeowidget",
+    "wagtailmarkdown",
 ]
 
 MIDDLEWARE = [
@@ -206,6 +207,7 @@ STATICFILES_FINDERS = [
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "frontend", "dist"),
+    os.path.join(BASE_DIR, "hot_osm", "static"),
 ]
 
 # Djang Compressor settings
@@ -272,6 +274,12 @@ GEO_WIDGET_LEAFLET_TILE_LAYER = "https://api.mapbox.com/styles/v1/mapbox/streets
 
 GEO_WIDGET_LEAFLET_TILE_LAYER_OPTIONS = {
     "attribution": '© <a href="https://www.mapbox.com/feedback/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+}
+
+WAGTAILMARKDOWN = {
+    "allowed_tags": ["iframe", "script", "figcaption", "head", "style"],
+    "allowed_styles": ["position"],
+    "allowed_attributes": {"iframe": ["src", "width", "height", "allow", "frameborder", "allowfullscreen"], "figcaption": ["align"]},
 }
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 2000

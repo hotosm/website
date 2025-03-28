@@ -7,13 +7,16 @@
 {% load wagtailimages_tags %}
 
 {% with project.localized as project %}
-    {% image project.header_image original as image_p %}
     <div class="font-medium {{class}}">
         <a href="{% include 'ui/components/PageOrLinkHrefText.html' with linkurl=project %}" class="[&:hover_.project-preview-title]:underline">
             <div>
                 {% if showimage %}
                     <div class="w-full min-h-[9rem] mb-3 image-overshadow-gradient">
-                        {% image project.header_image original class="aspect-[5/3] object-cover object-center" %}
+                        {% if project.header_image %}
+                            {% image project.header_image width-600 class="aspect-[5/3] w-full object-cover object-center" %}
+                        {% else %}
+                            {% image project.get_parent.specific.fallback_image width-600 class="aspect-[5/3] w-full object-cover object-center" %}
+                        {% endif %}
                     </div>
                 {% endif %}
 
@@ -37,4 +40,4 @@
             {% endfor %}
         </div>
     </div>
-{% endwith%}
+{% endwith %}

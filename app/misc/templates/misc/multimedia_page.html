@@ -17,7 +17,22 @@
         <div class="px-6 md:px-10">
             {% include "ui/components/FlexTitleWithLink.html" with underline=True title=page.map_title linktext=page.map_view_all_text linkurl=page.map_view_all_link titleclass="text-h2" %}
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mt-10 mb-20">
-                
+                {% for preview in page.map_previews %}
+                    {% if preview.value.link %}
+                        <a href="{{preview.value.link}}">
+                    {% endif%}
+                        <div>
+                            {% image preview.value.image original class="w-full aspect-[3/2] object-cover" %}
+                            {% if preview.value.short_desc %}
+                                <div class="text-small text-hot-dark-grey mt-2">
+                                    {{preview.value.short_desc|richtext}}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% if preview.value.link %}
+                        </a>
+                    {% endif%}
+                {% endfor %}
             </div>
 
             {% include "ui/components/FlexTitleWithLink.html" with underline=True title=page.video_title linktext=page.video_view_all_text linkurl=page.video_view_all_link titleclass="text-h2" %}

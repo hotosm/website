@@ -2,6 +2,7 @@
 {% load static %}
 {% load wagtailcore_tags %}
 {% load wagtailimages_tags %}
+{% load wagtailmarkdown %}
 {% load compress %}
 {% block body_class %}template-individualnewspage{% endblock %}
 {% block extra_css %}
@@ -18,7 +19,11 @@
                 {% if page.authors %}
                     {{page.get_parent.specific.authors_posted_by_text}}
                     {% for author in page.authors %}
-                        <a href="{{author.value.url}}" class="text-black font-bold hover:underline">{{author.value.title}}</a>{% if not forloop.last %}, {% endif %}
+                        {% if author.value.url %}
+                            <a href="{{author.value.url}}" class="text-black font-bold hover:underline">{{author.value.title}}</a>{% if not forloop.last %}, {% endif %}
+                        {% else %}
+                            {{author.value}}{% if not forloop.last %}, {% endif %}
+                        {% endif %}
                     {% endfor %}
                     {{page.get_parent.specific.authors_posted_on_text}}
                 {% endif %}

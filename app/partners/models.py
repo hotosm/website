@@ -77,7 +77,7 @@ class PartnerWithUsPage(Page):
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
         
-        context['partners'] = Partner.objects.all()
+        context['partners'] = Partner.objects.all().filter(partner_is_active=True)
         return context
     
     subpage_types = [
@@ -164,7 +164,7 @@ class OurPartnersPage(Page):
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
 
-        partners = Partner.objects.all().order_by('id')
+        partners = Partner.objects.all().filter(partner_is_active=True).order_by('id')
         
         p_types = PartnershipTemplatePage.objects.live().filter(locale=context['page'].locale)
         query = Q()

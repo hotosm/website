@@ -125,7 +125,7 @@
                                             </p>
                                         {% endif %}
                                     </div>
-                                    <p class="text-center mt-4 mb-8 cursor-pointer" id="next-project-map" class="{% if not projects.has_next %}hidden{% endif %}">
+                                    <div class="text-center mt-4 mb-8 cursor-pointer" x-data="{ loading: false }" id="next-project-map" class="{% if not projects.has_next %}hidden{% endif %}">
                                         {% if projects.has_next %}
                                                 {% comment %} <a href="?page={{ projects.next_page_number }}"></a> {% endcomment %}
                                                 <span
@@ -135,14 +135,16 @@
                                                     hx-select="#projects-list-map, #next-project-map, #projects-list, #next-project"
                                                     hx-swap="beforeend"
                                                     hx-select-oob="#projects-list-map:beforeend, #next-project-map:outerHTML, #projects-list:beforeend, #next-project:outerHTML"
+                                                    @click="loading = true"
                                                 >
                                                     <span class="border-b-hot-red border-b-2 pb-1 font-medium mr-4 text-intro">
                                                         {{page.load_more_projects_text}}
                                                     </span>
                                                     {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-90 text-hot-red" %}
                                                 </span>
+                                                {% include "ui/components/utilities/PaginatorLoadingSymbol.html" %}
                                         {% endif %}
-                                    </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -216,5 +216,5 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         self.stdout.write("i'm testing! i'm testing!")
-        # convert_all_news_in_dir('migration_pages/_posts/')
+        convert_all_news_in_dir('migration_pages/news/')
         # remigrate_news_images_in_dir('migration_pages/_posts')

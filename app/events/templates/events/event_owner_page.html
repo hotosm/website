@@ -20,7 +20,9 @@
                 hx-select="#items-list, #paginator-navigation"
                 hx-swap="innerHTML"
                 hx-select-oob="#items-list:outerHTML, #paginator-navigation:innerHTML"
-                @submit="activeParams = new FormData($el);"
+                x-init="Alpine.store('searchloading', false)"
+                hx-on::after-request="Alpine.store('searchloading', false)"
+                @submit="activeParams = new FormData($el); Alpine.store('searchloading', true)"
             >
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {% comment %} KEYWORD SEARCH {% endcomment %}
@@ -127,6 +129,7 @@
                         <input type="submit" value="{{page.search_button_text}}" class="bg-transparent w-full h-full cursor-pointer py-2">
                     </div>
                 </div>
+                {% include "ui/components/utilities/SearchLoadingSymbol.html" %}
             </form>
 
             <hr class="border-black border-t-2 mt-10 mb-4">

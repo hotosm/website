@@ -47,7 +47,7 @@
                         {% include "ui/components/projects/ProjectPreviewBlockNews.html" with project=project showimage=True %}
                     {% endfor %}
                 </div>
-                <p class="text-center mt-10" id="next-project" class="{% if not projects.has_next %}hidden{% endif %}">
+                <div class="text-center mt-10" x-data="{ loading: false }" id="next-project" class="{% if not projects.has_next %}hidden{% endif %}">
                     {% if projects.has_next %}
                             {% comment %} <a href="?page={{ projects.next_page_number }}"></a> {% endcomment %}
                             <button hx-get="?page={{ projects.next_page_number }}"
@@ -55,14 +55,16 @@
                                 hx-select="#projects-list, #next-project"
                                 hx-swap="beforeend"
                                 hx-select-oob="#projects-list:beforeend, #next-project:outerHTML"
+                                @click="loading = true"
                             >
                                 <span class="border-b-hot-red border-b-2 pb-1 font-medium mr-4 text-intro hover:text-hot-red transition">
                                     {{page.get_parent.specific.load_more_projects_text}}
                                 </span>
                                 {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-90 text-hot-red" %}
                             </button>
+                            {% include "ui/components/utilities/PaginatorLoadingSymbol.html" %}
                     {% endif %}
-                </p>
+                </div>
             </div>
             
             {% comment %} OTHER IMPACT AREAS {% endcomment %}
@@ -78,7 +80,6 @@
                     {% endfor %}
                 </div>
             </div>
-            
 
             {% comment %} DOGEAR BOXES {% endcomment %}
             <div class="grid grid-cols-1 md:grid-cols-2 text-white my-10 gap-8">

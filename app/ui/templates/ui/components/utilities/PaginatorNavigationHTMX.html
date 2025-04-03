@@ -6,7 +6,7 @@ PARAMETERS:
 {% load homepage_tags %}
 {% get_home_page as home_page %}
 
-<div x-data="{ params: new URLSearchParams((new URL(window.location.href)).search) }" id="paginator-navigation">
+<div x-data="{ params: new URLSearchParams((new URL(window.location.href)).search), loading: false }" id="paginator-navigation">
     <div class="w-full flex justify-center items-center" 
             x-data="{
                     page: 1,
@@ -22,6 +22,7 @@ PARAMETERS:
             hx-select-oob="#items-list:outerHTML, #paginator-navigation:outerHTML"
             {% if current_page == 1 %}disabled{% endif %}
             aria-label="Previous Page"
+            @click="loading = true"
         >
             <p class="cursor-pointer mr-2 {%if current_page == 1%}text-hot-slate-grey{%else%}text-hot-red{%endif%}">
                 {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-180" %} <span class="ml-2">{{home_page.paginator_previous}}</span>
@@ -36,6 +37,7 @@ PARAMETERS:
                                 hx-select="#items-list, #paginator-navigation"
                                 hx-swap="outerHTML"
                                 hx-select-oob="#items-list:outerHTML, #paginator-navigation:outerHTML"
+                                @click="loading = true"
                         >
                             <p class="px-2 font-bold {%if forloop.counter == current_page%}bg-hot-red text-white{%else%}bg-hot-off-white{%endif%}">
                                 {{forloop.counter}}
@@ -61,10 +63,12 @@ PARAMETERS:
                 hx-swap="outerHTML"
                 hx-select-oob="#items-list:outerHTML, #paginator-navigation:outerHTML"
                 aria-label="Next Page"
+                @click="loading = true"
         >
             <p class="cursor-pointer ml-2 {%if current_page == paginator.num_pages%}text-hot-slate-grey{%else%}text-hot-red{%endif%}">
                 <span class="mr-2">{{home_page.paginator_next}}</span> {% include "ui/components/icon_svgs/LinkCaret.html" %}
             </p>
         </button>
     </div>
+    {% include "./PaginatorLoadingSymbol.html" %}
 </div>

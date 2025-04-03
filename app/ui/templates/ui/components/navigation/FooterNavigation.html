@@ -54,7 +54,7 @@ No parameters; it grabs directly from the home page (for the correct locale).
         <div class="grid grid-cols-1 lg:grid-cols-3 text-small">
             <div class="lg:order-2 flex gap-4 lg:justify-end">
                 {% for link in home_page.footer_bottom_links %}
-                    <a href="{{link.value.url}}">
+                    <a href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=link.value.link%}">
                         <p>
                             {{link.value.text}}
                         </p>

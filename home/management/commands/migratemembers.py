@@ -221,7 +221,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         self.stdout.write("i'm testing! i'm testing!")
-        # convert_all_members_in_dir("migration_pages/people")
+        convert_all_members_in_dir("migration_pages/members")
+        add_projects_to_members_in_dir("migration_pages/members")
         # convert_member_intro_to_body()
         # add_projects_to_members_in_dir("migration_pages/_people")
         # add_projects_to_members_in_dir("migration_pages/_people/staff")

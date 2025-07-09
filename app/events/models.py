@@ -29,18 +29,22 @@ class EventOwnerPage(Page):
         
         categories = EventCategory.objects.all()
         query = Q()
+        
         for category in categories:
-            if request.GET.get("cat" + str(category), ''):
+            # Check both formats: category name AND category ID
+            if (request.GET.get(category.category_name, '') or 
+                request.GET.get("cat" + str(category.id), '')):
                 query = query | Q(event_categories=category)
-        events_list = events_list.filter(query)
+        
+        events_list = events_list.filter(query).distinct()
 
-        # these queries and filters are done in seperate parts so that filtering is done as ANDs instead of ORs
+        # Rest of your existing filtering code...
         event_host_types = EventHostType.objects.all()
         query = Q()
         for host_type in event_host_types:
             if request.GET.get("htype" + str(host_type.id), ''):
                 query = query | Q(event_host_type=host_type)
-        events_list = events_list.filter(query)
+        events_list = events_list.filter(query).distinct()
 
         hubs = IndividualMappingHubPage.objects.live().filter(locale=context['page'].locale)
         query = Q()
@@ -68,7 +72,7 @@ class EventOwnerPage(Page):
                 events_list = events_list.order_by('-start_date_time')
 
         page = request.GET.get('page', 1)
-        paginator = Paginator(events_list, 6)  # if you want more/less items per page (i.e., per load), change the number here to something else
+        paginator = Paginator(events_list, 6)
         try:
             events = paginator.page(page)
         except PageNotAnInteger:

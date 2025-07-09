@@ -164,7 +164,7 @@
                                     <div class="bg-hot-off-white w-full">
                                         <hr class="border-b-2">
                                         <div class="px-1 mt-4 flex gap-x-8 gap-y-4">
-                                            {% include "./components/ProjectStatusOption.html" with status_by="---" status_id="none" %}
+                                            <!-- {% include "./components/ProjectStatusOption.html" with status_by="---" status_id="none" %} -->
                                             {% for status in statuses %}
                                                 {% include "./components/ProjectStatusOption.html" with status_by=status status_id=status.id %}
                                             {% endfor %}

@@ -145,7 +145,7 @@
                         <div class="absolute z-20 bg-hot-off-white p-4 w-full" x-show="show">
                             <hr class="border-b-2 mb-4">
                             <div class="flex flex-col gap-2">
-                                {% include "our_work/components/ProjectStatusOption.html" with status_by="---" status_id="none" %}
+                                <!-- {% include "our_work/components/ProjectStatusOption.html" with status_by="---" status_id="none" %} -->
                                 {% for status in statuses %}
                                     {% include "our_work/components/ProjectStatusOption.html" with status_by=status status_id=status.id %}
                                 {% endfor %}

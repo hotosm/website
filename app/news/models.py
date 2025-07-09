@@ -22,13 +22,82 @@ from app.mapping_hubs.models import IndividualMappingHubPage
 
 
 class NewsOwnerPage(Page):
+    # def get_context(self, request, *args, **kwargs):
+    #     context = super().get_context(request, *args, **kwargs)
+
+    #     base_locale = context['page'].get_translation(1).locale
+
+    #     keyword = request.GET.get('keyword', '')
+    #     news_list = IndividualNewsPage.objects.live().filter(locale=base_locale)
+        
+    #     if keyword:
+    #         news_list = news_list.search(keyword).get_queryset()
+
+    #     categories = NewsCategory.objects.all()
+    #     tags = [x[4:] for x in request.GET.keys() if x.startswith("tag.")]
+    #     query = Q()
+    #     for category in categories:
+    #         if request.GET.get("cat" + str(category.id), ''):
+    #             query = query | Q(categories=category)
+    #     news_list = news_list.filter(query).distinct()
+        
+    #     query = Q()
+    #     for tag in tags:
+    #         query = query | Q(tags__name=tag)
+    #     news_list = news_list.filter(query).distinct()
+
+    #     hubs = IndividualMappingHubPage.objects.live().filter(locale=base_locale)
+    #     query = Q()
+    #     for hub in hubs:
+    #         if request.GET.get(f"hub{hub.id}", ''):
+    #             query = query | Q(associated_hubs__contains=[{'type': 'region_hub', 'value': hub.id }])
+    #     news_list = news_list.filter(query).distinct()
+
+    #     match request.GET.get('sort', ''):
+    #         case 'sort.new':
+    #             news_list = news_list.order_by('-date')
+    #         case 'sort.old':
+    #             news_list = news_list.order_by('date')
+    #         case 'sort.titlea':
+    #             news_list = news_list.order_by('title')
+    #         case 'sort.titlez':
+    #             news_list = news_list.order_by('-title')
+    #         case _:
+    #             news_list = news_list.order_by('-date')
+
+    #     page = request.GET.get('page', 1)
+    #     paginator = Paginator(news_list, 9)  # if you want more/less items per page (i.e., per load), change the number here to something else
+    #     try:
+    #         news = paginator.page(page)
+    #     except PageNotAnInteger:
+    #         news = paginator.page(1)
+    #     except EmptyPage:
+    #         news = paginator.page(paginator.num_pages)
+        
+    #     context['news'] = news
+    #     context['news_paginator'] = paginator
+    #     context['current_page'] = int(page)
+    #     context['categories'] = categories
+    #     context['hubs'] = hubs
+    #     return context
+
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
 
         base_locale = context['page'].get_translation(1).locale
 
         keyword = request.GET.get('keyword', '')
-        news_list = IndividualNewsPage.objects.live().filter(locale=base_locale)
+        
+        # SOLUTION 2: Optimize queries (removed associated_hubs from prefetch_related)
+        news_list = IndividualNewsPage.objects.live().filter(
+            locale=base_locale
+        ).select_related(
+            'owner'  # Fetch page owner data in one query
+        ).prefetch_related(
+            'categories',    # Fetch all categories in one query
+            'tags'          # Fetch all tags in one query
+            # Note: associated_hubs removed because it's a StreamField
+        )
         
         if keyword:
             news_list = news_list.search(keyword).get_queryset()
@@ -53,20 +122,31 @@ class NewsOwnerPage(Page):
                 query = query | Q(associated_hubs__contains=[{'type': 'region_hub', 'value': hub.id }])
         news_list = news_list.filter(query).distinct()
 
+        # SOLUTION 2: Add safety measures for sorting with limits
+        total_count = news_list.count()
+        
         match request.GET.get('sort', ''):
             case 'sort.new':
                 news_list = news_list.order_by('-date')
             case 'sort.old':
                 news_list = news_list.order_by('date')
             case 'sort.titlea':
-                news_list = news_list.order_by('title')
+                if total_count > 1000:  # Prevent timeout on large datasets
+                    context['sort_warning'] = f"Showing first 1000 of {total_count} results for performance"
+                    news_list = news_list.order_by('title')[:1000]
+                else:
+                    news_list = news_list.order_by('title')
             case 'sort.titlez':
-                news_list = news_list.order_by('-title')
+                if total_count > 1000:  # Prevent timeout on large datasets
+                    context['sort_warning'] = f"Showing first 1000 of {total_count} results for performance"
+                    news_list = news_list.order_by('-title')[:1000]
+                else:
+                    news_list = news_list.order_by('-title')
             case _:
                 news_list = news_list.order_by('-date')
 
         page = request.GET.get('page', 1)
-        paginator = Paginator(news_list, 9)  # if you want more/less items per page (i.e., per load), change the number here to something else
+        paginator = Paginator(news_list, 9)
         try:
             news = paginator.page(page)
         except PageNotAnInteger:

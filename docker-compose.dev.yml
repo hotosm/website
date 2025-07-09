@@ -1,4 +1,4 @@
-version: "3.11"
+# version: "3.11"
 services:
   web:
     image: "ghcr.io/hotosm/website/backend:${TAG_OVERRIDE:-debug}"

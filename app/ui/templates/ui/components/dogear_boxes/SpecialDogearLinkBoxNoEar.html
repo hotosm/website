@@ -4,6 +4,8 @@
 - description: an HTML element (should really just be one <p> element)
 - colour: a string; the colour that the box's accents should be 
           (can be hex code or any other CSS compatible colour thing)
+- link: the link object (internal page or external URL)
+- linktext: the text to display for the link
 {% endcomment %}
 {% load wagtailcore_tags %}
 
@@ -16,6 +18,6 @@
         {{ description|richtext }}
     </div>
     <div class="mt-auto text-intro mb-6">
-        {% include "ui/components/BaseLink.html" %}
+        {% include "ui/components/BaseLink.html" with linkurl=link linktext=linktext %}
     </div>
 </div>

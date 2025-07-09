@@ -2,3 +2,15 @@
     <input class="checked:bg-hot-red checked:hover:bg-hot-red checked:focus:bg-hot-red" type="radio" name="sort" :id="sort" :value="sort" :checked="(params.get('sort') == sort || (!params.get('sort')) && sort == 'sort.new') ? 'on' : ''">
     <label class="pl-2" :for="sort">{{sort_by}}</label>
 </div>
+
+<!-- <div class="mt-4 flex items-center w-fit h-fit" 
+     x-data="{ sort: '{{sort_id}}' }" 
+     @click="setSortType('{{sort_by}}')">
+    <input class="checked:bg-hot-red checked:hover:bg-hot-red checked:focus:bg-hot-red" 
+           type="radio" 
+           name="sort" 
+           id="{{sort_id}}" 
+           value="{{sort_id}}" 
+           :checked="params.get('sort') === '{{sort_id}}' || (!params.get('sort') && '{{sort_id}}' === 'sort.new')">
+    <label class="pl-2" for="{{sort_id}}">{{sort_by}}</label>
+</div> -->

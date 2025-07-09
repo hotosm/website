@@ -80,7 +80,8 @@ class MemberGroupPage(Page):
         keyword = request.GET.get('keyword', '')
 
         if keyword:
-            members = members.search(keyword, fields=["title"]).get_queryset()
+            members = members.filter(title__icontains=keyword)
+            # members = members.search(keyword, fields=["title"]).get_queryset()
         
         hubs = IndividualMappingHubPage.objects.live().filter(locale=context['page'].get_translation(1).locale)
         query = Q()

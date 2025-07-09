@@ -6,6 +6,21 @@
 {% block body_class %}template-membergrouppage{% endblock %}
 {% block extra_css %}
     {% compress css %}
+        <style>
+            
+             .text-intro b,
+            .base-article-m b,
+            div b{
+                font-weight: 700 !important;
+                text-decoration: none !important; 
+            }
+
+            .text-intro b:hover,
+            .base-article-m b:hover,
+            div b:hover {
+                text-decoration: underline !important;
+            }
+        </style>
     {% endcompress css %}
 {% endblock extra_css %}
 

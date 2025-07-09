@@ -103,7 +103,8 @@
                 </h1>
 
                 <div class="text-right self-center text-intro">
-                    {% include "ui/components/BaseLink.html" with linkurl=page.get_parent.specific.view_all_programs_link_url linktext=page.get_parent.specific.view_all_programs_title %}
+                    <!-- {% include "ui/components/BaseLink.html" with linkurl=page.get_parent.specific.view_all_programs_link_url linktext=page.get_parent.specific.view_all_programs_title %} -->
+                    {% include "ui/components/BaseLink.html" with linkurl="/programs/" linktext=page.get_parent.specific.view_all_programs_title %}
                 </div>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mt-6">

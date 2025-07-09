@@ -3,7 +3,7 @@
 {% load wagtailcore_tags %}
 {% load wagtailimages_tags %}
 {% load compress %}
-{% block body_class %}template-individualprojectpage{% endblock %}
+
 {% block extra_css %}
     {% compress css %}
     {% endcompress css %}
@@ -50,7 +50,8 @@
                             </div>
                         {% endif %}
                         
-                        {% if page.duration or page.duration_start or page.duration_end or page.project_status %}
+                        {% comment %} DURATION SECTION - Only duration-related fields {% endcomment %}
+                        {% if page.duration or page.duration_start or page.duration_end %}
                             <div>
                                 <p>{{page.get_parent.specific.duration_title}}</p>
                                 {%if page.duration%}<p>{{page.duration}}</p>{%endif%}
@@ -65,7 +66,14 @@
                                         </p>
                                     {% endif %}
                                 {% endif %}
-                                {%if page.project_status%}<p>{{page.project_status}}</p>{%endif%}
+                            </div>
+                        {% endif %}
+
+                        {% comment %} STATUS SECTION - Separate section for project status {% endcomment %}
+                        {% if page.project_status %}
+                            <div>
+                                <p>Status</p>
+                                <p>{{page.project_status}}</p>
                             </div>
                         {% endif %}
 

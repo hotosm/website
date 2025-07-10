@@ -31,7 +31,7 @@
                         </div>
                         <div class="mt-8" x-show="expand" x-transition>
                             {% image solution.value.banner original class="aspect-[9/2] object-cover" %}
-                            <div class="base-article-m mt-8 mb-10 lg:w-3/4 text-small">
+                            <div class="base-article-m mt-8 mb-10 lg:w-3/4">
                                 {{solution.value.description}}
                             </div>
                             <div class="grid md:grid-cols-3 lg:grid-cols-4 gap-8 lg:gap-16" x-data="{ selected: 0 }">
@@ -54,7 +54,7 @@
                                                 </h2>
                                             </div>
                                             
-                                            <div class="base-article-m mt-4 text-small">
+                                            <div class="base-article-m mt-4">
                                                 {{item.value.description}}
                                             </div>
                                             <div class="flex gap-8 flex-wrap mt-8">

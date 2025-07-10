@@ -1,4 +1,4 @@
-{% comment %}
+<!-- {% comment %}
 ==> PARAMETERS
 - partners: a list of partner snippets. 
             An example of how this should be accumulated can be found in the IndividualMappingHubPage.
@@ -32,6 +32,63 @@
             </div>
         {% endfor %}
         <div x-on:click="moveIndex(1)" class="p-4 order-last text-hot-red flex flex-col justify-center">
+            {% include "ui/components/icon_svgs/LinkCaretCircle.html" with styledhover=True %}
+        </div>
+    </div>
+</div> -->
+
+{% comment %}
+==> PARAMETERS
+- partners: a list of partner snippets. 
+            An example of how this should be accumulated can be found in the IndividualMappingHubPage.
+            Alternatively, you can just do it like this: "ParentalManyToManyField('core.Partner', blank=True)"
+{% endcomment %}
+
+{% load wagtailimages_tags %}
+<div x-data="{ 
+    partnerIndex: 0, 
+    totalPartners: {{partners|length}},
+    getVisibleIndex(partnerPosition) {
+        return (partnerPosition - this.partnerIndex + this.totalPartners) % this.totalPartners;
+    },
+    moveLeft() {
+        this.partnerIndex = (this.partnerIndex - 1 + this.totalPartners) % this.totalPartners;
+    },
+    moveRight() {
+        this.partnerIndex = (this.partnerIndex + 1) % this.totalPartners;
+    }
+}">
+    <div class="flex justify-between">
+        <!-- LEFT ARROW - moves backward (shows previous items) -->
+        <div x-on:click="moveLeft()" class="p-4 order-first rotate-180 text-hot-red flex flex-col justify-center cursor-pointer">
+            {% include "ui/components/icon_svgs/LinkCaretCircle.html" with styledhover=True %}
+        </div>
+        
+        {% for partner in partners %}
+            <div x-show="getVisibleIndex({{forloop.counter0}}) < 4"
+                 :class="{ 
+                    'block': getVisibleIndex({{forloop.counter0}}) === 0,
+                    'hidden md:block': getVisibleIndex({{forloop.counter0}}) === 1 || getVisibleIndex({{forloop.counter0}}) === 2, 
+                    'hidden lg:block': getVisibleIndex({{forloop.counter0}}) === 3,
+                    'hidden': getVisibleIndex({{forloop.counter0}}) > 3
+                }"
+                :style="`order: ${getVisibleIndex({{forloop.counter0}}) + 1}`"
+                class="p-4 transition-all duration-300"
+            >
+                {% if partner.value %}
+                    <a href="{{partner.value.partner_url}}" aria-label="{{partner.value.partner_name}}">
+                        {% image partner.value.partner_logo original class="max-h-16 max-w-full h-full w-auto" %}
+                    </a>
+                {% else %}
+                    <a href="{{partner.partner_url}}" aria-label="{{partner.partner_name}}">
+                        {% image partner.partner_logo original class="max-h-16 max-w-full h-full w-auto" %}
+                    </a>
+                {% endif %}
+            </div>
+        {% endfor %}
+        
+        <!-- RIGHT ARROW - moves forward (shows next items) -->
+        <div x-on:click="moveRight()" class="p-4 order-last text-hot-red flex flex-col justify-center cursor-pointer">
             {% include "ui/components/icon_svgs/LinkCaretCircle.html" with styledhover=True %}
         </div>
     </div>

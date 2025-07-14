@@ -53,7 +53,7 @@
             </h1>
             <hr class="border-hot-red w-16 border-b-2" />
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 py-6">
+        <!-- <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 py-6">
             {% for goal in page.goals %}
                 <div class="[&_ul]:list-disc [&_li]:py-1 [&_ul]:p-4 [&_li::marker]:text-hot-red bg-hot-off-white py-8 px-6">
                     {% comment %} Icon Section {% endcomment %}
@@ -68,6 +68,25 @@
                     </h1>
                     {{ goal.value.description|richtext }}
                 </div>
+            {% endfor %}
+        </div> -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 py-6">
+            {% for goal in page.goals %}
+                {% if goal.block_type == 'goal_block' %}
+                    <div class="[&_ul]:list-disc [&_li]:py-1 [&_ul]:p-4 [&_li::marker]:text-hot-red bg-hot-off-white py-8 px-6">
+                        {% comment %} Icon Section {% endcomment %}
+                        {% if goal.value.icon %}
+                            <div class="mb-4 flex justify-start">
+                                {% image goal.value.icon width-64 class="w-16 h-16 object-contain" %}
+                            </div>
+                        {% endif %}
+                        
+                        <h1 class="text-h4 font-bold">
+                            {{ goal.value.title }}
+                        </h1>
+                        {{ goal.value.description|richtext }}
+                    </div>
+                {% endif %}
             {% endfor %}
         </div>
 

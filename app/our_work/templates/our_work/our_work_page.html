@@ -9,35 +9,35 @@
     {% compress css %}
     <style>
     .filter-buttons-sticky {
-        position: fixed;
-        bottom: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 100%;
-        max-width: 28rem;
-        background: #f5f5f5; 
-        border-top: 2px solid #000;
-        padding: 1rem 3rem;
-        z-index: 50;
-        box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        width: 100% !important;
+        max-width: 28rem !important;
+        background: #f5f5f5 !important; 
+        border-top: 2px solid #000 !important;
+        padding: 1rem 3rem !important;
+        z-index: 50 !important;
+        box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1) !important;
     }
     
     @media (min-width: 1024px) {
         .filter-buttons-sticky {
-            max-width: calc(28rem * 1.2); 
+            max-width: calc(28rem * 1.2) !important; 
         }
     }
     
     @media (max-width: 768px) {
         .filter-buttons-sticky {
-            max-width: calc(100vw - 3rem); 
-            left: 50%;
-            padding: 1rem 1.5rem;
+            max-width: calc(100vw - 3rem) !important; 
+            left: 50% !important;
+            padding: 1rem 1.5rem !important;
         }
     }
     
     .sticky-buttons-active {
-        padding-bottom: 80px;
+        padding-bottom: 80px !important;
     }
     </style>
     {% endcompress css %}

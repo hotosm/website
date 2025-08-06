@@ -12,30 +12,6 @@
 {% block content %}
     {% include "ui/components/PageHeaderWithBlur.html" with title=page.title image=page.header_image full_length=True endinlarge=True %}
 
-    {% if not settings.DEBUG %}
-    <div style="background: #ffeb3b; border: 3px solid #ff5722; padding: 20px; margin: 20px; font-family: monospace; font-size: 12px; position: relative; z-index: 9999;">
-        <h3 style="color: #d32f2f; margin-top: 0;">🐛 DEBUG: Goal Icons (Remove this in production!)</h3>
-        {% for goal in page.goals %}
-            {% if goal.value.icon %}
-                <div style="border: 1px solid #2196f3; margin: 10px 0; padding: 10px; background: white;">
-                    <strong>Goal:</strong> {{ goal.value.title }}<br>
-                    <strong>Icon Title:</strong> {{ goal.value.icon.title }}<br>
-                    <strong>File Name:</strong> {{ goal.value.icon.file.name }}<br>
-                    <strong>File URL:</strong> <a href="{{ goal.value.icon.file.url }}" target="_blank">{{ goal.value.icon.file.url }}</a><br>
-                    
-                    <!-- Test direct image -->
-                    <strong>Direct img test:</strong> 
-                    <img src="{{ goal.value.icon.file.url }}" width="32" height="32" style="border: 2px solid red;" onerror="this.style.border='2px solid red'; this.alt='❌ FAILED';" onload="this.style.border='2px solid green';"><br>
-                    
-                    <!-- Test Wagtail rendering -->
-                    <strong>Wagtail img test:</strong> 
-                    {% image goal.value.icon width-32 %}
-                </div>
-            {% endif %}
-        {% endfor %}
-    </div>
-    {% endif %}
-
 
     <div class="max-w-7xl mx-auto my-10 px-6 md:px-10">
         <div class="text-h5 font-bold max-w-3xl my-10 [&_b]:text-hot-red bold-override">
@@ -83,7 +59,8 @@
                 <div class="[&_ul]:list-disc [&_li]:py-1 [&_ul]:p-4 [&_li::marker]:text-hot-red bg-hot-off-white py-8 px-6">
                     {% if goal.value.icon %}
                         <div class="mb-4 flex justify-start">
-                            {% image goal.value.icon width-64 class="w-16 h-16 object-contain" %}
+                            <!-- {% image goal.value.icon width-64 class="w-16 h-16 object-contain" %} -->
+                            <img src="{{ goal.value.icon.file.url }}" class="w-16 h-16 object-contain" alt="{{ goal.value.icon.title }}">
                         </div>
                     {% endif %}
                     <h1 class="text-h4 font-bold">

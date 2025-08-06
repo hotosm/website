@@ -92,11 +92,21 @@
                         </div>
                     </div>
 
-                    {% comment %} TAG {% endcomment %}
+                    <!-- {% comment %} TAG {% endcomment %}
                     <div class="bg-hot-off-white flex items-center" x-data="{ submitTagInput() {
                         if(!$refs.taginput.value) return;
                         $refs.taglist.innerHTML += `<div @click='' class='bg-hot-red text-white p-2 cursor-default'><input class='hidden' value='on' name='tag.${escape($refs.taginput.value)}'><p>${escape($refs.taginput.value)} <span class='ml-2 cursor-pointer' @click='$el.parentElement.parentElement.remove()'>✖</span></p></div>`; $refs.taginput.value = '';
-                    } }">
+                    } }"> -->
+                     {% comment %} TAG {% endcomment %}
+                        <div class="bg-hot-off-white flex items-center" x-data="{ submitTagInput() {
+                            if(!$refs.taginput.value) return;
+                            $refs.taglist.innerHTML += `<div @click='' class='bg-hot-red text-white p-2 cursor-default'><input class='hidden' value='on' name='tag.${escape($refs.taginput.value)}'><p>${escape($refs.taginput.value)} <span class='ml-2 cursor-pointer' @click='$el.parentElement.parentElement.remove()'>✖</span></p></div>`; 
+                            $refs.taginput.value = '';
+                            // Auto-submit the form after adding the tag
+                            setTimeout(() => {
+                                document.getElementById('search-form').submit();
+                            }, 100);
+                        } }">
                         <input class="w-full bg-transparent border-none" placeholder="{{page.enter_tag_hint}}" type="text" name="tagfield" x-ref="taginput" 
                                x-on:keydown.enter="submitTagInput(); $event.preventDefault(); return false;"
                         >

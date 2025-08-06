@@ -7,6 +7,39 @@
 {% block body_class %}template-ourworkpage{% endblock %}
 {% block extra_css %}
     {% compress css %}
+    <style>
+    .filter-buttons-sticky {
+        position: fixed;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
+        max-width: 28rem;
+        background: #f5f5f5; 
+        border-top: 2px solid #000;
+        padding: 1rem 3rem;
+        z-index: 50;
+        box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    
+    @media (min-width: 1024px) {
+        .filter-buttons-sticky {
+            max-width: calc(28rem * 1.2); 
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .filter-buttons-sticky {
+            max-width: calc(100vw - 3rem); 
+            left: 50%;
+            padding: 1rem 1.5rem;
+        }
+    }
+    
+    .sticky-buttons-active {
+        padding-bottom: 80px;
+    }
+    </style>
     {% endcompress css %}
 {% endblock extra_css %}
 
@@ -38,7 +71,8 @@
             </div>
 
             {% comment %} FILTERS {% endcomment %}
-            <div class="mt-20" x-data="{ mapView: params.get('mapView') ? params.get('mapView') : true, showFilters: params.get('showFilters') ? params.get('showFilters') : false }" id="projects-section">
+            <div class="mt-20" x-data="{ mapView: params.get('mapView') ? params.get('mapView') : true, showFilters: params.get('showFilters') ? params.get('showFilters') : false }" id="projects-section"
+                 x-init="$watch('showFilters', value => { document.body.classList.toggle('sticky-buttons-active', value) })">
                 <h1 class="text-h2 font-bold">
                     {{ page.projects_title }}
                 </h1>
@@ -149,9 +183,9 @@
                             </div>
                         </div>
                         
-                        {% comment %} FILTERS {% endcomment %}
+                        {% comment %} FILTERS - WITH FIXED POSITION BUTTONS {% endcomment %}
                         <div class="md:col-start-1 md:row-start-1 min-h-[30rem] bg-hot-off-white z-10 px-12 py-10 order-1 md:order-2" :class="showFilters ? '' : 'invisible hidden md:block'">
-                            <div class="grid lg:grid-cols-3 gap-8">
+                            <div class="grid lg:grid-cols-3 gap-8 pb-20">
                                 {% include "./components/FilterCategoryPage.html" with pages=impact_areas denoter="ia" title=page.f_impact_areas_text %}
                                 {% include "./components/FilterCategoryPage.html" with pages=hubs denoter="hub" title=page.f_open_mapping_hubs_text %}
                                 {% include "./components/FilterCategoryPage.html" with pages=programs denoter="pg" title=page.f_projects_by_programme_text %}
@@ -172,20 +206,24 @@
                                     </div>
                                 </div>
                             </div>
-                            <hr class="border-b-2 my-8">
-                            <div class="flex justify-end gap-8 items-center">
-                                <div>
-                                    <input type="submit" value="{{page.f_apply_filter_text}}" class="text-white text-intro font-medium font-archivo py-1 bg-hot-red border-2 border-hot-red text-hot-white px-hot-3 hover:bg-hot-off-white hover:text-hot-red focus:bg-transparent focus:text-hot-red focus:ring-2 focus:ring-hot-red focus:ring-inset w-full h-full cursor-pointer" @click="showFilters = false;">
-                                </div>
-                                <a href="{{page.url}}#projects-section" @click="window.location.reload();">
-                                    <p class="cursor-pointer inline-block text-intro font-medium">
-                                        <span class="border-b-hot-red border-b-2 pb-1">
-                                            {{page.f_reset_filters_text}}
-                                        </span>
-                                        {% include "ui/components/icon_svgs/RefreshIcon.html" with class="ml-4" %}
-                                    </p>
-                                </a>
+                        </div>
+                    </div>
+                    
+                    {% comment %} STICKY FILTER BUTTONS - FIXED AT BOTTOM OF VIEWPORT {% endcomment %}
+                    <div class="bg-hot-off-white px-12 py-4" :class="showFilters ? 'filter-buttons-sticky' : 'hidden'">
+                        <hr class="border-b-2 mb-4">
+                        <div class="flex justify-end gap-8 items-center">
+                            <div>
+                                <input type="submit" value="{{page.f_apply_filter_text}}" class="text-white text-intro font-medium font-archivo py-1 bg-hot-red border-2 border-hot-red text-hot-white px-hot-3 hover:bg-hot-off-white hover:text-hot-red focus:bg-transparent focus:text-hot-red focus:ring-2 focus:ring-hot-red focus:ring-inset w-full h-full cursor-pointer" @click="showFilters = false;">
                             </div>
+                            <a href="{{page.url}}#projects-section" @click="window.location.reload();">
+                                <p class="cursor-pointer inline-block text-intro font-medium">
+                                    <span class="border-b-hot-red border-b-2 pb-1">
+                                        {{page.f_reset_filters_text}}
+                                    </span>
+                                    {% include "ui/components/icon_svgs/RefreshIcon.html" with class="ml-4" %}
+                                </p>
+                            </a>
                         </div>
                     </div>
                 </form>

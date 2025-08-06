@@ -110,8 +110,18 @@
                 </h1>
 
                 <div class="text-right self-center text-intro">
-                    {% include "ui/components/BaseLink.html" with linkurl=page.get_parent.specific.view_all_programs_link_url linktext=page.get_parent.specific.view_all_programs_title %}
+                    {% if page.get_parent.specific.view_all_programs_link_url %}
+                        {% include "ui/components/BaseLink.html" with linkurl=page.get_parent.specific.view_all_programs_link_url linktext=page.get_parent.specific.view_all_programs_title %}
+                    {% else %}
+                        <a href="{{ page.get_parent.url }}" class="text-hot-red hover:underline inline-flex items-center gap-2">
+                            {{ page.get_parent.specific.view_all_programs_title|default:"View All Programs" }}
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+                            </svg>
+                        </a>
+                    {% endif %}
                 </div>
+                                
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mt-6">
                 {% for program in page.more_programs %}

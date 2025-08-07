@@ -323,3 +323,42 @@ class IndividualNewsPage(Page):
             FieldPanel('associated_hubs'),
         ], heading="Sidebar"),
     ]
+
+    @classmethod
+    def get_tool_related_news(cls, tool_name, tool_tags=None, limit=6):
+        """
+        Get news articles related to a specific tool.
+        
+        Args:
+            tool_name (str): Name of the tool to search for in titles
+            tool_tags (list): List of tag names to filter by
+            limit (int): Maximum number of articles to return
+        
+        Returns:
+            QuerySet: Filtered news articles
+        """
+        from django.db.models import Q
+        
+        # Start with live pages only
+        news_queryset = cls.objects.live().select_related('owner').prefetch_related('tags', 'categories')
+        
+        # Create query for title and tag filtering
+        query = Q()
+        
+        # Search for tool name in title (case-insensitive)
+        if tool_name:
+            query |= Q(title__icontains=tool_name)
+        
+        # Search for tool-related tags
+        if tool_tags:
+            for tag in tool_tags:
+                query |= Q(tags__name__icontains=tag)
+        
+        # Apply filters and order by date (newest first)
+        filtered_news = news_queryset.filter(query).distinct().order_by('-date')
+        
+        # Limit results
+        if limit:
+            filtered_news = filtered_news[:limit]
+        
+        return filtered_news

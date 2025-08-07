@@ -1,0 +1,79 @@
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+
+{% comment %}
+Usage: {% include "ui/components/news/NewsToolSection.html" with news_articles=tool_news section_title="DroneTM News" view_all_text="View all DroneTM News" view_all_url="/news/?tag.dronetm=on" %}
+{% endcomment %}
+
+{% if news_articles %}
+<div class="my-20">
+    <div class="flex justify-between items-end mb-8">
+        <h1 class="text-h2 font-bold">
+            {{ section_title|default:"Related News" }}
+        </h1>
+        {% if view_all_url %}
+        <div class="text-intro">
+            <a href="{{ view_all_url }}" class="text-hot-red hover:underline font-medium">
+                {{ view_all_text|default:"View all News" }}
+                <span class="ml-2">→</span>
+            </a>
+        </div>
+        {% endif %}
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {% for article in news_articles %}
+        <div class="bg-hot-off-white">
+            {% if article.image %}
+                <div class="aspect-[4/3] overflow-hidden">
+                    {% image article.image fill-400x300 class="w-full h-full object-cover" %}
+                </div>
+            {% endif %}
+            
+            <div class="p-6">
+                <div class="text-sm text-gray-600 mb-2">
+                    {{ article.date|date:"M d, Y" }}
+                    {% if article.categories.all %}
+                        <span class="mx-1">•</span>
+                        {% for category in article.categories.all %}
+                            <span class="text-hot-red">{{ category.category_name }}</span>{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                
+                <h3 class="text-h4 font-semibold mb-3 leading-tight">
+                    <a href="{{ article.url }}" class="text-black hover:text-hot-red transition-colors">
+                        {{ article.title }}
+                    </a>
+                </h3>
+                
+                {% if article.intro %}
+                <div class="text-intro text-gray-700 mb-4 line-clamp-3">
+                    {{ article.intro|richtext|striptags|truncatewords:20 }}
+                </div>
+                {% endif %}
+                
+                <div class="flex justify-between items-center">
+                    <a href="{{ article.url }}" class="text-hot-red hover:underline font-medium text-sm">
+                        {{ read_more_text|default:"Read More" }} →
+                    </a>
+                    
+                    {% if article.tags.all %}
+                    <div class="flex flex-wrap gap-1">
+                        {% for tag in article.tags.all|slice:":2" %}
+                        <span class="text-xs bg-gray-200 text-gray-700 px-2 py-1 rounded">
+                            {{ tag.name }}
+                        </span>
+                        {% endfor %}
+                        {% if article.tags.all.count > 2 %}
+                        <span class="text-xs text-gray-500">+{{ article.tags.all.count|add:"-2" }}</span>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}

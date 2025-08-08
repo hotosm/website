@@ -7,7 +7,6 @@ from wagtail.blocks import CharBlock, StreamBlock, StructBlock, URLBlock, RichTe
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.models import Page
 from app.core.models import LinkOrPageBlock
-from app.news.models import IndividualNewsPage
 
 
 class IndividualTechStackPage(Page):
@@ -54,59 +53,6 @@ class IndividualTechStackPage(Page):
         ]))
     ], use_json_field=True, null=True, blank=True)
 
-    def get_context(self, request, *args, **kwargs):
-        context = super().get_context(request, *args, **kwargs)
-        
-        # Import the news model - CORRECTED IMPORT PATH
-        from app.news.models import IndividualNewsPage
-        
-        # Define tool-specific keywords and tags based on the page slug
-        tool_config = {
-            'drone-tasking-manager': {
-                'name': 'DroneTM',
-                'tags': ['dronetm', 'drone', 'tasking manager', 'drone mapping'],
-                'section_title': 'DroneTM News',
-                'view_all_text': 'View all DroneTM News',
-                'view_all_url': '/news/?tag.dronetm=on'
-            },
-            'field-mapping-tasking-manager': {
-                'name': 'FMTM',
-                'tags': ['fmtm', 'field mapping', 'tasking manager'],
-                'section_title': 'FMTM News',
-                'view_all_text': 'View all FMTM News', 
-                'view_all_url': '/news/?tag.fmtm=on'
-            },
-            'export-tool': {
-                'name': 'Export Tool',
-                'tags': ['export tool', 'data export', 'osm export'],
-                'section_title': 'Export Tool News',
-                'view_all_text': 'View all Export Tool News',
-                'view_all_url': '/news/?tag.export=on'
-            },
-        }
-        
-        # Get the page slug to determine which tool this is
-        page_slug = self.slug
-        
-        if page_slug in tool_config:
-            config = tool_config[page_slug]
-            
-            # Get filtered news for this tool
-            tool_news = IndividualNewsPage.get_tool_related_news(
-                tool_name=config['name'],
-                tool_tags=config['tags'],
-                limit=6
-            )
-            
-            context.update({
-                'tool_news': tool_news,
-                'news_section_title': config['section_title'],
-                'news_view_all_text': config['view_all_text'],
-                'news_view_all_url': config['view_all_url'],
-            })
-        
-        return context  # ✅ FIXED: Added missing return statement
-
     content_panels = Page.content_panels + [
         FieldPanel('header_image'),
         FieldPanel('intro'),
@@ -120,6 +66,33 @@ class IndividualTechStackPage(Page):
         ], heading="Body Section"),
         FieldPanel('link_blocks'),
     ]
+
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+        
+        # Import here to avoid startup issues
+        from app.news.models import IndividualNewsPage
+        
+        # Check if this is the DroneTM page
+        if self.slug == 'drone-tasking-manager':
+            # Get DroneTM-specific news
+            tool_news = IndividualNewsPage.get_tool_related_news(
+                tool_name='DroneTM',
+                tool_tags=['dronetm', 'drone', 'drone mapping'],
+                limit=6
+            )
+            section_title = 'DroneTM News'
+        else:
+            # For other pages, show recent news
+            tool_news = IndividualNewsPage.get_tool_related_news(limit=3)
+            section_title = 'Recent News'
+        
+        context.update({
+            'tool_news': tool_news,
+            'news_section_title': section_title,
+        })
+        
+        return context
 
 
 class TechProductSuitePage(Page):
@@ -157,7 +130,7 @@ class TechProductSuitePage(Page):
     black_box_link_text = models.CharField(default="View tech news")
     black_box_link_url = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
     category_filter_selector = models.ForeignKey(
-        "app.news.NewsCategory",  # ✅ FIXED: Updated for consistency
+        "news.NewsCategory",
         null=True,
         blank=True,
         on_delete=models.SET_NULL,

@@ -69,13 +69,8 @@
                 {% endfor %}
             </div>
 
-            <!-- {% comment %} TOOL-SPECIFIC NEWS SECTION - Add this block {% endcomment %}
-            {% include "ui/components/news/NewsToolSection.html" with news_articles=tool_news section_title=news_section_title view_all_text=news_view_all_text view_all_url=news_view_all_url %} -->
-
-            {% comment %} TEST: Simple news section {% endcomment %}
+            {% comment %} news section {% endcomment %}
             <div class="my-20">
-                <!-- <h1 class="text-h2 font-bold mb-8">DroneTM News</h1> -->
-                <!-- {% include "ui/components/news/NewsToolSection.html" with section_title="DroneTM News Test" %} -->
                  {% include "ui/components/news/NewsToolSection.html" with news_articles=tool_news section_title=news_section_title %}
             </div>
             

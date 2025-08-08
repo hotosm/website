@@ -70,10 +70,8 @@ class IndividualTechStackPage(Page):
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
         
-        # Import here to avoid startup issues
         from app.news.models import IndividualNewsPage
         
-        # Check if this is the DroneTM page
         if self.slug == 'drone-tasking-manager':
             # Get DroneTM-specific news
             tool_news = IndividualNewsPage.get_tool_related_news(
@@ -83,7 +81,6 @@ class IndividualTechStackPage(Page):
             )
             section_title = 'DroneTM News'
         else:
-            # For other pages, show recent news
             tool_news = IndividualNewsPage.get_tool_related_news(limit=3)
             section_title = 'Recent News'
         

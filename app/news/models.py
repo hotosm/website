@@ -331,27 +331,21 @@ class IndividualNewsPage(Page):
         """
         from django.db.models import Q
         
-        # Start with live pages only
         news_queryset = cls.objects.live().order_by('-date')
         
-        # If we have filtering criteria, apply them
         if tool_name or tool_tags:
             query = Q()
             
-            # Search for tool name in title (case-insensitive)
             if tool_name:
                 query |= Q(title__icontains=tool_name)
             
-            # Search for tool-related tags
             if tool_tags:
                 for tag in tool_tags:
                     query |= Q(tags__name__icontains=tag)
             
-            # Apply the filter
             if query:
                 news_queryset = news_queryset.filter(query).distinct()
         
-        # Limit results
         if limit:
             news_queryset = news_queryset[:limit]
         

@@ -16,7 +16,8 @@ Usage: {% include "ui/components/news/NewsToolSection.html" with news_articles=t
         <div class="bg-hot-off-white">
             {% if article.image %}
                 <div class="aspect-[4/3] overflow-hidden">
-                    {% image article.image fill-400x300 class="w-full h-full object-cover" %}
+                    <!-- {% image article.image fill-400x300 class="w-full h-full object-cover" %} -->
+                     {% image article.image original class="w-full h-full object-cover" %}
                 </div>
             {% endif %}
             

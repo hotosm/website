@@ -20,7 +20,7 @@ from home.management.migration_helpers import create_image_from_url, create_imag
 FRONTMATTER_FIELD_TO_NEWS_FIELD_DICT = {
     "date": ("date", lambda date: date),
     "Person": ("authors", lambda authors: handle_authors(authors)),
-    # "Feature Image": ("image", lambda image: create_image_from_url(HOTOSM_LEGACY_SITE_URL + image, image)),
+    "Feature Image": ("image", lambda image: create_image_from_url(HOTOSM_LEGACY_SITE_URL + image, image)),
     "Summary Text": ("intro", lambda intro: f"<p>{intro}</p>"),
     "Project": ("related_projects", lambda projects: handle_projects(projects)),
     "Projects": ("related_projects", lambda projects: handle_projects(projects)),

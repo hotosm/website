@@ -1,3 +1,27 @@
+<!-- {% comment %}
+==> PARAMETERS
+- program: An IndividualProgramPage object; the program page to be previewed
+{% endcomment %}
+
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+
+{% with program.localized as program %}
+    <a href="{% include 'ui/components/PageOrLinkHrefText.html' with linkurl=program %}">
+        <div class="w-full bg-no-repeat bg-cover aspect-[4/3] grid">
+            {% image program.header_image original class="h-full w-full object-cover object-center col-start-1 row-start-1" %}
+            <div class="bg-gradient-to-t from-black/90 to-black/15 w-full h-full flex items-end col-start-1 row-start-1">
+                <div class="text-white p-4 text-small">
+                    <h1 class="text-h5 font-bold mb-2">
+                        {{ program.title }}
+                    </h1>
+                    {{ program.subtitle|richtext }}
+                </div>
+            </div>
+        </div>
+    </a>
+{% endwith %} -->
+
 {% comment %}
 ==> PARAMETERS
 - program: An IndividualProgramPage object; the program page to be previewed
@@ -10,6 +34,16 @@
     <a href="{% include 'ui/components/PageOrLinkHrefText.html' with linkurl=program %}">
         <div class="w-full bg-no-repeat bg-cover aspect-[4/3] grid">
             {% image program.header_image original class="h-full w-full object-cover object-center col-start-1 row-start-1" %}
+            
+            <!-- Completed Badge -->
+            {% if program.status == 'completed' %}
+                <div class="col-start-1 row-start-1 self-start justify-self-end m-4 pointer-events-none">
+                    <span class="bg-hot-red text-white px-3 py-1 rounded font-bold shadow-lg text-xs inline-block">
+                        COMPLETED
+                    </span>
+                </div>
+            {% endif %}
+            
             <div class="bg-gradient-to-t from-black/90 to-black/15 w-full h-full flex items-end col-start-1 row-start-1">
                 <div class="text-white p-4 text-small">
                     <h1 class="text-h5 font-bold mb-2">

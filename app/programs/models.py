@@ -331,7 +331,7 @@ class ProgramOwnerPage(Page):
     search_button_text = models.CharField(default="Apply Filters")
     remove_filters_text = models.CharField(default="Reset Filters")
 
-    red_box_title = models.CharField(default="See all of HOT’s projects")
+    red_box_title = models.CharField(default="See all of HOT's projects")
     red_box_link_text = models.CharField(default="Explore projects")
     red_box_link_url = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
     black_box_title = models.CharField(default="See the many ways to get involved with HOT and open mapping")
@@ -451,6 +451,19 @@ class IndividualProgramPage(Page):
     ], use_json_field=True, null=True, blank=True)
 
     program_start_date = models.DateField(help_text="This is not shown on the program page itself, and is basically just used for sorting on the program owner page.")
+    
+    # NEW: Status field (ongoing or completed)
+    STATUS_CHOICES = [
+        ('ongoing', 'Ongoing'),
+        ('completed', 'Completed'),
+    ]
+    
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default='ongoing',
+        help_text="Current status of the program"
+    )
 
     search_fields = Page.search_fields + [
         index.SearchField('title'),
@@ -483,6 +496,7 @@ class IndividualProgramPage(Page):
         ], heading="Programs"),
         MultiFieldPanel([
             FieldPanel('program_start_date'),
+            FieldPanel('status'),  # NEW: Status field added here
         ], heading="Others"),
     ]
 

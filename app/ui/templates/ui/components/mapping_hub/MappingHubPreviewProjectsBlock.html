@@ -4,8 +4,6 @@
 {% endcomment %}
 {% load wagtailimages_tags %}
 
-{% with hub.id|stringformat:"s" as id %}
-    <a href="{% include 'ui/components/PageOrLinkHrefText.html' with linkurl=baselink linkappendage="?hub"|add:id|add:"=on" %}" class="hover:underline">
-        {% include "./MappingHubPreviewBlockBase.html" with hub=hub %}
-    </a>
-{% endwith %}
+<a href="{{ hub.url }}" class="hover:underline">
+    {% include "./MappingHubPreviewBlockBase.html" with hub=hub %}
+</a>

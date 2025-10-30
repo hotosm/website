@@ -1,9 +1,9 @@
 {% load wagtailimages_tags %}
 <div x-data="{ partnerIndex: 0, fixedIndex(x) {return ({{items|length}} + x + this.partnerIndex) % {{items|length}}}, moveIndex(x) {this.partnerIndex = this.fixedIndex(x)} }" 
      class="grid {{class}}">
-    <div class="flex justify-between gap-8 items-center ml-auto">
+    <div class="flex justify-between gap-8 items-center">
         {% if title %}
-        <div>
+        <div class="self-start">
             {% include "ui/components/SectionHeadingWithUnderline.html" %}
         </div>
         {% endif %}

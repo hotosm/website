@@ -14,12 +14,13 @@ Usage: {% include "ui/components/news/NewsToolSection.html" with news_articles=t
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {% for article in news_articles %}
         <div class="bg-hot-off-white">
-            {% if article.image %}
-                <div class="aspect-[4/3] overflow-hidden">
-                    <!-- {% image article.image fill-400x300 class="w-full h-full object-cover" %} -->
-                     {% image article.image original class="w-full h-full object-cover" %}
-                </div>
-            {% endif %}
+            <div class="aspect-[4/3] overflow-hidden">
+                {% if article.image %}
+                    {% image article.image original class="w-full h-full object-cover" %}
+                {% else %}
+                    {% image article.get_parent.specific.fallback_image original class="w-full h-full object-cover" %}
+                {% endif %}
+            </div>
             
             <div class="p-6">
                 <div class="text-sm text-gray-600 mb-2">

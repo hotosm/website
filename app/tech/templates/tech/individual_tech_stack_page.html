@@ -38,12 +38,12 @@
 
             <div class="my-20 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
                 <div>
+                    <h1 class="text-h2 font-bold mb-3">
+                        {{page.section_title}}
+                    </h1>
                     {% image page.section_image original class="object-contain w-[100%] h-[100%]" %}
                 </div>
                 <div class="">
-                    <h1 class="text-h2 font-bold mb-2">
-                        {{page.section_title}}
-                    </h1>
                     <div class="text-intro font-medium mb-4">
                         {{page.section_intro|richtext}}
                     </div>

@@ -77,11 +77,11 @@
             >
                 {% if partner.value %}
                     <a href="{{partner.value.partner_url}}" aria-label="{{partner.value.partner_name}}">
-                        {% image partner.value.partner_logo original class="max-h-16 max-w-full h-full w-auto" %}
+                        {% image partner.value.partner_logo original class="max-h-20 max-w-full w-auto" %}
                     </a>
                 {% else %}
                     <a href="{{partner.partner_url}}" aria-label="{{partner.partner_name}}">
-                        {% image partner.partner_logo original class="max-h-16 max-w-full h-full w-auto" %}
+                        {% image partner.partner_logo original class="max-h-20 max-w-full w-auto" %}
                     </a>
                 {% endif %}
             </div>

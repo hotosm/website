@@ -53,17 +53,19 @@
     
     <div class="max-w-7xl mx-auto my-10" x-data="{ params: new URLSearchParams((new URL(window.location.href)).search) }">
         <div class="px-6 md:px-10">
-            <div class="grid grid-cols-1 lg:grid-cols-5 mt-10 mb-5 gap-4">
-                <div class="col-span-3">
+            <div class="mt-10 mb-5 gap-4">
+                <div class="flex flex-wrap justify-between items-start mb-4 gap-x-8 gap-y-4">
                     <h2 class="text-h2 font-bold">
                         {{ page.programs_title }}
                     </h2>
                     <div class="text-intro mt-2">
-                        {{ page.programs_description|richtext }}
+                        {% include "ui/components/BaseLink.html" with linktext=page.view_all_programs_text linkurl=page.view_all_programs_link %}
                     </div>
                 </div>
-                <div class="col-span-2 lg:text-right text-intro">
-                    {% include "ui/components/BaseLink.html" with linktext=page.view_all_programs_text linkurl=page.view_all_programs_link %}
+                <div class="grid grid-cols-1 md:grid-cols-5 text-intro">
+                    <div class="col-span-3">
+                        {{ page.programs_description|richtext }}
+                    </div>
                 </div>
             </div>
             <div class="mb-10">
@@ -277,7 +279,7 @@
                 </h1>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                     {% for hub in hubs %}
-                        {% include "ui/components/mapping_hub/MappingHubPreviewProjectsBlock.html" with baselink=page.projects_link %}
+                        {% include "ui/components/mapping_hub/MappingHubPreviewProjectsBlock.html" with hub=hub %}
                     {% endfor %}
                 </div>
             </div>

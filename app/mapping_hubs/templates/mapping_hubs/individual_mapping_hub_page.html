@@ -25,7 +25,7 @@
             </div>
 
             {% comment %} PROJECT SECTION {% endcomment %}
-            <div class="grid grid-cols-1 lg:grid-cols-2 mt-20">
+            <div class="flex justify-between gap-8 flex-wrap mt-20">
                 <div>
                     {% include "ui/components/SectionHeadingWithUnderline.html" with title=page.project_section_title %}
                 </div>
@@ -48,18 +48,22 @@
             </div>
 
             {% comment %} PARTNERS SECTION {% endcomment %}
-            <div class="grid grid-cols-1 md:grid-cols-2 mt-10">
+            {% if page.partner_list %}
                 <div>
-                    {% include "ui/components/SectionHeadingWithUnderline.html" with title=page.get_parent.specific.partners_section_title %}
+                    <div class="flex justify-between gap-8 flex-wrap mt-10">
+                        <div>
+                            {% include "ui/components/SectionHeadingWithUnderline.html" with title=page.get_parent.specific.partners_section_title %}
+                        </div>
+                        <div class="text-left md:text-right text-intro mt-4 md:mt-0 self-center">
+                            {% with page.id|stringformat:"s" as id %}
+                                {% include "ui/components/BaseLink.html" with linktext=page.get_parent.specific.partners_section_link_text linkurl=page.get_parent.specific.partners_section_link linkappendage="?hub"|add:original_id|add:"=on" %}
+                            {% endwith %}
+                        </div>
+                    </div>
+                    {% include "ui/components/partners/PartnerViewBlock.html" with partners=page.partner_list %}
                 </div>
-                <div class="text-left md:text-right text-intro mt-4 md:mt-0 self-center">
-                    {% with page.id|stringformat:"s" as id %}
-                        {% include "ui/components/BaseLink.html" with linktext=page.get_parent.specific.partners_section_link_text linkurl=page.get_parent.specific.partners_section_link linkappendage="?hub"|add:original_id|add:"=on" %}
-                    {% endwith %}
-                </div>
-            </div>
-            {% include "ui/components/partners/PartnerViewBlock.html" with partners=page.partner_list %}
-
+            {% endif %}
+            
             {% comment %} DOGEAR BOXES SECTION (OPTIONAL) {% endcomment %}
             {% if page.dogear_boxes %}
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 my-20">
@@ -78,7 +82,7 @@
                     <div class="text-intro font-medium">
                         {{ page.contact_section_description|richtext }}
                     </div>
-                    <div class="text-intro font-medium">
+                    <div class="flex flex-col items-end text-intro font-medium">
                         {% for link in page.contact_section_links %}
                             <p class="mb-4">
                                 {% include "ui/components/BaseLink.html" with linktext=link.value.link_text linkurl=link.value.link_url %}

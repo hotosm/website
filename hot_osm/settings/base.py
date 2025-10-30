@@ -135,15 +135,9 @@ DATABASES = {
         "PASSWORD": os.getenv("DB_PASSWORD"),
         "HOST": os.getenv("DB_HOST"),
         "PORT": os.getenv("DB_PORT"),
-        "CONN_MAX_AGE": 300,  
-        "CONN_HEALTH_CHECKS": True,  
+        "CONN_MAX_AGE": 60,
         "OPTIONS": {
             "sslmode": "disable",
-            "connect_timeout": 10,  
-            "keepalives": 1, 
-            "keepalives_idle": 30, 
-            "keepalives_interval": 10, 
-            "keepalives_count": 5, 
         }
     }
 }

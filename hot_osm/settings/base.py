@@ -135,9 +135,11 @@ DATABASES = {
         "PASSWORD": os.getenv("DB_PASSWORD"),
         "HOST": os.getenv("DB_HOST"),
         "PORT": os.getenv("DB_PORT"),
-        "CONN_MAX_AGE": 60,
+        "CONN_MAX_AGE": 0,  # Disable connection pooling for remote database to avoid stale connections
+        "CONN_HEALTH_CHECKS": True,  
         "OPTIONS": {
             "sslmode": "disable",
+            "connect_timeout": 10,  
         }
     }
 }

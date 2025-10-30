@@ -12,3 +12,5 @@ node_modules
 /media
 /locale
 /migration_pages
+# Prevent duplicate CSS file from being committed
+/hot_osm/static/css/hot_osm_processed.css

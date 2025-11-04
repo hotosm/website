@@ -127,27 +127,16 @@ WSGI_APPLICATION = "hot_osm.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
+import dj_database_url
+import re
+
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("DB_NAME"),
-        "USER": os.getenv("DB_USER"),
-        "PASSWORD": os.getenv("DB_PASSWORD"),
-        "HOST": os.getenv("DB_HOST"),
-        "PORT": os.getenv("DB_PORT"),
-        "CONN_MAX_AGE": 60,
-        "OPTIONS": {
-            "sslmode": "disable",
-        }
-    }
+    "default": dj_database_url.parse(
+        os.getenv("DATABASE_URL", "postgres://localhost/postgres"),
+        conn_max_age=600,
+        ssl_require=False,
+    )
 }
-# DATABASES = {
-#     "default": dj_database_url.parse(
-#         re.sub(r"^postgres(ql)?", "postgis", os.getenv("DATABASE_URL", None)),
-#         conn_max_age=600,
-#         ssl_require=False,
-#     )
-# }
 
 
 # Password validation

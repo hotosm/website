@@ -1,6 +1,10 @@
 # Django project
 /media/
 
+# Environment files
+.env
+.env.*
+
 # Python and others
 __pycache__
 *.pyc

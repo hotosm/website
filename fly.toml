@@ -1,10 +1,10 @@
-# fly.toml app configuration file generated for hotosm-staging-new on 2024-06-11T15:08:20-07:00
+# fly.toml app configuration file generated for hotosm-production on 2025-11-04T12:46:57-08:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'hotosm-staging-new'
-primary_region = 'sea'
+app = 'hotosm-production'
+primary_region = 'sjc'
 kill_signal = 'SIGINT'
 kill_timeout = '5s'
 console_command = '/code/manage.py shell'
@@ -13,7 +13,19 @@ console_command = '/code/manage.py shell'
 
 [deploy]
   strategy = 'rolling'
- 
+  release_command = 'python manage.py migrate --noinput'
+
+[env]
+  PORT = '8000'
+
+[http_service]
+  internal_port = 8000
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
 [[services]]
   protocol = 'tcp'
   internal_port = 8000

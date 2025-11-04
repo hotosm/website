@@ -1,7 +1,6 @@
 {% load i18n %}
 {% load static wagtailcore_tags wagtailuserbar %}
 {% load compress %}
-{% load django_browser_reload %}
 {% load debug_tags %}
 {% is_debug as debug %}
 
@@ -61,7 +60,6 @@
                 {% endblock content %}
             </div>
             {% include "ui/components/navigation/FooterNavigation.html" %}
-            {% django_browser_reload_script %}
             {% wagtailuserbar %}
         </div>
         {% include "ui/components/gdpr/GDPRBanner.html" %}

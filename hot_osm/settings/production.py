@@ -16,7 +16,7 @@ AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
 AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
 
 # S3 File Settings
-AWS_DEFAULT_ACL = 'public-read'
+AWS_DEFAULT_ACL = None  # Bucket owner enforced - ACLs disabled
 AWS_S3_OBJECT_PARAMETERS = {
     'CacheControl': 'max-age=86400',
 }

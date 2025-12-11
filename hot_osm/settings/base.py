@@ -231,6 +231,7 @@ AUTH_USER_MODEL = "users.User"
 
 CSRF_TRUSTED_ORIGINS = [
     "https://hotosm-staging-new.fly.dev",
+    "https://hotosm-production.fly.dev",
 ]
 
 WHITENOISE_MIMETYPES = {

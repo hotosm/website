@@ -35,7 +35,7 @@
                             <div>
                                 <p>{{page.get_parent.specific.impact_areas_title}}</p>
                                 {% for area in page.impact_area_list %}
-                                    <p><a href="{{area.value.url}}">{{area.value.title}}</a></p>
+                                    <p><a href="{{area.value.localized.url}}">{{area.value.title}}</a></p>
                                 {% endfor %}
                             </div>
                         {% endif %}
@@ -44,7 +44,7 @@
                             <div>
                                 <p>{{page.get_parent.specific.region_hub_title}}</p>
                                 {% for hub in page.region_hub_list %}
-                                    <p><a href="{{hub.value.url}}">{{hub.value.title}}</a></p>
+                                    <p><a href="{{hub.value.localized.url}}">{{hub.value.title}}</a></p>
                                 {% endfor %}
                                 {{page.country_text|richtext}}
                             </div>

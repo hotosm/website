@@ -39,7 +39,7 @@
                         <!-- Carousel CTA -->
                         {% include "home/components/HomeSpecificCarousel.html" %}
                     </div>
-                    <!--CTA Statistics, TODO: Use HTMX to query endpoint for stats once the endpoint exists  -->
+
                     <div class="grid grid-cols-2 md:grid-cols-4 h-full md:pt-16 bg-hot-red md:bg-transparent gap-8 max-w-5xl mx-auto md:px-4 [&_.stat-block:nth-child(odd)_.show-at-hover]:left-0 [&_.stat-block:nth-child(even)_.show-at-hover]:right-0 md:[&_.stat-block:nth-child(-n+2)_.show-at-hover]:left-0 md:[&_.stat-block:nth-child(n+1)_.show-at-hover]:right-0">
                         {% for stat in api_responses %}
                             {% if stat.value.api %}
@@ -158,11 +158,6 @@
             </div>
 
             {% comment %} SUBSCRIBE {% endcomment %}
-            <!-- <div class="rounded-2xl shadow-md">
-                <div class="bg-hot-off-white py-6 md:py-8 px-8 md:px-16 my-20">
-                    {% include "./components/SubscribeForm.html" %}
-                </div>
-            </div> -->
             <div class="rounded-2xl shadow-md">
                 <div class="bg-hot-off-white py-6 md:py-8 px-8 md:px-16 my-20">
                     <div class="text-center">

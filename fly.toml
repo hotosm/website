@@ -13,7 +13,7 @@ console_command = '/code/manage.py shell'
 
 [deploy]
   strategy = 'rolling'
-  release_command = 'python manage.py migrate --noinput'
+  # release_command = 'python manage.py migrate --noinput'  # Disabled to preserve database content
 
 [env]
   PORT = '8000'
@@ -21,32 +21,11 @@ console_command = '/code/manage.py shell'
 [http_service]
   internal_port = 8000
   force_https = true
-  auto_stop_machines = 'stop'
+  auto_stop_machines = false
   auto_start_machines = true
-  min_machines_running = 0
+  min_machines_running = 1
   processes = ['app']
 
-[[services]]
-  protocol = 'tcp'
-  internal_port = 8000
-
-  [[services.ports]]
-    port = 80
-    handlers = ['http']
-    force_https = true
-
-  [[services.ports]]
-    port = 443
-    handlers = ['tls', 'http']
-
-  [services.concurrency]
-    hard_limit = 25
-    soft_limit = 20
-
-  [[services.tcp_checks]]
-    interval = '30s'
-    timeout = '10s'
-    grace_period = '30s'
 
 [[vm]]
   memory = '1gb'

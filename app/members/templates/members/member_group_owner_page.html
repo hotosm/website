@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load static %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+{% load compress %}
+
+{% block body_class %}template-membergroupownerpage{% endblock %}
+
+{% block content %}
+    <div class="max-w-7xl mx-auto px-6 md:px-10 my-10">
+        <h1 class="text-h1 font-bold mb-8">{{page.title}}</h1>
+
+        {% comment %} LIST OF MEMBER GROUPS {% endcomment %}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 my-10">
+            {% for child in page.get_children.live %}
+                {% if forloop.counter0|divisibleby:2 %}
+                    <div>
+                        {% include "ui/components/dogear_boxes/DogearRed.html" with title=child.title linktext=page.view_all_text|add:' '|add:child.title linkurl=child.url %}
+                    </div>
+                {% else %}
+                    <div>
+                        {% include "ui/components/dogear_boxes/DogearBlack.html" with title=child.title linktext=page.view_all_text|add:' '|add:child.title linkurl=child.url %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        {% comment %} FOOTER BOX {% endcomment %}
+        <div class="my-10">
+            {% include "ui/components/FooterBannerWithTextAndLink.html" with text=page.footer_box_title url=page.footer_box_button_url buttontext=page.footer_box_button_text description=page.footer_box_description %}
+        </div>
+    </div>
+{% endblock %}

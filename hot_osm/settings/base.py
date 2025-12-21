@@ -215,6 +215,13 @@ MEDIA_URL = "/media/"
 WAGTAIL_SITE_NAME = "hot_osm"
 WAGTAILIMAGES_MAX_UPLOAD_SIZE = 20 * 1024 * 1024  # 20MB
 
+# Wagtail embeds configuration - use standard YouTube domain instead of privacy-enhanced
+WAGTAILEMBEDS_FINDERS = [
+    {
+        'class': 'wagtail.embeds.finders.oembed',
+    }
+]
+
 # Search
 # https://docs.wagtail.org/en/stable/topics/search/backends.html
 WAGTAILSEARCH_BACKENDS = {

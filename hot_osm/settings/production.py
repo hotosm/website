@@ -8,6 +8,12 @@ ALLOWED_HOSTS = ["hotosm-production.fly.dev", "hotosm-staging-new.fly.dev", "*.f
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
+# Remove XFrameOptionsMiddleware to allow YouTube embeds
+MIDDLEWARE = [m for m in MIDDLEWARE if m != 'django.middleware.clickjacking.XFrameOptionsMiddleware']
+
+# Set referrer policy to allow YouTube embeds to work
+SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
+
 # AWS S3 Configuration
 AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
 AWS_S3_REGION_NAME = os.getenv("AWS_S3_REGION_NAME", "us-west-1")

@@ -1,5 +1,7 @@
 ARG PYTHON_IMG_TAG=3.11
 ARG NODE_IMG_TAG=20.5.1
+ARG USER_UID=1000
+ARG USER_GID=1000
 
 FROM node:${NODE_IMG_TAG}-bookworm-slim as frontend-base
 COPY . ./app
@@ -113,7 +115,8 @@ WORKDIR /app
 COPY . /app/
 
 # Add non-root user, permissions
-RUN useradd -u 1001 -m -c "hotosm account" -d /home/wagtail -s /bin/false wagtail \
+RUN groupadd -g 1000 wagtail
+RUN useradd -u 1000 -g 1000 -m -c "hotosm account" -d /home/wagtail -s /bin/false wagtail \
     && chown -R wagtail:wagtail /app /home/wagtail \
     && chmod +x /container-entrypoint.sh
 # Change to non-root user

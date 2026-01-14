@@ -27,8 +27,21 @@ python manage.py collectstatic --noinput --clear
 if [ -z "$DJANGO_SUPERUSER_USERNAME" ] || [ -z "$DJANGO_SUPERUSER_PASSWORD" ] ; then
     echo "Superuser credentials not provided, skipping superuser creation."
 else
-    echo "Creating superuser $DJANGO_SUPERUSER_USERNAME"
-    echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('$DJANGO_SUPERUSER_USERNAME', '$DJANGO_SUPERUSER_EMAIL', '$DJANGO_SUPERUSER_PASSWORD')" | python manage.py shell
+    echo "Ensuring superuser $DJANGO_SUPERUSER_USERNAME exists"
+    python manage.py shell << EOF
+from django.contrib.auth import get_user_model
+User = get_user_model()
+
+username = "$DJANGO_SUPERUSER_USERNAME"
+email = "$DJANGO_SUPERUSER_EMAIL"
+password = "$DJANGO_SUPERUSER_PASSWORD"
+
+if not User.objects.filter(username=username).exists():
+    User.objects.create_superuser(username, email, password)
+    print("Superuser created:", username)
+else:
+    print("Superuser already exists:", username)
+EOF
 fi
 
 # Start server

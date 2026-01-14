@@ -184,6 +184,15 @@ WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
     ("es", "Spanish"),
 ]
 
+if os.getenv("DEEPL_KEY"):
+    WAGTAILLOCALIZE_MACHINE_TRANSLATOR = {
+        "CLASS": "wagtail_localize.machine_translators.deepl.DeepLTranslator",
+        "OPTIONS": {
+            "AUTH_KEY": os.getenv("DEEPL_KEY", None),
+            # Optional timeout for the request to the DeepL API
+            "TIMEOUT": 60,
+        },
+    }
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/

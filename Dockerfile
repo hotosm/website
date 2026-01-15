@@ -115,8 +115,7 @@ WORKDIR /app
 COPY . /app/
 
 # Add non-root user, permissions
-RUN groupadd -g 1000 wagtail
-RUN useradd -u 1000 -g 1000 -m -c "hotosm account" -d /home/wagtail -s /bin/false wagtail \
+RUN useradd -u 1000 -m -c "hotosm account" -d /home/wagtail -s /bin/false wagtail \
     && chown -R wagtail:wagtail /app /home/wagtail \
     && chmod +x /container-entrypoint.sh
 # Change to non-root user
@@ -165,4 +164,4 @@ HEALTHCHECK --start-period=10s --interval=5s --retries=20 --timeout=5s \
 USER root
 RUN python -c "import compileall; compileall.compile_path(maxlevels=10, quiet=1)"
 USER wagtail
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "hot_osm.wsgi:application"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--timeout", "30", "--workers", "2", "hot_osm.wsgi:application"]

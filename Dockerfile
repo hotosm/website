@@ -1,7 +1,5 @@
 ARG PYTHON_IMG_TAG=3.11
 ARG NODE_IMG_TAG=20.5.1
-ARG USER_UID=1000
-ARG USER_GID=1000
 
 FROM node:${NODE_IMG_TAG}-bookworm-slim as frontend-base
 COPY . ./app
@@ -165,3 +163,4 @@ USER root
 RUN python -c "import compileall; compileall.compile_path(maxlevels=10, quiet=1)"
 USER wagtail
 CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--timeout", "30", "--workers", "2", "hot_osm.wsgi:application"]
+

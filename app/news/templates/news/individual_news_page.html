@@ -6,61 +6,14 @@
 {% load compress %}
 {% block body_class %}template-individualnewspage{% endblock %}
 {% block extra_css %}
+    {{ block.super }}
+    {% if page.custom_css %}
+        <style>
+            {{ page.custom_css|safe }}
+        </style>
+    {% endif %}
     {% compress css %}
     {% endcompress css %}
-
-    <!-- Custom CSS for quarterly tech updates -->
-    <style>
-        .tool-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 1.75rem;
-            margin: 3rem 0;
-        }
-
-        .tool-card {
-            background: #ffffff;
-            border-radius: 8px;
-            padding: 1.5rem 1.75rem;
-            border-left: 6px solid #ccc;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        }
-
-        .tool-card h3 {
-            margin-top: 0;
-            margin-bottom: 1rem;
-            font-size: 1.25rem;
-        }
-
-        .tool-section + .tool-section {
-            margin-top: 1.25rem;
-        }
-
-        .tool-section h4 {
-            margin-bottom: 0.5rem;
-            font-size: 0.95rem;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-            color: #555;
-        }
-
-        .tool-section ul {
-            padding-left: 1.25rem;
-            margin: 0;
-        }
-
-        .tool-section li {
-            margin-bottom: 0.4rem;
-            line-height: 1.5;
-        }
-
-        .tool-drone { border-left-color: #4a90e2; }
-        .tool-oam   { border-left-color: #50b83c; }
-        .tool-tm    { border-left-color: #f5a623; }
-        .tool-fair  { border-left-color: #9b59b6; }
-        .tool-field { border-left-color: #16a085; }
-        .tool-chatmap { border-left-color: #e67e22; }
-    </style>
 {% endblock extra_css %}
 
 {% block content %}

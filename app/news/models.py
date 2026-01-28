@@ -305,6 +305,11 @@ class IndividualNewsPage(Page):
         index.SearchField('search_description'),
     ]
 
+    custom_css = models.TextField(
+        blank=True,
+        help_text="Optional custom CSS for this news post only."
+    )
+
     content_panels = Page.content_panels + [
         MultiFieldPanel([
             FieldPanel("authors"),
@@ -314,6 +319,7 @@ class IndividualNewsPage(Page):
             FieldPanel("image"),
             FieldPanel("intro"),
             FieldPanel("article_body"),
+            FieldPanel("custom_css"),
         ], heading="Body"),
         MultiFieldPanel([
             FieldPanel('related_projects'),

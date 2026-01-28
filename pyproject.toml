@@ -1,3 +1,48 @@
+[project]
+name = "hot-website"
+version = "0.1.0"
+description = "Wagtail CMS for Humanitarian OpenStreetMap Team"
+authors = [
+    {name = "HOTOSM", email = "sysadmin@hotosm.org"},
+    {name = "DK Benjamin", email = "dk@hotosm.org"},
+]
+dependencies = [
+    "wagtail==6.2.2",
+    "psycopg2==2.9.9",
+    "python-dotenv==1.0.0",
+    "docker==6.1.3",
+    "gunicorn==21.2.0",
+    "django-compressor==4.4",
+    "django-browser-reload==1.12.1",
+    "wagtail-localize==1.7",
+    "wagtailmenus==4.0",
+    "wagtail-modeladmin==2.0.0",
+    "dj-database-url==2.2.0",
+    "whitenoise==6.6.0",
+    "django-storages==1.14.3",
+    "boto3==1.34.129",
+    "wagtailgeowidget==8.1.1",
+    "wand==0.6.13",
+    "marko==2.1.2",
+    "python-frontmatter==1.1.0",
+    "wagtail-markdown==0.12.1",
+    "wagtail-favicon==0.3.0",
+    "sentry-sdk==2.58.0",
+]
+requires-python = ">=3.11"
+license = {text = "AGPL-3.0-only"}
+
+[dependency-groups]
+dev = [
+    "pre-commit==3.5.0",
+    "pytest-django==4.7.0",
+    "pytest-timeout==2.2.0",
+    "pytest-factoryboy==2.6.0",
+    "django-browser-reload==1.12.1",
+    "coverage==7.4.0",
+    "django-pattern-library==1.2.0",
+]
+
 [tool.black]
 line-length = 100
 target-version = ['py312']
@@ -15,43 +60,12 @@ known_first_party = ["config"]
 profile = "django"
 ignore = "H031"
 
-[tool.poetry]
-name = "HOT Wagtail CMS"
-version = "0.1.0"
-description = "Wagtail CMS for Humanitarian OpenStreetMap Team"
-authors = ["DK Benjamin <dk@hotosm.org>"]
-
-[tool.poetry.dependencies]
-python = "^3.11"
-wagtail = "^6.2.2"
-psycopg2 = "^2.9.9"
-python-dotenv = "^1.0.0"
-docker = "^6.1.3"
-gunicorn = "^21.2.0"
-django-compressor = "^4.4"
-django-browser-reload = "^1.12.1"
-wagtail-localize = "^1.7"
-wagtailmenus = "^4.0"
-wagtail-modeladmin = "^2.0.0"
-dj-database-url = "^2.2.0"
-whitenoise = "^6.6.0"
-django-storages = "^1.14.3"
-boto3 = "^1.34.129"
-wagtailgeowidget = "^8.1.1"
-wand = "^0.6.13"
-marko = "^2.1.2"
-python-frontmatter = "^1.1.0"
-wagtail-markdown = "^0.12.1"
-wagtail-favicon = "^0.3.0"
-sentry_sdk = "^2.58.0"
-
-[tool.poetry.dev-dependencies]
-
-[tool.poetry.group.dev.dependencies]
-pre-commit = "^3.5.0"
-pytest-django = "^4.7.0"
-pytest-timeout = "^2.2.0"
-pytest-factoryboy = "^2.6.0"
-django-browser-reload = "^1.12.1"
-coverage = "^7.4.0"
-django-pattern-library = "^1.2.0"
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "hot_osm.settings.dev"
+python_files = ["test_*.py", "test.py"]
+addopts = "--reuse-db"
+testpaths = ["hot_osm/tests"]
+filterwarnings = [
+    "ignore::django.utils.deprecation.RemovedInDjango51Warning",
+    "ignore::DeprecationWarning:l18n.translation",
+]

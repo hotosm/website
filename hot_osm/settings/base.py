@@ -15,6 +15,8 @@ import os
 
 from dotenv import load_dotenv
 import mimetypes 
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
 mimetypes.add_type("text/css", ".css", True)
 
 
@@ -290,3 +292,25 @@ WAGTAILMARKDOWN = {
 }
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 2000
+
+sentry_sdk.init(
+    dsn=os.getenv("SENTRY_DSN"),
+    # Add data like request headers and IP for users,
+    # see https://docs.sentry.io/platforms/python/data-management/data-collected/ for more info
+    send_default_pii=True,
+    integrations=[DjangoIntegration(
+            transaction_style='url',
+            middleware_spans=True,
+            cache_spans=False
+        ),],
+    # Enable logs to be sent to Sentry
+    enable_logs=True,
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for tracing.
+    traces_sample_rate=1.0,
+    # To collect profiles for all profile sessions,
+    # set `profile_session_sample_rate` to 1.0.
+    profile_session_sample_rate=1.0,
+    # Profiles will be automatically collected while
+    # there is an active span.
+)

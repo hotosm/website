@@ -19,7 +19,7 @@ ignore = "H031"
 name = "HOT Wagtail CMS"
 version = "0.1.0"
 description = "Wagtail CMS for Humanitarian OpenStreetMap Team"
-authors = ["Kat Olaguer <katherine.olaguer@gmail.com>"]
+authors = ["DK Benjamin <dk@hotosm.org>"]
 
 [tool.poetry.dependencies]
 python = "^3.11"
@@ -43,6 +43,7 @@ marko = "^2.1.2"
 python-frontmatter = "^1.1.0"
 wagtail-markdown = "^0.12.1"
 wagtail-favicon = "^0.3.0"
+sentry_sdk = "^2.58.0"
 
 [tool.poetry.dev-dependencies]
 

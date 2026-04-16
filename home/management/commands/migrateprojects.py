@@ -1,25 +1,14 @@
-from datetime import date
-import json
-from io import BytesIO
 import os
-import marko
 import frontmatter
 from django.db import transaction
 
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from app.projects.models import IndividualProjectPage, ProjectOwnerPage
-from app.members.models import IndividualMemberPage, MemberOwnerPage, MemberGroupPage
-from wagtail.fields import RichTextField, StreamField, StreamValue
-from app.news.models import IndividualNewsPage, NewsOwnerPage, NewsCategory, NewsTag
+from app.members.models import IndividualMemberPage
 from app.tech.models import IndividualTechStackPage
 from app.core.models import Partner
-from app.mapping_hubs.models import IndividualMappingHubPage
 from app.impact_areas.models import IndividualImpactAreaPage
-from modelcluster.contrib.taggit import ClusterTaggableManager
-from home.models import HomePage
-from django.core.files.images import ImageFile
-from wagtail.images.models import Image
-from home.management.migration_helpers import create_image_from_url, convert_markdown_contents, comb_keys
+from home.management.migration_helpers import create_image_from_url, convert_markdown_contents
 
 
 FRONTMATTER_FIELD_TO_PROJECT_FIELD_DICT = {

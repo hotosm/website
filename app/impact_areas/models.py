@@ -4,8 +4,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from wagtail.models import Page
 from wagtail.fields import RichTextField, StreamField
-from wagtail.blocks import StreamBlock, CharBlock, URLBlock, RichTextBlock, StructBlock
-from wagtail.images.blocks import ImageChooserBlock
+from wagtail.blocks import StreamBlock, CharBlock, RichTextBlock, StructBlock
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 
 from app.projects.models import IndividualProjectPage

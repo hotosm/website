@@ -1,4 +1,3 @@
-from django.db import models
 
 from wagtail.blocks import CharBlock, StreamBlock, StructBlock, URLBlock
 

@@ -1,21 +1,13 @@
-from datetime import date
 import json
-from io import BytesIO
 import os
-import marko
 import frontmatter
 
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from app.projects.models import IndividualProjectPage
 from app.members.models import IndividualMemberPage, MemberOwnerPage, MemberGroupPage
-from wagtail.fields import RichTextField, StreamField, StreamValue
-from app.news.models import IndividualNewsPage, NewsOwnerPage, NewsCategory, NewsTag
+from wagtail.fields import StreamValue
 from app.mapping_hubs.models import IndividualMappingHubPage
-from modelcluster.contrib.taggit import ClusterTaggableManager
-from home.models import HomePage
-from django.core.files.images import ImageFile
-from wagtail.images.models import Image
-from home.management.migration_helpers import create_image_from_url, create_image_from_local_file, handle_markdown_images, convert_markdown_contents, HOTOSM_LEGACY_SITE_URL, comb_keys
+from home.management.migration_helpers import create_image_from_url
 from django.db import transaction
 
 

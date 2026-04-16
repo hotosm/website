@@ -10,7 +10,6 @@ from app.projects.models import IndividualProjectPage
 from app.news.models import IndividualNewsPage
 from app.mapping_hubs.models import IndividualMappingHubPage
 from wagtail.search import index
-from wagtailmarkdown.fields import MarkdownField
 from wagtailmarkdown.blocks import MarkdownBlock
 
 from app.core.models import LinkOrPageBlock

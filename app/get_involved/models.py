@@ -2,10 +2,9 @@ from django.db import models
 
 from wagtail.models import Page
 from wagtail.fields import RichTextField, StreamField
-from wagtail.admin.panels import FieldPanel, MultiFieldPanel, PageChooserPanel
-from wagtail.blocks import CharBlock, StreamBlock, StructBlock, URLBlock, RichTextBlock, PageChooserBlock
+from wagtail.admin.panels import FieldPanel, MultiFieldPanel
+from wagtail.blocks import CharBlock, StructBlock, RichTextBlock, PageChooserBlock
 from wagtail.images.blocks import ImageChooserBlock
-from modelcluster.fields import ParentalKey, ParentalManyToManyField
 
 from app.core.models import LinkOrPageBlock
 

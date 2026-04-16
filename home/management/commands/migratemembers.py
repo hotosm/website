@@ -116,7 +116,7 @@ def markdown_article_to_member_dict(article: frontmatter.Post):
 
 def create_member_page_from_markdown(file):
     article = frontmatter.load(file)
-    if not 'title' in article.keys():
+    if 'title' not in article.keys():
         return
     
     member_dict = markdown_article_to_member_dict(article)
@@ -142,7 +142,7 @@ def convert_all_members_in_dir(directory):
 
 def add_projects_to_member(file):
     article = frontmatter.load(file)
-    if not 'title' in article.keys() or not 'Project' in article.keys():
+    if 'title' not in article.keys() or 'Project' not in article.keys():
         return
     
     member = IndividualMemberPage.objects.all().filter(title=article['title'])[0].get_translation(1)
@@ -180,7 +180,7 @@ def add_projects_to_members_in_dir(directory):
 
 def verify_publish_status(file):
     article = frontmatter.load(file)
-    if not 'title' in article.keys() or not 'published' in article.keys() or ('published' in article.keys() and article['published']):
+    if 'title' not in article.keys() or 'published' not in article.keys() or ('published' in article.keys() and article['published']):
         return
     
     member = IndividualMemberPage.objects.all().filter(title=article['title'])[0].get_translation(1)

@@ -184,6 +184,7 @@ WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
     ("en", "English"),
     ("fr", "French"),
     ("es", "Spanish"),
+    ("pt", "Portuguese")
 ]
 
 if os.getenv("DEEPL_KEY"):

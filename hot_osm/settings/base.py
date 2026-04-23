@@ -55,7 +55,6 @@ INSTALLED_APPS = [
     "app.tech",
     "app.our_work",
     "app.job_opportunities",
-    "search",
     "users",
     "utils",
     "wagtail.contrib.forms",

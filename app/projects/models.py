@@ -6,7 +6,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from wagtail.models import Page
 from wagtail.fields import RichTextField, StreamField
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel, PageChooserPanel
-from wagtail.blocks import CharBlock, StreamBlock, StructBlock, URLBlock, RichTextBlock, PageChooserBlock
+from wagtail.blocks import CharBlock, StructBlock, URLBlock, RichTextBlock, PageChooserBlock
 from wagtail.snippets.blocks import SnippetChooserBlock
 from wagtail.search import index
 from wagtail.snippets.models import register_snippet
@@ -14,7 +14,7 @@ from wagtailmarkdown.blocks import MarkdownBlock
 
 from wagtailgeowidget.panels import LeafletPanel
 
-from modelcluster.fields import ParentalKey, ParentalManyToManyField
+from modelcluster.fields import ParentalManyToManyField
 
 from app.core.models import LinkOrPageBlock, Partner
 import importlib

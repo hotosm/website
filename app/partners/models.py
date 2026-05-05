@@ -5,11 +5,10 @@ from django.db.models import Q
 
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 from wagtail.fields import RichTextField, StreamField
-from wagtail.blocks import CharBlock, StreamBlock, StructBlock, URLBlock, RichTextBlock, PageChooserBlock
-from wagtail.images.blocks import ImageChooserBlock
+from wagtail.blocks import PageChooserBlock
 from wagtail.models import Page
 
-from modelcluster.fields import ParentalKey, ParentalManyToManyField
+from modelcluster.fields import ParentalManyToManyField
 
 from app.core.models import LinkOrPageBlock, Partner
 from app.mapping_hubs.models import IndividualMappingHubPage

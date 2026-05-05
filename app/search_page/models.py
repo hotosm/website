@@ -1,15 +1,10 @@
-import re
 
 from django.db import models
-from django.db.models import Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import JsonResponse
 
 from wagtail.models import Page
-from wagtail.fields import RichTextField, StreamField
-from wagtail.admin.panels import FieldPanel, MultiFieldPanel, PageChooserPanel
-from wagtail.blocks import CharBlock, StreamBlock, StructBlock, URLBlock, RichTextBlock, PageChooserBlock
-from modelcluster.fields import ParentalKey, ParentalManyToManyField
+from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 
 
 class SearchPage(Page):

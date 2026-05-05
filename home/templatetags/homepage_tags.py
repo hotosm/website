@@ -1,6 +1,4 @@
-from wagtail.models import Page
 from django import template
-from django.utils.translation import get_language
 from home.models import HomePage
 from django.conf import settings
 

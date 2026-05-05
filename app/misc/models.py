@@ -6,7 +6,6 @@ from wagtail.fields import RichTextField, StreamField
 from wagtail.blocks import CharBlock, StreamBlock, StructBlock, URLBlock, RichTextBlock, PageChooserBlock, EmailBlock
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.models import Page
-from wagtail.documents.blocks import DocumentChooserBlock
 from wagtail.contrib.table_block.blocks import TableBlock
 
 from app.core.models import LinkOrPageBlock

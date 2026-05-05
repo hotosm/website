@@ -196,7 +196,7 @@ def markdown_article_to_project_dict(article: frontmatter.Post):
 
 def create_project_page_from_markdown(file):
     article = frontmatter.load(file)
-    if not 'title' in article.keys():
+    if 'title' not in article.keys():
         return
     
     project_dict = markdown_article_to_project_dict(article)
@@ -223,7 +223,7 @@ def convert_all_projects_in_dir(directory):
 
 def remigrate_project_images(file):
     article = frontmatter.load(file)
-    if not 'title' in article.keys() or not 'Feature Image' in article.keys() or ('Feature Image' in article.keys() and not article['Feature Image'].startswith("https://cdn.hotosm.org")):
+    if 'title' not in article.keys() or 'Feature Image' not in article.keys() or ('Feature Image' in article.keys() and not article['Feature Image'].startswith("https://cdn.hotosm.org")):
         return
     
     project = IndividualProjectPage.objects.all().filter(title=article['title'])[0].get_translation(1)

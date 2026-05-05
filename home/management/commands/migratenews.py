@@ -124,7 +124,7 @@ def handle_authors(authors):
 
 
 def handle_tags(page: IndividualNewsPage, article):
-    if not 'tags' in article.keys():
+    if 'tags' not in article.keys():
         return
     for tag in article['tags']:
         page.tags.add(tag)
@@ -151,7 +151,7 @@ def markdown_article_to_news_dict(article):
 
 def create_news_page_from_markdown(file):
     article = frontmatter.load(file)
-    if not 'title' in article.keys():
+    if 'title' not in article.keys():
         return
     
     news_dict = markdown_article_to_news_dict(article)
@@ -183,7 +183,7 @@ def convert_all_news_in_dir(directory):
 
 def remigrate_news_images(file):
     article = frontmatter.load(file)
-    if not 'title' in article.keys() or not 'Feature Image' in article.keys() or ('Feature Image' in article.keys() and not article['Feature Image'].startswith("https://cdn.hotosm.org")):
+    if 'title' not in article.keys() or 'Feature Image' not in article.keys() or ('Feature Image' in article.keys() and not article['Feature Image'].startswith("https://cdn.hotosm.org")):
         return
     
     news = IndividualNewsPage.objects.all().filter(title=article['title'])[0].get_translation(1)

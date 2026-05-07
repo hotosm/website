@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "django.fullname" . }}
+  labels:
+    {{- include "django.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook-weight": "-1"
+data:
+{{- if .Values.postgresql.enabled }}
+  DATABASE_HOST: {{ include "django.postgresql.host" . | quote }}
+  DATABASE_USER: {{ include "django.postgresql.username" . | quote }}
+  DATABASE_NAME: {{ include "django.postgresql.name" . | quote }}
+  DATABASE_PORT: {{ include "django.postgresql.port" . | quote }}
+{{- end }}
+{{- range $k, $v := .Values.env.normal }}
+  {{ $k }}: {{ $v | quote }}
+{{- end }}

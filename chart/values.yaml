@@ -27,11 +27,12 @@ env:
     # - AWS_STORAGE_BUCKET_NAME
     # - AWS_S3_REGION_NAME
   secret:
+    DATABASE_URL: ""
+    SECRET_KEY: ""
 
 # use sealed secrets 
 existingSecret: ""
   # Required: 
-  # - SECRET_KEY
   # - DJANGO_SUPERUSER_USERNAME
   # - DJANGO_SUPERUSER_EMAIL
   # - DJANGO_SUPERUSER_PASSWORD
@@ -72,16 +73,16 @@ web:
   tolerations: []
   podAnnotations: {}
   affinity: {}
-  # livenessProbe:
-  #   failureThreshold: 5
-  #   initialDelaySeconds: 5
-  #   timeoutSeconds: 2
-  #   path: "/_health/"
-  # readinessProbe:
-  #   failureThreshold: 10
-  #   initialDelaySeconds: 5
-  #   timeoutSeconds: 2
-  #   path: "/_health/"
+  livenessProbe:
+    failureThreshold: 5
+    initialDelaySeconds: 5
+    timeoutSeconds: 2
+    path: "/"
+  readinessProbe:
+    failureThreshold: 10
+    initialDelaySeconds: 5
+    timeoutSeconds: 2
+    path: "/"
   service:
     type: ClusterIP
     port: 80

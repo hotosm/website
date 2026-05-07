@@ -3,7 +3,7 @@ name: hot-website
 description: HOT Website Helm Chart
 
 type: application
-
+icon: https://hotosm.org/static/images/favicon-16x16.png
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
 version: 1.0.0

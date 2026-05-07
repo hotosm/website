@@ -19,7 +19,7 @@ prep *args:
 chart *args:
     @curl -sS https://raw.githubusercontent.com/hotosm/justfiles/main/chart.just \
       -o {{justfile_directory()}}/tasks/chart.just;
-    @just --justfile {{justfile_directory()}}/tasks/chart.just --set chart_name "website" {{args}}
+    @just --justfile {{justfile_directory()}}/tasks/chart.just --set chart_name "hot-website" {{args}}
 
 # Echo to terminal with blue colour
 [no-cd]

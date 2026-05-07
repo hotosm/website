@@ -15,3 +15,7 @@ node_modules
 /migration_pages
 # Prevent duplicate CSS file from being committed
 /hot_osm/static/css/hot_osm_processed.css
+
+# Helm
+chart/charts
+hot-website-*.tgz

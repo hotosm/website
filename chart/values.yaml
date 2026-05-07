@@ -1,7 +1,3 @@
-# Default values for django.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-
 image:
   repository: ghcr.io/hotosm/website
   tag: main
@@ -13,39 +9,23 @@ fullnameOverride: ""
 
 migrationJob:
   enabled: true
-  command: ["python manage.py migrate"]  # Default ./manage.py migrate
+  command: ["python", "manage.py", "migrate"]
   activeDeadlineSeconds: 900
   resources:
     limits: {}
     requests: {}
 
-env:
-  normal:
-    # Required
-    # - ENV: production
-    # - ALLOWED_HOSTS
-    # - AWS_STORAGE_BUCKET_NAME
-    # - AWS_S3_REGION_NAME
-  secret:
-    DATABASE_URL: ""
-    SECRET_KEY: ""
-
-# use sealed secrets 
+# Name of an existing Kubernetes Secret to load as env vars (via envFrom).
+# The secret should contain keys like DATABASE_URL, SECRET_KEY, etc.
 existingSecret: ""
-  # Required: 
-  # - DJANGO_SUPERUSER_USERNAME
-  # - DJANGO_SUPERUSER_EMAIL
-  # - DJANGO_SUPERUSER_PASSWORD
-  # - AWS_ACCESS_KEY_ID
-  # - AWS_SECRET_ACCESS_KEY
-  # - DATABASE_URL
-  #
-  # Optional: 
-  # - BROWSER_STACK_USER
-  # - BROWSER_ACCESS_KEY
-  # - DEEPL_KEY
-  # - MAPBOX_ACCESS_TOKEN
-  # - SENTRY_DSN
+
+# Plain (non-secret) environment variables added directly to the deployment
+# and migration job.
+env: {}
+  # ENV: production
+  # ALLOWED_HOSTS: "example.com"
+  # AWS_STORAGE_BUCKET_NAME: "my-bucket"
+  # AWS_S3_REGION_NAME: "us-east-1"
 
 extraVolumeMounts: []
 extraVolumes: []
@@ -53,13 +33,13 @@ extraVolumes: []
 web:
   replicaCount: 1
   port: 8080
+  args: []
   autoscaling:
     enabled: false
     minReplicas: 2
     maxReplicas: 10
-    targetCPUUtilizationPercentage: 80
-    # targetMemoryUtilizationPercentage: 80
-
+    targetCPU: 80
+    # targetMemory: 80
   budget:
     minAvailable: 1 # Ignored when replicaCount is 1
   resources:
@@ -86,7 +66,6 @@ web:
   service:
     type: ClusterIP
     port: 80
-
   ingress:
     enabled: true
     className: ""
@@ -103,105 +82,8 @@ web:
     #    hosts:
     #      - chart-example.local
 
-worker:
-  enabled: true
-  replicaCount: 1
-  autoscaling:
-    enabled: false
-    minReplicas: 1
-    maxReplicas: 100
-    targetCPUUtilizationPercentage: 90
-    # targetMemoryUtilizationPercentage: 80
-  livenessProbe: {}
-    # initialDelaySeconds: 10
-    # periodSeconds: 60
-    # timeoutSeconds: 30
-    # exec:
-    #   command:
-    #     - "bash"
-    #     - "-c"
-    #     - "celery -A django inspect ping -d celery@$HOSTNAME | grep -q OK"
-  resources:
-    limits:
-      cpu: 900m
-      memory: 768Mi
-    requests:
-      cpu: 100m
-      memory: 128Mi
-  nodeSelector: {}
-  tolerations: []
-  podAnnotations: {}
-  affinity: {}
-
-beat:
-  enabled: false
-  resources:
-    limits:
-      cpu: 100m
-      memory: 120Mi
-    requests:
-      cpu: 1m
-      memory: 90Mi
-  nodeSelector: {}
-  tolerations: []
-  podAnnotations: {}
-  affinity: {}
-
-flower:
-  enabled: false
-  image:
-    repository: mher/flower
-    tag: latest
-    pullPolicy: IfNotPresent
-  resources:
-    limits:
-      cpu: 500m
-      memory: 512Mi
-    requests:
-      cpu: 50m
-      memory: 256Mi
-  nodeSelector: {}
-  tolerations: []
-  podAnnotations: {}
-  affinity: {}
-  service:
-    type: ClusterIP
-    port: 80
-  ingress:
-    enabled: false
-    annotations:
-      {}
-      # kubernetes.io/ingress.class: nginx
-      # kubernetes.io/tls-acme: "true"
-    hosts:
-      - host: chart-example.local
-        paths:
-          - path: /
-            pathType: ImplementationSpecific
-    tls: []
-    #  - secretName: chart-example-tls
-    #    hosts:
-    #      - chart-example.local
-
 serviceAccount:
   create: true
   automount: true
   annotations: {}
   name: ""
-
-valkey:
-  enabled: false
-  master:
-    persistence:
-      enabled: false
-  replica:
-    replicaCount: 1
-    persistence:
-      enabled: false
-
-# Default to disabled, use a managed database service. But can be enabled here.
-postgresql:
-  enabled: false
-  #auth:
-  #  postgresqlPassword: # Must be set
-  

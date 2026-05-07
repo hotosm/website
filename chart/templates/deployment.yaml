@@ -16,30 +16,24 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
-        checksum/configmap: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
         tag: "{{ .Values.image.tag }}"
-        {{- if .Values.web.podAnnotations }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.web.podAnnotations "context" $ ) | nindent 8 }}
+        {{- with .Values.web.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
         {{- end }}
       labels:
         {{- include "django.selectorLabels" . | nindent 8 }}
         app.kubernetes.io/component: web
     spec:
-    {{- with .Values.imagePullSecrets }}
+      {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
-    {{- end }}
+      {{- end }}
       serviceAccountName: {{ include "django.serviceAccountName" . }}
-      securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
           {{- if .Values.web.args }}
-          args: {{- toYaml .Values.web.args | nindent 10}}
+          args: {{- toYaml .Values.web.args | nindent 10 }}
           {{- end }}
-          securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
@@ -49,57 +43,48 @@ spec:
           livenessProbe:
             failureThreshold: {{ .Values.web.livenessProbe.failureThreshold }}
             httpGet:
-              path: {{ .Values.web.livenessProbe.path | default "/_health/" }}
+              path: {{ .Values.web.livenessProbe.path | default "/" }}
               port: {{ .Values.web.port | default 8080 }}
             initialDelaySeconds: {{ .Values.web.livenessProbe.initialDelaySeconds }}
             timeoutSeconds: {{ .Values.web.livenessProbe.timeoutSeconds }}
           readinessProbe:
             failureThreshold: {{ .Values.web.readinessProbe.failureThreshold }}
             httpGet:
-              path: {{ .Values.web.readinessProbe.path | default "/_health/" }}
+              path: {{ .Values.web.readinessProbe.path | default "/" }}
               port: {{ .Values.web.port | default 8080 }}
             initialDelaySeconds: {{ .Values.web.readinessProbe.initialDelaySeconds }}
             timeoutSeconds: {{ .Values.web.readinessProbe.timeoutSeconds }}
           resources:
             {{- toYaml .Values.web.resources | nindent 12 }}
-          env:
-            - name: POD_IP
-              valueFrom:
-                fieldRef:
-                  fieldPath: status.podIP
-{{- if .Values.postgresql.enabled }}
-            - name: DATABASE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ default (include "django.postgresql.fullname" .) .Values.postgresql.auth.existingSecret }}
-                  key: postgres-password
-{{- end }}
+          {{- if .Values.existingSecret }}
           envFrom:
             - secretRef:
-                name: {{ include "django.fullname" . }}
-            {{- if .Values.existingSecret }}
-            - secretRef:
                 name: {{ .Values.existingSecret }}
+          {{- end }}
+          {{- if .Values.env }}
+          env:
+            {{- range $k, $v := .Values.env }}
+            - name: {{ $k }}
+              value: {{ $v | quote }}
             {{- end }}
-            - configMapRef:
-                name: {{ include "django.fullname" . }}
+          {{- end }}
           {{- with .Values.extraVolumeMounts }}
           volumeMounts:
-            {{- toYaml . | nindent 10 }}
+            {{- toYaml . | nindent 12 }}
           {{- end }}
       {{- with .Values.web.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-    {{- with .Values.web.affinity }}
+      {{- with .Values.web.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
-    {{- end }}
-    {{- with .Values.web.tolerations }}
+      {{- end }}
+      {{- with .Values.web.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
-    {{- end }}
+      {{- end }}
       {{- with .Values.extraVolumes }}
       volumes:
-        {{- toYaml . | nindent 6 }}
+        {{- toYaml . | nindent 8 }}
       {{- end }}

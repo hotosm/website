@@ -34,16 +34,15 @@ ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
 
-# Extract dependencies using poetry (to requirements.txt)
+# Extract dependencies using uv (to requirements.txt)
 FROM base as extract-deps
 WORKDIR /opt/python
-COPY pyproject.toml poetry.lock* /opt/python/
+COPY pyproject.toml uv.lock /opt/python/
 RUN pip install --no-cache-dir --upgrade pip \
     && pip install --no-cache-dir \
-    poetry==1.7.1 poetry-plugin-export==1.6.0 \
-    && poetry config warnings.export false
-RUN poetry export --without dev --output requirements.txt
-RUN poetry export --with dev --output requirements-dev.txt
+    uv==0.9.27 \
+    && uv export --no-group dev > requirements.txt \
+    && uv export --only-dev > requirements-dev.txt
 
 
 # Define build stage (install deps)

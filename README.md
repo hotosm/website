@@ -48,17 +48,13 @@ accidental commits.
 
 ## Dependency Management
 
-This project uses Poetry for dependency management. Poetry is a Python tool that
-helps to handle dependency installation, building packages, and versioning. It
-simplifies package management and deployment by adding a layer of abstraction
-over the standard setup tools.
+This project uses `uv` for dependency management.
 
-Dependencies are specified in the `pyproject.toml`, and the exact versions of
-the dependencies are locked in the `poetry.lock`. To install the dependencies,
-run `poetry install`. To add a new dependency, run `poetry add {dependency}`.
+Dependencies are specified in the `pyproject.toml`.
 
-Note that you don't need to run `poetry install`, as Docker handles this when
-building.
+To install the dependencies, run `uv sync`. To add a new dependency, run `uv add {dependency}`.
+
+Note that you probably don't need to run `uv sync`, as Docker handles this when building.
 
 ## Using the Makefile
 

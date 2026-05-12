@@ -158,12 +158,11 @@ FROM runtime AS prod
 HEALTHCHECK --start-period=10s --interval=5s --retries=20 --timeout=5s \
     CMD curl --fail http://localhost:8000/__lbheartbeat__ || exit 1
 COPY --chown=wagtail:wagtail gunicorn_config.py ./
-# Compile translations and gather static files at build time so they ship in
-# the image. Runtime pods do not (and should not) regenerate these.
+# Gather static files at build time so they ship in the image. Runtime pods do
+# not (and should not) regenerate these. UI translations come from
+# wagtail_localize (DB-backed) and pre-compiled .mo files inside installed
+# packages, so there are no project-level .po files to compile here.
 RUN DJANGO_SETTINGS_MODULE=hot_osm.settings.production \
-    SECRET_KEY=build-only \
-    python manage.py compilemessages \
- && DJANGO_SETTINGS_MODULE=hot_osm.settings.production \
     SECRET_KEY=build-only \
     python manage.py collectstatic --noinput
 # Pre-compile packages to .pyc (init speed gains)

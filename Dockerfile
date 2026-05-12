@@ -157,10 +157,19 @@ CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
 FROM runtime as prod
 # Add Healthcheck
 HEALTHCHECK --start-period=10s --interval=5s --retries=20 --timeout=5s \
-    CMD curl --fail http://localhost:8000 || exit 1
+    CMD curl --fail http://localhost:8000/__lbheartbeat__ || exit 1
 COPY gunicorn_config.py ./
-# Pre-compile packages to .pyc (init speed gains)
 USER root
+# Compile translations and gather static files at build time so they ship in
+# the image. Runtime pods do not (and should not) regenerate these.
+RUN DJANGO_SETTINGS_MODULE=hot_osm.settings.production \
+    SECRET_KEY=build-only \
+    python manage.py compilemessages \
+ && DJANGO_SETTINGS_MODULE=hot_osm.settings.production \
+    SECRET_KEY=build-only \
+    python manage.py collectstatic --noinput
+# Pre-compile packages to .pyc (init speed gains)
 RUN python -c "import compileall; compileall.compile_path(maxlevels=10, quiet=1)"
+RUN chown -R wagtail:wagtail /app/staticfiles /app/locale
 USER wagtail
 CMD ["gunicorn", "-c", "gunicorn_config.py", "hot_osm.wsgi:application"]

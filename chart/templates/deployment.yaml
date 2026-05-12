@@ -29,8 +29,16 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ include "django.serviceAccountName" . }}
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
+          {{- with .Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           {{- if .Values.web.args }}
           args: {{- toYaml .Values.web.args | nindent 10 }}
           {{- end }}
@@ -38,20 +46,30 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: {{ .Values.web.port | default 8080 }}
+              containerPort: {{ .Values.web.port | default 8000 }}
               protocol: TCP
           livenessProbe:
             failureThreshold: {{ .Values.web.livenessProbe.failureThreshold }}
             httpGet:
-              path: {{ .Values.web.livenessProbe.path | default "/" }}
-              port: {{ .Values.web.port | default 8080 }}
+              path: {{ .Values.web.livenessProbe.path | default "/__lbheartbeat__" }}
+              port: {{ .Values.web.port | default 8000 }}
+              {{- if .Values.web.livenessProbe.host }}
+              httpHeaders:
+                - name: Host
+                  value: {{ .Values.web.livenessProbe.host | quote }}
+              {{- end }}
             initialDelaySeconds: {{ .Values.web.livenessProbe.initialDelaySeconds }}
             timeoutSeconds: {{ .Values.web.livenessProbe.timeoutSeconds }}
           readinessProbe:
             failureThreshold: {{ .Values.web.readinessProbe.failureThreshold }}
             httpGet:
-              path: {{ .Values.web.readinessProbe.path | default "/" }}
-              port: {{ .Values.web.port | default 8080 }}
+              path: {{ .Values.web.readinessProbe.path | default "/__lbheartbeat__" }}
+              port: {{ .Values.web.port | default 8000 }}
+              {{- if .Values.web.readinessProbe.host }}
+              httpHeaders:
+                - name: Host
+                  value: {{ .Values.web.readinessProbe.host | quote }}
+              {{- end }}
             initialDelaySeconds: {{ .Values.web.readinessProbe.initialDelaySeconds }}
             timeoutSeconds: {{ .Values.web.readinessProbe.timeoutSeconds }}
           resources:
@@ -61,13 +79,13 @@ spec:
             - secretRef:
                 name: {{ .Values.existingSecret }}
           {{- end }}
-          {{- if .Values.env }}
           env:
+            - name: GUNICORN_BIND
+              value: "0.0.0.0:{{ .Values.web.port | default 8000 }}"
             {{- range $k, $v := .Values.env }}
             - name: {{ $k }}
               value: {{ $v | quote }}
             {{- end }}
-          {{- end }}
           {{- with .Values.extraVolumeMounts }}
           volumeMounts:
             {{- toYaml . | nindent 12 }}

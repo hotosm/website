@@ -16,24 +16,55 @@ migrationJob:
     limits: {}
     requests: {}
 
-# Name of an existing Kubernetes Secret to load as env vars (via envFrom).
-# The secret should contain keys like DATABASE_URL, SECRET_KEY, etc.
-existingSecret: ""
+# Bootstraps a Django superuser as an ArgoCD PostSync hook. Disabled by
+# default - flip to true only for initial bootstrap of a new environment,
+# then set back to false. Requires DJANGO_SUPERUSER_USERNAME /
+# DJANGO_SUPERUSER_PASSWORD (and optionally DJANGO_SUPERUSER_EMAIL) in
+# `existingSecret`.
+superuserJob:
+  enabled: false
+  activeDeadlineSeconds: 300
+  resources:
+    limits: {}
+    requests: {}
+
+# Kubernetes Secret loaded as env vars via envFrom. Must contain at least
+# SECRET_KEY, DATABASE_URL, MAPBOX_ACCESS_TOKEN; typically also
+# AWS_STORAGE_BUCKET_NAME / AWS_S3_REGION_NAME / AWS_ACCESS_KEY_ID /
+# AWS_SECRET_ACCESS_KEY / SENTRY_DSN / DEEPL_KEY.
+existingSecret: hot-website-secret-env
 
 # Plain (non-secret) environment variables added directly to the deployment
 # and migration job.
-env: {}
-  # ENV: production
-  # ALLOWED_HOSTS: "example.com"
-  # AWS_STORAGE_BUCKET_NAME: "my-bucket"
-  # AWS_S3_REGION_NAME: "us-east-1"
+env:
+  DJANGO_SETTINGS_MODULE: hot_osm.settings.production
+  # `localhost` must stay in this list - kubelet probes send `Host: localhost`
+  # via the probe httpHeaders config below.
+  ALLOWED_HOSTS: "website.hotosm.org,hotosm.org,www.hotosm.org,localhost"
 
 extraVolumeMounts: []
 extraVolumes: []
 
+# Pod-level security context applied to web Deployment and migration Job.
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+  fsGroup: 1000
+  seccompProfile:
+    type: RuntimeDefault
+
+# Container-level security context.
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: false
+  capabilities:
+    drop:
+      - ALL
+
 web:
-  replicaCount: 1
-  port: 8080
+  replicaCount: 2
+  port: 8000
   args: []
   autoscaling:
     enabled: false
@@ -42,7 +73,7 @@ web:
     targetCPU: 80
     # targetMemory: 80
   budget:
-    minAvailable: 1 # Ignored when replicaCount is 1
+    minAvailable: 1
   resources:
     limits:
       cpu: 1000m
@@ -56,32 +87,37 @@ web:
   affinity: {}
   livenessProbe:
     failureThreshold: 5
-    initialDelaySeconds: 5
+    initialDelaySeconds: 15
     timeoutSeconds: 2
-    path: "/"
+    path: "/__lbheartbeat__"
+    # Host header sent to the app; must be in ALLOWED_HOSTS.
+    host: "localhost"
   readinessProbe:
     failureThreshold: 10
     initialDelaySeconds: 5
     timeoutSeconds: 2
-    path: "/"
+    path: "/__lbheartbeat__"
+    host: "localhost"
   service:
     type: ClusterIP
     port: 80
   ingress:
     enabled: true
-    className: ""
-    annotations: {}
-      # kubernetes.io/ingress.class: nginx
-      # kubernetes.io/tls-acme: "true"
+    className: nginx
+    annotations:
+      cert-manager.io/cluster-issuer: "letsencrypt-prod"
+      external-dns.alpha.kubernetes.io/hostname: website.hotosm.org
+      external-dns.alpha.kubernetes.io/ttl: "300"
+      nginx.ingress.kubernetes.io/proxy-body-size: "20m"
     hosts:
-      - host: website.localhost
+      - host: website.hotosm.org
         paths:
           - path: /
-            pathType: ImplementationSpecific
-    tls: []
-    #  - secretName: chart-example-tls
-    #    hosts:
-    #      - chart-example.local
+            pathType: Prefix
+    tls:
+      - secretName: hot-website-tls
+        hosts:
+          - website.hotosm.org
 
 serviceAccount:
   create: true

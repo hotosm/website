@@ -1,28 +1,25 @@
-{{- if .Values.migrationJob.enabled -}}
+{{- if .Values.superuserJob.enabled -}}
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "django.fullname" . }}-migrate
+  name: {{ include "django.fullname" . }}-superuser
   labels:
     {{- include "django.labels" . | nindent 4 }}
   annotations:
-    # ArgoCD-native hooks (replaces Helm lifecycle hooks). PreSync runs before
-    # the main Deployment is applied; sync-wave gives explicit ordering if other
-    # PreSync resources get added later.
-    argocd.argoproj.io/hook: PreSync
-    # BeforeHookCreation clears a stuck/failed Job from a previous sync so the
-    # new one can be created with the same name; HookSucceeded then tidies up
-    # after a clean run (failed Jobs are kept for debugging).
+    # ArgoCD-native hooks (replaces Helm lifecycle hooks). PostSync runs after
+    # the Deployment is healthy. The job itself is idempotent - disabled by
+    # default; flip superuserJob.enabled when bootstrapping a new environment.
+    argocd.argoproj.io/hook: PostSync
     argocd.argoproj.io/hook-delete-policy: BeforeHookCreation,HookSucceeded
-    argocd.argoproj.io/sync-wave: "-1"
+    argocd.argoproj.io/sync-wave: "1"
     tag: "{{ .Values.image.tag }}"
 spec:
-  activeDeadlineSeconds: {{ default 900 .Values.migrationJob.activeDeadlineSeconds }}
+  activeDeadlineSeconds: {{ default 300 .Values.superuserJob.activeDeadlineSeconds }}
   backoffLimit: 2
   template:
     metadata:
       labels:
-        app.kubernetes.io/component: migrate-job
+        app.kubernetes.io/component: superuser-job
         {{- include "django.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
@@ -36,19 +33,34 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       containers:
-        - name: migrate-job
+        - name: superuser-job
           {{- with .Values.securityContext }}
           securityContext:
             {{- toYaml . | nindent 12 }}
           {{- end }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          # K8s `command` overrides the image ENTRYPOINT, so the Job runs
-          # `manage.py migrate` directly without invoking container-entrypoint.sh.
-          command: {{ .Values.migrationJob.command | toJson }}
-          {{- if .Values.migrationJob.resources }}
+          # K8s `command` overrides the image ENTRYPOINT so only this script runs.
+          command:
+            - python
+            - manage.py
+            - shell
+            - -c
+            - |
+              import os
+              from django.contrib.auth import get_user_model
+              User = get_user_model()
+              username = os.environ["DJANGO_SUPERUSER_USERNAME"]
+              email = os.environ.get("DJANGO_SUPERUSER_EMAIL", "")
+              password = os.environ["DJANGO_SUPERUSER_PASSWORD"]
+              if User.objects.filter(username=username).exists():
+                  print(f"Superuser already exists: {username}")
+              else:
+                  User.objects.create_superuser(username, email, password)
+                  print(f"Superuser created: {username}")
+          {{- if .Values.superuserJob.resources }}
           resources:
-            {{- toYaml .Values.migrationJob.resources | nindent 12 }}
+            {{- toYaml .Values.superuserJob.resources | nindent 12 }}
           {{- end }}
           {{- if .Values.existingSecret }}
           envFrom:

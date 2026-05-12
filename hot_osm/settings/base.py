@@ -276,7 +276,7 @@ PATTERN_LIBRARY = {
     "BASE_TEMPLATE_NAMES": ["patterns/base_page.html"],
 }
 
-MAPBOX_ACCESS_TOKEN = os.getenv("MAPBOX_ACCESS_TOKEN")
+MAPBOX_ACCESS_TOKEN = os.getenv("MAPBOX_ACCESS_TOKEN", "")
 GEO_WIDGET_LEAFLET_TILE_LAYER = "https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=" + MAPBOX_ACCESS_TOKEN
 
 GEO_WIDGET_LEAFLET_TILE_LAYER_OPTIONS = {

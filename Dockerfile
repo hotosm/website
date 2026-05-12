@@ -1,7 +1,7 @@
 ARG PYTHON_IMG_TAG=3.11
 ARG NODE_IMG_TAG=20.5.1
 
-FROM node:${NODE_IMG_TAG}-bookworm-slim as frontend-base
+FROM node:${NODE_IMG_TAG}-bookworm-slim AS frontend-base
 COPY . ./app
 WORKDIR /app/frontend
 RUN mkdir -p ./node_modules
@@ -10,7 +10,7 @@ RUN mkdir -p ./dist/css
 RUN npm run build
 
 # Define the base stage
-FROM docker.io/python:${PYTHON_IMG_TAG}-slim-bookworm as base
+FROM docker.io/python:${PYTHON_IMG_TAG}-slim-bookworm AS base
 ARG APP_VERSION
 ARG COMMIT_REF
 ARG PYTHON_IMG_TAG
@@ -35,7 +35,7 @@ ENV LC_ALL en_US.UTF-8
 
 
 # Extract dependencies using uv (to requirements.txt)
-FROM base as extract-deps
+FROM base AS extract-deps
 WORKDIR /opt/python
 COPY pyproject.toml uv.lock /opt/python/
 RUN pip install --no-cache-dir --upgrade pip \
@@ -46,7 +46,7 @@ RUN pip install --no-cache-dir --upgrade pip \
 
 
 # Define build stage (install deps)
-FROM base as build
+FROM base AS build
 RUN set -ex \
     && apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install \
@@ -69,7 +69,7 @@ RUN pip install --user --no-warn-script-location \
     --no-cache-dir -r /opt/python/requirements.txt
 
 # Define run stage
-FROM base as runtime
+FROM base AS runtime
 ARG PYTHON_IMG_TAG
 ENV PORT=8000 \
     PYTHONDONTWRITEBYTECODE=1 \
@@ -122,7 +122,7 @@ ENTRYPOINT ["/container-entrypoint.sh"]
 
 
 # Define dev-deps stage (install requirements-dev)
-FROM runtime as dev-deps
+FROM runtime AS dev-deps
 COPY --from=extract-deps --chown=wagtail \
     /opt/python/requirements-dev.txt /home/wagtail/
 RUN pip install --user --no-warn-script-location \
@@ -131,7 +131,7 @@ RUN pip install --user --no-warn-script-location \
 
 
 # Define test (ci) stage
-FROM dev-deps as test
+FROM dev-deps AS test
 USER root
 ARG PYTHON_IMG_TAG
 # Copy packages from user to root dirs (run ci as root)
@@ -145,7 +145,7 @@ CMD ["pytest"]
 
 
 # Define debug (development) stage
-FROM dev-deps as debug
+FROM dev-deps AS debug
 # Add Healthcheck
 HEALTHCHECK --start-period=10s --interval=5s --retries=20 --timeout=5s \
     CMD curl --fail http://localhost:8000 || exit 1
@@ -153,12 +153,11 @@ CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
 
 
 # Define prod stage
-FROM runtime as prod
+FROM runtime AS prod
 # Add Healthcheck
 HEALTHCHECK --start-period=10s --interval=5s --retries=20 --timeout=5s \
     CMD curl --fail http://localhost:8000/__lbheartbeat__ || exit 1
-COPY gunicorn_config.py ./
-USER root
+COPY --chown=wagtail:wagtail gunicorn_config.py ./
 # Compile translations and gather static files at build time so they ship in
 # the image. Runtime pods do not (and should not) regenerate these.
 RUN DJANGO_SETTINGS_MODULE=hot_osm.settings.production \
@@ -169,6 +168,4 @@ RUN DJANGO_SETTINGS_MODULE=hot_osm.settings.production \
     python manage.py collectstatic --noinput
 # Pre-compile packages to .pyc (init speed gains)
 RUN python -c "import compileall; compileall.compile_path(maxlevels=10, quiet=1)"
-RUN chown -R wagtail:wagtail /app/staticfiles /app/locale
-USER wagtail
 CMD ["gunicorn", "-c", "gunicorn_config.py", "hot_osm.wsgi:application"]

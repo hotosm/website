@@ -47,7 +47,7 @@ target cluster and namespace:
 kubectl create secret generic hot-website-secret-env \
     --namespace='website' \
     --from-literal=SECRET_KEY='replace-with-a-long-random-django-secret-key' \
-    --from-literal=DATABASE_URL='postgres://hotosm:password@hot-website-db-rw.website.svc.cluster.local:5432/hotosm' \
+    --from-literal=DATABASE_URL='postgres://hotosm:password@hot-website-db-rw.postgres.svc.cluster.local:5432/hotosm' \
     --from-literal=AWS_STORAGE_BUCKET_NAME='hot-website-media' \
     --from-literal=AWS_ACCESS_KEY_ID='replace-with-aws-access-key-id' \
     --from-literal=AWS_SECRET_ACCESS_KEY='replace-with-aws-secret-access-key' \

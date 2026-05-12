@@ -3,8 +3,15 @@ from .base import *
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-# SECURITY WARNING: define the correct hosts in production!
-ALLOWED_HOSTS = ["hotosm-production.fly.dev", "hotosm-staging-new.fly.dev", "*.fly.dev", "127.0.0.1", "localhost", "hotosm.org", "www.hotosm.org", "new-www.hotosm.org"]
+_default_allowed_hosts = [
+    "hotosm-production.fly.dev",
+    "hotosm-staging-new.fly.dev",
+    "hotosm.org",
+    "www.hotosm.org",
+    "website.hotosm.org",
+]
+_env_allowed_hosts = [h.strip() for h in os.getenv("ALLOWED_HOSTS", "").split(",") if h.strip()]
+ALLOWED_HOSTS = _env_allowed_hosts or _default_allowed_hosts
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 

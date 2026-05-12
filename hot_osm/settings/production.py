@@ -21,6 +21,17 @@ MIDDLEWARE = [m for m in MIDDLEWARE if m != 'django.middleware.clickjacking.XFra
 # Set referrer policy to allow YouTube embeds to work
 SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
 
+# Behind the nginx ingress controller (TLS terminated at the LB, plain HTTP
+# forwarded to the pod with X-Forwarded-Proto: https).
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SECURE_SSL_REDIRECT = True
+# Kubelet liveness/readiness probes hit the pod directly over HTTP with no
+# X-Forwarded-Proto header; without this exemption the redirect would fail
+# every probe.
+SECURE_REDIRECT_EXEMPT = [r"^__lbheartbeat__$"]
+
 # AWS S3 Configuration
 AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
 AWS_S3_REGION_NAME = os.getenv("AWS_S3_REGION_NAME", "us-west-1")

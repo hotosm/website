@@ -7,9 +7,12 @@ on:
       - 'main'
       - 'release/*'
       - 'dev'
+  # Allow manual run
+  workflow_dispatch:
+
 jobs:
   pytest:
-    uses: hotosm/gh-workflows/.github/workflows/test_compose.yml@main
+    uses: hotosm/gh-workflows/.github/workflows/test_compose.yml@4.0.1
     secrets: inherit
     with:
       image_name: ghcr.io/${{ github.repository }}

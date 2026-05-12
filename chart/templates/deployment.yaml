@@ -5,6 +5,8 @@ metadata:
   labels:
     {{- include "django.labels" . | nindent 4 }}
     app.kubernetes.io/component: web
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
 spec:
   {{- if not .Values.web.autoscaling.enabled }}
   replicas: {{ .Values.web.replicaCount }}

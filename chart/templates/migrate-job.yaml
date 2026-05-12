@@ -6,15 +6,13 @@ metadata:
   labels:
     {{- include "django.labels" . | nindent 4 }}
   annotations:
-    # ArgoCD-native hooks (replaces Helm lifecycle hooks). PreSync runs before
-    # the main Deployment is applied; sync-wave gives explicit ordering if other
-    # PreSync resources get added later.
-    argocd.argoproj.io/hook: PreSync
-    # BeforeHookCreation clears a stuck/failed Job from a previous sync so the
-    # new one can be created with the same name; HookSucceeded then tidies up
-    # after a clean run (failed Jobs are kept for debugging).
-    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation,HookSucceeded
-    argocd.argoproj.io/sync-wave: "-1"
+    # Ordered via sync-waves rather than PreSync hook: the ServiceAccount lives
+    # in the Sync phase (wave 0), so a PreSync hook can't reference it. Running
+    # the Job as a Sync resource at wave 1 lets it use the SA, and the
+    # Deployment at wave 2 waits for the Job to reach Healthy (== complete).
+    # Replace=true recreates the immutable Job spec on each sync.
+    argocd.argoproj.io/sync-wave: "1"
+    argocd.argoproj.io/sync-options: Replace=true
     tag: "{{ .Values.image.tag }}"
 spec:
   activeDeadlineSeconds: {{ default 900 .Values.migrationJob.activeDeadlineSeconds }}

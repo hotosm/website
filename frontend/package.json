@@ -1,6 +1,6 @@
 {
   "name": "hot_osm",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A Wagtail CMS for the Humanitarian OpenStreetMap Team",
   "main": "index.js",
   "devDependencies": {

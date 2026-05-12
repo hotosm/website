@@ -66,6 +66,5 @@ python_files = ["test_*.py", "test.py"]
 addopts = "--reuse-db"
 testpaths = ["hot_osm/tests"]
 filterwarnings = [
-    "ignore::django.utils.deprecation.RemovedInDjango51Warning",
     "ignore::DeprecationWarning:l18n.translation",
 ]

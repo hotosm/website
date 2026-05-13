@@ -11,7 +11,7 @@ migrationJob:
   enabled: true
   # Bypasses the image entrypoint so only the migrate step runs.
   command: ["python", "manage.py", "migrate", "--noinput"]
-  activeDeadlineSeconds: 900
+  activeDeadlineSeconds: 3600
   resources:
     limits: {}
     requests: {}

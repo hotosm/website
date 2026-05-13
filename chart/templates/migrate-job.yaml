@@ -10,9 +10,11 @@ metadata:
     # in the Sync phase (wave 0), so a PreSync hook can't reference it. Running
     # the Job as a Sync resource at wave 1 lets it use the SA, and the
     # Deployment at wave 2 waits for the Job to reach Healthy (== complete).
-    # Replace=true recreates the immutable Job spec on each sync.
+    # Force+Replace deletes and recreates the Job on each sync - required
+    # because Job.spec.selector is auto-generated and immutable, so a plain
+    # `kubectl replace` (Replace=true alone) fails on the second sync.
     argocd.argoproj.io/sync-wave: "1"
-    argocd.argoproj.io/sync-options: Replace=true
+    argocd.argoproj.io/sync-options: Force=true,Replace=true
     tag: "{{ .Values.image.tag }}"
 spec:
   activeDeadlineSeconds: {{ default 900 .Values.migrationJob.activeDeadlineSeconds }}

@@ -63,24 +63,30 @@ securityContext:
       - ALL
 
 web:
-  replicaCount: 2
+  # Scale horizontally via replicas rather than packing more gunicorn workers
+  # into one pod. Pair this with the GUNICORN_WORKERS env var below, which
+  # defaults to 2 in gunicorn_config.py.
+  replicaCount: 3
   port: 8000
   args: []
   autoscaling:
-    enabled: false
-    minReplicas: 2
+    enabled: true
+    minReplicas: 3
     maxReplicas: 10
-    targetCPU: 80
+    targetCPU: 70
     # targetMemory: 80
   budget:
     minAvailable: 1
+  # Sized for GUNICORN_WORKERS=2. CPU request roughly matches worker count so
+  # one worker can saturate ~one core without throttling siblings; the limit
+  # allows brief bursts. Memory budgets ~250-300Mi per worker plus headroom.
   resources:
     limits:
-      cpu: 1000m
-      memory: 512Mi
+      cpu: 1500m
+      memory: 768Mi
     requests:
-      cpu: 100m
-      memory: 128Mi
+      cpu: 500m
+      memory: 256Mi
   nodeSelector: {}
   tolerations: []
   podAnnotations: {}

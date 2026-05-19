@@ -291,6 +291,16 @@ WAGTAILMARKDOWN = {
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 2000
 
+CACHES = {
+    'default': {
+        'BACKEND': os.getenv('CACHE_BACKEND', 'django_redis.cache.RedisCache'),
+        'LOCATION': os.getenv('CACHE_LOCATION', 'redis://127.0.0.1:6379/dbname'),
+        'OPTIONS': {
+            'CLIENT_CLASS': os.getenv('CACHE_CLIENT_CLASS', 'django_redis.client.DefaultClient'),
+        }
+    }
+}
+
 sentry_sdk.init(
     dsn=os.getenv("SENTRY_DSN"),
     # Add data like request headers and IP for users,

@@ -29,7 +29,7 @@ class NewsOwnerPage(Page):
 
     #     keyword = request.GET.get('keyword', '')
     #     news_list = IndividualNewsPage.objects.live().filter(locale=base_locale)
-        
+
     #     if keyword:
     #         news_list = news_list.search(keyword).get_queryset()
 
@@ -40,7 +40,7 @@ class NewsOwnerPage(Page):
     #         if request.GET.get("cat" + str(category.id), ''):
     #             query = query | Q(categories=category)
     #     news_list = news_list.filter(query).distinct()
-        
+
     #     query = Q()
     #     for tag in tags:
     #         query = query | Q(tags__name=tag)
@@ -73,7 +73,7 @@ class NewsOwnerPage(Page):
     #         news = paginator.page(1)
     #     except EmptyPage:
     #         news = paginator.page(paginator.num_pages)
-        
+
     #     context['news'] = news
     #     context['news_paginator'] = paginator
     #     context['current_page'] = int(page)
@@ -87,7 +87,7 @@ class NewsOwnerPage(Page):
         base_locale = context['page'].get_translation(1).locale
 
         keyword = request.GET.get('keyword', '')
-        
+
         # SOLUTION 2: Optimize queries (removed associated_hubs from prefetch_related)
         news_list = IndividualNewsPage.objects.live().filter(
             locale=base_locale
@@ -98,7 +98,7 @@ class NewsOwnerPage(Page):
             'tags'          # Fetch all tags in one query
             # Note: associated_hubs removed because it's a StreamField
         )
-        
+
         if keyword:
             news_list = news_list.search(keyword).get_queryset()
 
@@ -109,7 +109,7 @@ class NewsOwnerPage(Page):
             if request.GET.get("cat" + str(category.id), ''):
                 query = query | Q(categories=category)
         news_list = news_list.filter(query).distinct()
-        
+
         query = Q()
         for tag in tags:
             query = query | Q(tags__name=tag)
@@ -124,7 +124,7 @@ class NewsOwnerPage(Page):
 
         # SOLUTION 2: Add safety measures for sorting with limits
         total_count = news_list.count()
-        
+
         match request.GET.get('sort', ''):
             case 'sort.new':
                 news_list = news_list.order_by('-date')
@@ -153,14 +153,14 @@ class NewsOwnerPage(Page):
             news = paginator.page(1)
         except EmptyPage:
             news = paginator.page(paginator.num_pages)
-        
+
         context['news'] = news
         context['news_paginator'] = paginator
         context['current_page'] = int(page)
         context['categories'] = categories
         context['hubs'] = hubs
         return context
-    
+
     max_count = 1
 
     subpage_types = [
@@ -245,7 +245,7 @@ class NewsCategory(models.Model):
 
     def __str__(self):
         return self.category_name
-    
+
     class Meta:
         verbose_name_plural = "News Categories"
 
@@ -325,30 +325,30 @@ class IndividualNewsPage(Page):
     ]
 
     @classmethod
-    def get_tool_related_news(cls, tool_name=None, tool_tags=None, limit=6):
+    def get_tool_related_news(cls, locale, tool_name=None, tool_tags=None, limit=6):
         """
         Get news articles related to a specific tool
         """
         from django.db.models import Q
-        
-        news_queryset = cls.objects.live().order_by('-date')
-        
+
+        news_queryset = cls.objects.live().order_by('-date').filter(locale=locale)
+
         if tool_name or tool_tags:
             query = Q()
-            
+
             if tool_name:
                 query |= Q(title__icontains=tool_name)
-            
+
             if tool_tags:
                 for tag in tool_tags:
                     query |= Q(tags__name__icontains=tag)
-            
+
             if query:
-                news_queryset = news_queryset.filter(query).distinct()
-        
+                news_queryset = news_queryset.filter(query)
+
+        news_queryset = news_queryset.distinct()
+
         if limit:
             news_queryset = news_queryset[:limit]
-        
-        return news_queryset
 
-    
+        return news_queryset

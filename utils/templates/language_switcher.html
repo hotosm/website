@@ -19,7 +19,7 @@
       {% language language.code %}
         <option
           value="{{ language.code }}"
-          data-url="{% pageurl page.localized %}"
+          data-url="{% if page %}{% pageurl page.localized %}{% else %}/{{ language.code }}/{% endif %}"
           {% if language.code == LANGUAGE_CODE %}selected{% endif %}
         >
           {{ language.name_local|title_case }}

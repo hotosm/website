@@ -1,6 +1,6 @@
 image:
   repository: ghcr.io/hotosm/website
-  tag: "6d1d8feedc00b5801ff6dd687646891d4a24e035" 
+  tag: main 
   pullPolicy: Always
 
 imagePullSecrets: []

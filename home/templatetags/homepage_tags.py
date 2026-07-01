@@ -1,5 +1,6 @@
 from django import template
 from home.models import HomePage
+from app.search_page.models import SearchPage
 from django.conf import settings
 
 register = template.Library()
@@ -17,6 +18,11 @@ def get_home_page(context):
         home_page = HomePage.objects.live().filter(locale=context['page'].locale).first().specific
 
     return home_page
+
+
+@register.simple_tag(takes_context=True)
+def get_search_page(context):
+    return SearchPage.objects.live().filter(locale=context['page'].locale).first().specific
 
 
 @register.simple_tag(takes_context=True)

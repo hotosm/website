@@ -141,6 +141,32 @@ serviceAccount:
   annotations: {}
   name: ""
 
+# Bundled Postgres for local development. Disabled by default - production
+# deployments should supply DATABASE_URL via `existingSecret` and point at a
+# managed database. When enabled, the chart provisions a single-replica
+# Postgres StatefulSet and injects DATABASE_URL into the web Deployment and
+# Jobs, overriding any DATABASE_URL from `existingSecret`.
+postgres:
+  enabled: false
+  image:
+    repository: docker.io/postgres
+    tag: "18"
+    pullPolicy: IfNotPresent
+  auth:
+    username: hotosm
+    password: hotosm
+    database: hotosm
+  service:
+    port: 5432
+  persistence:
+    enabled: false
+    size: 5Gi
+    storageClassName: ""
+  resources: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
 # Subchart configurations
 # https://github.com/dragonflydb/dragonfly/blob/main/contrib/charts/dragonfly/values.yaml
 dragonfly:

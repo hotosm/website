@@ -77,3 +77,21 @@ Common values:
 | `GUNICORN_WORKER_CLASS` | Overrides Gunicorn worker class. Defaults to `sync`. |
 
 `GUNICORN_BIND` is set by the chart from `web.port`.
+
+## Bundled Postgres (local development)
+
+For local development the chart can provision an in-cluster Postgres
+(disabled by default). Enable it with:
+
+```yaml
+postgres:
+  enabled: true
+```
+
+When enabled, the chart creates a Secret, ClusterIP Service, and single-replica
+StatefulSet (docker.io postgres:18) and injects `DATABASE_URL` into the web
+Deployment and Jobs, overriding any `DATABASE_URL` supplied by `existingSecret`.
+Data is stored in an `emptyDir` unless `postgres.persistence.enabled=true`, in
+which case a PVC (`postgres.persistence.size`,
+`postgres.persistence.storageClassName`) is used. Do not use this for
+production - point at a managed database via `existingSecret` instead.

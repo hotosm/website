@@ -84,6 +84,9 @@ spec:
           env:
             - name: GUNICORN_BIND
               value: "0.0.0.0:{{ .Values.web.port | default 8000 }}"
+            {{- if .Values.postgres.enabled }}
+            {{- include "django.postgresDatabaseUrlEnv" . | nindent 12 }}
+            {{- end }}
             {{- range $k, $v := .Values.env }}
             - name: {{ $k }}
               value: {{ $v | quote }}

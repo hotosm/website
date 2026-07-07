@@ -52,6 +52,26 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
 
 {{/*
+Name of the bundled Postgres resources (Service, StatefulSet, Secret).
+*/}}
+{{- define "django.postgresName" -}}
+{{ include "django.fullname" . }}-postgres
+{{- end -}}
+
+{{/*
+DATABASE_URL env entry sourced from the chart-managed Postgres Secret.
+Included in web Deployment and Jobs when postgres.enabled=true so it
+overrides any DATABASE_URL loaded from `existingSecret` via envFrom.
+*/}}
+{{- define "django.postgresDatabaseUrlEnv" -}}
+- name: DATABASE_URL
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "django.postgresName" . }}
+      key: DATABASE_URL
+{{- end -}}
+
+{{/*
 Create the name of the service account to use
 */}}
 {{- define "django.serviceAccountName" -}}

@@ -67,8 +67,11 @@ spec:
             - secretRef:
                 name: {{ .Values.existingSecret }}
           {{- end }}
-          {{- if .Values.env }}
+          {{- if or .Values.env .Values.postgres.enabled }}
           env:
+            {{- if .Values.postgres.enabled }}
+            {{- include "django.postgresDatabaseUrlEnv" . | nindent 12 }}
+            {{- end }}
             {{- range $k, $v := .Values.env }}
             - name: {{ $k }}
               value: {{ $v | quote }}

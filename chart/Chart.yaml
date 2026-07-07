@@ -17,3 +17,4 @@ dependencies:
     version: v1.38.0
     repository: oci://ghcr.io/dragonflydb/dragonfly/helm
     alias: dragonfly
+    condition: dragonfly.enabled

@@ -12,7 +12,7 @@ on:
 
 jobs:
   pytest:
-    uses: hotosm/gh-workflows/.github/workflows/test_compose.yml@4.0.2
+    uses: hotosm/gh-workflows/.github/workflows/test_compose.yml@4.0.3
     secrets: inherit
     with:
       image_name: ghcr.io/${{ github.repository }}

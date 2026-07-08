@@ -1,9 +1,6 @@
 dependencies:
-- name: postgresql
-  repository: https://charts.bitnami.com/bitnami
-  version: 16.1.2
-- name: valkey
-  repository: https://charts.bitnami.com/bitnami
-  version: 2.0.2
-digest: sha256:02435fa7bb4e7e9783b56f5da3b6012b326c45fc315a9e7d3473fcbc65ed65a2
-generated: "2024-11-06T20:41:25.311333687-05:00"
+- name: dragonfly
+  repository: oci://ghcr.io/dragonflydb/dragonfly/helm
+  version: v1.38.0
+digest: sha256:b9a6a56348c6b020fb771ac30547437c080e5e7e3e8dcdb8fa681ad22c88f17b
+generated: "2026-07-08T15:02:04.554745614+01:00"

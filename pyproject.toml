@@ -5,6 +5,7 @@ description = "Wagtail CMS for Humanitarian OpenStreetMap Team"
 authors = [
     {name = "HOTOSM", email = "sysadmin@hotosm.org"},
     {name = "DK Benjamin", email = "dk@hotosm.org"},
+    {name = "Sam Woodcock", email = "sam.woodcock@hotosm.org"},
 ]
 dependencies = [
     "wagtail==6.2.2",

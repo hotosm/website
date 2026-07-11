@@ -98,3 +98,17 @@ for doing this is largely the same as building Tailwind:
 3. Move to the `Exec` tab within this container
 4. Run `python manage.py makemigrations` and then `python manage.py migrate` (if
    successful)
+
+## HOT Activation Protocol page
+
+To restore the archived activation protocol landing page on the new site, run:
+
+```bash
+python manage.py setup_activation_protocol_page
+```
+
+Optional: pass `--replace-pdf-redirect` to replace the temporary PDF redirect with
+the new Wagtail page redirect.
+
+This creates a `DocumentCollectionPage` at `/en/hot-activation-protocol/` with
+links to the v2 (2022) and original (2015) PDFs, plus legacy path redirects.

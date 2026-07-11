@@ -37,6 +37,11 @@ if settings.DEBUG:
             path("pattern-library/", include("pattern_library.urls")),
         ]
 
+    if apps.is_installed("debug_toolbar"):
+        urlpatterns += [
+            path("__debug__/", include("debug_toolbar.urls")),
+        ]
+
 urlpatterns.extend(
     i18n_patterns(
         # For anything not caught by a more specific rule above, hand over to

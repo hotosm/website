@@ -98,3 +98,26 @@ for doing this is largely the same as building Tailwind:
 3. Move to the `Exec` tab within this container
 4. Run `python manage.py makemigrations` and then `python manage.py migrate` (if
    successful)
+
+## Django Debug Toolbar
+
+The [Django Debug Toolbar](https://django-debug-toolbar.readthedocs.io/) is
+enabled automatically in the **development** settings (`hot_osm.settings.dev`).
+It is not installed or loaded in production.
+
+When running the dev server (`make up` / `DJANGO_SETTINGS_MODULE=hot_osm.settings.dev`),
+open any page in the browser. A debug panel appears on the right side of the
+page. Use it to inspect:
+
+- SQL queries and timing
+- Request/response headers and context
+- Template rendering
+- Cache usage
+- Static files
+
+The toolbar URLs are served at `/__debug__/`. In Docker, the toolbar is shown
+for all requests because client IPs are not `127.0.0.1`; this is limited to
+`DEBUG=True` in `dev.py` only.
+
+To disable the toolbar locally without changing code, set `DEBUG=False` in
+`hot_osm/settings/local.py` (if you use that override file).

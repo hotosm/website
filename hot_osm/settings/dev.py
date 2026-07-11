@@ -8,8 +8,28 @@ ALLOWED_HOSTS = ["*"]
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
-INSTALLED_APPS = INSTALLED_APPS + ["django_browser_reload", "pattern_library",]  # noqa: F405
-MIDDLEWARE = MIDDLEWARE + ["django_browser_reload.middleware.BrowserReloadMiddleware"]  # noqa: F405
+INSTALLED_APPS = INSTALLED_APPS + [  # noqa: F405
+    "debug_toolbar",
+    "django_browser_reload",
+    "pattern_library",
+]
+
+_locale_middleware_index = MIDDLEWARE.index("django.middleware.locale.LocaleMiddleware")  # noqa: F405
+MIDDLEWARE = (
+    MIDDLEWARE[: _locale_middleware_index + 1]  # noqa: F405
+    + ["debug_toolbar.middleware.DebugToolbarMiddleware"]
+    + MIDDLEWARE[_locale_middleware_index + 1 :]  # noqa: F405
+    + ["django_browser_reload.middleware.BrowserReloadMiddleware"]
+)
+
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
+
+# Show the toolbar in Docker dev where the client IP is not 127.0.0.1.
+DEBUG_TOOLBAR_CONFIG = {
+    "SHOW_TOOLBAR_CALLBACK": lambda request: DEBUG,
+}
 
 X_FRAME_OPTIONS = "SAMEORIGIN"
 

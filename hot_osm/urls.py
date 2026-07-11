@@ -4,6 +4,7 @@ from django.conf.urls.i18n import i18n_patterns
 from django.contrib import admin
 from django.http import HttpResponse
 from django.urls import include, path
+from django.views.generic import RedirectView
 from wagtail import urls as wagtail_urls
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.documents import urls as wagtaildocs_urls
@@ -19,6 +20,8 @@ urlpatterns = [
     path("__lbheartbeat__", lbheartbeat),
     path("i18n/", include("django.conf.urls.i18n")),
     path("django-admin/", admin.site.urls),
+    # Avoid locale-prefixed slash redirect (/admin → /es/admin/) which 404s.
+    path("admin", RedirectView.as_view(url="/admin/", permanent=True)),
     path("admin/", include(wagtailadmin_urls)),
     path("documents/", include(wagtaildocs_urls)),
     path("__reload__/", include("django_browser_reload.urls")),

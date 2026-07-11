@@ -31,7 +31,17 @@
                             {{page.send_message_title}}
                         </h1>
 
-                        <form class="mt-4 grid gap-8 [&_label]:font-medium">
+                        {% if request.GET.sent %}
+                            <p class="mt-4 p-4 bg-green-100 text-green-900 font-medium">
+                                Thank you — your message has been sent.
+                            </p>
+                        {% endif %}
+
+                        <form class="mt-4 grid gap-8 [&_label]:font-medium" method="post" action="">
+                            {% csrf_token %}
+                            {% if contact_form.errors %}
+                                <p class="text-hot-red font-medium">Please correct the errors below and try again.</p>
+                            {% endif %}
                             <div class="grid md:grid-cols-2 gap-8">
                                 <div>
                                     <label for="firstname">{{page.first_name_text}}</label>

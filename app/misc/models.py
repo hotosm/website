@@ -1,5 +1,11 @@
 from django.db import models
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.conf import settings
+from django.core.mail import send_mail
+from django.shortcuts import redirect
+from django.template.response import TemplateResponse
+
+from app.misc.forms import ContactForm
 
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 from wagtail.fields import RichTextField, StreamField
@@ -415,6 +421,32 @@ class ContactUsPage(Page):
     dogear_box_title = models.CharField(default="We want to know what you think about HOT and our work.")
     dogear_box_link_text = models.CharField(default="Send us your feedback")
     dogear_box_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
+
+    def serve(self, request, *args, **kwargs):
+        if request.method == "POST":
+            form = ContactForm(request.POST)
+            if form.is_valid():
+                data = form.cleaned_data
+                send_mail(
+                    subject=f"[HOT Contact] {data['subject']}",
+                    message=(
+                        f"From: {data['firstname']} {data['lastname']} "
+                        f"<{data['email']}>\n\n"
+                        f"{data['message']}"
+                    ),
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    recipient_list=[settings.CONTACT_FORM_RECIPIENT],
+                    reply_to=[data["email"]],
+                )
+                return redirect(f"{request.path}?sent=1")
+            context = self.get_context(request, *args, **kwargs)
+            context["contact_form"] = form
+            return TemplateResponse(
+                request,
+                self.get_template(request, *args, **kwargs),
+                context,
+            )
+        return super().serve(request, *args, **kwargs)
     
     content_panels = Page.content_panels + [
         FieldPanel('header_image'),

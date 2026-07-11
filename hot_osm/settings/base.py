@@ -292,6 +292,9 @@ WAGTAILMARKDOWN = {
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 2000
 
+DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "noreply@hotosm.org")
+CONTACT_FORM_RECIPIENT = os.getenv("CONTACT_FORM_RECIPIENT", "info@hotosm.org")
+
 CACHES = {
     'default': {
         'BACKEND': os.getenv('CACHE_BACKEND', 'django_redis.cache.RedisCache'),

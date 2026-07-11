@@ -1,5 +1,6 @@
 ARG PYTHON_IMG_TAG=3.11
 ARG NODE_IMG_TAG=20.5.1
+ARG UV_IMG_TAG=0.9.27
 
 FROM node:${NODE_IMG_TAG}-bookworm-slim AS frontend-base
 COPY . ./app
@@ -8,6 +9,8 @@ RUN mkdir -p ./node_modules
 RUN npm install
 RUN mkdir -p ./dist/css
 RUN npm run build
+
+FROM ghcr.io/astral-sh/uv:${UV_IMG_TAG} AS uv
 
 # Define the base stage
 FROM docker.io/python:${PYTHON_IMG_TAG}-slim-bookworm AS base
@@ -34,18 +37,7 @@ ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
 
-# Extract dependencies using uv (to requirements.txt)
-FROM base AS extract-deps
-WORKDIR /opt/python
-COPY pyproject.toml uv.lock /opt/python/
-RUN pip install --no-cache-dir --upgrade pip \
-    && pip install --no-cache-dir \
-    uv==0.9.27 \
-    && uv export --no-group dev > requirements.txt \
-    && uv export --only-dev > requirements-dev.txt
-
-
-# Define build stage (install deps)
+# Install runtime Python dependencies with uv sync + cache
 FROM base AS build
 RUN set -ex \
     && apt-get update \
@@ -62,11 +54,20 @@ RUN set -ex \
         "npm" \
         "libmagickwand-dev" \
     && rm -rf /var/lib/apt/lists/*
-COPY --from=extract-deps \
-    /opt/python/requirements.txt /opt/python/
-# Install dependencies
-RUN pip install --user --no-warn-script-location \
-    --no-cache-dir -r /opt/python/requirements.txt
+COPY --from=uv /uv /usr/local/bin/uv
+ENV UV_LINK_MODE=copy \
+    UV_COMPILE_BYTECODE=1 \
+    UV_PYTHON_DOWNLOADS=never \
+    UV_PYTHON="python${PYTHON_IMG_TAG}" \
+    UV_PROJECT_ENVIRONMENT=/opt/python
+COPY pyproject.toml uv.lock /opt/python/
+RUN --mount=type=cache,target=/root/.cache/uv \
+    UV_CACHE_DIR=/root/.cache/uv uv sync \
+        --project /opt/python \
+        --frozen \
+        --no-editable \
+        --no-dev
+
 
 # Define run stage
 FROM base AS runtime
@@ -75,9 +76,9 @@ ENV PORT=8000 \
     PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PYTHONFAULTHANDLER=1 \
-    PATH="/home/wagtail/.local/bin:$PATH" \
+    PATH="/opt/python/bin:$PATH" \
     PYTHONPATH="/app" \
-    PYTHON_LIB="/home/wagtail/.local/lib/python$PYTHON_IMG_TAG/site-packages" \
+    PYTHON_LIB="/opt/python/lib/python$PYTHON_IMG_TAG/site-packages" \
     SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt \
     REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt \
     CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
@@ -98,12 +99,9 @@ RUN set -ex \
     && rm -rf /var/lib/apt/lists/*
 # Copy the entrypoint script into the Docker image
 COPY --chown=wagtail:wagtail container-entrypoint.sh /
-# Copy pip dependencies from build stage
-COPY --from=build \
-    /root/.local \
-    /home/wagtail/.local
+# Copy Python environment from build stage
+COPY --from=build /opt/python /opt/python
 # Copy compiled css from frontend stage
-# In the final stage of your Dockerfile...
 COPY --from=frontend-base /app/frontend/dist/css /app/frontend/dist/css
 COPY --from=frontend-base /app/frontend/node_modules /app/frontend/node_modules
 # Use /app folder as a directory where the source code is stored.
@@ -121,26 +119,24 @@ USER wagtail
 ENTRYPOINT ["/container-entrypoint.sh"]
 
 
-# Define dev-deps stage (install requirements-dev)
+# Install dev dependencies with uv sync + cache
 FROM runtime AS dev-deps
-COPY --from=extract-deps --chown=wagtail \
-    /opt/python/requirements-dev.txt /home/wagtail/
-RUN pip install --user --no-warn-script-location \
-    --no-cache-dir -r /home/wagtail/requirements-dev.txt \
-    && rm -r /home/wagtail/requirements-dev.txt
+USER root
+COPY --from=uv /uv /usr/local/bin/uv
+COPY pyproject.toml uv.lock /opt/python/
+RUN --mount=type=cache,target=/root/.cache/uv \
+    UV_CACHE_DIR=/root/.cache/uv uv sync \
+        --project /opt/python \
+        --frozen \
+        --no-editable \
+        --group dev
+USER wagtail
 
 
 # Define test (ci) stage
 FROM dev-deps AS test
 USER root
-ARG PYTHON_IMG_TAG
-# Copy packages from user to root dirs (run ci as root)
-RUN mv /home/wagtail/.local/bin/* /usr/local/bin/ \
-    && cp -R /home/wagtail/.local/lib/python${PYTHON_IMG_TAG}/site-packages/* \
-    /usr/local/lib/python${PYTHON_IMG_TAG}/site-packages/ \
-    && rm -rf /home/wagtail/.local/ \
-    # Pre-compile packages to .pyc (init speed gains)
-    && python -c "import compileall; compileall.compile_path(maxlevels=10, quiet=1)"
+RUN python -c "import compileall; compileall.compile_path(maxlevels=10, quiet=1)"
 CMD ["pytest"]
 
 

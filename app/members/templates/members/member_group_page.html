@@ -72,6 +72,10 @@
                                     <input class="ml-auto checked:bg-hot-red checked:hover:bg-hot-red checked:focus:bg-hot-red" id="hub-{{forloop.counter}}" type="checkbox" name="hub{{hub.id}}" :checked="params.get('hub{{hub.id}}')">
                                 </div>
                             {% endfor %}
+                            <div class="mt-4 flex">
+                                <label for="hub-other">{{page.get_parent.specific.filter_other_label}}</label>
+                                <input class="ml-auto checked:bg-hot-red checked:hover:bg-hot-red checked:focus:bg-hot-red" id="hub-other" type="checkbox" name="hubother" :checked="params.get('hubother')">
+                            </div>
                         </div>
                     </div>
 

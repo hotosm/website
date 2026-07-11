@@ -33,6 +33,7 @@ class MemberGroupOwnerPage(Page):
     applied_text = models.CharField(default="applied", help_text="This will be a suffix to a number, used to indicate how many filters are applied currently in some field.")
     search_placeholder = models.CharField(default="Search by name")
     filter_by_country = models.CharField(default="Filter by Country")
+    filter_other_label = models.CharField(default="Other", help_text="Label for members not assigned to any mapping hub region.")
     sort_by_titlea = models.CharField(default="Sort by Name Alphabetical")
     sort_by_titlez = models.CharField(default="Sort by Name Reverse Alphabetical")
     search_button_text = models.CharField(default="Search")
@@ -52,6 +53,7 @@ class MemberGroupOwnerPage(Page):
             FieldPanel('applied_text'),
             FieldPanel('search_placeholder'),
             FieldPanel('filter_by_country'),
+            FieldPanel('filter_other_label'),
             FieldPanel('sort_by_titlea'),
             FieldPanel('sort_by_titlez'),
             FieldPanel('search_button_text'),
@@ -84,10 +86,16 @@ class MemberGroupPage(Page):
         
         hubs = IndividualMappingHubPage.objects.live().filter(locale=context['page'].get_translation(1).locale)
         query = Q()
+        hub_filters_active = False
         for hub in hubs:
             if request.GET.get("hub" + str(hub.id), ''):
                 query = query | Q(location_hub=hub)
-        members = members.filter(query).distinct()
+                hub_filters_active = True
+        if request.GET.get("hubother", ''):
+            query = query | Q(location_hub__isnull=True)
+            hub_filters_active = True
+        if hub_filters_active:
+            members = members.filter(query).distinct()
 
         match request.GET.get('sort', ''):
             case 'sort.titlea':

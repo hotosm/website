@@ -38,6 +38,7 @@ license = {text = "AGPL-3.0-only"}
 [dependency-groups]
 dev = [
     "pre-commit==3.5.0",
+    "ruff==0.9.10",
     "pytest-django==4.7.0",
     "pytest-timeout==2.2.0",
     "pytest-factoryboy==2.6.0",
@@ -46,18 +47,17 @@ dev = [
     "django-pattern-library==1.5.0",
 ]
 
-[tool.black]
+[tool.ruff]
 line-length = 100
-target-version = ['py312']
-include = '\.pyi?$'
+target-version = "py311"
+exclude = ["*/migrations/*"]
 
-[tool.isort]
-profile = "django"
-combine_as_imports = true
-include_trailing_comma = true
-line_length = 100
-multi_line_output = 3
-known_first_party = ["config"]
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+ignore = ["E501"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["hot_osm", "home", "app", "users", "utils"]
 
 [tool.djlint]
 profile = "django"

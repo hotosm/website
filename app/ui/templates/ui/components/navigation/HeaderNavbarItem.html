@@ -5,12 +5,12 @@
 {% endcomment %}
 <div class="text-small font-medium [&>.show-at-large]:hidden [&:hover>.show-at-large]:block p-2 [&>p]:hover:text-hot-red [&_p:hover]:text-hot-red text-left">
     <p class="">
-        {%if item.link%}
+        {%if item.link and not item.children%}
             <a href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=item.link%}">
                 <span class="{%if item.children%}pr-2{%endif%}">{{item.title}}</span>
             </a>
-            {% else %}
-            <span class="{%if item.children%}pr-2{%endif%}">{{item.title}}</span>
+        {% else %}
+            <span class="{%if item.children%}pr-2 cursor-default{%endif%}">{{item.title}}</span>
         {%endif%}
         {% if item.children %}
             {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-90 text-hot-red" %}
@@ -23,9 +23,13 @@
             {% for child in item.children %}
                 <div class="[&>.show-at-large]:hidden [&:hover>.show-at-large]:block px-6 py-2">
                     <p class="">
-                        <a class="hover:text-hot-red" href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=child.value.link%}">
-                            {{child.value.title}}
-                        </a>
+                        {% if child.value.link and not child.value.children %}
+                            <a class="hover:text-hot-red" href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=child.value.link%}">
+                                {{child.value.title}}
+                            </a>
+                        {% else %}
+                            <span class="{% if child.value.children %}cursor-default{% endif %}">{{child.value.title}}</span>
+                        {% endif %}
                         {% if child.value.children %}
                             {% include "ui/components/icon_svgs/LinkCaret.html" with class="text-hot-red caret-arrow ml-2 rotate-90 lg:rotate-0" %}
                         {% endif %}

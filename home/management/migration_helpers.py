@@ -18,7 +18,8 @@ def create_image_from_bytes(image_bytes: bytes, image_name: str, image_title: st
     img_file = ImageFile(BytesIO(image_bytes), name=image_name)
 
     image = Image(
-        title=image_name,
+        title=image_title,
+        description=image_title,
         file=img_file,
     )
     image.save()

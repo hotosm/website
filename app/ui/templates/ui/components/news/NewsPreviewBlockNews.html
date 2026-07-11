@@ -4,6 +4,7 @@
 - readmoretext: a string; the text that should show for the "read more" button
 {% endcomment %}
 {% load wagtailcore_tags %}
+{% load wagtailmarkdown %}
 
 {% with news.localized as news %}
     <div class="{{class}}">
@@ -18,7 +19,7 @@
         </p>
 
         <div class="max-h-20 text-ellipsis overflow-hidden text-small">
-            {{ news.intro|richtext }}
+            {{ news.intro|markdown }}
         </div>
 
         <p class="mt-4 font-medium">

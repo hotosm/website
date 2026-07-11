@@ -5,6 +5,7 @@
 {% endcomment %}
 {% load wagtailcore_tags %}
 {% load wagtailimages_tags %}
+{% load wagtailmarkdown %}
 
 {% with news.localized as news %}
     {% if news.image %}
@@ -34,7 +35,7 @@
             </p>
 
             <div class="max-h-20 text-ellipsis overflow-hidden text-small">
-                {{ news.intro|richtext }}
+                {{ news.intro|markdown }}
             </div>
 
             <p class="my-2">

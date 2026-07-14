@@ -76,7 +76,7 @@ class PartnerWithUsPage(Page):
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
         
-        context['partners'] = Partner.objects.live().filter(partner_is_active=True)
+        context['partners'] = Partner.objects.all().filter(partner_is_active=True)
         return context
     
     subpage_types = [

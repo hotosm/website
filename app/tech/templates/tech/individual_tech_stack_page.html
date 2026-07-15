@@ -11,7 +11,7 @@
 
 {% block content %}
     {% include "ui/components/PageHeaderWithBlur.html" with title=page.title image=page.header_image endinlarge=True full_length=True smaller=True %}
-    
+
     <div class="max-w-7xl mx-auto my-10">
         <div class="px-6 md:px-10">
             <div class="max-w-5xl mb-10 col-span-5">
@@ -69,12 +69,10 @@
                 {% endfor %}
             </div>
 
-            {% comment %} news section {% endcomment %}
             <div class="my-20">
-                 {% include "ui/components/news/NewsToolSection.html" with news_articles=tool_news section_title=news_section_title %}
+              {% include "ui/components/news/NewsToolSection.html" with news_articles=tool_news section_title=news_section_title %}
             </div>
-            
-            
+
             {% include "ui/components/FooterBannerWithTextAndLink.html" with text=page.get_parent.specific.tech_stack_cta_title description=page.get_parent.specific.tech_stack_cta_description buttontext=page.get_parent.specific.tech_stack_cta_button_link_text url=page.get_parent.specific.tech_stack_cta_button_link_url %}
 
             <p class="my-20 text-intro">

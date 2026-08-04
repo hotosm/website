@@ -22,7 +22,25 @@ def get_home_page(context):
 
 @register.simple_tag(takes_context=True)
 def get_search_page(context):
-    return SearchPage.objects.live().filter(locale=context['page'].locale).first().specific
+    page = context.get("page")
+    if page is None:
+        return None
+    search_page = SearchPage.objects.live().filter(locale=page.locale).first()
+    return search_page.specific if search_page else None
+
+# @register.simple_tag(takes_context=True)
+# def get_search_page(context):
+    # current_page = context.get('self')
+
+    # if current_page is None:
+    #     return None
+
+    # search_page = current_page.get_ancestors(inclusive=True).type(SearchPage).first().specific
+
+    # if not search_page:
+    #     search_page = SearchPage.objects.live().filter(locale=context['page'].locale).first().specific
+    
+    # return search_page
 
 
 @register.simple_tag(takes_context=True)

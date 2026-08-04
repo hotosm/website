@@ -8,8 +8,6 @@ from wagtail import urls as wagtail_urls
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.documents import urls as wagtaildocs_urls
 
-# from search import views as search_views
-
 
 def lbheartbeat(_request):
     return HttpResponse("ok", content_type="text/plain")
@@ -43,7 +41,6 @@ urlpatterns.extend(
         # Wagtail's page serving mechanism. This should be the last pattern in
         # the list:
         path("", include(wagtail_urls)),
-        # path("search/", search_views.search, name="search"),
         # Alternatively, if you want Wagtail pages to be served from a subpath
         # of your site, rather than the site root:
         #    path("pages/", include(wagtail_urls)),

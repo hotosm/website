@@ -38,7 +38,7 @@ db-refresh-staging:
 
     # --- Drop & recreate staging DB (forces off any open connections) ---
     just _echo-yellow "==> Dropping and recreating staging DB..."
-    kubectl exec -n staging-website hot-website-postgres-0 -- sh -c '
+    kubectl exec -n website-staging hot-website-postgres-0 -- sh -c '
       PGPASSWORD="$POSTGRES_PASSWORD" psql -v ON_ERROR_STOP=1 -U "$POSTGRES_USER" -d postgres \
         -c "DROP DATABASE IF EXISTS \"$POSTGRES_DB\" WITH (FORCE);" \
         -c "CREATE DATABASE \"$POSTGRES_DB\" OWNER \"$POSTGRES_USER\";"'
@@ -47,12 +47,12 @@ db-refresh-staging:
     just _echo-yellow "==> Streaming pg_dump postgres/${prod_pod} -> staging..."
     kubectl exec -n postgres "$prod_pod" -c postgres -- \
       pg_dump -U postgres --no-owner --no-privileges hotosm \
-    | kubectl exec -i -n staging-website hot-website-postgres-0 -- \
+    | kubectl exec -i -n website-staging hot-website-postgres-0 -- \
       sh -c 'PGPASSWORD="$POSTGRES_PASSWORD" psql -v ON_ERROR_STOP=1 -U "$POSTGRES_USER" -d "$POSTGRES_DB"'
 
     # --- Rewrite prod URLs in redirect table so staging testers don't hit prod ---
     just _echo-yellow "==> Rewriting wagtailredirects_redirect prod URLs -> staging..."
-    kubectl exec -i -n staging-website hot-website-postgres-0 -- \
+    kubectl exec -i -n website-staging hot-website-postgres-0 -- \
       sh -c 'PGPASSWORD="$POSTGRES_PASSWORD" psql -v ON_ERROR_STOP=1 -U "$POSTGRES_USER" -d "$POSTGRES_DB"' <<'SQL'
     UPDATE wagtailredirects_redirect
     SET redirect_link = REPLACE(redirect_link, 'https://www.hotosm.org/', 'https://staging.website.hotosm.org/')

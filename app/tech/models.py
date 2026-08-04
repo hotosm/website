@@ -68,26 +68,31 @@ class IndividualTechStackPage(Page):
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
-        
+
         from app.news.models import IndividualNewsPage
-        
+
         if self.slug == 'drone-tasking-manager':
             # Get DroneTM-specific news
             tool_news = IndividualNewsPage.get_tool_related_news(
+                locale=context['page'].locale,
                 tool_name='DroneTM',
                 tool_tags=['dronetm', 'drone', 'drone mapping'],
                 limit=6
             )
             section_title = 'DroneTM News'
         else:
-            tool_news = IndividualNewsPage.get_tool_related_news(limit=3)
+            tool_news = IndividualNewsPage.get_tool_related_news(
+                locale=context['page'].locale,
+                limit=3,
+            )
+
             section_title = 'Recent News'
-        
+
         context.update({
             'tool_news': tool_news,
             'news_section_title': section_title,
         })
-        
+
         return context
 
 
@@ -170,7 +175,7 @@ class TechProductSuitePage(Page):
                 FieldPanel('tech_stack_cta_title'),
                 FieldPanel('tech_stack_cta_description'),
                 FieldPanel('tech_stack_cta_button_link_text'),
-                FieldPanel('tech_stack_cta_button_link_url'),    
+                FieldPanel('tech_stack_cta_button_link_url'),
             ], heading="Call to Action"),
             FieldPanel('tech_stack_go_back_text'),
         ], heading="Individual Tech Stack Page"),

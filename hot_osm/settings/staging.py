@@ -1,11 +1,9 @@
 from .base import *
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 _default_allowed_hosts = [
-    "hotosm-production.fly.dev",
-    "hotosm-staging-new.fly.dev",
     "hotosm.org",
     "www.hotosm.org",
     "website.hotosm.org",
@@ -58,6 +56,8 @@ STORAGES = {
     },
 }
 
+MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/"
+
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
@@ -68,11 +68,9 @@ LOGGING = {
     },
     "root": {
         "handlers": ["console"],
-        "level": "INFO",
+        "level": "DEBUG",
     },
 }
-
-MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/"
 
 try:
     from .local import *

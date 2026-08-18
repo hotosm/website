@@ -302,6 +302,20 @@ CACHES = {
     }
 }
 
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "INFO",
+    },
+}
+
 sentry_sdk.init(
     dsn=os.getenv("SENTRY_DSN"),
     # Add data like request headers and IP for users,

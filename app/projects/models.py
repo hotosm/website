@@ -85,13 +85,20 @@ class ProjectOwnerPage(Page):
                 query = query | Q(owner_program=program)
         projects_list = projects_list.filter(query).distinct()
 
+        from django.db.models import F
+
+        # Inside your get_context / sorting method:
         match request.GET.get('sort', ''):
             case 'sort.titlea':
                 projects_list = projects_list.order_by('title')
             case 'sort.titlez':
                 projects_list = projects_list.order_by('-title')
+            case 'sort.newest':
+                projects_list = projects_list.order_by(F('duration_start').desc(nulls_last=True))
+            case 'sort.oldest':
+                projects_list = projects_list.order_by(F('duration_start').asc(nulls_last=True))
             case _:
-                projects_list = projects_list.order_by('title')
+                projects_list = projects_list.order_by(F('duration_start').desc(nulls_last=True))
 
         page = request.GET.get('page', 1)
         paginator = Paginator(projects_list, 12)  # if you want more/less items per page (i.e., per load), change the number here to something else

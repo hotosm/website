@@ -89,15 +89,9 @@ class ProjectOwnerPage(Page):
 
         # Inside your get_context / sorting method:
         match request.GET.get('sort', ''):
-            case 'sort.titlea':
-                projects_list = projects_list.order_by('title')
-            case 'sort.titlez':
-                projects_list = projects_list.order_by('-title')
-            case 'sort.newest':
-                projects_list = projects_list.order_by(F('duration_start').desc(nulls_last=True))
             case 'sort.oldest':
                 projects_list = projects_list.order_by(F('duration_start').asc(nulls_last=True))
-            case _:
+            case 'sort.newest' | _:
                 projects_list = projects_list.order_by(F('duration_start').desc(nulls_last=True))
 
         page = request.GET.get('page', 1)

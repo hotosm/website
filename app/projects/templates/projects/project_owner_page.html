@@ -39,14 +39,17 @@
                     <div class="relative" x-data="{ show: false, setSortType(text) {$refs.sorttype.innerText = text} }" @click.away="show = false">
                         <div class="w-full h-full flex justify-between py-2 px-3 bg-hot-off-white items-center cursor-pointer" @click="show = !show">
                             <p class="pointer-events-none" x-ref="sorttype">
-                                {{page.sort_titlea_text}}
+                                <!-- Update the default text shown on load -->
+                                Newest First
                             </p>
-                        {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-90 text-hot-red" %}
+                            {% include "ui/components/icon_svgs/LinkCaret.html" with class="rotate-90 text-hot-red" %}
                         </div>
                         <div class="absolute z-20 bg-hot-off-white p-4 w-full" x-show="show">
                             <hr class="border-b-2">
-                            {% include "our_work/components/ProjectSortOption.html" with sort_by=page.sort_titlea_text sort_id="sort.titlea" %}
-                            {% include "our_work/components/ProjectSortOption.html" with sort_by=page.sort_titlez_text sort_id="sort.titlez" %}
+                            <!-- Point to our_work/components instead of ./components -->
+                            {% include "our_work/components/ProjectSortOption.html" with sort_by="Newest First" sort_id="sort.newest" %}
+                            
+                            {% include "our_work/components/ProjectSortOption.html" with sort_by="Oldest First" sort_id="sort.oldest" %}
                         </div>
                     </div>
 

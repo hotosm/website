@@ -87,7 +87,6 @@ class ProjectOwnerPage(Page):
 
         from django.db.models import F
 
-        # Inside your get_context / sorting method:
         match request.GET.get('sort', ''):
             case 'sort.oldest':
                 projects_list = projects_list.order_by(F('duration_start').asc(nulls_last=True))

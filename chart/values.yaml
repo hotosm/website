@@ -1,6 +1,6 @@
 image:
   repository: ghcr.io/hotosm/website
-  tag: main 
+  tag: ""  # defaults to appVersion
   pullPolicy: Always
 
 imagePullSecrets: []

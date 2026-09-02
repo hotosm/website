@@ -1,12 +1,11 @@
-from django import forms
 from django.db import models
 
 from wagtail.models import Page
-from wagtail.fields import StreamField, RichTextField
-from wagtail.blocks import CharBlock, StreamBlock, StructBlock, URLBlock, RichTextBlock, PageChooserBlock
+from wagtail.fields import StreamField
+from wagtail.blocks import CharBlock, StreamBlock, URLBlock, PageChooserBlock
 from wagtail.documents.blocks import DocumentChooserBlock
 from wagtail.snippets.models import register_snippet
-from wagtail.admin.panels import FieldPanel, MultiFieldPanel, InlinePanel
+from wagtail.admin.panels import FieldPanel
 
 
 class ErrorPage(Page):

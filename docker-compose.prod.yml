@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   web:
-    image: "ghcr.io/hotosm/website/backend:${TAG_OVERRIDE:-main}"
+    image: "ghcr.io/hotosm/website:${TAG_OVERRIDE:-main}"
     build:
       context: .
       dockerfile: Dockerfile

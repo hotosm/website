@@ -23,6 +23,7 @@
             {% include "ui/components/SectionHeadingWithUnderline.html" with title=page.partnership_types_title %}
             <div class="grid md:grid-cols-2 gap-8 mt-6 mb-20">
                 {% for ptype in page.get_children %}
+                    {% if ptype.specific.live %}
                     <div class="p-6 bg-hot-off-white">
                         {% image ptype.specific.external_icon original class="h-12 w-auto mt-2" %}
                         <a href="{{ptype.url}}" class="hover:underline">
@@ -34,6 +35,7 @@
                             {{ptype.specific.intro|richtext}}
                         </div>
                     </div>
+                    {% endif %}
                 {% endfor %}
             </div>
 

@@ -1,0 +1,188 @@
+image:
+  repository: ghcr.io/hotosm/website
+  tag: main 
+  pullPolicy: Always
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+migrationJob:
+  enabled: true
+  # Bypasses the image entrypoint so only the migrate step runs.
+  command: ["python", "manage.py", "migrate", "--noinput"]
+  activeDeadlineSeconds: 3600
+  resources:
+    limits: {}
+    requests: {}
+
+# Bootstraps a Django superuser as an ArgoCD PostSync hook. Disabled by
+# default - flip to true only for initial bootstrap of a new environment,
+# then set back to false. Requires DJANGO_SUPERUSER_USERNAME /
+# DJANGO_SUPERUSER_PASSWORD (and optionally DJANGO_SUPERUSER_EMAIL) in
+# `existingSecret`.
+superuserJob:
+  enabled: false
+  activeDeadlineSeconds: 300
+  resources:
+    limits: {}
+    requests: {}
+
+# Kubernetes Secret loaded as env vars via envFrom. Must contain at least
+# SECRET_KEY, DATABASE_URL, MAPBOX_ACCESS_TOKEN; typically also
+# AWS_STORAGE_BUCKET_NAME / AWS_S3_REGION_NAME / AWS_ACCESS_KEY_ID /
+# AWS_SECRET_ACCESS_KEY / SENTRY_DSN / DEEPL_KEY.
+existingSecret: hot-website-secret-env
+
+# Plain (non-secret) environment variables added directly to the deployment
+# and migration job.
+env:
+  DJANGO_SETTINGS_MODULE: hot_osm.settings.production
+  # `localhost` must stay in this list - kubelet probes send `Host: localhost`
+  # via the probe httpHeaders config below.
+  ALLOWED_HOSTS: "website.hotosm.org,hotosm.org,www.hotosm.org,localhost"
+
+extraVolumeMounts: []
+extraVolumes: []
+
+# Pod-level security context applied to web Deployment and migration Job.
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+  fsGroup: 1000
+  seccompProfile:
+    type: RuntimeDefault
+
+# Container-level security context.
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: false
+  capabilities:
+    drop:
+      - ALL
+
+web:
+  # Scale horizontally via replicas rather than packing more gunicorn workers
+  # into one pod. Pair this with the GUNICORN_WORKERS env var below, which
+  # defaults to 2 in gunicorn_config.py.
+  replicaCount: 3
+  port: 8000
+  args: []
+  autoscaling:
+    enabled: true
+    minReplicas: 3
+    maxReplicas: 10
+    targetCPU: 70
+    # targetMemory: 80
+  budget:
+    minAvailable: 1
+  # Sized for GUNICORN_WORKERS=2. CPU request roughly matches worker count so
+  # one worker can saturate ~one core without throttling siblings; the limit
+  # allows brief bursts. Memory budgets ~250-300Mi per worker plus headroom.
+  resources:
+    limits:
+      cpu: 1500m
+      memory: 768Mi
+    requests:
+      cpu: 500m
+      memory: 256Mi
+  nodeSelector: {}
+  tolerations: []
+  podAnnotations: {}
+  affinity: {}
+  livenessProbe:
+    failureThreshold: 5
+    initialDelaySeconds: 15
+    timeoutSeconds: 2
+    path: "/__lbheartbeat__"
+    # Host header sent to the app; must be in ALLOWED_HOSTS.
+    host: "localhost"
+  readinessProbe:
+    failureThreshold: 10
+    initialDelaySeconds: 5
+    timeoutSeconds: 2
+    path: "/__lbheartbeat__"
+    host: "localhost"
+  service:
+    type: ClusterIP
+    port: 80
+  ingress:
+    enabled: true
+    className: nginx
+    annotations:
+      cert-manager.io/cluster-issuer: "letsencrypt-prod"
+      external-dns.alpha.kubernetes.io/hostname: website.hotosm.org
+      external-dns.alpha.kubernetes.io/ttl: "300"
+      nginx.ingress.kubernetes.io/proxy-body-size: "20m"
+    hosts:
+      - host: website.hotosm.org
+        paths:
+          - path: /
+            pathType: Prefix
+      - host: hotosm.org
+        paths:
+          - path: /
+            pathType: Prefix
+      - host: www.hotosm.org
+        paths:
+          - path: /
+            pathType: Prefix
+    tls:
+      - secretName: hot-website-tls
+        hosts:
+          - website.hotosm.org
+          - hotosm.org
+          - www.hotosm.org
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+# Bundled Postgres for local development. Disabled by default - production
+# deployments should supply DATABASE_URL via `existingSecret` and point at a
+# managed database. When enabled, the chart provisions a single-replica
+# Postgres StatefulSet and injects DATABASE_URL into the web Deployment and
+# Jobs, overriding any DATABASE_URL from `existingSecret`.
+postgres:
+  enabled: false
+  image:
+    repository: docker.io/postgres
+    tag: "18"
+    pullPolicy: IfNotPresent
+  auth:
+    username: hotosm
+    password: hotosm
+    database: hotosm
+  service:
+    port: 5432
+  persistence:
+    enabled: false
+    size: 5Gi
+    storageClassName: ""
+  resources: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+# Subchart configurations
+# https://github.com/dragonflydb/dragonfly/blob/main/contrib/charts/dragonfly/values.yaml
+dragonfly:
+  enabled: true
+  replicaCount: 1
+  storage:
+    enabled: false
+    storageClassName: "gp3"
+    requests: 2Gi
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 250m
+      memory: 256Mi
+  commonLabels:
+    project: hot-website
+    tool: hot-website

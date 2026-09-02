@@ -1,20 +1,14 @@
 from datetime import date
 import json
-from io import BytesIO
 import os
-import marko
 import frontmatter
 from django.db import transaction
 
-from django.core.management.base import BaseCommand, CommandError
-from app.news.models import IndividualNewsPage, NewsOwnerPage, NewsCategory, NewsTag
+from django.core.management.base import BaseCommand
+from app.news.models import IndividualNewsPage, NewsOwnerPage, NewsCategory
 from app.projects.models import IndividualProjectPage
 from app.members.models import IndividualMemberPage
-from modelcluster.contrib.taggit import ClusterTaggableManager
-from home.models import HomePage
-from django.core.files.images import ImageFile
-from wagtail.images.models import Image
-from home.management.migration_helpers import create_image_from_url, create_image_from_local_file, handle_markdown_images, convert_markdown_contents, HOTOSM_LEGACY_SITE_URL, comb_keys
+from home.management.migration_helpers import create_image_from_url, convert_markdown_contents, HOTOSM_LEGACY_SITE_URL
 
 
 FRONTMATTER_FIELD_TO_NEWS_FIELD_DICT = {
@@ -124,7 +118,7 @@ def handle_authors(authors):
 
 
 def handle_tags(page: IndividualNewsPage, article):
-    if not 'tags' in article.keys():
+    if 'tags' not in article.keys():
         return
     for tag in article['tags']:
         page.tags.add(tag)
@@ -151,7 +145,7 @@ def markdown_article_to_news_dict(article):
 
 def create_news_page_from_markdown(file):
     article = frontmatter.load(file)
-    if not 'title' in article.keys():
+    if 'title' not in article.keys():
         return
     
     news_dict = markdown_article_to_news_dict(article)
@@ -183,7 +177,7 @@ def convert_all_news_in_dir(directory):
 
 def remigrate_news_images(file):
     article = frontmatter.load(file)
-    if not 'title' in article.keys() or not 'Feature Image' in article.keys() or ('Feature Image' in article.keys() and not article['Feature Image'].startswith("https://cdn.hotosm.org")):
+    if 'title' not in article.keys() or 'Feature Image' not in article.keys() or ('Feature Image' in article.keys() and not article['Feature Image'].startswith("https://cdn.hotosm.org")):
         return
     
     news = IndividualNewsPage.objects.all().filter(title=article['title'])[0].get_translation(1)

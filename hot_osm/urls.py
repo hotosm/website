@@ -2,16 +2,23 @@ from django.apps import apps
 from django.conf import settings
 from django.conf.urls.i18n import i18n_patterns
 from django.contrib import admin
+from django.http import HttpResponse
 from django.urls import include, path
+from django.views.generic import RedirectView
 from wagtail import urls as wagtail_urls
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.documents import urls as wagtaildocs_urls
 
-# from search import views as search_views
+
+def lbheartbeat(_request):
+    return HttpResponse("ok", content_type="text/plain")
+
 
 urlpatterns = [
+    path("__lbheartbeat__", lbheartbeat),
     path("i18n/", include("django.conf.urls.i18n")),
     path("django-admin/", admin.site.urls),
+    path("admin", RedirectView.as_view(url="/admin/", permanent=True)),
     path("admin/", include(wagtailadmin_urls)),
     path("documents/", include(wagtaildocs_urls)),
     path("__reload__/", include("django_browser_reload.urls")),
@@ -36,7 +43,6 @@ urlpatterns.extend(
         # Wagtail's page serving mechanism. This should be the last pattern in
         # the list:
         path("", include(wagtail_urls)),
-        # path("search/", search_views.search, name="search"),
         # Alternatively, if you want Wagtail pages to be served from a subpath
         # of your site, rather than the site root:
         #    path("pages/", include(wagtail_urls)),

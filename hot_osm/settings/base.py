@@ -15,6 +15,8 @@ import os
 
 from dotenv import load_dotenv
 import mimetypes 
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
 mimetypes.add_type("text/css", ".css", True)
 
 
@@ -55,7 +57,6 @@ INSTALLED_APPS = [
     "app.tech",
     "app.our_work",
     "app.job_opportunities",
-    "search",
     "users",
     "utils",
     "wagtail.contrib.forms",
@@ -89,7 +90,6 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",
-    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -97,6 +97,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "wagtail.contrib.redirects.middleware.RedirectMiddleware",
 ]
 
@@ -116,6 +117,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "django.template.context_processors.i18n",
                 "wagtail.contrib.settings.context_processors.settings",
             ],
         },
@@ -128,7 +130,6 @@ WSGI_APPLICATION = "hot_osm.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 import dj_database_url
-import re
 
 DATABASES = {
     "default": dj_database_url.parse(
@@ -277,7 +278,7 @@ PATTERN_LIBRARY = {
     "BASE_TEMPLATE_NAMES": ["patterns/base_page.html"],
 }
 
-MAPBOX_ACCESS_TOKEN = os.getenv("MAPBOX_ACCESS_TOKEN")
+MAPBOX_ACCESS_TOKEN = os.getenv("MAPBOX_ACCESS_TOKEN", "")
 GEO_WIDGET_LEAFLET_TILE_LAYER = "https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=" + MAPBOX_ACCESS_TOKEN
 
 GEO_WIDGET_LEAFLET_TILE_LAYER_OPTIONS = {
@@ -291,3 +292,49 @@ WAGTAILMARKDOWN = {
 }
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 2000
+
+CACHES = {
+    'default': {
+        'BACKEND': os.getenv('CACHE_BACKEND', 'django_redis.cache.RedisCache'),
+        'LOCATION': os.getenv('CACHE_LOCATION', 'redis://127.0.0.1:6379/dbname'),
+        'OPTIONS': {
+            'CLIENT_CLASS': os.getenv('CACHE_CLIENT_CLASS', 'django_redis.client.DefaultClient'),
+        }
+    }
+}
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "INFO",
+    },
+}
+
+sentry_sdk.init(
+    dsn=os.getenv("SENTRY_DSN"),
+    # Add data like request headers and IP for users,
+    # see https://docs.sentry.io/platforms/python/data-management/data-collected/ for more info
+    send_default_pii=True,
+    integrations=[DjangoIntegration(
+            transaction_style='url',
+            middleware_spans=True,
+            cache_spans=False
+        ),],
+    # Enable logs to be sent to Sentry
+    enable_logs=True,
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for tracing.
+    traces_sample_rate=1.0,
+    # To collect profiles for all profile sessions,
+    # set `profile_session_sample_rate` to 1.0.
+    profile_session_sample_rate=1.0,
+    # Profiles will be automatically collected while
+    # there is an active span.
+)

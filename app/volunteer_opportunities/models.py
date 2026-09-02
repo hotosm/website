@@ -3,7 +3,7 @@ from django.utils import timezone
 
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 from wagtail.fields import RichTextField, StreamField
-from wagtail.blocks import CharBlock, StreamBlock, StructBlock, URLBlock, RichTextBlock, PageChooserBlock
+from wagtail.blocks import RichTextBlock, PageChooserBlock
 from wagtail.models import Page
 
 from app.core.models import LinkOrPageBlock

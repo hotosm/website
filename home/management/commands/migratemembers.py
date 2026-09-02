@@ -1,21 +1,13 @@
-from datetime import date
 import json
-from io import BytesIO
 import os
-import marko
 import frontmatter
 
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from app.projects.models import IndividualProjectPage
 from app.members.models import IndividualMemberPage, MemberOwnerPage, MemberGroupPage
-from wagtail.fields import RichTextField, StreamField, StreamValue
-from app.news.models import IndividualNewsPage, NewsOwnerPage, NewsCategory, NewsTag
+from wagtail.fields import StreamValue
 from app.mapping_hubs.models import IndividualMappingHubPage
-from modelcluster.contrib.taggit import ClusterTaggableManager
-from home.models import HomePage
-from django.core.files.images import ImageFile
-from wagtail.images.models import Image
-from home.management.migration_helpers import create_image_from_url, create_image_from_local_file, handle_markdown_images, convert_markdown_contents, HOTOSM_LEGACY_SITE_URL, comb_keys
+from home.management.migration_helpers import create_image_from_url
 from django.db import transaction
 
 
@@ -116,7 +108,7 @@ def markdown_article_to_member_dict(article: frontmatter.Post):
 
 def create_member_page_from_markdown(file):
     article = frontmatter.load(file)
-    if not 'title' in article.keys():
+    if 'title' not in article.keys():
         return
     
     member_dict = markdown_article_to_member_dict(article)
@@ -142,7 +134,7 @@ def convert_all_members_in_dir(directory):
 
 def add_projects_to_member(file):
     article = frontmatter.load(file)
-    if not 'title' in article.keys() or not 'Project' in article.keys():
+    if 'title' not in article.keys() or 'Project' not in article.keys():
         return
     
     member = IndividualMemberPage.objects.all().filter(title=article['title'])[0].get_translation(1)
@@ -180,7 +172,7 @@ def add_projects_to_members_in_dir(directory):
 
 def verify_publish_status(file):
     article = frontmatter.load(file)
-    if not 'title' in article.keys() or not 'published' in article.keys() or ('published' in article.keys() and article['published']):
+    if 'title' not in article.keys() or 'published' not in article.keys() or ('published' in article.keys() and article['published']):
         return
     
     member = IndividualMemberPage.objects.all().filter(title=article['title'])[0].get_translation(1)

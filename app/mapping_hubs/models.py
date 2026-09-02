@@ -1,13 +1,11 @@
-from django import forms
 from django.db import models
 from django.db.models import Q
 
 from wagtail.models import Page
 from wagtail.fields import RichTextField, StreamField
-from wagtail.admin.panels import FieldPanel, MultiFieldPanel, PageChooserPanel
+from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 from wagtail.snippets.blocks import SnippetChooserBlock
-from wagtail.blocks import CharBlock, StreamBlock, StructBlock, URLBlock, RichTextBlock, PageChooserBlock
-from modelcluster.fields import ParentalKey, ParentalManyToManyField
+from wagtail.blocks import CharBlock, StreamBlock, StructBlock, RichTextBlock
 
 from app.projects.models import IndividualProjectPage
 from app.ui.models import CarouselBlock

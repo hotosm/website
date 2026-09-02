@@ -28,6 +28,12 @@ STORAGES = {
     },
 }
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    }
+}
+
 try:
     from .local import *
 except ImportError:

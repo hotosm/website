@@ -128,8 +128,8 @@ class ProjectOwnerPage(Page):
     )
 
     search_keyword_text = models.CharField(default="Search by keyword")
-    sort_titlea_text = models.CharField(default="Sort by Name Alphabetical")
-    sort_titlez_text = models.CharField(default="Sort by Name Reverse Alphabetical")
+    sort_newest_text = models.CharField(default="Newest First")
+    sort_oldest_text = models.CharField(default="Oldest First")
     impact_areas_text = models.CharField(default="Filter by Impact Area")
     open_mapping_hubs_text = models.CharField(default="Filter by Hub")
     projects_by_programme_text = models.CharField(default="Filter by Program")
@@ -186,8 +186,8 @@ class ProjectOwnerPage(Page):
             FieldPanel('header_image'),
             MultiFieldPanel([
                 FieldPanel('search_keyword_text'),
-                FieldPanel('sort_titlea_text'),
-                FieldPanel('sort_titlez_text'),
+                FieldPanel('sort_newest_text'),
+                FieldPanel('sort_oldest_text'),
                 FieldPanel('impact_areas_text'),
                 FieldPanel('open_mapping_hubs_text'),
                 FieldPanel('projects_by_programme_text'),

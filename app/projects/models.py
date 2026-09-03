@@ -85,13 +85,13 @@ class ProjectOwnerPage(Page):
                 query = query | Q(owner_program=program)
         projects_list = projects_list.filter(query).distinct()
 
+        from django.db.models import F
+
         match request.GET.get('sort', ''):
-            case 'sort.titlea':
-                projects_list = projects_list.order_by('title')
-            case 'sort.titlez':
-                projects_list = projects_list.order_by('-title')
-            case _:
-                projects_list = projects_list.order_by('title')
+            case 'sort.oldest':
+                projects_list = projects_list.order_by(F('duration_start').asc(nulls_last=True))
+            case 'sort.newest' | _:
+                projects_list = projects_list.order_by(F('duration_start').desc(nulls_last=True))
 
         page = request.GET.get('page', 1)
         paginator = Paginator(projects_list, 12)  # if you want more/less items per page (i.e., per load), change the number here to something else
@@ -128,8 +128,8 @@ class ProjectOwnerPage(Page):
     )
 
     search_keyword_text = models.CharField(default="Search by keyword")
-    sort_titlea_text = models.CharField(default="Sort by Name Alphabetical")
-    sort_titlez_text = models.CharField(default="Sort by Name Reverse Alphabetical")
+    sort_newest_text = models.CharField(default="Newest First")
+    sort_oldest_text = models.CharField(default="Oldest First")
     impact_areas_text = models.CharField(default="Filter by Impact Area")
     open_mapping_hubs_text = models.CharField(default="Filter by Hub")
     projects_by_programme_text = models.CharField(default="Filter by Program")
@@ -186,8 +186,8 @@ class ProjectOwnerPage(Page):
             FieldPanel('header_image'),
             MultiFieldPanel([
                 FieldPanel('search_keyword_text'),
-                FieldPanel('sort_titlea_text'),
-                FieldPanel('sort_titlez_text'),
+                FieldPanel('sort_newest_text'),
+                FieldPanel('sort_oldest_text'),
                 FieldPanel('impact_areas_text'),
                 FieldPanel('open_mapping_hubs_text'),
                 FieldPanel('projects_by_programme_text'),

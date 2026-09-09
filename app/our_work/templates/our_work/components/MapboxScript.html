@@ -1,14 +1,21 @@
 {% load homepage_tags %}
 {% get_mapbox_key as mapbox_key %}
 
-{% include './MapboxCountryFallbacks.html' %}
-
 <script>
-        const mapboxToken = "{{mapbox_key}}";
-        const currentMarkers = [];
-        window.map = null;
+        mapboxgl.accessToken = "{{mapbox_key}}";
 
-        window.callMapUpdate = async () => {
+        const regex = /\(([^\)]+)\)/g;
+
+        const map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/hot/cm2dpp8lb000j01pb8chz3y15',
+            center: [0, 0],
+            zoom: 2
+        });
+
+        const currentMarkers = [];
+
+        const callMapUpdate = async () => {
             let params = new URLSearchParams(Alpine.store('formdata'));
             if (!params) {
                 params = new URLSearchParams();
@@ -16,34 +23,14 @@
             params.set('page', Alpine.store('pageNum'));
             params.set('projects', true);
             const apiUrl = '?' + params.toString();
-            
             fetch(apiUrl).then(response => {
-                if (response.ok) return response.json();
+                if (response.ok)
+                    return response.json();
                 throw new Error("Failed to fetch projects.");
             }).then(data => {
-                const geojson = data;
+                geojson = data;
                 
                 for (const feature of geojson.features) {
-                    let coords = null;
-
-                    if (feature.geometry && feature.geometry.coordinates && feature.geometry.coordinates.length >= 2) {
-                        coords = feature.geometry.coordinates;
-                    } 
-                    else {
-                        const projectText = (feature.properties.location || "") + " " + (feature.properties.title || "");
-                        
-                        for (const [country, fallbackCoords] of Object.entries(window.countryFallbacks)) {
-                            if (projectText.includes(country)) {
-                                coords = fallbackCoords;
-                                break; 
-                            }
-                        }
-                    }
-
-                    if (!coords) {
-                        continue; 
-                    }
-
                     const element = `
                         <div class="" @click="$refs['project${feature.properties.id}'].scrollIntoView({block: 'nearest', behavior: 'smooth'}); selectedProject = 'project${feature.properties.id}';">
                             {% include './MapboxMarker.html' %}
@@ -51,34 +38,16 @@
                     `;
                     const el = document.createElement('div');
                     el.innerHTML = element;
-                    
-                    if (window.map) {
-                        var marker = new mapboxgl.Marker(el);
-                        marker.setLngLat(coords).addTo(window.map);
-                        currentMarkers.push(marker);
-                    }
+                    var marker = new mapboxgl.Marker(el);
+                    marker.setLngLat(feature.geometry.coordinates).addTo(map);
+                    currentMarkers.push(marker);
                 }
-            }).catch(error => {
-                console.error("Map fetch error:", error);
-            });
+            })
         }
 
-        window.refreshWithSearch = () => {
+        const refreshWithSearch = () => {
             for (const marker of currentMarkers) {
                 marker.remove();
             }
-            currentMarkers.length = 0; 
-        }
-
-        if (mapboxToken && mapboxToken !== "None" && mapboxToken !== "") {
-            mapboxgl.accessToken = mapboxToken;
-            window.map = new mapboxgl.Map({
-                container: 'map',
-                style: 'mapbox://styles/hot/cm2dpp8lb000j01pb8chz3y15',
-                center: [0, 0],
-                zoom: 2
-            });
-        } else {
-            console.warn("Mapbox token is missing locally.");
         }
 </script>

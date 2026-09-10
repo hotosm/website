@@ -71,26 +71,29 @@ class IndividualTechStackPage(Page):
 
         from app.news.models import IndividualNewsPage
 
-        if self.slug == 'drone-tasking-manager':
-            # Get DroneTM-specific news
-            tool_news = IndividualNewsPage.get_tool_related_news(
-                locale=context['page'].locale,
-                tool_name='DroneTM',
-                tool_tags=['dronetm', 'drone', 'drone mapping'],
-                limit=6
-            )
-            section_title = 'DroneTM News'
-        else:
-            tool_news = IndividualNewsPage.get_tool_related_news(
-                locale=context['page'].locale,
-                limit=3,
-            )
+        tag_mapping = {
+            'tasking-manager': ['tasking manager', 'tm'],
+            'chatmap': ['chatmap', 'chat map'],
+            'fair': ['fair', 'fAIr'],
+            'hot-export-tool': ['export tool', 'hot export tool'],
+            'open-aerial-map': ['open aerial map', 'oam', 'openaerialmap'],
+            'field-tasking-manager': ['field tasking manager', 'ftm', 'fmtm', "Field-TM", 'Field Tasking Manager'],
+            'drone-tasking-manager': ['dronetm', 'drone', 'drone mapping'],
+            'umap': ['umap', 'u map'],
+        }
 
-            section_title = 'Recent News'
+        tool_tags = tag_mapping.get(self.slug, [self.title.lower()])
+            # Get DroneTM-specific news
+        tool_news = IndividualNewsPage.get_tool_related_news(
+                    locale=context['page'].locale,
+                    tool_name=self.title,
+                    tool_tags=tool_tags,
+                    limit=6
+                )
 
         context.update({
             'tool_news': tool_news,
-            'news_section_title': section_title,
+            'news_section_title': f'{self.title} News',
         })
 
         return context

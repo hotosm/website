@@ -51,6 +51,8 @@ class EventOwnerPage(Page):
         for hub in hubs:
             if request.GET.get("hub" + str(hub.id), ''):
                 query = query | Q(event_region_hub=hub)
+        if request.GET.get("hub_other"):
+            query = query | Q(event_region_hub__isnull=True)
         events_list = events_list.filter(query).distinct()
 
         from_date = request.GET.get("fromdate")

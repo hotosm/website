@@ -87,6 +87,8 @@ class MemberGroupPage(Page):
         for hub in hubs:
             if request.GET.get("hub" + str(hub.id), ''):
                 query = query | Q(location_hub=hub)
+            if request.GET.get("hub_other"):
+                query = query | Q(location_hub__isnull=True)
         members = members.filter(query).distinct()
 
         match request.GET.get('sort', ''):

@@ -69,6 +69,8 @@ class ProjectOwnerPage(Page):
         for hub in hubs:
             if request.GET.get(f"hub{hub.id}", ''):
                 query = query | Q(region_hub_list__contains=[{'type': 'region_hub', 'value': hub.id }])
+            if request.GET.get("hub_other"):
+                query = query | Q(region_hub_list='') | Q(region_hub_list='[]') | ~Q(region_hub_list__icontains='region_hub')
         projects_list = projects_list.filter(query).distinct()
         
         impact_areas = IndividualImpactAreaPage.objects.live().filter(locale=base_locale)

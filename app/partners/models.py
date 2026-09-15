@@ -177,6 +177,9 @@ class OurPartnersPage(Page):
         for hub in hubs:
             if request.GET.get("hub" + str(hub.id), ''):
                 query = query | Q(id__in=[x.value.id for x in hub.specific.partner_list])
+            if request.GET.get("hub_other"):
+                partners_with_hubs = [x.value.id for h in hubs for x in h.specific.partner_list]
+                query = query | ~Q(id__in=partners_with_hubs)
         partners = partners.filter(query).distinct()
 
         programs = IndividualProgramPage.objects.live().filter(locale=context['page'].locale)

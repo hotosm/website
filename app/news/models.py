@@ -120,6 +120,8 @@ class NewsOwnerPage(Page):
         for hub in hubs:
             if request.GET.get(f"hub{hub.id}", ''):
                 query = query | Q(associated_hubs__contains=[{'type': 'region_hub', 'value': hub.id }])
+            if request.GET.get("hub_other"):
+                query = query | Q(associated_hubs='') | Q(associated_hubs='[]') | ~Q(associated_hubs__icontains='region_hub')
         news_list = news_list.filter(query).distinct()
 
         # SOLUTION 2: Add safety measures for sorting with limits

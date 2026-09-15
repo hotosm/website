@@ -10,5 +10,12 @@
                 <input class="ml-auto checked:bg-hot-red checked:hover:bg-hot-red checked:focus:bg-hot-red" id="{{denoter}}-{{forloop.counter}}" type="checkbox" name="{{denoter}}{{p.id}}" :checked="params.get('{{denoter}}{{p.id}}')">
             </div>
         {% endfor %}
+        
+        {% if denoter == "hub" %}
+            <div class="px-1 mt-4 flex">
+                <label for="hub-other">Other</label>
+                <input class="ml-auto checked:bg-hot-red checked:hover:bg-hot-red checked:focus:bg-hot-red" id="hub-other" type="checkbox" name="hub_other" :checked="params.get('hub_other')">
+            </div>
+        {% endif %}
     </div>
 </div>

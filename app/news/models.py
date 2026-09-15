@@ -102,7 +102,7 @@ class NewsOwnerPage(Page):
         if keyword:
             news_list = news_list.search(keyword).get_queryset()
 
-        categories = NewsCategory.objects.all()
+        categories = NewsCategory.objects.exclude(category_name__iexact="Migrated News")
         tags = [x[4:] for x in request.GET.keys() if x.startswith("tag.")]
         query = Q()
         for category in categories:

@@ -95,10 +95,12 @@
                             <p>
                                 {% with categories=page.categories.all %}
                                     {% for category in categories %}
-                                        {% comment %} keep in one line so that the commas don't have spaces between them {% endcomment %}
-                                        {% with category.id|stringformat:"s" as id %}
-                                            <a href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=page.get_parent linkappendage='?cat'|add:id|add:'=on'%}" class="text-hot-red hover:underline">{{ category.category_name }}</a>{% if not forloop.last %}, {% endif %}
-                                        {% endwith %}
+                                        {% if category.category_name != "Migrated News" %}
+                                            {% comment %} keep in one line so that the commas don't have spaces between them {% endcomment %}
+                                            {% with category.id|stringformat:"s" as id %}
+                                                <a href="{%include 'ui/components/PageOrLinkHrefText.html' with linkurl=page.get_parent linkappendage='?cat'|add:id|add:'=on'%}" class="text-hot-red hover:underline">{{ category.category_name }}</a>{% if not forloop.last %}, {% endif %}
+                                            {% endwith %}
+                                        {% endif %}
                                     {% endfor %}
                                 {% endwith %}
                             </p>

@@ -59,8 +59,13 @@
 
             <div class="my-20">
                 {% with page.id|stringformat:"s" as id %}
-                    {% include "ui/components/FlexTitleWithLink.html" with class="mb-8" title=page.get_parent.specific.meet_partners_title linktext=page.get_parent.specific.view_partners_text linkurl=page.get_parent.specific.view_partners_link linkappendage="?pt"|add:id|add:"=on" underline=True %}
+                    {% if page.slug == "corporate-volunteering" %}
+                        {% include "ui/components/FlexTitleWithLink.html" with class="mb-8" title="Meet our Corporate Volunteering Partners" linktext=page.get_parent.specific.view_partners_text linkurl=page.get_parent.specific.view_partners_link linkappendage="?pt"|add:id|add:"=on" underline=True %}
+                    {% else %}
+                        {% include "ui/components/FlexTitleWithLink.html" with class="mb-8" title=page.get_parent.specific.meet_partners_title linktext=page.get_parent.specific.view_partners_text linkurl=page.get_parent.specific.view_partners_link linkappendage="?pt"|add:id|add:"=on" underline=True %}
+                    {% endif %}
                 {% endwith %}
+                
                 {% include "ui/components/partners/PartnerViewBlock.html" with partners=page.featured_partners.all %}
             </div>
 

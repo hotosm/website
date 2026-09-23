@@ -183,7 +183,7 @@ WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
     ("en", "English"),
     ("fr", "French"),
     ("es", "Spanish"),
-    ("pt-BR", "Portuguese (Brazil)")
+    ("pt", "Portuguese")
 ]
 
 if os.getenv("DEEPL_KEY"):
@@ -319,6 +319,7 @@ LOGGING = {
 
 sentry_sdk.init(
     dsn=os.getenv("SENTRY_DSN"),
+    environment=os.getenv("ENV"),
     # Add data like request headers and IP for users,
     # see https://docs.sentry.io/platforms/python/data-management/data-collected/ for more info
     send_default_pii=True,

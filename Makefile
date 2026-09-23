@@ -18,6 +18,7 @@ makemessages:
 	@docker compose -f docker-compose.dev.yml run --rm web python manage.py makemessages -l en
 	@docker compose -f docker-compose.dev.yml run --rm web python manage.py makemessages -l fr
 	@docker compose -f docker-compose.dev.yml run --rm web python manage.py makemessages -l es
+	@docker compose -f docker-compose.dev.yml run --rm web python manage.py makemessages -l pt
 
 makemigrations:
 	@docker compose -f docker-compose.dev.yml run --rm web python manage.py makemigrations

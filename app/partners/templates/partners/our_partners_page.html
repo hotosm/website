@@ -127,3 +127,19 @@
         </div>
     </div>
 {% endblock %}
+
+{% block extra_js %}
+    {{ block.super }}
+    
+    {% if page.slug == "corporate-volunteering" %}
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=AW-937260129"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'AW-937260129');
+        </script>
+    {% endif %}
+{% endblock extra_js %}

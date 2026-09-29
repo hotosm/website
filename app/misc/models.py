@@ -1,5 +1,11 @@
 from django.db import models
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.conf import settings
+from django.core.mail import EmailMultiAlternatives
+from django.shortcuts import redirect
+from django.template.response import TemplateResponse
+
+from app.misc.forms import ContactForm
 
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 from wagtail.fields import RichTextField, StreamField
@@ -375,6 +381,9 @@ class ContactUsPage(Page):
 
     send_message_title = models.CharField(default="Send us a message!")
 
+    thank_you_text = models.CharField(default="Thank you, your message has been sent.")
+    error_text = models.CharField(default="Please correct the errors and try again.")
+
     first_name_text = models.CharField(default="First Name")
     last_name_text = models.CharField(default="Last Name")
     email_text = models.CharField(default="Email Address")
@@ -415,6 +424,32 @@ class ContactUsPage(Page):
     dogear_box_title = models.CharField(default="We want to know what you think about HOT and our work.")
     dogear_box_link_text = models.CharField(default="Send us your feedback")
     dogear_box_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
+
+    def serve(self, request, *args, **kwargs):
+        if request.method == "POST":
+            form = ContactForm(request.POST)
+            if form.is_valid():
+                data = form.cleaned_data
+                message = EmailMultiAlternatives(
+                    subject=f"[HOT Website Contact Form] {data['subject']}", 
+                    body=(
+                        f"From: {data['firstname']} {data['lastname']} "
+                        f"<{data['email']}>\n\n"
+                        f"{data['message']}"
+                    ), 
+                    to=[settings.CONTACT_FORM_RECIPIENT, data['email']],  # where you receive the contact emails  
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    reply_to=[data['email']])
+                message.send()
+                return redirect(f"{request.path}?sent=1")
+            context = self.get_context(request, *args, **kwargs)
+            context["contact_form"] = form
+            return TemplateResponse(
+                request,
+                self.get_template(request, *args, **kwargs),
+                context,
+            )
+        return super().serve(request, *args, **kwargs)
     
     content_panels = Page.content_panels + [
         FieldPanel('header_image'),
@@ -426,6 +461,8 @@ class ContactUsPage(Page):
         MultiFieldPanel([
             FieldPanel('send_message_title'),
             FieldPanel('submit_button_text'),
+            FieldPanel('thank_you_text'),
+            FieldPanel('error_text'),
             MultiFieldPanel([
                 FieldPanel('first_name_text'),
                 FieldPanel('last_name_text'),

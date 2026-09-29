@@ -1,7 +1,7 @@
 from django.db import models
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.conf import settings
-from django.core.mail import send_mail
+from django.core.mail import EmailMultiAlternatives
 from django.shortcuts import redirect
 from django.template.response import TemplateResponse
 
@@ -430,16 +430,17 @@ class ContactUsPage(Page):
             form = ContactForm(request.POST)
             if form.is_valid():
                 data = form.cleaned_data
-                send_mail(
-                    subject=f"[HOT Website Contact Form] {data['subject']}",
-                    message=(
+                message = EmailMultiAlternatives(
+                    subject=f"[HOT Website Contact Form] {data['subject']}", 
+                    body=(
                         f"From: {data['firstname']} {data['lastname']} "
                         f"<{data['email']}>\n\n"
                         f"{data['message']}"
-                    ),
+                    ), 
+                    to=[settings.CONTACT_FORM_RECIPIENT, data['email']],  # where you receive the contact emails  
                     from_email=settings.DEFAULT_FROM_EMAIL,
-                    recipient_list=[settings.CONTACT_FORM_RECIPIENT, data['email']],
-                )
+                    reply_to=[data['email']])
+                message.send()
                 return redirect(f"{request.path}?sent=1")
             context = self.get_context(request, *args, **kwargs)
             context["contact_form"] = form

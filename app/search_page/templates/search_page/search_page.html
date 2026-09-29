@@ -22,29 +22,46 @@
                 <div class="grid gap-8 max-w-3xl my-10">
                     {% for result in results %}
                         <div class="grid gap-2">
-                            <h2 class="text-h4 font-semibold">{{result.title}}</h2>
-                            {% if result.get_ancestors|length > 2 %}
-                                <p>
-                                    {% for ancestor in result.get_ancestors|slice:"2:" %}
-                                        <a href="{{ancestor.url}}" class="text-hot-red font-medium">{{ancestor.title}}</a>
-                                        {% if not forloop.last %} &gt; {% endif %}
-                                    {% endfor %}
-                                </p>
-                            {% endif %}
+                            <h2 class="text-h4 font-semibold">
+                                <a href="{{result.url}}" class="hover:text-hot-red transition-colors">{{result.title}}</a>
+                            </h2>
+                            
+                            <div class="text-sm text-gray-600 font-medium flex flex-wrap items-center gap-2">
+                                {% comment %} 1. The Category (Ancestors) {% endcomment %}
+                                {% if result.get_ancestors|length > 2 %}
+                                    <span class="flex items-center gap-1">
+                                        {% for ancestor in result.get_ancestors|slice:"2:" %}
+                                            <a href="{{ancestor.url}}" class="text-hot-red">{{ancestor.title}}</a>
+                                            {% if not forloop.last %} &gt; {% endif %}
+                                        {% endfor %}
+                                    </span>
+                                    <span class="text-gray-400">&bull;</span>
+                                {% endif %}
+                                
+                                {% comment %} 2. The Date {% endcomment %}
+                                {% if result.specific.date %}
+                                    <span>{{ result.specific.date|date:"M d, Y" }}</span>
+                                {% else %}
+                                    <span>{{ result.first_published_at|date:"M d, Y" }}</span>
+                                {% endif %}
+                                
+                                {% comment %} 3. The Country/Location {% endcomment %}
+                                {% if result.specific.country %}
+                                    <span class="text-gray-400">&bull;</span>
+                                    <span>{{ result.specific.country }}</span>
+                                {% elif result.specific.location %}
+                                    <span class="text-gray-400">&bull;</span>
+                                    <span>{{ result.specific.location }}</span>
+                                {% endif %}
+                            </div>
                             
                             {% if result.specific.intro %}
-                                <div>
-                                    {{result.specific.intro|richtext}}
+                                <div class="mt-1">
+                                    {{result.specific.intro|richtext|striptags|truncatewords:30}}
                                 </div>
-                                {% else %}
-                                {% if result.search_description %}
-                                    <p>{{result.search_description}}</p>
-                                {% endif %}
+                            {% elif result.search_description %}
+                                <p class="mt-1">{{result.search_description}}</p>
                             {% endif %}
-                            
-                            <p>
-                                <a class="text-hot-red font-medium" href="{{result.url}}">{{result.full_url}}</a>
-                            </p>
                         </div>
                     {% endfor %}
                 </div>

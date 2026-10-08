@@ -17,7 +17,7 @@ class SearchPage(Page):
         if keyword:
             results_list = results_list.search(keyword).get_queryset()
         
-        results_list = results_list.exclude(id__in=[1, 2])
+        results_list = results_list.exclude(id__in=[1, 2]).order_by('-first_published_at')
 
         page = request.GET.get('page', 1)
         paginator = Paginator(results_list, 6)  # if you want more/less items per page (i.e., per load), change the number here to something else

@@ -8,6 +8,11 @@
     {% compress css %}
     {% endcompress css %}
 {% endblock extra_css %}
+{% block extra_head %}
+    {% if page.slug == "corporate-volunteering" %}
+        <!-- Event snippet for Page view conversion page --> <script> gtag('event', 'conversion', { 'send_to': 'AW-937260129/rangCL32-r0bEOHo9b4D', 'value': 1.0, 'currency': 'USD' }); </script> 
+    {% endif %}
+{% endblock extra_head %}
 
 {% block content %}
     {% include "ui/components/PageHeaderWithBlur.html" with title=page.title image=page.header_image full_length=True smaller=True endinlarge=True %}
@@ -62,6 +67,10 @@
                                     <input class="ml-auto checked:bg-hot-red checked:hover:bg-hot-red checked:focus:bg-hot-red" id="hub-{{forloop.counter}}" type="checkbox" name="hub{{hub.id}}" :checked="params.get('hub{{hub.id}}')">
                                 </div>
                             {% endfor %}
+                            <div class="mt-4 flex">
+                                <label for="hub-other">Other</label>
+                                <input class="ml-auto checked:bg-hot-red checked:hover:bg-hot-red checked:focus:bg-hot-red" id="hub-other" type="checkbox" name="hub_other" :checked="params.get('hub_other')">
+                            </div>
                         </div>
                     </div>
 

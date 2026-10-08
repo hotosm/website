@@ -8,6 +8,11 @@
     {% compress css %}
     {% endcompress css %}
 {% endblock extra_css %}
+{% block extra_head %}
+    {% if page.slug == "corporate-volunteering" %}
+        <!-- Event snippet for Page view conversion page --> <script> gtag('event', 'conversion', { 'send_to': 'AW-937260129/rangCL32-r0bEOHo9b4D', 'value': 1.0, 'currency': 'USD' }); </script> 
+    {% endif %}
+{% endblock extra_head %}
 
 {% block content %}
     {% include "ui/components/PageHeaderWithBlur.html" with title=page.title image=page.header_image full_length=True smaller=True endinlarge=True %}
@@ -131,19 +136,3 @@
         </div>
     </div>
 {% endblock %}
-
-{% block extra_js %}
-    {{ block.super }}
-    
-    {% if page.slug == "corporate-volunteering" %}
-        <!-- Google tag (gtag.js) -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=AW-937260129"></script>
-        <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-
-            gtag('config', 'AW-937260129');
-        </script>
-    {% endif %}
-{% endblock extra_js %}

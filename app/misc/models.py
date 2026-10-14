@@ -425,6 +425,12 @@ class ContactUsPage(Page):
     dogear_box_link_text = models.CharField(default="Send us your feedback")
     dogear_box_link = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
 
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+        # Inject an empty form into the context for standard GET requests
+        context["contact_form"] = ContactForm()
+        return context
+
     def serve(self, request, *args, **kwargs):
         if request.method == "POST":
             form = ContactForm(request.POST)

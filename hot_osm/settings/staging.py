@@ -11,6 +11,8 @@ _default_allowed_hosts = [
 _env_allowed_hosts = [h.strip() for h in os.getenv("ALLOWED_HOSTS", "").split(",") if h.strip()]
 ALLOWED_HOSTS = _env_allowed_hosts or _default_allowed_hosts
 
+WAGTAILADMIN_BASE_URL = "https://staging.website.hotosm.org"
+
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 # Remove XFrameOptionsMiddleware to allow YouTube embeds

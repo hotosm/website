@@ -30,6 +30,16 @@ class MemberGroupOwnerPage(Page):
         'members.MemberGroupPage'
     ]
 
+    intro_text = RichTextField(blank=True, help_text="Text to appear at the top of the page next to the image.")
+    intro_image = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text="Image to appear at the top of the page next to the intro text."
+    )
+
     applied_text = models.CharField(default="applied", help_text="This will be a suffix to a number, used to indicate how many filters are applied currently in some field.")
     search_placeholder = models.CharField(default="Search by name")
     filter_by_country = models.CharField(default="Filter by Country")
@@ -48,6 +58,10 @@ class MemberGroupOwnerPage(Page):
     footer_box_button_url = StreamField(LinkOrPageBlock(), use_json_field=True, blank=True)
 
     content_panels = Page.content_panels + [
+        MultiFieldPanel([
+            FieldPanel('intro_text'),
+            FieldPanel('intro_image'),
+        ], heading="Top Section Introduction"),
         MultiFieldPanel([
             FieldPanel('applied_text'),
             FieldPanel('search_placeholder'),

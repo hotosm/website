@@ -13,6 +13,8 @@ _default_allowed_hosts = [
 _env_allowed_hosts = [h.strip() for h in os.getenv("ALLOWED_HOSTS", "").split(",") if h.strip()]
 ALLOWED_HOSTS = _env_allowed_hosts or _default_allowed_hosts
 
+WAGTAILADMIN_BASE_URL = "https://hotosm.org"
+
 DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "noreply@hotosm.org")
 CONTACT_FORM_RECIPIENT = os.getenv("CONTACT_FORM_RECIPIENT", "info@hotosm.org")
 

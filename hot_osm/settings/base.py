@@ -225,7 +225,8 @@ MEDIA_URL = "/media/"
 # Wagtail settings
 
 WAGTAIL_SITE_NAME = "hot_osm"
-WAGTAILIMAGES_MAX_UPLOAD_SIZE = 20 * 1024 * 1024  # 20MB
+WAGTAILIMAGES_MAX_UPLOAD_SIZE = 10 * 1024 * 1024  # 10MB
+WAGTAILIMAGES_MAX_IMAGE_PIXELS = 12800000 #12.8 megapixels
 
 # Wagtail embeds configuration - use standard YouTube domain instead of privacy-enhanced
 WAGTAILEMBEDS_FINDERS = [

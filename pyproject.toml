@@ -27,6 +27,7 @@ dependencies = [
     "wand==0.6.13",
     "marko==2.1.2",
     "python-frontmatter==1.1.0",
+    "django-recaptcha==4.1.0",
     "wagtail-markdown==0.12.1",
     "wagtail-favicon==0.3.0",
     "sentry-sdk==2.58.0",

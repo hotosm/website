@@ -86,6 +86,7 @@ INSTALLED_APPS = [
     "storages",
     "wagtailgeowidget",
     "wagtailmarkdown",
+    "django_recaptcha"
 ]
 
 MIDDLEWARE = [
@@ -295,6 +296,9 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = 2000
 
 DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "noreply@hotosm.org")
 CONTACT_FORM_RECIPIENT = os.getenv("CONTACT_FORM_RECIPIENT", "info@hotosm.org")
+
+RECAPTCHA_PUBLIC_KEY = os.getenv('RECAPTCHA_PUBLIC_KEY',None)
+RECAPTCHA_PRIVATE_KEY = os.getenv('RECAPTCHA_PRIVATE_KEY', None)
 
 CACHES = {
     'default': {

@@ -22,6 +22,23 @@
             {% endblock title_suffix %}
         </title>
         {% if page.search_description %}<meta name="description" content="{{ page.search_description }}" />{% endif %}
+        {# --- SOCIAL MEDIA CARDS --- #}
+        <meta property="og:title" content="{% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %}" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="{{ page.get_full_url|default:request.build_absolute_uri }}" />
+        {% if page.search_description %}
+            <meta property="og:description" content="{{ page.search_description }}" />
+        {% endif %}
+        
+        {# We check for standard Wagtail image fields and force an absolute URL for Apple #}
+        {% load wagtailimages_tags %}
+        {% if page.header_image %}
+            {% image page.header_image original as social_img %}
+            <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ social_img.url }}" />
+        {% elif page.image %}
+            {% image page.image original as social_img %}
+            <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ social_img.url }}" />
+        {% endif %}
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         {# Force all links in the live preview panel to be opened in a new tab #}
         {% if request.in_preview_panel %}<base target="_blank">{% endif %}

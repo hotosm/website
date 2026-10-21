@@ -86,6 +86,7 @@ INSTALLED_APPS = [
     "storages",
     "wagtailgeowidget",
     "wagtailmarkdown",
+    "django_recaptcha"
 ]
 
 MIDDLEWARE = [
@@ -224,7 +225,9 @@ MEDIA_URL = "/media/"
 # Wagtail settings
 
 WAGTAIL_SITE_NAME = "hot_osm"
-WAGTAILIMAGES_MAX_UPLOAD_SIZE = 20 * 1024 * 1024  # 20MB
+WAGTAILIMAGES_MAX_UPLOAD_SIZE = 10 * 1024 * 1024  # 10MB
+WAGTAILIMAGES_MAX_IMAGE_PIXELS = 12800000 #12.8 megapixels
+WAGTAILIMAGES_EXTENSIONS = ["avif", "svg", "jpg", "jpeg", "png", "webp"]
 
 # Wagtail embeds configuration - use standard YouTube domain instead of privacy-enhanced
 WAGTAILEMBEDS_FINDERS = [
@@ -295,6 +298,9 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = 2000
 
 DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "noreply@hotosm.org")
 CONTACT_FORM_RECIPIENT = os.getenv("CONTACT_FORM_RECIPIENT", "info@hotosm.org")
+
+RECAPTCHA_PUBLIC_KEY = os.getenv('RECAPTCHA_PUBLIC_KEY',"")
+RECAPTCHA_PRIVATE_KEY = os.getenv('RECAPTCHA_PRIVATE_KEY', "")
 
 CACHES = {
     'default': {

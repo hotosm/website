@@ -9,6 +9,10 @@
     {% endcompress css %}
 {% endblock extra_css %}
 
+<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
+    async defer>
+</script>
+
 {% block content %}
     {% include "ui/components/BasePageHeader.html" with title=page.title image=page.header_image endinlarge=True full_length=True %}
     
@@ -74,6 +78,10 @@
                             <div>
                                 <label for="message">{{page.message_text}}</label>
                                 <textarea class="mt-2 w-full bg-hot-off-white border-none px-4 min-h-48 resize-none" placeholder="{{page.message_field_text}}" type="text" name="message" required></textarea>
+                            </div>
+                            <div>
+                                {{ contact_form.captcha }}
+                                {{ contact_form.captcha.errors }}
                             </div>
                             <div class="flex">
                                 <input type="submit" value="{{page.submit_button_text}}" class="bg-hot-red border-2 border-hot-red text-white cursor-pointer py-1 px-hot-3 font-medium text-intro hover:bg-hot-burgundy hover:border-hot-burgundy duration-100">
